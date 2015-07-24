@@ -469,7 +469,9 @@ class HowTo extends Controller implements ExampleInterface
          */
         $allRoles = $roleProvider->findAll();
         foreach ($allRoles as $role) {
-            var_dump($role instanceof Role);
+            if(!$role instanceof Role){
+                Throw new \Exception('$role must be instance of Role.');
+            }
         }
         
         /*
@@ -485,9 +487,13 @@ class HowTo extends Controller implements ExampleInterface
          * return null.
          */
         if ($roleProvider->isExistingByName("ROLE_USER")) {
-            var_dump($roleProvider->findOneByName("ROLE_USER") instanceof Role);
+            if(!$roleProvider->findOneByName("ROLE_USER") instanceof Role){
+                throw new \Exception('$roleProvider->findOneByName("ROLE_USER") must be instance of Role');
+            }
         } else {
-            var_dump($roleProvider->findOneByName("ROLE_USER") === null);
+            if(!$roleProvider->findOneByName("ROLE_USER") === null){
+                throw new \Exception('$roleProvider->findOneByName("ROLE_USER") must be null');
+            }
         }
     }
 }

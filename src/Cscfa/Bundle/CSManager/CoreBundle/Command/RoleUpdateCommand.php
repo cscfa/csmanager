@@ -25,6 +25,7 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Cscfa\Bundle\CSManager\CoreBundle\Util\Provider\RoleProvider;
 use Cscfa\Bundle\CSManager\CoreBundle\Util\Manager\RoleManager;
 use Cscfa\Bundle\CSManager\CoreBundle\Util\Builder\RoleBuilder;
+use Doctrine\ORM\OptimisticLockException;
 
 /**
  * RoleUpdateCommand class.

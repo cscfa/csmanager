@@ -24,6 +24,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Cscfa\Bundle\CSManager\CoreBundle\Entity\User;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
+use Doctrine\ORM\OptimisticLockException;
 
 /**
  * UserAddCommand class.

@@ -25,6 +25,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Cscfa\Bundle\CSManager\CoreBundle\Util\Manager\RoleManager;
 use Cscfa\Bundle\CSManager\CoreBundle\Util\Provider\RoleProvider;
+use Doctrine\ORM\OptimisticLockException;
 
 /**
  * RoleRemoveCommand class.
