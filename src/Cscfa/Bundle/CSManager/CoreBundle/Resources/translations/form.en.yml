@@ -1,0 +1,10 @@
+core:
+    form:
+        navbar:
+            label:
+                name:         "Name"
+                route:        "Route"
+                translation:  "Translation"
+                description:  "Description"
+                priority:     "Priority"
+                role:         "Role"

@@ -1,0 +1,3 @@
+cscfa_twig_ui_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: CscfaTwigUIBundle:Default:index }

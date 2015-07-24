@@ -1,0 +1,3 @@
+#cscfa_cs_manager_config_homepage:
+#    path:     /hello/{name}
+#    defaults: { _controller: CscfaCSManagerConfigBundle:Default:index }

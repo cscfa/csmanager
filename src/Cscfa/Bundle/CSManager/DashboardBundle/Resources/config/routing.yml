@@ -1,0 +1,3 @@
+#cscfa_cs_manager_dashboard_homepage:
+#    path:     /hello/{name}
+#    defaults: { _controller: CscfaCSManagerDashboardBundle:Default:index }

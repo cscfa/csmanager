@@ -1,0 +1,4 @@
+services:
+#    cscfa_cs_manager_task.example:
+#        class: Cscfa\Bundle\CSManager\TaskBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]

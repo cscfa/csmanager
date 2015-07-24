@@ -1,0 +1,4 @@
+services:
+#    cscfa_cs_manager_config.example:
+#        class: Cscfa\Bundle\CSManager\ConfigBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]

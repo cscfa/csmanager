@@ -1,0 +1,4 @@
+services:
+#    cscfa_twig_ui.example:
+#        class: Cscfa\Bundle\TwigUIBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]

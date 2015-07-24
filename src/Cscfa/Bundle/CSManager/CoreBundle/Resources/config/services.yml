@@ -1,0 +1,99 @@
+parameters:
+    ##############################################################################
+    #                         The role command classes                           #
+    ##############################################################################
+    #The default class for the role generating command
+    core.command.add_role.class:      Cscfa\Bundle\CSManager\CoreBundle\Command\RoleAddCommand
+    #The default class for the role listing command
+    core.command.view_role.class:     Cscfa\Bundle\CSManager\CoreBundle\Command\RoleViewCommand
+    #The default class for the role deletion command
+    core.command.remove_role.class:   Cscfa\Bundle\CSManager\CoreBundle\Command\RoleRemoveCommand
+    #The default class for the role updating command
+    core.command.update_role.class:   Cscfa\Bundle\CSManager\CoreBundle\Command\RoleUpdateCommand
+    #The default class for the role debuging command
+    core.command.debug_role.class:    Cscfa\Bundle\CSManager\CoreBundle\Command\RoleDebugCommand
+    ##############################################################################
+    #                         The role tool classes                              #
+    ##############################################################################
+    #The default class for the role manager tool
+    core.manager.role_manager.class:  Cscfa\Bundle\CSManager\CoreBundle\Util\Manager\RoleManager
+    #The default class for the role provider tool
+    core.provider.role_provider.class:  Cscfa\Bundle\CSManager\CoreBundle\Util\Provider\RoleProvider
+    
+    ##############################################################################
+    #                         The user command classes                          #
+    ##############################################################################
+    #The default class for the user generating command
+    core.command.add_user.class:      Cscfa\Bundle\CSManager\CoreBundle\Command\UserAddCommand
+    #The default class for the user listing command
+    core.command.view_user.class:     Cscfa\Bundle\CSManager\CoreBundle\Command\UserViewCommand
+    #The default class for the user deletion command
+    core.command.remove_user.class:   Cscfa\Bundle\CSManager\CoreBundle\Command\UserRemoveCommand
+
+services:
+    ##############################################################################
+    #                         The role command services                          #
+    ##############################################################################
+    #tag: command     #The add role command definition. This command allow a shell user to create a new role into the database.
+    core.command.add_role:
+        class: "%core.command.add_role.class%"
+        arguments: [ "@core.manager.role_manager", "@core.provider.role_provider" ]
+        tags:
+            -  { name: console.command }
+    #tag: command     #The update role command definition. This command allow a shell user to update an existing role into the database.
+    core.command.update_role:
+        class: "%core.command.update_role.class%"
+        arguments: [ "@core.manager.role_manager", "@core.provider.role_provider" ]
+        tags:
+            -  { name: console.command }
+    #tag: command     #The view role command definition. This command allow a shell user to list all existing roles from the database.
+    core.command.view_role:
+        class: "%core.command.view_role.class%"
+        arguments: [ "@core.provider.role_provider" ]
+        tags:
+            -  { name: console.command }
+    #tag: command     #The debug role command definition. This command allow a shell user to get bug information about the existing roles into the database.
+    core.command.debug_role:
+        class: "%core.command.debug_role.class%"
+        arguments: [ "@core.provider.role_provider", "@core.manager.role_manager" ]
+        tags:
+            -  { name: console.command }
+    #tag: command     #The remove role command definition. This command allow a shell user to remove an existing roles from the database.
+    core.command.remove_role:
+        class: "%core.command.remove_role.class%"
+        arguments: [ "@core.manager.role_manager", "@core.provider.role_provider" ]
+        tags:
+            -  { name: console.command }
+    ##############################################################################
+    #                          The role tool services                            #
+    ##############################################################################
+    #tag: tool        #The role manager service offer various method to abstract role persistance and usage.
+    core.manager.role_manager:
+        class: "%core.manager.role_manager.class%"
+        arguments: [ "@doctrine.orm.entity_manager", "@core.provider.role_provider", "@security.context" ]
+    #tag: tool        #The role provider service offer various method to retreive role from the database.
+    core.provider.role_provider:
+        class: "%core.provider.role_provider.class%"
+        arguments: [ "@doctrine.orm.entity_manager", "@security.context" ]
+    ##############################################################################
+    #                         The user command services                          #
+    ##############################################################################
+    #tag: command     #The add user command definition. This command allow a shell user to create a new user into the database.
+    core.command.add_user:
+        class: "%core.command.add_user.class%"
+        arguments: [ "@doctrine.orm.entity_manager", "@security.encoder_factory" ]
+        tags:
+            -  { name: console.command }
+    #tag: command     #The view user command definition. This command allow a shell user to list all existing users from the database.
+    core.command.view_user:
+        class: "%core.command.view_user.class%"
+        arguments: [ "@doctrine.orm.entity_manager" ]
+        tags:
+            -  { name: console.command }
+    #tag: command     #The remove user command definition. This command allow a shell user to remove an existing user from the database.
+    core.command.remove_user:
+        class: "%core.command.remove_user.class%"
+        arguments: [ "@doctrine.orm.entity_manager" ]
+        tags:
+            -  { name: console.command }
+        
