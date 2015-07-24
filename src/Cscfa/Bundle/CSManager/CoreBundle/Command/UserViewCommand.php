@@ -21,7 +21,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Console\Helper\Table;
-use Cscfa\Bundle\CSManager\CoreBundle\Entity\Role;
 
 /**
  * UserViewCommand class.
