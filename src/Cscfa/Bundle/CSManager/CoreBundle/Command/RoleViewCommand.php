@@ -21,6 +21,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Helper\Table;
 use Cscfa\Bundle\CSManager\CoreBundle\Util\Provider\RoleProvider;
+use Cscfa\Bundle\CSManager\CoreBundle\Entity\Role;
 
 /**
  * RoleViewCommand class.
