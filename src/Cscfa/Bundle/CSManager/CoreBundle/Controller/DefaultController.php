@@ -17,7 +17,6 @@
 namespace Cscfa\Bundle\CSManager\CoreBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Cscfa\Bundle\CSManager\CoreBundle\Entity\Role;
 
 /**
  * DefaultController class.

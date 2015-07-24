@@ -17,8 +17,6 @@
 namespace Cscfa\Bundle\CSManager\CoreBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
-use Cscfa\Bundle\CSManager\CoreBundle\Entity\Role;
-use Doctrine\ORM\EntityManager;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Cscfa\Bundle\CSManager\CoreBundle\Util\Manager\RoleManager;

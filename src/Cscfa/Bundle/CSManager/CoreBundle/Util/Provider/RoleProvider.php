@@ -143,6 +143,6 @@ class RoleProvider
      */
     public function isExistingByName($name)
     {
-        return $this->repository->isExistingByName($name) == null ? false : true;
+        return $this->repository->isExistingByName($name) === null ? false : true;
     }
 }

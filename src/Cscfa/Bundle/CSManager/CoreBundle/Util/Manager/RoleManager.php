@@ -22,7 +22,6 @@ use Cscfa\Bundle\CSManager\CoreBundle\Exception\CircularReferenceException;
 use Cscfa\Bundle\CSManager\CoreBundle\Util\Builder\RoleBuilder;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Cscfa\Bundle\CSManager\CoreBundle\Util\Provider\RoleProvider;
-use Doctrine\ORM\OptimisticLockException;
 
 /**
  * RoleManager class.
@@ -130,7 +129,7 @@ class RoleManager
             return false;
         }
         
-        if ($role == null) {
+        if ($role === null) {
             return true;
         }
         
@@ -274,7 +273,7 @@ class RoleManager
         if ($stack !== null) {
             $stack->setDate(new \DateTime());
             
-            if (method_exists($this->security, "getToken") && $this->security->getToken() != null && method_exists($this->security->getToken(), "getUser") && $this->security->getToken()->getUser() != null) {
+            if (method_exists($this->security, "getToken") && $this->security->getToken() !== null && method_exists($this->security->getToken(), "getUser") && $this->security->getToken()->getUser() !== null) {
                 $stack->setUpdatedBy(
                     $this->security->getToken()
                         ->getUser()

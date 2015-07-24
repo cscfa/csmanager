@@ -1,6 +1,6 @@
 {
     "name": "vallance/csmanager",
-    "description": "The csmanager is a scrum project manager."
+    "description": "The csmanager is a scrum project manager.",
     "license": "MIT",
     "type": "project",
     "autoload": {

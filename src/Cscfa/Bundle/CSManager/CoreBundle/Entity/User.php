@@ -22,7 +22,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\User\UserInterface;
 use FOS\UserBundle\Model\GroupableInterface;
 use FOS\UserBundle\Model\GroupInterface;
-use Symfony\Component\Config\Definition\BooleanNode;
 
 /**
  * User class.

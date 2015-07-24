@@ -17,7 +17,6 @@
 namespace Cscfa\Bundle\CSManager\CoreBundle\Entity\Base;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\Authentication\Provider\DaoAuthenticationProvider;
 use Cscfa\Bundle\CSManager\CoreBundle\Entity\User;
 
 /**
