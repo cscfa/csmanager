@@ -17,4 +17,3 @@ core:
                         min:      "This value must be positive"
                         invalid:  "This value must be an integer"
                     type:         "This value must be an integer"
-                    

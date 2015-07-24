@@ -22,4 +22,3 @@
 cscfa_cs_manager_core:
     resource: "@CscfaCSManagerCoreBundle/Resources/config/routing.yml"
     prefix:   /
-    
