@@ -1,12 +1,12 @@
 <?php
 /**
  * This file is a part of CSCFA csmanager project.
- * 
+ *
  * The csmanager project is a project manager written in php
  * with Symfony2 framework.
- * 
+ *
  * PHP version 5.5
- * 
+ *
  * @category   Example
  * @package    CscfaCSManagerCoreBundle
  * @author     Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
@@ -34,10 +34,10 @@ use Cscfa\Bundle\CSManager\CoreBundle\Entity\Role;
 
 /**
  * The HowToCreate class.
- * 
+ *
  * This class present the Role instance
  * creation.
- * 
+ *
  * @category Example
  * @package  CscfaCSManagerCoreBundle
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
@@ -49,10 +49,10 @@ class HowTo extends Controller implements ExampleInterface
 
     /**
      * The howItWork method.
-     * 
+     *
      * This method present the creation
      * of a Role instance.
-     * 
+     *
      * @see    \Cscfa\Bundle\CSManager\CoreBundle\Example\ExampleInterface::howItWork()
      * @return void
      */
@@ -125,12 +125,12 @@ class HowTo extends Controller implements ExampleInterface
 
     /**
      * The createRoleInstanceFromNothing.
-     * 
-     * This method present the empty Role 
+     *
+     * This method present the empty Role
      * instance creation.
-     * 
+     *
      * @param RoleManager $roleManager A RoleManager to manage Role instance.
-     * 
+     *
      * @return void
      */
     public function createRoleInstanceFromNothing(RoleManager $roleManager)
@@ -230,7 +230,7 @@ class HowTo extends Controller implements ExampleInterface
      *
      * @param RoleManager  $roleManager  A RoleManager to manage Role instance.
      * @param RoleProvider $roleProvider A RoleProvider to get Role from the databaase.
-     * 
+     *
      * @return void
      */
     public function createRoleInstanceFromExisting(RoleManager $roleManager, RoleProvider $roleProvider)
@@ -334,12 +334,12 @@ class HowTo extends Controller implements ExampleInterface
 
     /**
      * The useRoleManager.
-     * 
+     *
      * This method present the RoleManager
      * instance usage.
-     * 
+     *
      * @param RoleManager $roleManager A RoleManager to manage Role instance.
-     * 
+     *
      * @return void
      */
     public function useRoleManager(RoleManager $roleManager)
@@ -454,7 +454,7 @@ class HowTo extends Controller implements ExampleInterface
      * instance usage.
      *
      * @param RoleProvider $roleProvider A RoleProvider to get Role from the databaase.
-     * 
+     *
      * @return void
      */
     public function useRoleProvider(RoleProvider $roleProvider)
@@ -469,7 +469,7 @@ class HowTo extends Controller implements ExampleInterface
          */
         $allRoles = $roleProvider->findAll();
         foreach ($allRoles as $role) {
-            if(!$role instanceof Role){
+            if (! $role instanceof Role) {
                 Throw new \Exception('$role must be instance of Role.');
             }
         }
@@ -487,11 +487,11 @@ class HowTo extends Controller implements ExampleInterface
          * return null.
          */
         if ($roleProvider->isExistingByName("ROLE_USER")) {
-            if(!$roleProvider->findOneByName("ROLE_USER") instanceof Role){
+            if (! $roleProvider->findOneByName("ROLE_USER") instanceof Role) {
                 throw new \Exception('$roleProvider->findOneByName("ROLE_USER") must be instance of Role');
             }
         } else {
-            if(!$roleProvider->findOneByName("ROLE_USER") === null){
+            if (! $roleProvider->findOneByName("ROLE_USER") === null) {
                 throw new \Exception('$roleProvider->findOneByName("ROLE_USER") must be null');
             }
         }

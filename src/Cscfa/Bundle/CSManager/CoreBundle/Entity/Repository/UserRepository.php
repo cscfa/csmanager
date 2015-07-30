@@ -1,12 +1,12 @@
 <?php
 /**
  * This file is a part of CSCFA csmanager project.
- * 
+ *
  * The csmanager project is a project manager written in php
  * with Symfony2 framework.
- * 
+ *
  * PHP version 5.5
- * 
+ *
  * @category   Repository
  * @package    CscfaCSManagerCoreBundle
  * @author     Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
@@ -17,6 +17,7 @@
 namespace Cscfa\Bundle\CSManager\CoreBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query;
 
 /**
  * UserRepository class.
@@ -33,4 +34,52 @@ use Doctrine\ORM\EntityRepository;
  */
 class UserRepository extends EntityRepository
 {
+
+    /**
+     * Get all username.
+     *
+     * Return an array of all
+     * username into canonical
+     * state or null if none
+     * exists.
+     *
+     * @return string[]|NULL
+     */
+    public function getAllUsername()
+    {
+        try {
+            return $this->getEntityManager()
+                ->createQueryBuilder()
+                ->select("t0.user_username_canonical")
+                ->distinct()
+                ->getQuery()
+                ->getResult(Query::HYDRATE_ARRAY);
+        } catch (ORMInvalidArgumentException $e) {
+            return null;
+        }
+    }
+
+    /**
+     * Get all email.
+     *
+     * Return an array of all
+     * email into canonical
+     * state or null if none
+     * exists.
+     *
+     * @return string[]|NULL
+     */
+    public function getAllEmail()
+    {
+        try {
+            return $this->getEntityManager()
+                ->createQueryBuilder()
+                ->select("t0.user_email_canonical")
+                ->distinct()
+                ->getQuery()
+                ->getResult(Query::HYDRATE_ARRAY);
+        } catch (ORMInvalidArgumentException $e) {
+            return null;
+        }
+    }
 }
