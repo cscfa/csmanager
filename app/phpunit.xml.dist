@@ -13,6 +13,12 @@
             <directory>../src/*/Bundle/*Bundle/Tests</directory>
             <directory>../src/*Bundle/Tests</directory>
         </testsuite>
+        <testsuite name="cscfa csmanager core bundle role tests">
+          <file>../src/Cscfa/Bundle/CSManager/CoreBundle/Tests/Role/RoleBuilderTest.php</file>
+          <file>../src/Cscfa/Bundle/CSManager/CoreBundle/Tests/Role/RoleManagerTest.php</file>
+          <file>../src/Cscfa/Bundle/CSManager/CoreBundle/Tests/Role/RoleProviderTest.php</file>
+          <file>../src/Cscfa/Bundle/CSManager/CoreBundle/Tests/Role/RoleTest.php</file>
+        </testsuite>
     </testsuites>
 
     <!--
