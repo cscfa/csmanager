@@ -1,10 +1,10 @@
 <?php
-
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
 
 class AppKernel extends Kernel
 {
+
     public function registerBundles()
     {
         $bundles = array(
@@ -17,27 +17,30 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new Cscfa\Bundle\CSManager\CoreBundle\CscfaCSManagerCoreBundle(),
-//             new Cscfa\Bundle\CSManager\DashboardBundle\CscfaCSManagerDashboardBundle(),
-//             new Cscfa\Bundle\CSManager\ProjectBundle\CscfaCSManagerProjectBundle(),
-//             new Cscfa\Bundle\CSManager\TaskBundle\CscfaCSManagerTaskBundle(),
-//             new Cscfa\Bundle\CSManager\UserBundle\CscfaCSManagerUserBundle(),
-//             new Cscfa\Bundle\CSManager\ConfigBundle\CscfaCSManagerConfigBundle(),
-//             new Cscfa\Bundle\TwigUIBundle\CscfaTwigUIBundle(),
-        	new FOS\UserBundle\FOSUserBundle(),
+            // new Cscfa\Bundle\CSManager\DashboardBundle\CscfaCSManagerDashboardBundle(),
+            // new Cscfa\Bundle\CSManager\ProjectBundle\CscfaCSManagerProjectBundle(),
+            // new Cscfa\Bundle\CSManager\TaskBundle\CscfaCSManagerTaskBundle(),
+            // new Cscfa\Bundle\CSManager\UserBundle\CscfaCSManagerUserBundle(),
+            // new Cscfa\Bundle\CSManager\ConfigBundle\CscfaCSManagerConfigBundle(),
+            // new Cscfa\Bundle\TwigUIBundle\CscfaTwigUIBundle(),
+            new FOS\UserBundle\FOSUserBundle()
         );
-
-        if (in_array($this->getEnvironment(), array('dev', 'test'))) {
+        
+        if (in_array($this->getEnvironment(), array(
+            'dev',
+            'test'
+        ))) {
             $bundles[] = new Symfony\Bundle\DebugBundle\DebugBundle();
             $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
             $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
             $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
         }
-
+        
         return $bundles;
     }
 
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
-        $loader->load($this->getRootDir().'/config/config_'.$this->getEnvironment().'.yml');
+        $loader->load($this->getRootDir() . '/config/config_' . $this->getEnvironment() . '.yml');
     }
 }
