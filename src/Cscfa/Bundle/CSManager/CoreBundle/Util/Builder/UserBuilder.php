@@ -20,7 +20,6 @@ use Cscfa\Bundle\CSManager\CoreBundle\Entity\User;
 use Cscfa\Bundle\CSManager\CoreBundle\Util\Manager\UserManager;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Cscfa\Bundle\CSManager\CoreBundle\Entity\StackUpdate;
-use Cscfa\Bundle\CSManager\CoreBundle\Util\Manager\RoleManager;
 use Cscfa\Bundle\CSManager\CoreBundle\Entity\Role;
 use Cscfa\Bundle\CSManager\CoreBundle\Util\Provider\UserProvider;
 
@@ -217,8 +216,12 @@ class UserBuilder
      *
      * @return \Cscfa\Bundle\CSManager\CoreBundle\Util\Builder\UserBuilder
      */
-    public function addRole($role, $force = false)
+    public function addRole(Role $role = null, $force = false)
     {
+        if ($role === null) {
+            return $this;
+        }
+        
         if ($this->manager->getRoleManager()->roleExists($role->getName()) || $force) {
             $this->user->addRole($role);
         } else {
@@ -286,7 +289,7 @@ class UserBuilder
      * the email format according to general
      * email regular expression.
      *
-     * @param unknown $email
+     * @param string $email
      * @param string $force
      * @return boolean
      */

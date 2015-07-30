@@ -16,7 +16,6 @@
  */
 namespace Cscfa\Bundle\CSManager\CoreBundle\Util\Provider;
 
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\EntityManager;
 
 /**
