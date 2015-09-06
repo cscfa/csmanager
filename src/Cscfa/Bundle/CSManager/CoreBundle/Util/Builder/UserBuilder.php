@@ -468,7 +468,7 @@ class UserBuilder
     {
         $currentDate = new \DateTime();
         
-        if ($currentDate <= $date || $date == null || $force) {
+        if ($currentDate <= $date || $date === null || $force) {
             $this->user->setCredentialsExpireAt($date);
             return true;
         } else {
