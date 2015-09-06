@@ -92,6 +92,100 @@ class UserBuilder
     const DUPLICATE_EMAIL = 3;
 
     /**
+     * An error type.
+     * 
+     * This error represent that a
+     * role is unexisting into the
+     * database. 
+     * 
+     * @var integer
+     */
+    const UNDEFINED_ROLE = 4;
+
+    /**
+     * An error type.
+     * 
+     * This error represent that
+     * a role is not assigned to the
+     * current user when a deletion
+     * occured.
+     * 
+     * @var integer
+     */
+    const NOT_ASSIGNED_ROLE = 5;
+
+    /**
+     * An error type.
+     * 
+     * This error represent that
+     * a given expiration date is
+     * before the current date.
+     * 
+     * @var integer
+     */
+    const EXPIRATION_DATE_BEFORE_NOW = 6;
+
+    /**
+     * An error type.
+     * 
+     * This error represent that
+     * a parameter asserted as
+     * boolean is not a boolean.
+     * 
+     * @var integer
+     */
+    const IS_NOT_BOOLEAN = 7;
+    
+    /**
+     * An error type.
+     * 
+     * This error represent that
+     * a parameter asserted as
+     * string password is an
+     * empty string.
+     * 
+     * @var integer
+     */
+    const EMPTY_PASSWORD = 8;
+    
+    /**
+     * An error type.
+     * 
+     * This error represent that
+     * a parameter asserted as
+     * string password is not a
+     * typed string.
+     * 
+     * @var integer
+     */
+    const IS_NOT_STRING = 9;
+    
+    /**
+     * An error type.
+     * 
+     * This error represent that
+     * a parameter asserted as
+     * a last user login date
+     * is more avanced that the
+     * current date.
+     * 
+     * @var integer
+     */
+    const LAST_LOGIN_AFTER_NOW = 10;
+    
+    /**
+     * An error type.
+     * 
+     * This error represent that
+     * a parameter asserted as
+     * a date is time based after
+     * the current date and time.
+     * 
+     * @var integer
+     */
+    const DATE_AFTER_NOW = 11;
+
+    /**
      * The user instance.
      *
      * This is the encapsulated user instance
@@ -235,6 +329,44 @@ class UserBuilder
     }
 
     /**
+     * Remove a Role from the user.
+     * 
+     * This method allow to remove a role
+     * from the current user. This will first
+     * check if the Role exist and if the user
+     * already has this Role. If one of this
+     * check fail, the method will return false.
+     * Also, if the checks success, this method
+     * will return true.
+     * 
+     * It is possible to desable this first
+     * check by passing true as second parameter.
+     * In this case, the method will always return
+     * true.
+     * 
+     * @param Role    $role  The role to remove
+     * @param boolean $force The validation force state
+     * 
+     * @return boolean
+     */
+    public function removeRole(Role $role, $force = false)
+    {
+        if ($this->manager->getRoleManager()->roleExists($role->getName()) || $force) {
+            if ($this->user->hasRole($role->getName()) || $force) {
+                $this->user->removeRole($role->getName());
+            } else {
+                $this->lastError = self::NOT_ASSIGNED_ROLE;
+                return false;
+            }
+        } else {
+            $this->lastError = self::UNDEFINED_ROLE;
+            return false;
+        }
+        
+        return true;
+    }
+
+    /**
      * Setting the username.
      *
      * This method allow to set the username
@@ -258,7 +390,7 @@ class UserBuilder
      * @param string  $username The new username.
      * @param boolean $force    The validation force state.
      *
-     * @return boolean|\Cscfa\Bundle\CSManager\CoreBundle\Util\Builder\UserBuilder
+     * @return boolean
      */
     public function setUsername($username, $force = false)
     {
@@ -277,8 +409,6 @@ class UserBuilder
             $this->lastError = self::INVALID_USERNAME;
             return false;
         }
-        
-        return $this;
     }
 
     /**
@@ -289,15 +419,16 @@ class UserBuilder
      * the email format according to general
      * email regular expression.
      *
-     * @param string $email
-     * @param string $force
+     * @param string $email The new email
+     * @param string $force The validation force state
+     * 
      * @return boolean
      */
     public function setEmail($email, $force = false)
     {
         if ($this->manager->isEmailValid($email) || $force) {
             $canonical = strtolower($email);
-            if (! in_array($canonical, $this->provider->getAllEmail()) || $force || $this->user->getEmail()) {
+            if (! in_array($canonical, $this->provider->getAllEmail()) || $force || $this->user->getEmailCanonical() === $canonical) {
                 $this->user->setEmail($email);
                 $this->user->setEmailCanonical($canonical);
                 return true;
@@ -309,5 +440,619 @@ class UserBuilder
             $this->lastError = self::INVALID_EMAIL;
             return false;
         }
+    }
+
+    /**
+     * Setting the credentials expiration date.
+     * 
+     * This method allow to specify a
+     * credential expiration date. This
+     * will check if the given expiration
+     * date is after the current date. If
+     * this validation fail, the method
+     * will return false. Else if the date
+     * is valid, the method will return true.
+     * 
+     * It's possible to force the validation
+     * state by passing true as second parameter.
+     * In this case the method will always
+     * return true. The same effect will be
+     * find when passing null as date.
+     * 
+     * @param \DateTime $date  The new date or null
+     * @param string    $force The validation force state
+     * 
+     * @return boolean
+     */
+    public function setCredentialsExpireAt(\DateTime $date = null, $force = false)
+    {
+        $currentDate = new \DateTime();
+        
+        if ($currentDate <= $date || $date == null || $force) {
+            $this->user->setCredentialsExpireAt($date);
+            return true;
+        } else {
+            $this->lastError = self::EXPIRATION_DATE_BEFORE_NOW;
+            return false;
+        }
+    }
+
+    /**
+     * Force the credential expiration state.
+     * 
+     * This method allow to force 
+     * the expiration state of the 
+     * credentials. If the needed state
+     * is true, the expiration state
+     * will be turn to true and the
+     * expiration date will be set
+     * to the current date.
+     * 
+     * If the needed state is false,
+     * the expiration state will be turn
+     * to false, and the expiration date
+     * will be set to null.
+     * 
+     * @param boolean $boolean The expiration state
+     */
+    public function setCredentialsExpired($boolean)
+    {
+        if ($boolean === true) {
+            $currentDate = new \DateTime();
+            $this->user->setCredentialsExpireAt($currentDate);
+            $this->user->setCredentialsExpired(true);
+        } else {
+            $this->user->setCredentialsExpireAt(null);
+            $this->user->setCredentialsExpired(false);
+        }
+    }
+
+    /**
+     * Set the enable state.
+     * 
+     * This method allow to set the
+     * enabled state of an user account.
+     * It will assert that the given
+     * parameter is a boolean type. If
+     * not, the method will return false,
+     * however the method will return true.
+     * 
+     * It's possible to force the validation
+     * by passing true as second parameter.
+     * In this case, the first parameter
+     * will be casted and the method will
+     * return true.
+     * 
+     * @param boolean $boolean The enabled state
+     * @param string  $force   The validation force state
+     * 
+     * @return boolean
+     */
+    public function setEnabled($boolean, $force = false)
+    {
+        if (($boolean !== true && $boolean !== false) || $force) {
+            $this->lastError = self::IS_NOT_BOOLEAN;
+            return false;
+        }
+        
+        $this->user->setEnabled($boolean);
+        return true;
+    }
+    
+    /**
+     * Set the expiration date.
+     * 
+     * This method allow to set the user
+     * expiration date. It will assert
+     * that the new date is past of the
+     * current date. If not, the method
+     * will return false. Else, the method
+     * will return true.
+     * 
+     * It's possible to force the validation
+     * by passing true as second parameter.
+     * If it's the case, the method will
+     * return true.
+     * 
+     * This method allow to passing null as
+     * date. In this case, the date validation
+     * is ignored.
+     * 
+     * @param \DateTime $date  The new expiration date
+     * @param boolean   $force The validation force state
+     * 
+     * @return boolean
+     */
+    public function setExpiresAt(\DateTime $date = null, $force)
+    {
+        $currentDate = new \DateTime();
+        
+        if($date !== null && $currentDate >= $date && !$force){
+            $this->lastError = self::EXPIRATION_DATE_BEFORE_NOW;
+            return false;
+        }
+        
+        $this->user->setExpiresAt($date);
+    
+        return true;
+    }
+    
+    /**
+     * Set the expired state.
+     * 
+     * This method allow to set the user
+     * expired state. It will assert that
+     * the given state is typed as boolean.
+     * If not, the method will return false.
+     * Else, it'll return true.
+     * 
+     * It's possible to override the validation
+     * by passing true as second parameter. In
+     * this case, the state will be cast as
+     * boolean.
+     * 
+     * This method also set the expiration
+     * date of the user to conserve the logic
+     * state of the entity. If the new state
+     * is false, the expiration date will
+     * be set to null. If the state is true,
+     * expiration date will be set to the
+     * current date.
+     * 
+     * @param boolean $boolean The expired state
+     * @param string  $force   The validation force state
+     * 
+     * @return boolean
+     */
+    public function setExpired($boolean, $force = false)
+    {
+        if (($boolean !== true && $boolean !== false) || $force) {
+            $this->lastError = self::IS_NOT_BOOLEAN;
+            return false;
+        }
+        
+        if($boolean){
+            $this->user->setExpiresAt(new \DateTime());
+        }else{
+            $this->user->setExpiresAt(null);
+        }
+        
+        $this->user->setExpired($boolean);
+        
+        return true;
+    }
+    
+    /**
+     * Set the password.
+     * 
+     * This method allow to set the user 
+     * password. It will first assert that 
+     * the  given password is not empty 
+     * and is a string. No password format 
+     * validation is applied by this method. 
+     * It'll return false if a validation 
+     * failed. However it'll return true. 
+     * This method allow to passing null 
+     * as password.
+     * 
+     * It's possible to desable the 
+     * validation by passing true as 
+     * second parameter. In this specific 
+     * case, the method will always
+     * return true.
+     * 
+     * This method set up the plain 
+     * password field and encode the
+     * password before apply to the
+     * user as new password.
+     * 
+     * @param string  $password The plain password to set
+     * @param boolean $force    The validation force state
+     * 
+     * @return boolean
+     */
+    public function setPassword($password = null, $force = false)
+    {
+        if(!$force && $password !== null && ($password == "" || empty($password))){
+            $this->lastError = self::EMPTY_PASSWORD;
+            return false;
+        } else if(!$force && $password !== null && !is_string($password)){
+            $this->lastError = self::IS_NOT_STRING;
+            return false;
+        }
+        
+        $plainPassword = $password;
+        
+        if($password !== null){
+            $password = $this->encoder->getEncoder($this->user)->encodePassword($password, $this->user->getSalt());
+        }
+        
+        $this->user->setPassword($password);
+        $this->user->setPlainPassword($plainPassword);
+        
+        return true;
+    }
+    
+    /**
+     * Set super admin state.
+     * 
+     * This method allow to set the user
+     * super administrator state. It will 
+     * first assert that the given state 
+     * is a valid typed boolean. If this 
+     * validation failed, the method will 
+     * return false. Else, the method will 
+     * return true.
+     * 
+     * It's possible to desable the 
+     * validation by passing true as 
+     * second parameter. In this specific 
+     * case, the method will always
+     * return true.
+     * 
+     * @param boolean $boolean The super admin state
+     * @param boolean $force   The validation force state
+     *
+     * @return boolean
+     */
+    public function setSuperAdmin($boolean, $force = false)
+    {
+        if(!$force && $boolean !== true && $boolean !== false){
+            $this->lastError = self::IS_NOT_BOOLEAN;
+            return false;
+        } else if (true === $boolean) {
+            $this->user->addRole(static::ROLE_SUPER_ADMIN);
+        } else {
+            $this->user->removeRole(static::ROLE_SUPER_ADMIN);
+        }
+        
+        return true;
+    }
+    
+    /**
+     * Set the user last login date.
+     * 
+     * This method allow to set the user 
+     * last login date. It will first 
+     * valid that the given date is 
+     * before or equal the current date 
+     * and time. If this validation fail, 
+     * the method will return false. Else 
+     * if the validation success, the 
+     * method will return true.
+     * 
+     * It's possible to desable the 
+     * validation stateby passing true 
+     * as second parameter. In this 
+     * case, the method will always 
+     * return true.
+     * 
+     * @param \DateTime $time  The new user last login time
+     * @param boolean   $force The validation force state
+     * 
+     * @return boolean
+     */
+    public function setLastLogin(\DateTime $time, $force = false)
+    {
+        $currentTime = new \DateTime();
+        
+        if($currentTime < $time && !$force){
+            $this->lastError = self::LAST_LOGIN_AFTER_NOW;
+            return false;
+        }
+        
+        $this->user->setLastLogin($time);
+        
+        return true;
+    }
+    
+    /**
+     * Set the user locked state.
+     * 
+     * This method allow to set the user 
+     * locked state. It will assert that 
+     * the first parameter is typed as 
+     * boolean and valid this. If the 
+     * validation failed, the method will 
+     * return false. However, the method 
+     * will return true.
+     * 
+     * It's possible to desable the 
+     * validation by passing true as 
+     * second parameter. In this case, 
+     * the method will always return true.
+     * 
+     * @param boolean $boolean The locked state
+     * @param string  $force   The validation force state
+     * 
+     * @return boolean
+     */
+    public function setLocked($boolean, $force = false)
+    {
+        if($boolean !== false && $boolean !== true && !$force){
+            $this->lastError = self::IS_NOT_BOOLEAN;
+            return false;
+        }
+        
+        $this->user->setLocked( (boolean)$force );
+        
+        return true;
+    }
+
+    /**
+     * Set the user confirmation token.
+     * 
+     * This method allow to set the user
+     * confirmation token. It will first
+     * validate that the given token is
+     * typed as string. If not, the method
+     * will return false, else return
+     * true.
+     * 
+     * It's possible to desable the 
+     * validation by passing true as 
+     * second parameter. In this case, 
+     * the method will always return true.
+     * 
+     * @param string $confirmationToken The confirmation token string
+     * @param string $force             The validation force state
+     * 
+     * @return boolean
+     */
+    public function setConfirmationToken($confirmationToken, $force = false)
+    {
+        if(!$force && !is_string($confirmationToken)){
+            $this->lastError = self::IS_NOT_STRING;
+            return false;
+        }
+        
+        $this->user->setConfirmationToken($confirmationToken);
+        
+        return true;
+    }
+    
+    /**
+     * Set the password request date.
+     * 
+     * This method allow to set the user
+     * password request date. It will first
+     * validate that the new date is past
+     * or equal the current date and time.
+     * 
+     * It's possible to desable the 
+     * validation by passing true as 
+     * second parameter. In this case, 
+     * the method will always return true.
+     * 
+     * @param \DateTime $date  The request date
+     * @param string    $force The validation force state
+     * 
+     * @return boolean
+     */
+    public function setPasswordRequestedAt(\DateTime $date = null, $force = false)
+    {
+        $currentTime = new \DateTime();
+        
+        if($currentTime < $date && !$force){
+            $this->lastError = self::DATE_AFTER_NOW;
+            return false;
+        }
+        
+        $this->user->setPasswordRequestedAt($date);
+        
+        return true;
+    }
+    
+    /**
+     * Set the user password salt.
+     * 
+     * This method allow to set the user
+     * password salt. It will first validate
+     * that the given salt is typed as string.
+     * If not, the method will return false,
+     * however, the method will return true.
+     * 
+     * It's possible to desable the 
+     * validation by passing true as 
+     * second parameter. In this case, 
+     * the method will always return true.
+     * 
+     * Consider that the password need to be
+     * set up after this method usage or
+     * any login action will fail due to
+     * encoding logical error du to unreferenced
+     * salt hacking.
+     * 
+     * @param string  $salt  The new user salt
+     * @param boolean $force The validation force state
+     * 
+     * @return boolean
+     */
+    public function setSalt($salt, $force = false)
+    {
+        if(!is_string($salt) && !$force){
+            $this->lastError = self::IS_NOT_STRING;
+            return false;
+        }
+        
+        $this->user->setSalt($salt);
+        return true;
+    }
+    
+    /**
+     * Get the username.
+     * 
+     * This method return the
+     * user username as string.
+     * 
+     * @return string
+     */
+    public function getUsername(){
+        return $this->user->getUsername();
+    }
+    /**
+     * Get the username canonical.
+     * 
+     * This method return the
+     * user username canonical
+     * as string.
+     * 
+     * @return string
+     */
+    public function getUsernameCanonical(){
+        return $this->user->getUsernameCanonical();
+    }
+    /**
+     * Get the email.
+     * 
+     * This method return the
+     * user email as string.
+     * 
+     * @return string
+     */
+    public function getEmail(){
+        return $this->user->getEmail();
+    }
+    /**
+     * Get the email canonical.
+     * 
+     * This method return the
+     * user email canonical
+     * as string.
+     * 
+     * @return string
+     */
+    public function getEmailCanonical(){
+        return $this->user->getEmailCanonical();
+    }
+    /**
+     * Get the enable state.
+     * 
+     * This method return the
+     * user enabled state as
+     * boolean.
+     * 
+     * @return boolean
+     */
+    public function isEnabled(){
+        return $this->user->isEnabled();
+    }
+    /**
+     * Get the password salt.
+     * 
+     * This method return the user
+     * password salt as string.
+     * 
+     * @return string
+     */
+    public function getSalt(){
+        return $this->user->getSalt();
+    }
+    /**
+     * Get the password.
+     * 
+     * This method return the
+     * user password as string.
+     * 
+     * @return string
+     */
+    public function getPassword(){
+        return $this->user->getPassword();
+    }
+    /**
+     * Get the plain password.
+     * 
+     * This method return the
+     * user plain text password
+     * as string.
+     * 
+     * @return string
+     */
+    public function getPlainPassword(){
+        return $this->user->getPlainPassword();
+    }
+    /**
+     * Get the last login.
+     * 
+     * This method return the
+     * user last login date as
+     * DateTime.
+     * 
+     * @return DateTime
+     */
+    public function getLastLogin(){
+        return $this->user->getLastLogin();
+    }
+    /**
+     * Get the confirmation token.
+     * 
+     * This method return the
+     * user confirmation token
+     * as string.
+     * 
+     * @return string
+     */
+    public function getConfirmationToken(){
+        return $this->user->getConfirmationToken();
+    }
+    /**
+     * Get the password request date.
+     * 
+     * This method return the
+     * user password request as
+     * DateTime.
+     * 
+     * @return DateTime
+     */
+    public function getPasswordRequestedAt(){
+        return $this->user->getPasswordRequestedAt();
+    }
+    /**
+     * Get the locked state.
+     * 
+     * This method return the
+     * user locked state as 
+     * boolean.
+     * 
+     * @return boolean
+     */
+    public function isLocked(){
+        return $this->user->isLocked();
+    }
+    /**
+     * Get the expiration state.
+     * 
+     * This method return the
+     * user expiration state as 
+     * boolean.
+     * 
+     * @return boolean
+     */
+    public function isExpired(){
+        return $this->user->isExpired();
+    }
+    /**
+     * Get the roles.
+     * 
+     * This method return the
+     * user Roles as array of
+     * Role.
+     * 
+     * @return multitype:Role
+     */
+    public function getRoles(){
+        return $this->user->getRoles();
+    }
+    /**
+     * Get the credential expired state.
+     * 
+     * This method return the
+     * user credential expiration
+     * state as boolean.
+     * 
+     * @return boolean
+     */
+    public function isCredentialsExpired(){
+        return $this->user->isCredentialsExpired();
     }
 }

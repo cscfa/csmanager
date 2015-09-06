@@ -200,7 +200,7 @@ class UserAddCommand extends ContainerAwareCommand
             ->setEmailCanonical(strtolower($email))
             ->setRoles($roles);
         
-        $hash = $this->encoderFactory->getEncoder($user)->encodePassword($password, null);
+        $hash = $this->encoderFactory->getEncoder($user)->encodePassword($password, $salt);
         $user->setPassword($hash);
         
         $this->doctrineManager->persist($user);
