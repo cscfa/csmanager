@@ -7,12 +7,12 @@
  * 
  * PHP version 5.5
  * 
- * @category   Command
- * @package    CscfaCSManagerCoreBundle
- * @author     Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
- * @license    http://opensource.org/licenses/MIT MIT
+ * @category Command
+ * @package  CscfaCSManagerCoreBundle
+ * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
+ * @license  http://opensource.org/licenses/MIT MIT
  * @filesource
- * @link       http://cscfa.fr
+ * @link     http://cscfa.fr
  */
 namespace Cscfa\Bundle\CSManager\CoreBundle\Command;
 
@@ -66,8 +66,8 @@ class RoleDebugCommand extends ContainerAwareCommand
      * and a role manager. Also it call the parent
      * constructor.
      *
-     * @param RoleProvider $RoleProvider            
-     * @param RoleManager  $roleManager            
+     * @param RoleProvider $RoleProvider The Role provider service
+     * @param RoleManager  $roleManager  The Role manager service
      */
     public function __construct(RoleProvider $RoleProvider, RoleManager $roleManager)
     {

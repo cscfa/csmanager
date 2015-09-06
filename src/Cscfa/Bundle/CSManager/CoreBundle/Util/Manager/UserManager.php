@@ -7,12 +7,12 @@
  *
  * PHP version 5.5
  *
- * @category   Manager
- * @package    CscfaCSManagerCoreBundle
- * @author     Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
- * @license    http://opensource.org/licenses/MIT MIT
+ * @category Manager
+ * @package  CscfaCSManagerCoreBundle
+ * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
+ * @license  http://opensource.org/licenses/MIT MIT
  * @filesource
- * @link       http://cscfa.fr
+ * @link     http://cscfa.fr
  */
 namespace Cscfa\Bundle\CSManager\CoreBundle\Util\Manager;
 
@@ -79,7 +79,8 @@ class UserManager
      * a regex test and return true if
      * the regex match the username.
      *
-     * @param string $username
+     * @param string $username The username to test
+     * 
      * @return boolean
      */
     public function isUsernameValid($username)
@@ -94,7 +95,8 @@ class UserManager
      * a regex test and return true if
      * the regex match the email.
      *
-     * @param string $email
+     * @param string $email The email to validate
+     * 
      * @return boolean
      */
     public function isEmailValid($email)

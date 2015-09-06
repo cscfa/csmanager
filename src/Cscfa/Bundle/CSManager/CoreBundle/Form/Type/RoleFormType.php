@@ -7,12 +7,12 @@
  * 
  * PHP version 5.5
  * 
- * @category   Form
- * @package    CscfaCSManagerCoreBundle
- * @author     Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
- * @license    http://opensource.org/licenses/MIT MIT
+ * @category Form
+ * @package  CscfaCSManagerCoreBundle
+ * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
+ * @license  http://opensource.org/licenses/MIT MIT
  * @filesource
- * @link       http://cscfa.fr
+ * @link     http://cscfa.fr
  */
 namespace Cscfa\Bundle\CSManager\CoreBundle\Form\Type;
 
@@ -56,7 +56,7 @@ class RoleFormType extends AbstractType
      * instance to access to specific
      * management methods.
      *
-     * @param RoleManager $roleManager            
+     * @param RoleManager $roleManager The Role manager service
      */
     public function __construct(RoleManager $roleManager)
     {

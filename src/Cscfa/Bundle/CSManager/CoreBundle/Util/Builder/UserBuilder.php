@@ -7,12 +7,12 @@
  *
  * PHP version 5.5
  *
- * @category   Builder
- * @package    CscfaCSManagerCoreBundle
- * @author     Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
- * @license    http://opensource.org/licenses/MIT MIT
+ * @category Builder
+ * @package  CscfaCSManagerCoreBundle
+ * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
+ * @license  http://opensource.org/licenses/MIT MIT
  * @filesource
- * @link       http://cscfa.fr
+ * @link     http://cscfa.fr
  */
 namespace Cscfa\Bundle\CSManager\CoreBundle\Util\Builder;
 
@@ -135,7 +135,7 @@ class UserBuilder
      * @var integer
      */
     const IS_NOT_BOOLEAN = 7;
-    
+
     /**
      * An error type.
      * 
@@ -147,7 +147,7 @@ class UserBuilder
      * @var integer
      */
     const EMPTY_PASSWORD = 8;
-    
+
     /**
      * An error type.
      * 
@@ -159,7 +159,7 @@ class UserBuilder
      * @var integer
      */
     const IS_NOT_STRING = 9;
-    
+
     /**
      * An error type.
      * 
@@ -172,7 +172,7 @@ class UserBuilder
      * @var integer
      */
     const LAST_LOGIN_AFTER_NOW = 10;
-    
+
     /**
      * An error type.
      * 
@@ -494,6 +494,8 @@ class UserBuilder
      * will be set to null.
      * 
      * @param boolean $boolean The expiration state
+     * 
+     * @return void
      */
     public function setCredentialsExpired($boolean)
     {
@@ -538,7 +540,7 @@ class UserBuilder
         $this->user->setEnabled($boolean);
         return true;
     }
-    
+
     /**
      * Set the expiration date.
      * 
@@ -563,20 +565,20 @@ class UserBuilder
      * 
      * @return boolean
      */
-    public function setExpiresAt(\DateTime $date = null, $force)
+    public function setExpiresAt(\DateTime $date = null, $force = false)
     {
         $currentDate = new \DateTime();
         
-        if($date !== null && $currentDate >= $date && !$force){
+        if ($date !== null && $currentDate >= $date && ! $force) {
             $this->lastError = self::EXPIRATION_DATE_BEFORE_NOW;
             return false;
         }
         
         $this->user->setExpiresAt($date);
-    
+        
         return true;
     }
-    
+
     /**
      * Set the expired state.
      * 
@@ -611,9 +613,9 @@ class UserBuilder
             return false;
         }
         
-        if($boolean){
+        if ($boolean) {
             $this->user->setExpiresAt(new \DateTime());
-        }else{
+        } else {
             $this->user->setExpiresAt(null);
         }
         
@@ -621,7 +623,7 @@ class UserBuilder
         
         return true;
     }
-    
+
     /**
      * Set the password.
      * 
@@ -653,17 +655,17 @@ class UserBuilder
      */
     public function setPassword($password = null, $force = false)
     {
-        if(!$force && $password !== null && ($password == "" || empty($password))){
+        if (! $force && $password !== null && ($password == "" || empty($password))) {
             $this->lastError = self::EMPTY_PASSWORD;
             return false;
-        } else if(!$force && $password !== null && !is_string($password)){
+        } else if (! $force && $password !== null && ! is_string($password)) {
             $this->lastError = self::IS_NOT_STRING;
             return false;
         }
         
         $plainPassword = $password;
         
-        if($password !== null){
+        if ($password !== null) {
             $password = $this->encoder->getEncoder($this->user)->encodePassword($password, $this->user->getSalt());
         }
         
@@ -672,7 +674,7 @@ class UserBuilder
         
         return true;
     }
-    
+
     /**
      * Set super admin state.
      * 
@@ -697,7 +699,7 @@ class UserBuilder
      */
     public function setSuperAdmin($boolean, $force = false)
     {
-        if(!$force && $boolean !== true && $boolean !== false){
+        if (! $force && $boolean !== true && $boolean !== false) {
             $this->lastError = self::IS_NOT_BOOLEAN;
             return false;
         } else if (true === $boolean) {
@@ -708,7 +710,7 @@ class UserBuilder
         
         return true;
     }
-    
+
     /**
      * Set the user last login date.
      * 
@@ -736,7 +738,7 @@ class UserBuilder
     {
         $currentTime = new \DateTime();
         
-        if($currentTime < $time && !$force){
+        if ($currentTime < $time && ! $force) {
             $this->lastError = self::LAST_LOGIN_AFTER_NOW;
             return false;
         }
@@ -745,7 +747,7 @@ class UserBuilder
         
         return true;
     }
-    
+
     /**
      * Set the user locked state.
      * 
@@ -769,12 +771,12 @@ class UserBuilder
      */
     public function setLocked($boolean, $force = false)
     {
-        if($boolean !== false && $boolean !== true && !$force){
+        if ($boolean !== false && $boolean !== true && ! $force) {
             $this->lastError = self::IS_NOT_BOOLEAN;
             return false;
         }
         
-        $this->user->setLocked( (boolean)$force );
+        $this->user->setLocked((boolean) $force);
         
         return true;
     }
@@ -801,7 +803,7 @@ class UserBuilder
      */
     public function setConfirmationToken($confirmationToken, $force = false)
     {
-        if(!$force && !is_string($confirmationToken)){
+        if (! $force && ! is_string($confirmationToken)) {
             $this->lastError = self::IS_NOT_STRING;
             return false;
         }
@@ -810,7 +812,7 @@ class UserBuilder
         
         return true;
     }
-    
+
     /**
      * Set the password request date.
      * 
@@ -833,7 +835,7 @@ class UserBuilder
     {
         $currentTime = new \DateTime();
         
-        if($currentTime < $date && !$force){
+        if ($currentTime < $date && ! $force) {
             $this->lastError = self::DATE_AFTER_NOW;
             return false;
         }
@@ -842,7 +844,7 @@ class UserBuilder
         
         return true;
     }
-    
+
     /**
      * Set the user password salt.
      * 
@@ -870,7 +872,7 @@ class UserBuilder
      */
     public function setSalt($salt, $force = false)
     {
-        if(!is_string($salt) && !$force){
+        if (! is_string($salt) && ! $force) {
             $this->lastError = self::IS_NOT_STRING;
             return false;
         }
@@ -878,7 +880,7 @@ class UserBuilder
         $this->user->setSalt($salt);
         return true;
     }
-    
+
     /**
      * Get the username.
      * 
@@ -887,9 +889,11 @@ class UserBuilder
      * 
      * @return string
      */
-    public function getUsername(){
+    public function getUsername()
+    {
         return $this->user->getUsername();
     }
+
     /**
      * Get the username canonical.
      * 
@@ -899,9 +903,11 @@ class UserBuilder
      * 
      * @return string
      */
-    public function getUsernameCanonical(){
+    public function getUsernameCanonical()
+    {
         return $this->user->getUsernameCanonical();
     }
+
     /**
      * Get the email.
      * 
@@ -910,9 +916,11 @@ class UserBuilder
      * 
      * @return string
      */
-    public function getEmail(){
+    public function getEmail()
+    {
         return $this->user->getEmail();
     }
+
     /**
      * Get the email canonical.
      * 
@@ -922,9 +930,11 @@ class UserBuilder
      * 
      * @return string
      */
-    public function getEmailCanonical(){
+    public function getEmailCanonical()
+    {
         return $this->user->getEmailCanonical();
     }
+
     /**
      * Get the enable state.
      * 
@@ -934,9 +944,11 @@ class UserBuilder
      * 
      * @return boolean
      */
-    public function isEnabled(){
+    public function isEnabled()
+    {
         return $this->user->isEnabled();
     }
+
     /**
      * Get the password salt.
      * 
@@ -945,9 +957,11 @@ class UserBuilder
      * 
      * @return string
      */
-    public function getSalt(){
+    public function getSalt()
+    {
         return $this->user->getSalt();
     }
+
     /**
      * Get the password.
      * 
@@ -956,9 +970,11 @@ class UserBuilder
      * 
      * @return string
      */
-    public function getPassword(){
+    public function getPassword()
+    {
         return $this->user->getPassword();
     }
+
     /**
      * Get the plain password.
      * 
@@ -968,9 +984,11 @@ class UserBuilder
      * 
      * @return string
      */
-    public function getPlainPassword(){
+    public function getPlainPassword()
+    {
         return $this->user->getPlainPassword();
     }
+
     /**
      * Get the last login.
      * 
@@ -980,9 +998,11 @@ class UserBuilder
      * 
      * @return DateTime
      */
-    public function getLastLogin(){
+    public function getLastLogin()
+    {
         return $this->user->getLastLogin();
     }
+
     /**
      * Get the confirmation token.
      * 
@@ -992,9 +1012,11 @@ class UserBuilder
      * 
      * @return string
      */
-    public function getConfirmationToken(){
+    public function getConfirmationToken()
+    {
         return $this->user->getConfirmationToken();
     }
+
     /**
      * Get the password request date.
      * 
@@ -1004,9 +1026,11 @@ class UserBuilder
      * 
      * @return DateTime
      */
-    public function getPasswordRequestedAt(){
+    public function getPasswordRequestedAt()
+    {
         return $this->user->getPasswordRequestedAt();
     }
+
     /**
      * Get the locked state.
      * 
@@ -1016,9 +1040,11 @@ class UserBuilder
      * 
      * @return boolean
      */
-    public function isLocked(){
+    public function isLocked()
+    {
         return $this->user->isLocked();
     }
+
     /**
      * Get the expiration state.
      * 
@@ -1028,9 +1054,11 @@ class UserBuilder
      * 
      * @return boolean
      */
-    public function isExpired(){
+    public function isExpired()
+    {
         return $this->user->isExpired();
     }
+
     /**
      * Get the roles.
      * 
@@ -1040,9 +1068,11 @@ class UserBuilder
      * 
      * @return multitype:Role
      */
-    public function getRoles(){
+    public function getRoles()
+    {
         return $this->user->getRoles();
     }
+
     /**
      * Get the credential expired state.
      * 
@@ -1052,7 +1082,8 @@ class UserBuilder
      * 
      * @return boolean
      */
-    public function isCredentialsExpired(){
+    public function isCredentialsExpired()
+    {
         return $this->user->isCredentialsExpired();
     }
 }

@@ -7,12 +7,12 @@
  * 
  * PHP version 5.5
  * 
- * @category   Exception
- * @package    CscfaCSManagerCoreBundle
- * @author     Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
- * @license    http://opensource.org/licenses/MIT MIT
+ * @category Exception
+ * @package  CscfaCSManagerCoreBundle
+ * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
+ * @license  http://opensource.org/licenses/MIT MIT
  * @filesource
- * @link       http://cscfa.fr
+ * @link     http://cscfa.fr
  */
 namespace Cscfa\Bundle\CSManager\CoreBundle\Exception;
 
@@ -48,7 +48,7 @@ class CircularReferenceException extends \Exception
      *
      * The default status code is
      *
-     * @param Role $role            
+     * @param Role $role The Role that provide error
      */
     public function __construct(Role $role)
     {

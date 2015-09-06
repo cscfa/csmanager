@@ -7,12 +7,12 @@
  * 
  * PHP version 5.5
  * 
- * @category   Manager
- * @package    CscfaCSManagerCoreBundle
- * @author     Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
- * @license    http://opensource.org/licenses/MIT MIT
+ * @category Manager
+ * @package  CscfaCSManagerCoreBundle
+ * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
+ * @license  http://opensource.org/licenses/MIT MIT
  * @filesource
- * @link       http://cscfa.fr
+ * @link     http://cscfa.fr
  */
 namespace Cscfa\Bundle\CSManager\CoreBundle\Util\Manager;
 
@@ -97,7 +97,7 @@ class RoleManager
      * it own role name. It will return true
      * if exist or false if not.
      *
-     * @param string $roleName 
+     * @param string $roleName The new Role name
      *          
      * @return boolean
      */

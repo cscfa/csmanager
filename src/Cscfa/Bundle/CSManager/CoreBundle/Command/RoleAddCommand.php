@@ -7,12 +7,12 @@
  * 
  * PHP version 5.5
  * 
- * @category   Command
- * @package    CscfaCSManagerCoreBundle
- * @author     Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
- * @license    http://opensource.org/licenses/MIT MIT
+ * @category Command
+ * @package  CscfaCSManagerCoreBundle
+ * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
+ * @license  http://opensource.org/licenses/MIT MIT
  * @filesource
- * @link       http://cscfa.fr
+ * @link     http://cscfa.fr
  */
 namespace Cscfa\Bundle\CSManager\CoreBundle\Command;
 
@@ -68,8 +68,8 @@ class RoleAddCommand extends ContainerAwareCommand
      * providder and a role manager. Also
      * it call the parent constructor.
      *
-     * @param RoleManager  $roleManager            
-     * @param RoleProvider $roleProvider            
+     * @param RoleManager  $roleManager  The Role manager service
+     * @param RoleProvider $roleProvider The role provider service
      */
     public function __construct(RoleManager $roleManager, RoleProvider $roleProvider)
     {

@@ -7,12 +7,12 @@
  * 
  * PHP version 5.5
  * 
- * @category   Test
- * @package    CscfaCSManagerCoreBundle
- * @author     Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
- * @license    http://opensource.org/licenses/MIT MIT
+ * @category Test
+ * @package  CscfaCSManagerCoreBundle
+ * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
+ * @license  http://opensource.org/licenses/MIT MIT
  * @filesource
- * @link       http://cscfa.fr
+ * @link     http://cscfa.fr
  */
 namespace Cscfa\Bundle\CSManager\CoreBundle\Tests\Role;
 
@@ -103,6 +103,6 @@ class RoleTest extends WebTestCase
     {
         $role = new Role();
         
-        $this->assertInstanceOf(Role::class, $role);
+        $this->assertTrue($role instanceof Role);
     }
 }

@@ -7,20 +7,20 @@
  *
  * PHP version 5.5
  *
- * @category   Example
- * @package    CscfaCSManagerCoreBundle
- * @author     Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
- * @license    http://opensource.org/licenses/MIT MIT
+ * @category Example
+ * @package  CscfaCSManagerCoreBundle
+ * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
+ * @license  http://opensource.org/licenses/MIT MIT
  * @filesource
- * @link       http://cscfa.fr
- * @see        Cscfa\Bundle\CSManager\CoreBundle\Entity\Role
- * @see        Cscfa\Bundle\CSManager\CoreBundle\Entity\StackUpdate
- * @see        Cscfa\Bundle\CSManager\CoreBundle\Util\Builder\RoleBuilder
- * @see        Cscfa\Bundle\CSManager\CoreBundle\Util\Manager\RoleManager
- * @see        Cscfa\Bundle\CSManager\CoreBundle\Util\Provider\RoleProvider
- * @see        Cscfa\Bundle\CSManager\CoreBundle\Entity\Base\StackableObject
- * @see        Cscfa\Bundle\CSManager\CoreBundle\Entity\Repository\RoleRepository
- * @see        Cscfa\Bundle\CSManager\CoreBundle\Exception\CircularReferenceException
+ * @link     http://cscfa.fr
+ * @see      Cscfa\Bundle\CSManager\CoreBundle\Entity\Role
+ * @see      Cscfa\Bundle\CSManager\CoreBundle\Entity\StackUpdate
+ * @see      Cscfa\Bundle\CSManager\CoreBundle\Util\Builder\RoleBuilder
+ * @see      Cscfa\Bundle\CSManager\CoreBundle\Util\Manager\RoleManager
+ * @see      Cscfa\Bundle\CSManager\CoreBundle\Util\Provider\RoleProvider
+ * @see      Cscfa\Bundle\CSManager\CoreBundle\Entity\Base\StackableObject
+ * @see      Cscfa\Bundle\CSManager\CoreBundle\Entity\Repository\RoleRepository
+ * @see      Cscfa\Bundle\CSManager\CoreBundle\Exception\CircularReferenceException
  */
 namespace Cscfa\Bundle\CSManager\CoreBundle\Example\Role;
 
