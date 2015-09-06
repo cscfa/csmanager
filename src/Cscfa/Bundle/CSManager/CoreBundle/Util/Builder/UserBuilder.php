@@ -1086,4 +1086,47 @@ class UserBuilder
     {
         return $this->user->isCredentialsExpired();
     }
+
+    /**
+     * Get the user StackUpdate.
+     *
+     * This method allow to get the current
+     * user StackUpdate that represent the
+     * state of the user before modification.
+     *
+     * For allow backup and modification trace,
+     * this instance is stored into the database
+     * and encapsule a serialized state of the
+     * user.
+     *
+     * This instance is stored on construct
+     * calling. If the given User is null at
+     * this time, also the StackObject is
+     * set to null.
+     *
+     * @return \Cscfa\Bundle\CSManager\CoreBundle\Entity\StackUpdate|null
+     */
+    public function getStackUpdate()
+    {
+        return $this->stackUpdate;
+    }
+
+    /**
+     * Get the user.
+     *
+     * The UserBuilder object give abstraction
+     * of the User interface but is not an
+     * instance of. It encapsulate a User
+     * instance and provide access to it
+     * method with a logic validation.
+     *
+     * This method allow to get the
+     * encapsulate User instance.
+     * 
+     * @return \Cscfa\Bundle\CSManager\CoreBundle\Entity\User
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
 }

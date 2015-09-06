@@ -22,6 +22,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\User\UserInterface;
 use FOS\UserBundle\Model\GroupableInterface;
 use FOS\UserBundle\Model\GroupInterface;
+use Cscfa\Bundle\CSManager\CoreBundle\Entity\Base\StackableObject;
 
 /**
  * User class.
@@ -47,7 +48,7 @@ use FOS\UserBundle\Model\GroupInterface;
  * @ORM\Entity(repositoryClass="Cscfa\Bundle\CSManager\CoreBundle\Entity\Repository\UserRepository")
  * @ORM\Table(name="csmanager_core_user")
  */
-class User implements UserInterface, GroupableInterface
+class User extends StackableObject implements UserInterface, GroupableInterface
 {
 
     const ROLE_DEFAULT = "ROLE_ANONYMOUS";

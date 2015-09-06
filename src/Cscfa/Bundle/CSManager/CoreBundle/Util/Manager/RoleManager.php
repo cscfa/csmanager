@@ -46,7 +46,7 @@ class RoleManager
      * This allow to register or remove the
      * current Role instance into the database.
      *
-     * @var Symfony\Component\Security\Core\SecurityContextInterface
+     * @var EntityManager
      */
     protected $entityManager;
 
@@ -258,7 +258,7 @@ class RoleManager
      * that only exist in StackUpdate table.
      * 
      * @param RoleBuilder $roleBuilder The role builder that contain instances to store.
-     * @param string      $onlyStack   The state of persisting. True to sotre only the StackUpdate object.
+     * @param boolean     $onlyStack   The state of persisting. True to sotre only the StackUpdate object.
      *
      * @throws Doctrine\ORM\OptimisticLockException
      * @return void
