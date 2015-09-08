@@ -20,9 +20,9 @@
           <file>../src/Cscfa/Bundle/CSManager/CoreBundle/Tests/Role/RoleTest.php</file>
         </testsuite>
         <testsuite name="cscfa csmanager core bundle user tests">
-          <file>../src/Cscfa/Bundle/CSManager/CoreBundle/Tests/Role/UserBuilderTest.php</file>
-          <file>../src/Cscfa/Bundle/CSManager/CoreBundle/Tests/Role/UserManagerTest.php</file>
-          <file>../src/Cscfa/Bundle/CSManager/CoreBundle/Tests/Role/UserProviderTest.php</file>
+          <file>../src/Cscfa/Bundle/CSManager/CoreBundle/Tests/User/UserBuilderTest.php</file>
+          <file>../src/Cscfa/Bundle/CSManager/CoreBundle/Tests/User/UserManagerTest.php</file>
+          <file>../src/Cscfa/Bundle/CSManager/CoreBundle/Tests/User/UserProviderTest.php</file>
         </testsuite>
     </testsuites>
 
