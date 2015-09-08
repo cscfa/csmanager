@@ -18,7 +18,6 @@ namespace Cscfa\Bundle\CSManager\CoreBundle\Entity\Repository;
 
 use Doctrine\ORM\ORMInvalidArgumentException;
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Query;
 
 /**
  * UserRepository class.

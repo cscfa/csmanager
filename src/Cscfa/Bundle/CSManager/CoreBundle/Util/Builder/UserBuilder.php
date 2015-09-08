@@ -512,7 +512,7 @@ class UserBuilder
             $this->user->setCredentialsExpireAt($currentDate);
             $this->user->setCredentialsExpired(true);
             return true;
-        } else if ($boolean === false || ((boolean) $boolean == false && $force)) {
+        } else if ($boolean === false || ((boolean) $boolean === false && $force)) {
             $this->user->setCredentialsExpireAt(null);
             $this->user->setCredentialsExpired(false);
             return true;
