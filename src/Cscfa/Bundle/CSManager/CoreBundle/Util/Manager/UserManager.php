@@ -141,7 +141,7 @@ class UserManager
      */
     public function isUsernameValid($username)
     {
-        return preg_match("/^[a-zA-Z0-9_]+$/", $username) ? true : false;
+        return preg_match("/^[a-zA-Z][a-zA-Z0-9_]+$/", $username) ? true : false;
     }
 
     /**
@@ -258,6 +258,6 @@ class UserManager
      */
     public function convertInstance(User $user)
     {
-        return new UserBuilder($this, $user);
+        return new UserBuilder($this, $this->userProvider, $this->encoder, $user);
     }
 }

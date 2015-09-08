@@ -486,26 +486,39 @@ class UserBuilder
      * is true, the expiration state
      * will be turn to true and the
      * expiration date will be set
-     * to the current date.
+     * to the current date. This method
+     * will first valid that the given
+     * state is a boolean. If not, it
+     * return false. However, will return 
+     * true.
      * 
      * If the needed state is false,
      * the expiration state will be turn
      * to false, and the expiration date
      * will be set to null.
      * 
+     * It's possible to override the 
+     * validation by passing true as
+     * second parameter.
+     * 
      * @param boolean $boolean The expiration state
      * 
      * @return void
      */
-    public function setCredentialsExpired($boolean)
+    public function setCredentialsExpired($boolean, $force = false)
     {
-        if ($boolean === true) {
+        if ($boolean === true || ((boolean) $boolean && $force)) {
             $currentDate = new \DateTime();
             $this->user->setCredentialsExpireAt($currentDate);
             $this->user->setCredentialsExpired(true);
-        } else {
+            return true;
+        } else if ($boolean === false || ((boolean) $boolean == false && $force)) {
             $this->user->setCredentialsExpireAt(null);
             $this->user->setCredentialsExpired(false);
+            return true;
+        } else {
+            $this->lastError = self::IS_NOT_BOOLEAN;
+            return false;
         }
     }
 
@@ -532,7 +545,7 @@ class UserBuilder
      */
     public function setEnabled($boolean, $force = false)
     {
-        if (($boolean !== true && $boolean !== false) || $force) {
+        if ( !$force && $boolean !== true && $boolean !== false ) {
             $this->lastError = self::IS_NOT_BOOLEAN;
             return false;
         }
@@ -569,7 +582,7 @@ class UserBuilder
     {
         $currentDate = new \DateTime();
         
-        if ($date !== null && $currentDate >= $date && ! $force) {
+        if ($date !== null && $currentDate > $date && ! $force) {
             $this->lastError = self::EXPIRATION_DATE_BEFORE_NOW;
             return false;
         }
@@ -608,7 +621,7 @@ class UserBuilder
      */
     public function setExpired($boolean, $force = false)
     {
-        if (($boolean !== true && $boolean !== false) || $force) {
+        if (!$force && $boolean !== true && $boolean !== false) {
             $this->lastError = self::IS_NOT_BOOLEAN;
             return false;
         }
@@ -619,7 +632,7 @@ class UserBuilder
             $this->user->setExpiresAt(null);
         }
         
-        $this->user->setExpired($boolean);
+        $this->user->setExpired((boolean)$boolean);
         
         return true;
     }
@@ -676,42 +689,6 @@ class UserBuilder
     }
 
     /**
-     * Set super admin state.
-     * 
-     * This method allow to set the user
-     * super administrator state. It will 
-     * first assert that the given state 
-     * is a valid typed boolean. If this 
-     * validation failed, the method will 
-     * return false. Else, the method will 
-     * return true.
-     * 
-     * It's possible to desable the 
-     * validation by passing true as 
-     * second parameter. In this specific 
-     * case, the method will always
-     * return true.
-     * 
-     * @param boolean $boolean The super admin state
-     * @param boolean $force   The validation force state
-     *
-     * @return boolean
-     */
-    public function setSuperAdmin($boolean, $force = false)
-    {
-        if (! $force && $boolean !== true && $boolean !== false) {
-            $this->lastError = self::IS_NOT_BOOLEAN;
-            return false;
-        } else if (true === $boolean) {
-            $this->user->addRole(static::ROLE_SUPER_ADMIN);
-        } else {
-            $this->user->removeRole(static::ROLE_SUPER_ADMIN);
-        }
-        
-        return true;
-    }
-
-    /**
      * Set the user last login date.
      * 
      * This method allow to set the user 
@@ -734,11 +711,11 @@ class UserBuilder
      * 
      * @return boolean
      */
-    public function setLastLogin(\DateTime $time, $force = false)
+    public function setLastLogin(\DateTime $time = null, $force = false)
     {
         $currentTime = new \DateTime();
         
-        if ($currentTime < $time && ! $force) {
+        if ($time !== null && ( $currentTime < $time && ! $force )) {
             $this->lastError = self::LAST_LOGIN_AFTER_NOW;
             return false;
         }
@@ -796,14 +773,14 @@ class UserBuilder
      * second parameter. In this case, 
      * the method will always return true.
      * 
-     * @param string $confirmationToken The confirmation token string
-     * @param string $force             The validation force state
+     * @param string  $confirmationToken The confirmation token string
+     * @param boolean $force             The validation force state
      * 
      * @return boolean
      */
-    public function setConfirmationToken($confirmationToken, $force = false)
+    public function setConfirmationToken($confirmationToken = null, $force = false)
     {
-        if (! $force && ! is_string($confirmationToken)) {
+        if (!$force && !is_string($confirmationToken) && $confirmationToken !== null) {
             $this->lastError = self::IS_NOT_STRING;
             return false;
         }
@@ -827,7 +804,7 @@ class UserBuilder
      * the method will always return true.
      * 
      * @param \DateTime $date  The request date
-     * @param string    $force The validation force state
+     * @param boolean   $force The validation force state
      * 
      * @return boolean
      */
@@ -835,7 +812,7 @@ class UserBuilder
     {
         $currentTime = new \DateTime();
         
-        if ($currentTime < $date && ! $force) {
+        if ($date !== null && $currentTime < $date && ! $force) {
             $this->lastError = self::DATE_AFTER_NOW;
             return false;
         }
@@ -1128,5 +1105,20 @@ class UserBuilder
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Get the last error.
+     *
+     * This method allow to get the
+     * last error state. By default,
+     * the last error is set to
+     * RoleBuilder::NO_ERROR.
+     *
+     * @return number
+     */
+    public function getLastError()
+    {
+        return $this->lastError;
     }
 }

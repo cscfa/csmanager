@@ -17,6 +17,11 @@
 namespace Cscfa\Bundle\CSManager\CoreBundle\Util\Provider;
 
 use Doctrine\ORM\EntityManager;
+use Cscfa\Bundle\CSManager\CoreBundle\Util\Builder\UserBuilder;
+use Cscfa\Bundle\CSManager\CoreBundle\Util\Manager\RoleManager;
+use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
+use Symfony\Component\Security\Core\SecurityContextInterface;
+use Cscfa\Bundle\CSManager\CoreBundle\Util\Manager\UserManager;
 
 /**
  * UserProvider class.
@@ -49,6 +54,26 @@ class UserProvider
      * @var Doctrine\ORM\EntityRepository
      */
     protected $repository;
+    
+    /**
+     * The User manager.
+     * 
+     * This manager is used
+     * to create user builder.
+     * 
+     * @var UserManager
+     */
+    protected $userManager;
+    
+    /**
+     * The encoder factory.
+     * 
+     * This encoder is used
+     * to create user builder.
+     * 
+     * @var EncoderFactoryInterface
+     */
+    protected $encoder;
 
     /**
      * The UserProvider constructor.
@@ -56,11 +81,16 @@ class UserProvider
      * This constructor register a doctrine manager
      * from what the User repository is retreived.
      *
-     * @param EntityManager $doctrineManager The doctrine manager to get User repository.
+     * @param EntityManager            $doctrineManager The entity manager to use to interact with database.
+     * @param RoleManager              $roleManager     The role manager to be returned by the getRoleManager method
+     * @param EncoderFactoryInterface  $encoder         The encoder factory service to hack user password
+     * @param SecurityContextInterface $security        The security context to use to get current user.
      */
-    public function __construct(EntityManager $doctrineManager)
+    public function __construct(EntityManager $doctrineManager, RoleManager $roleManager, EncoderFactoryInterface $encoder, SecurityContextInterface $security)
     {
         $this->repository = $doctrineManager->getRepository("CscfaCSManagerCoreBundle:User");
+        $this->userManager = new UserManager($doctrineManager, $roleManager, $this, $encoder, $security);
+        $this->encoder = $encoder;
     }
 
     /**
@@ -102,6 +132,54 @@ class UserProvider
             return array();
         } else {
             return $result;
+        }
+    }
+    
+    /**
+     * Find one user by username or null.
+     * 
+     * This method allow to retreive
+     * a user instance by it username.
+     * 
+     * It will be automaticaly inserted
+     * into a UserBuilder instance.
+     * 
+     * @param string $username The username of the User to find
+     * 
+     * @return \Cscfa\Bundle\CSManager\CoreBundle\Util\Builder\UserBuilder|NULL
+     */
+    public function findOneByUsername($username)
+    {
+        $user = $this->repository->findOneByUsername($username);
+        
+        if ($user !== null) {
+            return new UserBuilder($this->userManager, $this, $this->encoder, $user);
+        } else {
+            return null;
+        }
+    }
+    
+    /**
+     * Find one user by email or null.
+     * 
+     * This method allow to retreive
+     * a user instance by it email.
+     * 
+     * It will be automaticaly inserted
+     * into a UserBuilder instance.
+     * 
+     * @param string $email The email of the User to find
+     * 
+     * @return \Cscfa\Bundle\CSManager\CoreBundle\Util\Builder\UserBuilder|NULL
+     */
+    public function findOneByEmail($email)
+    {
+        $user = $this->repository->findOneByEmail($email);
+        
+        if ($user !== null) {
+            return new UserBuilder($this->userManager, $this, $this->encoder, $user);
+        } else {
+            return null;
         }
     }
 }

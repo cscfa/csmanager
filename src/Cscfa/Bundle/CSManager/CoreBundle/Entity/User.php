@@ -686,18 +686,6 @@ class User extends StackableObject implements UserInterface, GroupableInterface
     }
 
     /**
-     * Is super admin.
-     * 
-     * Check if the user is super admin.
-     * 
-     * @return boolean
-     */
-    public function isSuperAdmin()
-    {
-        return $this->hasRole(static::ROLE_SUPER_ADMIN);
-    }
-
-    /**
      * Is user.
      * 
      * Check if the current user is the given user.
@@ -772,7 +760,7 @@ class User extends StackableObject implements UserInterface, GroupableInterface
      *
      * @return User
      */
-    public function setCredentialsExpireAt(\DateTime $date)
+    public function setCredentialsExpireAt(\DateTime $date = null)
     {
         $this->credentialsExpireAt = $date;
         
@@ -892,26 +880,6 @@ class User extends StackableObject implements UserInterface, GroupableInterface
     }
 
     /**
-     * Set superadmin.
-     * 
-     * Set the user superadmin state.
-     * 
-     * @param boolean $boolean The superadmin state.
-     * 
-     * @return \Cscfa\Bundle\CSManager\CoreBundle\Entity\User
-     */
-    public function setSuperAdmin($boolean)
-    {
-        if (true === $boolean) {
-            $this->addRole(static::ROLE_SUPER_ADMIN);
-        } else {
-            $this->removeRole(static::ROLE_SUPER_ADMIN);
-        }
-        
-        return $this;
-    }
-
-    /**
      * Set plain password.
      * 
      * Set the user plain password.
@@ -936,7 +904,7 @@ class User extends StackableObject implements UserInterface, GroupableInterface
      * 
      * @return \Cscfa\Bundle\CSManager\CoreBundle\Entity\User
      */
-    public function setLastLogin(\DateTime $time)
+    public function setLastLogin($time)
     {
         $this->lastLogin = $time;
         

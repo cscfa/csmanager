@@ -29,6 +29,13 @@ parameters:
     core.command.view_user.class:     Cscfa\Bundle\CSManager\CoreBundle\Command\UserViewCommand
     #The default class for the user deletion command
     core.command.remove_user.class:   Cscfa\Bundle\CSManager\CoreBundle\Command\UserRemoveCommand
+    ##############################################################################
+    #                         The user tool classes                              #
+    ##############################################################################
+    #The default class for the user manager tool
+    core.manager.user_manager.class:  Cscfa\Bundle\CSManager\CoreBundle\Util\Manager\UserManager
+    #The default class for the user provider tool
+    core.provider.user_provider.class:  Cscfa\Bundle\CSManager\CoreBundle\Util\Provider\UserProvider
 
 services:
     ##############################################################################
@@ -96,3 +103,14 @@ services:
         arguments: [ "@doctrine.orm.entity_manager" ]
         tags:
             -  { name: console.command }
+    ##############################################################################
+    #                          The user tool services                            #
+    ##############################################################################
+    #tag: tool        #The user manager service offer various method to abstract user persistance and usage.
+    core.manager.user_manager:
+        class: "%core.manager.user_manager.class%"
+        arguments: [ "@doctrine.orm.entity_manager", "@core.manager.role_manager", "@core.provider.user_provider", "@security.encoder_factory", "@security.context" ]
+    #tag: tool        #The user provider service offer various method to retreive user from the database.
+    core.provider.user_provider:
+        class: "%core.provider.user_provider.class%"
+        arguments: [ "@doctrine.orm.entity_manager", "@core.manager.role_manager", "@security.encoder_factory", "@security.context" ]

@@ -49,12 +49,21 @@ class UserRepository extends EntityRepository
     public function getAllUsername()
     {
         try {
-            return $this->getEntityManager()
+            $usernames = $this->getEntityManager()
                 ->createQueryBuilder()
-                ->select("t0.user_username_canonical")
+                ->select("t0.usernameCanonical")
+                ->from("Cscfa\Bundle\CSManager\CoreBundle\Entity\User", "t0")
                 ->distinct()
                 ->getQuery()
-                ->getResult(Query::HYDRATE_ARRAY);
+                ->getResult();
+            
+            $result = array();
+            foreach ($usernames as $value) {
+                $result[] = $value['usernameCanonical'];
+            }
+            
+            return $result;
+            
         } catch (ORMInvalidArgumentException $e) {
             return null;
         }
@@ -73,12 +82,21 @@ class UserRepository extends EntityRepository
     public function getAllEmail()
     {
         try {
-            return $this->getEntityManager()
+            $emails = $this->getEntityManager()
                 ->createQueryBuilder()
-                ->select("t0.user_email_canonical")
+                ->select("t0.emailCanonical")
+                ->from("Cscfa\Bundle\CSManager\CoreBundle\Entity\User", "t0")
                 ->distinct()
                 ->getQuery()
-                ->getResult(Query::HYDRATE_ARRAY);
+                ->getResult();
+            
+            $result = array();
+            foreach ($emails as $value) {
+                $result[] = $value['emailCanonical'];
+            }
+            
+            return $result;
+            
         } catch (ORMInvalidArgumentException $e) {
             return null;
         }
