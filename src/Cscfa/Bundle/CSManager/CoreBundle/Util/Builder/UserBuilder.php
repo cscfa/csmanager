@@ -781,7 +781,7 @@ class UserBuilder
      */
     public function setConfirmationToken($confirmationToken = null, $force = false)
     {
-        if (! $force && ! is_string($confirmationToken) && $confirmationToken !== null ) {
+        if ($confirmationToken !== null && ! $force && ! is_string($confirmationToken)) {
             $this->lastError = self::IS_NOT_STRING;
             return false;
         }
