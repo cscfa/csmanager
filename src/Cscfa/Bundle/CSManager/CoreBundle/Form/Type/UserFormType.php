@@ -89,44 +89,51 @@ class UserFormType extends AbstractType
                     'label' => 'core.form.user.label.username',
                     'translation_domain' => 'form'
                     )
-                )->add('email', 'email', array(
+            )->add(
+                'email', 'email', array(
                     'max_length' => '255',
                     'label' => 'core.form.user.label.email',
                     'translation_domain' => 'form'
                     )
-                )->add('enabled', 'checkbox', array(
+            )->add(
+                'enabled', 'checkbox', array(
                     'value' => true,
                     'label' => 'core.form.user.label.enabled',
                     'translation_domain' => 'form'
                     )
-                )->add('salt', 'text', array(
+            )->add(
+                'salt', 'text', array(
                     'label' => 'core.form.user.label.salt',
                     'translation_domain' => 'form'
                     )
-                )->add('password', 'password', array(
+            )->add(
+                'password', 'password', array(
                     'label' => 'core.form.user.label.password',
                     'translation_domain' => 'form'
                     )
-                )->add('locked', 'checkbox', array(
+            )->add(
+                'locked', 'checkbox', array(
                     'value' => false,
                     'label' => 'core.form.user.label.locked',
                     'translation_domain' => 'form'
                     )
-                )->add('expiresAt', 'datetime', array(
+            )->add(
+                'expiresAt', 'datetime', array(
                     'label' => 'core.form.user.label.expiresAt',
                     'translation_domain' => 'form'
                     )
-                )->add(
-                    'roles', 'choice', array(
+            )->add(
+                'roles', 'choice', array(
                     'choices' => $this->roleManager->getRolesName(),
                     'label' => 'core.form.user.label.child',
                     'translation_domain' => 'form'
                     )
-                )->add('credentialsExpireAt', 'datetime', array(
+            )->add(
+                'credentialsExpireAt', 'datetime', array(
                     'label' => 'core.form.user.label.credentialsExpireAt',
                     'translation_domain' => 'form'
                     )
-                )->add('save', 'submit');
+            )->add('save', 'submit');
     }
 
     /**

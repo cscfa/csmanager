@@ -502,6 +502,7 @@ class UserBuilder
      * second parameter.
      * 
      * @param boolean $boolean The expiration state
+     * @param boolean $force   The validation force state
      * 
      * @return void
      */
@@ -545,7 +546,7 @@ class UserBuilder
      */
     public function setEnabled($boolean, $force = false)
     {
-        if ( !$force && $boolean !== true && $boolean !== false ) {
+        if (! $force && $boolean !== true && $boolean !== false) {
             $this->lastError = self::IS_NOT_BOOLEAN;
             return false;
         }
@@ -621,7 +622,7 @@ class UserBuilder
      */
     public function setExpired($boolean, $force = false)
     {
-        if (!$force && $boolean !== true && $boolean !== false) {
+        if (! $force && $boolean !== true && $boolean !== false) {
             $this->lastError = self::IS_NOT_BOOLEAN;
             return false;
         }
@@ -632,7 +633,7 @@ class UserBuilder
             $this->user->setExpiresAt(null);
         }
         
-        $this->user->setExpired((boolean)$boolean);
+        $this->user->setExpired((boolean) $boolean);
         
         return true;
     }
@@ -715,7 +716,7 @@ class UserBuilder
     {
         $currentTime = new \DateTime();
         
-        if ($time !== null && ( $currentTime < $time && ! $force )) {
+        if ($time !== null && ($currentTime < $time && ! $force)) {
             $this->lastError = self::LAST_LOGIN_AFTER_NOW;
             return false;
         }
@@ -780,7 +781,7 @@ class UserBuilder
      */
     public function setConfirmationToken($confirmationToken = null, $force = false)
     {
-        if (!$force && !is_string($confirmationToken) && $confirmationToken !== null) {
+        if (! $force && ! is_string($confirmationToken) && $confirmationToken !== null ) {
             $this->lastError = self::IS_NOT_STRING;
             return false;
         }

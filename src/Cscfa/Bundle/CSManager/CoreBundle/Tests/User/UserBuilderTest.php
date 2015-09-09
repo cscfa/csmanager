@@ -37,6 +37,7 @@ use Cscfa\Bundle\CSManager\CoreBundle\Entity\StackUpdate;
  */
 class UserBuilderTest extends WebTestCase
 {
+
     /**
      * The user manager service.
      * 
@@ -148,7 +149,7 @@ class UserBuilderTest extends WebTestCase
         $this->assertTrue($user->getLastError() === $user::IS_NOT_BOOLEAN);
         $this->assertTrue($user->setLocked("world", true));
         $this->assertTrue($user->isLocked() === true);
-
+        
         $date = new \DateTime();
         $this->assertTrue($user->setLastLogin($date));
         $this->assertFalse($user->setLastLogin($dateAfterNow));
@@ -172,7 +173,7 @@ class UserBuilderTest extends WebTestCase
         $this->assertTrue($user->getLastError() === $user::IS_NOT_BOOLEAN);
         $this->assertTrue($user->setExpired("world", true));
         $this->assertTrue($user->isExpired() === true);
-
+        
         $this->assertTrue($user->setEnabled(true));
         $this->assertTrue($user->setEnabled(false));
         $this->assertFalse($user->setEnabled("hello"));
@@ -190,10 +191,10 @@ class UserBuilderTest extends WebTestCase
         $this->assertTrue($user->setEmail("invalid", true));
         $this->assertTrue($user->getEmail() === "invalid");
         
-        try{
+        try {
             $this->assertFalse($user->setEmail("test@test.ts", true));
             $this->assertTrue(false);
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             $this->assertTrue(true);
         }
         
@@ -217,16 +218,14 @@ class UserBuilderTest extends WebTestCase
         $this->assertTrue($user->setCredentialsExpireAt($dateAfterNow));
         $this->assertTrue($user->setCredentialsExpireAt(null));
         $this->assertTrue($user->setCredentialsExpireAt($dateBeforeNow, true));
-
+        
         $token = substr(str_shuffle(str_repeat("_ABCDEFGHIJKLMNOPQRSTUWVXYZabcdefghijklmnopqrstuvwxyz", 180)), 0, 180);
         $this->assertTrue($user->setConfirmationToken($token));
         $this->assertFalse($user->setConfirmationToken(148));
         $this->assertTrue($user->getConfirmationToken() === $token);
-        $this->assertTrue($user->getLastError   () === $user::IS_NOT_STRING);
+        $this->assertTrue($user->getLastError() === $user::IS_NOT_STRING);
         $this->assertTrue($user->setConfirmationToken(148, true));
         $this->assertTrue($user->setConfirmationToken(null));
         $this->assertTrue($user->getConfirmationToken() === null);
-        
-        
     }
 }
