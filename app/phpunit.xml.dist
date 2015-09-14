@@ -24,6 +24,11 @@
           <file>../src/Cscfa/Bundle/CSManager/CoreBundle/Tests/User/UserManagerTest.php</file>
           <file>../src/Cscfa/Bundle/CSManager/CoreBundle/Tests/User/UserProviderTest.php</file>
         </testsuite>
+        <testsuite name="cscfa csmanager core bundle group tests">
+          <file>../src/Cscfa/Bundle/CSManager/CoreBundle/Tests/Group/GroupBuilderTest.php</file>
+          <file>../src/Cscfa/Bundle/CSManager/CoreBundle/Tests/Group/GroupManagerTest.php</file>
+          <file>../src/Cscfa/Bundle/CSManager/CoreBundle/Tests/Group/GroupProviderTest.php</file>
+        </testsuite>
     </testsuites>
 
     <!--
