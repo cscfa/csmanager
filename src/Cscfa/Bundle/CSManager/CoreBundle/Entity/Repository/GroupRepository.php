@@ -48,9 +48,20 @@ class GroupRepository extends EntityRepository
     public function getAllName()
     {
         try {
-            return $this->getEntityManager()
-                ->createQuery("SELECT nameCanonical FROM CscfaCSManagerCoreBundle:Group")
-                ->getArrayResult();
+            $names = $this->getEntityManager()
+                ->createQueryBuilder()
+                ->select("t0.name")
+                ->from("Cscfa\Bundle\CSManager\CoreBundle\Entity\Group", "t0")
+                ->distinct()
+                ->getQuery()
+                ->getResult();
+            
+            $result = array();
+            foreach ($names as $value) {
+                $result[] = $value['name'];
+            }
+            
+            return $result;
         } catch (ORMInvalidArgumentException $e) {
             return null;
         }
@@ -74,7 +85,7 @@ class GroupRepository extends EntityRepository
     {
         try {
             return $this->getEntityManager()
-                ->createQuery("SELECT 1 FROM CscfaCSManagerCoreBundle:Group g WHERE g.nameCanonical = :groupName")
+                ->createQuery("SELECT 1 FROM CscfaCSManagerCoreBundle:Group g WHERE g.name = :groupName")
                 ->setParameter("groupName", $name)
                 ->getOneOrNullResult();
         } catch (ORMInvalidArgumentException $e) {

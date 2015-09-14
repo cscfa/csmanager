@@ -19,6 +19,7 @@ namespace Cscfa\Bundle\CSManager\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Cscfa\Bundle\CSManager\CoreBundle\Entity\Base\StackableObject;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Group class.
@@ -114,7 +115,7 @@ class Group extends StackableObject
      * group.
      * 
      * @ORM\Column(
-     *      type="boolean", name="group_expired", options={"comment":"the expired state of the group"}
+     *      type="boolean", name="group_expired", nullable=true, options={"comment":"the expired state of the group"}
      * )
      */
     protected $expired;
@@ -126,7 +127,7 @@ class Group extends StackableObject
      * of the current group.
      * 
      * @ORM\Column(
-     *      type="datetime", name="group_expire_at", options={"comment":"the expiration date of the group"}
+     *      type="datetime", name="group_expire_at", nullable=true, options={"comment":"the expiration date of the group"}
      * )
      */
     protected $expiresAt;
@@ -138,10 +139,23 @@ class Group extends StackableObject
      * group.
      *
      * @ORM\Column(
-     *      type="boolean", name="group_locked", options={"comment":"the locked state of the group"}
+     *      type="boolean", name="group_locked", nullable=true, options={"comment":"the locked state of the group"}
      * )
      */
     protected $locked;
+
+    /**
+     * Default constructor.
+     * 
+     * This method is the
+     * default Group constructor.
+     */
+    public function __construct()
+    {
+        $this->roles = new ArrayCollection();
+        $this->createdAt = new \DateTime();
+        $this->locked = false;
+    }
 
     /**
      * Get the id.
@@ -265,6 +279,12 @@ class Group extends StackableObject
     {
         if ($role instanceof Role) {
             $role = $role->getName();
+        } else {
+            return false;
+        }
+        
+        if ($this->roles === null || $this->roles->count() == 0) {
+            return false;
         }
         
         foreach ($this->roles as $roles) {
@@ -318,6 +338,10 @@ class Group extends StackableObject
      */
     public function isExpired()
     {
+        if ($this->expiresAt === null) {
+            return false;
+        }
+        
         if ((new \DateTime())->getTimestamp() >= $this->expiresAt->getTimestamp()) {
             $this->setExpired(true);
         }

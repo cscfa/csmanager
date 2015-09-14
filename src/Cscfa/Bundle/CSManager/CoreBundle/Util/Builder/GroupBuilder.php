@@ -271,7 +271,7 @@ class GroupBuilder
         if (! $this->manager->nameIsValid($name) && ! $force) {
             $this->lastError = self::INVALID_NAME;
             return false;
-        } else if ($this->manager->nameExist(strtolower($name)) && ! $force) {
+        } else if ($this->manager->nameExist(strtolower($name)) && $this->group->getName() != $name && ! $force) {
             $this->lastError = self::EXISTING_NAME;
             return false;
         } else {
@@ -562,5 +562,20 @@ class GroupBuilder
     public function getId()
     {
         return $this->group->getId();
+    }
+
+    /**
+     * Get the last error.
+     *
+     * This method allow to get the
+     * last error state. By default,
+     * the last error is set to
+     * GroupBuilder::NO_ERROR.
+     *
+     * @return number
+     */
+    public function getLastError()
+    {
+        return $this->lastError;
     }
 }

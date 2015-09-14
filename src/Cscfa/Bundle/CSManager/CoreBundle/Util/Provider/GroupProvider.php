@@ -20,6 +20,8 @@ use Cscfa\Bundle\CSManager\CoreBundle\Util\Manager\GroupManager;
 use Doctrine\ORM\EntityManager;
 use Cscfa\Bundle\CSManager\CoreBundle\Entity\Repository\GroupRepository;
 use Cscfa\Bundle\CSManager\CoreBundle\Util\Builder\GroupBuilder;
+use Cscfa\Bundle\CSManager\CoreBundle\Util\Manager\RoleManager;
+use Symfony\Component\Security\Core\SecurityContextInterface;
 
 /**
  * GroupProvider class.
@@ -70,12 +72,14 @@ class GroupProvider
      * This constructor register a doctrine manager
      * from what the Group repository is retreived.
      *
-     * @param EntityManager $doctrineManager The entity manager to use to interact with database.
+     * @param EntityManager            $doctrineManager The entity manager to use to interact with database.
+     * @param RoleManager              $roleManager     The role manager service to create a group manager.
+     * @param SecurityContextInterface $security        The security context service
      */
-    public function __construct(EntityManager $doctrineManager)
+    public function __construct(EntityManager $doctrineManager, RoleManager $roleManager, SecurityContextInterface $security)
     {
         $this->repository = $doctrineManager->getRepository("CscfaCSManagerCoreBundle:Group");
-        $this->manager = new GroupManager($this, $doctrineManager);
+        $this->manager = new GroupManager($this, $doctrineManager, $roleManager, $security);
     }
 
     /**
@@ -119,7 +123,7 @@ class GroupProvider
      */
     public function getOneByName($name)
     {
-        $group = $this->repository->getOneByName($name);
+        $group = $this->repository->findOneByName($name);
         
         if ($group !== null) {
             return new GroupBuilder($this->manager, $group);

@@ -36,6 +36,14 @@ parameters:
     core.manager.user_manager.class:  Cscfa\Bundle\CSManager\CoreBundle\Util\Manager\UserManager
     #The default class for the user provider tool
     core.provider.user_provider.class:  Cscfa\Bundle\CSManager\CoreBundle\Util\Provider\UserProvider
+    
+    ##############################################################################
+    #                         The group tool classes                             #
+    ##############################################################################
+    #The default class for the group manager tool
+    core.manager.group_manager.class: Cscfa\Bundle\CSManager\CoreBundle\Util\Manager\GroupManager
+    #The default class for the group provider tool
+    core.provider.group_provider.class:  Cscfa\Bundle\CSManager\CoreBundle\Util\Provider\GroupProvider
 
 services:
     ##############################################################################
@@ -114,3 +122,14 @@ services:
     core.provider.user_provider:
         class: "%core.provider.user_provider.class%"
         arguments: [ "@doctrine.orm.entity_manager", "@core.manager.role_manager", "@security.encoder_factory", "@security.context" ]
+    ##############################################################################
+    #                          The group tool services                           #
+    ##############################################################################
+    #tag: tool        #The group manager service offer various method to abstract group persistance and usage.
+    core.manager.group_manager:
+        class: "%core.manager.group_manager.class%"
+        arguments: [ "@core.provider.group_provider", "@doctrine.orm.entity_manager", "@core.manager.role_manager", "@security.context" ]
+    #tag: tool        #The group provider service offer various method to retreive group from the database.
+    core.provider.group_provider:
+        class: "%core.provider.group_provider.class%"
+        arguments: [ "@doctrine.orm.entity_manager", "@core.manager.role_manager", "@security.context" ]

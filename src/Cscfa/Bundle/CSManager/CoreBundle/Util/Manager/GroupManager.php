@@ -20,6 +20,7 @@ use Cscfa\Bundle\CSManager\CoreBundle\Entity\Group;
 use Cscfa\Bundle\CSManager\CoreBundle\Util\Builder\GroupBuilder;
 use Cscfa\Bundle\CSManager\CoreBundle\Util\Provider\GroupProvider;
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\Security\Core\SecurityContextInterface;
 
 /**
  * GroupManager class.
@@ -74,21 +75,34 @@ class GroupManager
     protected $roleManager;
 
     /**
+     * The security context.
+     *
+     * This allow to register the current
+     * application user into the User instance
+     * as creator or updator.
+     *
+     * @var Symfony\Component\Security\Core\SecurityContextInterface
+     */
+    protected $security;
+
+    /**
      * The group manager constructor.
      * 
      * This constructor register
      * a group provider that provide
      * access to database store.
      * 
-     * @param GroupProvider $provider        The group provider service
-     * @param EntityManager $doctrineManager The doctrine manager service
-     * @param RoleManager   $roleManager     The role manager service
+     * @param GroupProvider            $provider        The group provider service
+     * @param EntityManager            $doctrineManager The doctrine manager service
+     * @param RoleManager              $roleManager     The role manager service
+     * @param SecurityContextInterface $security        The security context service
      */
-    public function __construct(GroupProvider $provider, EntityManager $doctrineManager, RoleManager $roleManager)
+    public function __construct(GroupProvider $provider, EntityManager $doctrineManager, RoleManager $roleManager, SecurityContextInterface $security)
     {
         $this->provider = $provider;
         $this->roleManager = $roleManager;
         $this->entityManager = $doctrineManager;
+        $this->security = $security;
     }
 
     /**
