@@ -19,7 +19,6 @@ namespace Cscfa\Bundle\CSManager\CoreBundle\Util\Builder;
 use Cscfa\Bundle\CSManager\CoreBundle\Util\Manager\GroupManager;
 use Cscfa\Bundle\CSManager\CoreBundle\Entity\Group;
 use Cscfa\Bundle\CSManager\CoreBundle\Entity\StackUpdate;
-use Cscfa\Bundle\CSManager\CoreBundle\Util\Manager\RoleManager;
 use Cscfa\Bundle\CSManager\CoreBundle\Entity\Role;
 
 /**

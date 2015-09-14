@@ -61,7 +61,7 @@ class GroupManager
      * 
      * @var EntityManager
      */
-    protected $doctrineManager;
+    protected $entityManager;
     
     /**
      * The role manager service.
@@ -88,6 +88,7 @@ class GroupManager
     {
         $this->provider = $provider;
         $this->roleManager = $roleManager;
+        $this->entityManager = $doctrineManager;
     }
 
     /**

@@ -16,7 +16,6 @@
  */
 namespace Cscfa\Bundle\CSManager\CoreBundle\Util\Provider;
 
-use Cscfa\Bundle\CSManager\CoreBundle\Entity\Group;
 use Cscfa\Bundle\CSManager\CoreBundle\Util\Manager\GroupManager;
 use Doctrine\ORM\EntityManager;
 use Cscfa\Bundle\CSManager\CoreBundle\Entity\Repository\GroupRepository;
