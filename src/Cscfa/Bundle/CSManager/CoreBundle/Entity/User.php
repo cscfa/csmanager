@@ -20,8 +20,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\User\UserInterface;
-use FOS\UserBundle\Model\GroupableInterface;
-use FOS\UserBundle\Model\GroupInterface;
 use Cscfa\Bundle\CSManager\CoreBundle\Entity\Base\StackableObject;
 
 /**
@@ -46,9 +44,11 @@ use Cscfa\Bundle\CSManager\CoreBundle\Entity\Base\StackableObject;
  * @link     http://cscfa.fr
  *
  * @ORM\Entity(repositoryClass="Cscfa\Bundle\CSManager\CoreBundle\Entity\Repository\UserRepository")
- * @ORM\Table(name="csmanager_core_user")
+ * @ORM\Table(name="csmanager_core_user",
+ *      indexes={@ORM\Index(name="cs_manager_user_indx", columns={"user_username_canonical", "user_email_canonical"})}
+ *      )
  */
-class User extends StackableObject implements UserInterface, GroupableInterface
+class User extends StackableObject implements UserInterface
 {
 
     const ROLE_DEFAULT = "ROLE_ANONYMOUS";
@@ -61,7 +61,7 @@ class User extends StackableObject implements UserInterface, GroupableInterface
      * format to improve security and allow
      * obfuscation of the total entry count.
      *
-     * It is stored into role_id field into GUID
+     * It is stored into user_id field into GUID
      * format, is unique and can't be null.
      *
      * @ORM\Column(
@@ -227,7 +227,11 @@ class User extends StackableObject implements UserInterface, GroupableInterface
      * 
      * This field store the user groups.
      *
-     * @var Collection
+     * @ORM\ManyToMany(targetEntity="Group")
+     * @ORM\JoinTable(name="tk_csmanager_user_join_group",
+     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="user_id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="group_id", referencedColumnName="group_id")}
+     *      )
      */
     protected $groups;
 
@@ -1001,89 +1005,6 @@ class User extends StackableObject implements UserInterface, GroupableInterface
         
         foreach ($roles as $role) {
             $this->addRole($role);
-        }
-        
-        return $this;
-    }
-
-    /**
-     * Get groups.
-     * 
-     * Gets the groups granted to the user.
-     *
-     * @return Collection
-     */
-    public function getGroups()
-    {
-        return $this->groups ?  : $this->groups = new ArrayCollection();
-    }
-
-    /**
-     * Get groups name.
-     * 
-     * Get the user groups name.
-     * 
-     * @see    \FOS\UserBundle\Model\GroupableInterface::getGroupNames()
-     * @return array
-     */
-    public function getGroupNames()
-    {
-        $names = array();
-        foreach ($this->getGroups() as $group) {
-            $names[] = $group->getName();
-        }
-        
-        return $names;
-    }
-
-    /**
-     * Has group.
-     * 
-     * Checck if the user has a given group.
-     * 
-     * @param string $name The group to check.
-     * 
-     * @see    \FOS\UserBundle\Model\GroupableInterface::hasGroup()
-     * @return boolean.
-     */
-    public function hasGroup($name)
-    {
-        return in_array($name, $this->getGroupNames());
-    }
-
-    /**
-     * Add group.
-     * 
-     * Add a group to the user.
-     * 
-     * @param GroupableInterface $group The group to add.
-     * 
-     * @see    \FOS\UserBundle\Model\GroupableInterface::addGroup()
-     * @return User
-     */
-    public function addGroup(GroupInterface $group)
-    {
-        if (! $this->getGroups()->contains($group)) {
-            $this->getGroups()->add($group);
-        }
-        
-        return $this;
-    }
-
-    /**
-     * Remove group.
-     * 
-     * Remove a group from the user.
-     * 
-     * @param GroupableInterface $group The group to remove.
-     * 
-     * @see    \FOS\UserBundle\Model\GroupableInterface::removeGroup()
-     * @return User
-     */
-    public function removeGroup(GroupInterface $group)
-    {
-        if ($this->getGroups()->contains($group)) {
-            $this->getGroups()->removeElement($group);
         }
         
         return $this;

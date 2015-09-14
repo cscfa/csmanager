@@ -44,6 +44,19 @@ class UserBuilder
 {
 
     /**
+     * A UserBuilder error type.
+     *
+     * This constant represent a no
+     * error state of UserBuilder.
+     *
+     * The default value of this constant
+     * is an integer set to -1.
+     *
+     * @var integer
+     */
+    const NO_ERROR = - 1;
+    
+    /**
      * An error type.
      *
      * This error represent that an
@@ -279,6 +292,7 @@ class UserBuilder
         $this->manager = $manager;
         $this->provider = $provider;
         $this->encoder = $encoder;
+        $this->lastError = self::NO_ERROR;
         
         if ($user !== null && $user instanceof User) {
             $this->user = $user;
