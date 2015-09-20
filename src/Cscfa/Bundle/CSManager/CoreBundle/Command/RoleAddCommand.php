@@ -20,8 +20,6 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Doctrine\ORM\OptimisticLockException;
-use Cscfa\Bundle\CSManager\CoreBundle\Entity\Role;
 use Cscfa\Bundle\CSManager\CoreBundle\Util\Manager\RoleManager;
 use Cscfa\Bundle\CSManager\CoreBundle\Util\Provider\RoleProvider;
 use Cscfa\Bundle\CSManager\CoreBundle\Util\Builder\RoleBuilder;

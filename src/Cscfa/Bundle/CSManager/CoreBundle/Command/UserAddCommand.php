@@ -22,13 +22,10 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
-use Cscfa\Bundle\CSManager\CoreBundle\Entity\User;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
-use Doctrine\ORM\OptimisticLockException;
 use Cscfa\Bundle\ToolboxBundle\Builder\Command\CommandAskBuilder;
 use Cscfa\Bundle\ToolboxBundle\Facade\Command\CommandFacade;
 use Cscfa\Bundle\CSManager\CoreBundle\Util\Provider\RoleProvider;
-use Cscfa\Bundle\CSManager\CoreBundle\Util\Manager\RoleManager;
 use Cscfa\Bundle\CSManager\CoreBundle\Util\Manager\UserManager;
 use Cscfa\Bundle\CSManager\CoreBundle\Util\Builder\UserBuilder;
 

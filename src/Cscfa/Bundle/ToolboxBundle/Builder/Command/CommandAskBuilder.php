@@ -16,8 +16,6 @@
  */
 namespace Cscfa\Bundle\ToolboxBundle\Builder\Command;
 
-use Symfony\Component\Console\Output\OutputInterface;
-
 /**
  * CommandAskBuilder class.
  *

@@ -24,11 +24,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Cscfa\Bundle\ToolboxBundle\Facade\Command\CommandFacade;
 use Cscfa\Bundle\ToolboxBundle\Builder\Command\CommandAskBuilder;
-use Cscfa\Bundle\ToolboxBundle\Factory\Command\ColoredStringFactory;
-use Cscfa\Bundle\ToolboxBundle\Builder\Command\CommandColorBuilder;
-use Cscfa\Bundle\ToolboxBundle\Facade\Command\CommandColorFacade;
 use Cscfa\Bundle\CSManager\CoreBundle\Util\Provider\RoleProvider;
-use Cscfa\Bundle\ToolboxBundle\BaseInterface\Command\CommandColorInterface;
 use Cscfa\Bundle\CSManager\CoreBundle\Util\Builder\GroupBuilder;
 
 /**
