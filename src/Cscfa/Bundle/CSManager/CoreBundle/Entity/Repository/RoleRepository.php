@@ -60,4 +60,36 @@ class RoleRepository extends EntityRepository
             return null;
         }
     }
+    
+    /**
+     * Get all names.
+     * 
+     * This method allow to get
+     * all of the existings Roles
+     * instance into the database.
+     * 
+     * @return array
+     */
+    public function getAllNames()
+    {
+
+        try {
+            $usernames = $this->getEntityManager()
+                ->createQueryBuilder()
+                ->select("t0.name")
+                ->from("Cscfa\Bundle\CSManager\CoreBundle\Entity\Role", "t0")
+                ->distinct()
+                ->getQuery()
+                ->getResult();
+            
+            $result = array();
+            foreach ($usernames as $value) {
+                $result[] = $value['name'];
+            }
+            
+            return $result;
+        } catch (ORMInvalidArgumentException $e) {
+            return array();
+        }
+    }
 }

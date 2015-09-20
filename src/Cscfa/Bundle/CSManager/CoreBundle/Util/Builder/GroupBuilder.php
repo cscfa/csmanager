@@ -20,6 +20,7 @@ use Cscfa\Bundle\CSManager\CoreBundle\Util\Manager\GroupManager;
 use Cscfa\Bundle\CSManager\CoreBundle\Entity\Group;
 use Cscfa\Bundle\CSManager\CoreBundle\Entity\StackUpdate;
 use Cscfa\Bundle\CSManager\CoreBundle\Entity\Role;
+use Cscfa\Bundle\ToolboxBundle\BaseInterface\Error\ErrorRegisteryInterface;
 
 /**
  * GroupBuilder class.
@@ -33,26 +34,14 @@ use Cscfa\Bundle\CSManager\CoreBundle\Entity\Role;
  * @package  CscfaCSManagerCoreBundle
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
+ * @version  Release: 1.1
  * @link     http://cscfa.fr
  * @see      Cscfa\Bundle\CSManager\CoreBundle\Entity\StackUpdate
  * @see      Cscfa\Bundle\CSManager\CoreBundle\Entity\Group
  * @see      Cscfa\Bundle\CSManager\CoreBundle\Util\Manager\GroupManager
  */
-class GroupBuilder
+class GroupBuilder implements ErrorRegisteryInterface
 {
-
-    /**
-     * A GroupBuilder error type.
-     *
-     * This constant represent a no
-     * error state of GroupBuilder.
-     *
-     * The default value of this constant
-     * is an integer set to -1.
-     *
-     * @var integer
-     */
-    const NO_ERROR = - 1;
 
     /**
      * An error type.

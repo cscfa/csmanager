@@ -120,6 +120,11 @@ class RoleProviderTest extends WebTestCase
         $this->assertContains($role, $allRoles, "RoleProvider::findAll() result does not contain existing role.");
         $this->assertGreaterThanOrEqual(1, $allRoles, "The RoleProvider::findAll() method doesn't contain one index.");
         
+        $rolesNames = $this->roleProvider->getAllNames();
+        $this->assertTrue(is_array($rolesNames), "RoleProvider::getAllNames() doesn't return array.");
+        $this->assertFalse(empty($rolesNames), "RoleProvider::getAllNames() return empty array.");
+        $this->assertTrue(in_array($roleName, $rolesNames), "RoleProvider::getAllNames() doesn't return existing role name.");
+        
         $this->doctrine->remove($role);
         $this->doctrine->flush();
     }

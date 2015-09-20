@@ -23,7 +23,8 @@ class AppKernel extends Kernel
             // new Cscfa\Bundle\CSManager\UserBundle\CscfaCSManagerUserBundle(),
             // new Cscfa\Bundle\CSManager\ConfigBundle\CscfaCSManagerConfigBundle(),
             // new Cscfa\Bundle\TwigUIBundle\CscfaTwigUIBundle(),
-            new FOS\UserBundle\FOSUserBundle()
+            new FOS\UserBundle\FOSUserBundle(),
+            new Cscfa\Bundle\ToolboxBundle\CscfaToolboxBundle(),
         );
         
         if (in_array($this->getEnvironment(), array(

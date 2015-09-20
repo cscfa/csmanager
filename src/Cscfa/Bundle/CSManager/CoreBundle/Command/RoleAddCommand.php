@@ -21,9 +21,12 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Doctrine\ORM\OptimisticLockException;
+use Cscfa\Bundle\CSManager\CoreBundle\Entity\Role;
 use Cscfa\Bundle\CSManager\CoreBundle\Util\Manager\RoleManager;
 use Cscfa\Bundle\CSManager\CoreBundle\Util\Provider\RoleProvider;
 use Cscfa\Bundle\CSManager\CoreBundle\Util\Builder\RoleBuilder;
+use Cscfa\Bundle\ToolboxBundle\Builder\Command\CommandAskBuilder;
+use Cscfa\Bundle\ToolboxBundle\Facade\Command\CommandFacade;
 
 /**
  * RoleAddCommand class.
@@ -35,6 +38,7 @@ use Cscfa\Bundle\CSManager\CoreBundle\Util\Builder\RoleBuilder;
  * @package  CscfaCSManagerCoreBundle
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
+ * @version  Release: 1.2
  * @link     http://cscfa.fr
  */
 class RoleAddCommand extends ContainerAwareCommand
@@ -46,7 +50,7 @@ class RoleAddCommand extends ContainerAwareCommand
      * This variable is used to get
      * Role instance from the database.
      *
-     * @var Cscfa\Bundle\CSManager\CoreBundle\Util\Provider\RoleProvider
+     * @var RoleProvider
      */
     protected $roleProvider;
 
@@ -57,7 +61,7 @@ class RoleAddCommand extends ContainerAwareCommand
      * logic and persist instance into
      * the database.
      *
-     * @var Cscfa\Bundle\CSManager\CoreBundle\Util\Manager\RoleManager
+     * @var RoleManager
      */
     protected $roleManager;
 
@@ -127,68 +131,75 @@ class RoleAddCommand extends ContainerAwareCommand
      * @param InputInterface  $input  The common command input
      * @param OutputInterface $output The common command output
      *
-     * @see    \Symfony\Component\Console\Command\Command::execute()
-     * @return void
+     * @see     \Symfony\Component\Console\Command\Command::execute()
+     * @version Release: 1.2
+     * @return  void
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        // get all existing role name for autocompletion.
-        $autoComplete = $this->roleManager->getRolesName();
+        $limit = $this->roleManager->getRolesName();
+        $multi = array(
+            array(
+                "var" => "name",
+                "question" => "Role name",
+                "type" => CommandAskBuilder::TYPE_ASK,
+                "extra" => array(
+                    "empty" => false,
+                    "default" => false
+                )
+            ),
+            array(
+                "var" => "child",
+                "question" => "Role childs",
+                "type" => CommandAskBuilder::TYPE_ASK_SELECT,
+                "limit" => $limit,
+                "default" => null,
+                "extra" => array(
+                    "active" => (empty($limit) ? false : true),
+                    "unactive" => array()
+                )
+            )
+        );
+        $commandFacade = new CommandFacade($input, $output, $this);
         
-        // get the dialog helper to create interactive interface.
-        $dialog = $this->getHelper('dialog');
+        list ($name, $child) = $commandFacade->getOrAskMulti($multi);
         
-        // getting the role name from the input command. If not exist, use dialog to get it.
-        $name = $input->getArgument('name');
-        if ($name) {
-            $roleName = $name;
+        if (is_int($child)) {
+            $childName = $limit[$child];
+            $child = $this->roleProvider->findOneByName($childName)->getRole();
         } else {
-            // getting dialog to get role name.
-            $roleName = $dialog->ask($output, 'Please enter the name of the role : ');
+            $childName = null;
+            $child = null;
         }
         
-        // getting the role child name from the input command. If not exist, use dialog to get it.
-        $child = $input->getArgument('child');
-        if ($child) {
-            $roleChild = $child;
-        } else {
-            // getting the child name. By default the child is null, that's for empty child. This dialog use autocompletion for choose existing role.
-            $roleChild = $dialog->ask($output, 'Please enter the name of the child role or press enter for null : ', null, $autoComplete);
-        }
-        
-        // get new role instance from RoleManager.
-        $newRole = $this->roleManager->getNewInstance();
-        
-        // assigning role parameters.
-        if (! $newRole->setName(strtoupper($roleName))) {
-            if ($newRole->getLastError() === RoleBuilder::DUPLICATE_ROLE_NAME) {
-                $output->writeln("<error>" . $roleName . " already exist.</error>");
-            } else if ($newRole->getLastError() === RoleBuilder::INVALID_ROLE_NAME) {
-                $output->writeln("<error>" . $roleName . " is not a valid role name. The role name can contain only case unsensitive A to Z letters and underscore.</error>");
+        if ($commandFacade->getConfirmation(array("name" => $name, "childs" => $childName))) {
+            
+            $validating = array(
+                "setName" => array(
+                    $name,
+                    "Naming error",
+                    array(
+                        RoleBuilder::DUPLICATE_ROLE_NAME => "name already exist",
+                        RoleBuilder::INVALID_ROLE_NAME => "invalid name"
+                    )
+                ),
+                "setChild" => array(
+                    $child,
+                    "Child error",
+                    array(
+                        RoleBuilder::CIRCULAR_REFERENCE => "circular reference creating",
+                        RoleBuilder::INVALID_ROLE_INSTANCE_OF => "invalid role instance"
+                    )
+                )
+            );
+            
+            $roleBuilder = $this->roleManager->getNewInstance();
+            $isValid = $commandFacade->applyAndValidate($roleBuilder, $validating, "An error occured. Can't generate", "Generating succefull");
+            
+            if ($isValid) {
+                $roleBuilder->getRole()->setCreatedAt(new \DateTime());
+                $this->roleManager->persist($roleBuilder);
             }
-            return;
-        }
-        $newRole->setCreatedAt(new \DateTime(), true);
-        $newRole->setUpdatedAt(new \DateTime(), true);
-        
-        // getting role child or null.
-        $child = $this->roleProvider->findOneByName($roleChild)->getRole();
-        
-        if (! $newRole->setChild($child)) {
-            if ($newRole->getLastError() === RoleBuilder::INVALID_ROLE_INSTANCE_OF) {
-                $output->writeln("<error>An error occured with the child creation.</error>");
-            } else if ($newRole->getLastError() === RoleBuilder::CIRCULAR_REFERENCE) {
-                $output->writeln("<error>" . $child->getName . " create a circular reference.</error>");
-            }
-            return;
-        }
-        
-        // créate the new role into the database.
-        try {
-            $this->roleManager->persist($newRole);
-            $output->writeln("Done");
-        } catch (OptimisticLockException $e) {
-            $output->writeln("<error>An error occures : [" . $e->getCode() . "] " . $e->getMessage() . "\n\t In file : " . $e->getFile() . " line " . $e->getLine() . "</error>");
         }
     }
 }

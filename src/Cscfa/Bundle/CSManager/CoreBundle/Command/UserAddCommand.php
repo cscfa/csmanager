@@ -25,6 +25,12 @@ use Symfony\Component\Console\Input\InputOption;
 use Cscfa\Bundle\CSManager\CoreBundle\Entity\User;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Doctrine\ORM\OptimisticLockException;
+use Cscfa\Bundle\ToolboxBundle\Builder\Command\CommandAskBuilder;
+use Cscfa\Bundle\ToolboxBundle\Facade\Command\CommandFacade;
+use Cscfa\Bundle\CSManager\CoreBundle\Util\Provider\RoleProvider;
+use Cscfa\Bundle\CSManager\CoreBundle\Util\Manager\RoleManager;
+use Cscfa\Bundle\CSManager\CoreBundle\Util\Manager\UserManager;
+use Cscfa\Bundle\CSManager\CoreBundle\Util\Builder\UserBuilder;
 
 /**
  * UserAddCommand class.
@@ -63,6 +69,28 @@ class UserAddCommand extends ContainerAwareCommand
     protected $encoderFactory;
 
     /**
+     * The role provider service.
+     * 
+     * This service allow to
+     * access to the database
+     * behind the Roles tables.
+     * 
+     * @var RoleProvider
+     */
+    protected $roleProvider;
+
+    /**
+     * The user manager service.
+     * 
+     * This allow to use
+     * the UserBuilder
+     * instances.
+     * 
+     * @var UserManager
+     */
+    protected $userManager;
+
+    /**
      * UserAddCommand constructor.
      *
      * This constructor register a doctrine
@@ -71,15 +99,18 @@ class UserAddCommand extends ContainerAwareCommand
      *
      * @param EntityManager           $doctrineManager An entity manager to manage User instance into the database.
      * @param EncoderFactoryInterface $encoderFactory  A security encoder factory to encode user password.
+     * @param RoleProvider            $roleProvider    The role provider service that allow to access to database.
+     * @param UserManager             $userManager     The user manager service that allow to use UserBuilder
      */
-    public function __construct(EntityManager $doctrineManager, EncoderFactoryInterface $encoderFactory)
+    public function __construct(EntityManager $doctrineManager, EncoderFactoryInterface $encoderFactory, RoleProvider $roleProvider, UserManager $userManager)
     {
         $this->doctrineManager = $doctrineManager;
         $this->encoderFactory = $encoderFactory;
+        $this->roleProvider = $roleProvider;
+        $this->userManager = $userManager;
         
         parent::__construct();
     }
-
 
     /**
      * Command configuration.
@@ -100,17 +131,15 @@ class UserAddCommand extends ContainerAwareCommand
      */
     protected function configure()
     {
-        $defaultStrong = true;
-        
         $this->setName('csmanager:generate:user')
             ->setDescription('Create and register new user')
             ->addArgument('username', InputArgument::OPTIONAL, "What's the username?")
             ->addArgument('email', InputArgument::OPTIONAL, "What's the user mail?")
             ->addArgument('password', InputArgument::OPTIONAL, "What's the user password?")
-            ->addOption('enabled', '-en', InputOption::VALUE_OPTIONAL, "If the user is enabled?", true)
-            ->addOption('salt', '-sa', InputOption::VALUE_OPTIONAL, "What's the user salt?", base64_encode(utf8_encode(openssl_random_pseudo_bytes(10, $defaultStrong))))
-            ->addOption('confirmationToken', '-co', InputOption::VALUE_OPTIONAL, "What's the user confirmationToken?", base64_encode(utf8_encode(openssl_random_pseudo_bytes(30, $defaultStrong))))
-            ->addOption('expiresAt', '-ex', InputOption::VALUE_OPTIONAL, "What's the user account expiration date?", null)
+            ->addOption('enabled', '-en', InputOption::VALUE_OPTIONAL, "If the user is enabled?")
+            ->addOption('salt', '-sa', InputOption::VALUE_OPTIONAL, "What's the user salt?")
+            ->addOption('confirmationToken', '-co', InputOption::VALUE_OPTIONAL, "What's the user confirmationToken?")
+            ->addOption('expiresAt', '-ex', InputOption::VALUE_OPTIONAL, "What's the user account expiration date?")
             ->addArgument('roles', InputArgument::IS_ARRAY, "What's the user roles?");
     }
 
@@ -133,83 +162,184 @@ class UserAddCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $username = $input->getArgument('username');
-        $email = $input->getArgument('email');
-        $password = $input->getArgument('password');
-        $roles = $input->getArgument('roles');
-        
-        $enabled = $input->getOption('enabled');
-        $salt = $input->getOption('salt');
-        $confirmationToken = $input->getOption('confirmationToken');
-        $expiresAt = $input->getOption('expiresAt');
-        $defaultStrong = true;
-        
-        $dialog = $this->getHelper('dialog');
-        
-        if (! $username) {
-            $username = $dialog->ask($output, 'Please enter the user name : ');
+        $rolesNames = $this->roleProvider->getAllNames();
+        if (empty($rolesNames)) {
+            $rolesActive = false;
+        } else {
+            $rolesActive = true;
         }
-        if (! $email) {
-            $email = $dialog->ask($output, 'Please enter the user email : ');
-        }
-        if (! $password) {
-            $password = $dialog->askHiddenResponse($output, 'Please enter the user password : ');
-        }
-        if (! $roles) {
-            do {
-                $roleElm = $dialog->ask($output, 'Please enter one of the user role or let empty to continue : ');
-                if ($roleElm) {
-                    $roleEntity = $this->doctrineManager->getRepository("CscfaCSManagerCoreBundle:Role")->findOneByName($roleElm);
-                    
-                    do {
-                        if ($roleEntity) {
-                            $roles[] = $roleEntity;
-                        } else {
-                            $output->writeln("Undefined role.");
+        
+        $multi = array(
+            array(
+                "var" => "username",
+                "question" => "Username",
+                "type" => CommandAskBuilder::TYPE_ASK,
+                "extra" => array(
+                    "empty" => false,
+                    "default" => false
+                )
+            ),
+            array(
+                "var" => "email",
+                "question" => "Email",
+                "type" => CommandAskBuilder::TYPE_ASK,
+                "extra" => array(
+                    "empty" => false,
+                    "default" => false
+                )
+            ),
+            array(
+                "var" => "password",
+                "question" => "Password",
+                "type" => CommandAskBuilder::TYPE_ASK,
+                "option" => CommandAskBuilder::OPTION_ASK_HIDDEN_RESPONSE,
+                "extra" => array(
+                    "empty" => false,
+                    "default" => false
+                )
+            ),
+            array(
+                "var" => "enabled",
+                "question" => "enabled",
+                "default" => true
+            ),
+            array(
+                "var" => "salt",
+                "question" => "Salt",
+                "default" => base64_encode(utf8_encode(openssl_random_pseudo_bytes(10))),
+                "type" => CommandAskBuilder::TYPE_ASK
+            ),
+            array(
+                "var" => "confirmationToken",
+                "question" => "Confirmation token",
+                "default" => base64_encode(utf8_encode(openssl_random_pseudo_bytes(10))),
+                "type" => CommandAskBuilder::TYPE_ASK
+            ),
+            array(
+                "var" => "expiresAt",
+                "question" => "Expiration date as Y-m-d H:i:s",
+                "type" => CommandAskBuilder::TYPE_ASK,
+                "default" => null,
+                "extra" => array(
+                    "transform" => function ($expire) {
+                        $expire = \DateTime::createFromFormat("Y-m-d H:i:s", $expire);
+                        if (! ($expire instanceof \DateTime) || $expire !== null) {
+                            $expire = null;
                         }
-                        
-                        if ($roleEntity->getChild()) {
-                            $roleEntity = $roleEntity->getChild();
-                            $output->writeln($roleEntity->getName() . " implicitely.");
-                        } else {
-                            $roleEntity = false;
-                        }
-                    } while ($roleEntity);
-                }
-            } while ($roleElm);
+                        return $expire;
+                    }
+                )
+            ),
+            array(
+                "var" => "roles",
+                "question" => "Roles",
+                "type" => CommandAskBuilder::TYPE_ASK_SELECT,
+                "limit" => $rolesNames,
+                "option" => CommandAskBuilder::OPTION_ASK_MULTI_SELECT,
+                "default" => null,
+                "extra" => array(
+                    "active" => $rolesActive,
+                    "unactive" => array()
+                )
+            )
+        );
+        
+        $commandFacade = new CommandFacade($input, $output, $this);
+        list ($username, $email, $password, $enabled, $salt, $confirmationToken, $expiresAt, $roles) = $commandFacade->getOrAskMulti($multi);
+        
+        $rolesSelected = array();
+        foreach ($roles as $value) {
+            $rolesSelected[] = $rolesNames[$value];
         }
         
-        if (! $enabled) {
-            $enabled = true;
-        }
-        if (! $salt) {
-            $salt = base64_encode(utf8_encode(openssl_random_pseudo_bytes(10, $defaultStrong)));
-        }
-        if (! $confirmationToken) {
-            $salt = base64_encode(utf8_encode(openssl_random_pseudo_bytes(30, $defaultStrong)));
-        }
+        $confirmationArray = array(
+            "username" => $username,
+            "email" => $email,
+            "password" => preg_replace("/./", "*", $password),
+            "enabled" => $enabled,
+            "salt" => $salt,
+            "confirmation token" => $confirmationToken,
+            "expiration date" => $expiresAt,
+            "roles" => $rolesSelected
+        );
         
-        $user = new User();
-        $user->setUsername($username)
-            ->setEmail($email)
-            ->setEnabled($enabled)
-            ->setSalt($salt)
-            ->setConfirmationToken($confirmationToken)
-            ->setExpiresAt($expiresAt)
-            ->setUsernameCanonical(strtolower($username))
-            ->setEmailCanonical(strtolower($email))
-            ->setRoles($roles);
-        
-        $hash = $this->encoderFactory->getEncoder($user)->encodePassword($password, $salt);
-        $user->setPassword($hash);
-        
-        $this->doctrineManager->persist($user);
-        
-        try {
-            $this->doctrineManager->flush();
-            $output->writeln("Done");
-        } catch (OptimisticLockException $e) {
-            $output->writeln("An error occures : [" . $e->getCode() . "] " . $e->getMessage() . "\n\t In file : " . $e->getFile() . " line " . $e->getLine());
+        if ($commandFacade->getConfirmation($confirmationArray)) {
+            
+            $roles = array();
+            foreach ($rolesSelected as $roleName) {
+                $roles = $this->roleProvider->findOneByName($roleName)->getRole();
+            }
+            
+            $userBuilder = $this->userManager->getNewInstance();
+            
+            $validating = array(
+                "setUsername" => array(
+                    $username,
+                    "Username error",
+                    array(
+                        UserBuilder::DUPLICATE_USERNAME => "username exist",
+                        UserBuilder::INVALID_USERNAME => "username format error"
+                    )
+                ),
+                "setEmail" => array(
+                    $email,
+                    "Email error",
+                    array(
+                        UserBuilder::DUPLICATE_EMAIL => "email exist",
+                        UserBuilder::INVALID_EMAIL => "email format error"
+                    )
+                ),
+                "setEnabled" => array(
+                    $enabled,
+                    "Enabled error",
+                    array(
+                        UserBuilder::IS_NOT_BOOLEAN => "enabled is not a boolean type"
+                    )
+                ),
+                "setSalt" => array(
+                    $salt,
+                    "Salt error",
+                    array(
+                        UserBuilder::IS_NOT_STRING => "salt is not a string type"
+                    )
+                ),
+                "setPassword" => array(
+                    $password,
+                    "Password error",
+                    array(
+                        UserBuilder::EMPTY_PASSWORD => "password is empty",
+                        UserBuilder::IS_NOT_STRING => "password is not a string"
+                    )
+                ),
+                "setConfirmationToken" => array(
+                    $confirmationToken,
+                    "Confirmation token error",
+                    array(
+                        UserBuilder::IS_NOT_STRING => "Confirmation token is not a string type"
+                    )
+                ),
+                "setExpiresAt" => array(
+                    $expiresAt,
+                    "Expiration error",
+                    array(
+                        UserBuilder::EXPIRATION_DATE_BEFORE_NOW => "Expiration date before now"
+                    )
+                ),
+                "addRole" => array(
+                    $roles,
+                    "Role error",
+                    array()
+                )
+            );
+            
+            $isValid = $commandFacade->applyAndValidate($userBuilder, $validating, "An error occured. Can't generate", "Generating succefull");
+            
+            if ($isValid) {
+                $userBuilder->getUser()->setCreatedAt(new \DateTime());
+                $this->userManager->persist($userBuilder);
+            }
+        } else {
+            return;
         }
     }
 }

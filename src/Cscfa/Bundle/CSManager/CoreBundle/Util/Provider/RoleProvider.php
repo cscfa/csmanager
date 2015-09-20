@@ -145,4 +145,18 @@ class RoleProvider
     {
         return $this->repository->isExistingByName($name) === null ? false : true;
     }
+
+    /**
+     * Get all names.
+     *
+     * This method allow to get
+     * all of the existings Roles
+     * instance into the database.
+     *
+     * @return array
+     */
+    public function getAllNames()
+    {
+        return $this->repository->getAllNames();
+    }
 }

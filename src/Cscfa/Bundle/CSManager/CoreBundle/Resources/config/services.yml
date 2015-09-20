@@ -44,7 +44,12 @@ parameters:
     core.manager.group_manager.class: Cscfa\Bundle\CSManager\CoreBundle\Util\Manager\GroupManager
     #The default class for the group provider tool
     core.provider.group_provider.class:  Cscfa\Bundle\CSManager\CoreBundle\Util\Provider\GroupProvider
-
+    ##############################################################################
+    #                         The group command classes                          #
+    ##############################################################################
+    #The default class for the group generating command
+    core.command.add_group.class: Cscfa\Bundle\CSManager\CoreBundle\Command\GroupAddCommand
+    
 services:
     ##############################################################################
     #                         The role command services                          #
@@ -96,7 +101,7 @@ services:
     #tag: command     #The add user command definition. This command allow a shell user to create a new user into the database.
     core.command.add_user:
         class: "%core.command.add_user.class%"
-        arguments: [ "@doctrine.orm.entity_manager", "@security.encoder_factory" ]
+        arguments: [ "@doctrine.orm.entity_manager", "@security.encoder_factory", "@core.provider.role_provider", "@core.manager.user_manager" ]
         tags:
             -  { name: console.command }
     #tag: command     #The view user command definition. This command allow a shell user to list all existing users from the database.
@@ -133,3 +138,12 @@ services:
     core.provider.group_provider:
         class: "%core.provider.group_provider.class%"
         arguments: [ "@doctrine.orm.entity_manager", "@core.manager.role_manager", "@security.context" ]
+    ##############################################################################
+    #                         The group command services                         #
+    ##############################################################################
+    #tag: command     #The add user command definition. This command allow a shell user to create a new user into the database.
+    core.command.add_group:
+        class: "%core.command.add_group.class%"
+        arguments: [ "@core.manager.group_manager", "@core.provider.group_provider", "@core.provider.role_provider" ]
+        tags:
+            -  { name: console.command }

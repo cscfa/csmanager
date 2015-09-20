@@ -22,6 +22,7 @@ use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Cscfa\Bundle\CSManager\CoreBundle\Entity\StackUpdate;
 use Cscfa\Bundle\CSManager\CoreBundle\Entity\Role;
 use Cscfa\Bundle\CSManager\CoreBundle\Util\Provider\UserProvider;
+use Cscfa\Bundle\ToolboxBundle\BaseInterface\Error\ErrorRegisteryInterface;
 
 /**
  * UserBuilder class.
@@ -35,26 +36,14 @@ use Cscfa\Bundle\CSManager\CoreBundle\Util\Provider\UserProvider;
  * @package  CscfaCSManagerCoreBundle
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
+ * @version  Release: 1.1
  * @link     http://cscfa.fr
  * @see      Cscfa\Bundle\CSManager\CoreBundle\Entity\StackUpdate
  * @see      Cscfa\Bundle\CSManager\CoreBundle\Entity\User
  * @see      Cscfa\Bundle\CSManager\CoreBundle\Util\Manager\UserManager
  */
-class UserBuilder
+class UserBuilder implements ErrorRegisteryInterface
 {
-
-    /**
-     * A UserBuilder error type.
-     *
-     * This constant represent a no
-     * error state of UserBuilder.
-     *
-     * The default value of this constant
-     * is an integer set to -1.
-     *
-     * @var integer
-     */
-    const NO_ERROR = - 1;
     
     /**
      * An error type.
