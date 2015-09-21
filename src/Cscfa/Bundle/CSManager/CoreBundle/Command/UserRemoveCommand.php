@@ -20,9 +20,12 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
-use Doctrine\ORM\EntityManager;
-use Symfony\Component\Console\Question\ConfirmationQuestion;
-use Doctrine\ORM\OptimisticLockException;
+use Cscfa\Bundle\ToolboxBundle\Facade\Command\CommandFacade;
+use Cscfa\Bundle\ToolboxBundle\Facade\Command\CommandColorFacade;
+use Cscfa\Bundle\ToolboxBundle\BaseInterface\Command\CommandColorInterface;
+use Cscfa\Bundle\ToolboxBundle\Builder\Command\CommandAskBuilder;
+use Cscfa\Bundle\CSManager\CoreBundle\Util\Manager\UserManager;
+use Cscfa\Bundle\CSManager\CoreBundle\Util\Provider\UserProvider;
 
 /**
  * UserRemoveCommand class.
@@ -40,15 +43,25 @@ class UserRemoveCommand extends ContainerAwareCommand
 {
 
     /**
-     * The doctrine entity manager.
+     * The user manager service.
      * 
+     * This variable is used to manage
+     * User instance logic.
+     * 
+     * @var UserManager
+     */
+    protected $userManager;
+
+    /**
+     * The user provider service.
+     *
      * This variable is used to manage
      * User instance storage into the
      * database.
-     * 
-     * @var EntityManager
+     *
+     * @var UserProvider
      */
-    protected $doctrineManager;
+    protected $userProvider;
 
     /**
      * UserRemoveCommand constructor.
@@ -57,11 +70,13 @@ class UserRemoveCommand extends ContainerAwareCommand
      *.entity manager. Also it call the parent
      * constructor.
      *
-     * @param EntityManager $doctrineManager An entity manager to manage User instance into the database.
+     * @param UserManager  $userManager  The user manager service to manage User instance logic.
+     * @param UserProvider $userProvider The user provider service that manage User instance into the database.
      */
-    public function __construct(EntityManager $doctrineManager)
+    public function __construct(UserManager $userManager, UserProvider $userProvider)
     {
-        $this->doctrineManager = $doctrineManager;
+        $this->userManager = $userManager;
+        $this->userProvider = $userProvider;
         
         parent::__construct();
     }
@@ -104,34 +119,37 @@ class UserRemoveCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $dialog = $this->getHelper('dialog');
-        $username = $input->getArgument('username');
-        if ($username) {
-            $name = $username;
-        } else {
-            $name = $dialog->ask($output, 'Please enter the name of the user : ');
-        }
+        $commandFacade = new CommandFacade($input, $output, $this);
+        $cf = new CommandColorFacade($output);
+        $cf->addColor("error", CommandColorInterface::BLACK, CommandColorInterface::RED, null);
+        $cf->addColor("success", CommandColorInterface::BLACK, CommandColorInterface::GREEN, null);
         
-        $user = $this->doctrineManager->getRepository("CscfaCSManagerCoreBundle:User")->findOneByUsername($name);
+        $builder = new CommandAskBuilder(CommandAskBuilder::TYPE_ASK, "The user name : ", null, CommandAskBuilder::OPTION_ASK_AUTOCOMPLETED, $this->userProvider->findAllUsernames());
+        $name = $commandFacade->getOrAsk("username", $builder);
         
-        if ($user) {
-            
-            $confirm = $this->getHelper('question');
-            $question = new ConfirmationQuestion('Are you sure to delete ' . $username . '?', false);
-            if ($confirm->ask($input, $output, $question)) {
-                try {
-                    $this->doctrineManager->remove($user);
-                    $this->doctrineManager->flush();
-                    $output->writeln("Done");
-                } catch (OptimisticLockException $e) {
-                    $output->writeln("An error occures : [" . $e->getCode() . "] " . $e->getMessage() . "\n\t In file : " . $e->getFile() . " line " . $e->getLine());
-                }
-            } else {
-                $output->writeln("Aborted");
+        $user = $this->userProvider->findOneByUsername($name);
+        
+        if ($user !== null && $commandFacade->getConfirmation(array("username" => $name))) {
+            try {
+                $this->userManager->remove($user);
+                $cf->clear();
+                $cf->addText("\n");
+                $cf->addText("\nDone\n", "success");
+                $cf->addText("\n");
+                $cf->write();
+            } catch (OptimisticLockException $e) {
+                $cf->clear();
+                $cf->addText("\n");
+                $cf->addText("\nAn error occures : [" . $e->getCode() . "] " . $e->getMessage() . "\n\t In file : " . $e->getFile() . " line " . $e->getLine() . "\n", "error");
+                $cf->addText("\n");
+                $cf->write();
             }
-        } else {
-            $output->writeln("Unexisting user " . $username . ".");
-            return;
+        } else if ($user === null) {
+            $cf->clear();
+            $cf->addText("\n");
+            $cf->addText("\nUnexisting group " . $name . ".\n", "error");
+            $cf->addText("\n");
+            $cf->write();
         }
     }
 }

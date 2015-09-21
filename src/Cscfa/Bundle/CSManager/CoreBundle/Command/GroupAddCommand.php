@@ -26,6 +26,7 @@ use Cscfa\Bundle\ToolboxBundle\Facade\Command\CommandFacade;
 use Cscfa\Bundle\ToolboxBundle\Builder\Command\CommandAskBuilder;
 use Cscfa\Bundle\CSManager\CoreBundle\Util\Provider\RoleProvider;
 use Cscfa\Bundle\CSManager\CoreBundle\Util\Builder\GroupBuilder;
+use Cscfa\Bundle\CSManager\CoreBundle\Util\Builder\RoleBuilder;
 
 /**
  * GroupAddCommand class.
@@ -212,7 +213,11 @@ class GroupAddCommand extends ContainerAwareCommand
             
             $rolesArray = array();
             foreach ($roles as $value) {
-                $rolesArray[] = $this->roleProvider->findOneByName($rolesNames[$value]);
+                $tmpR = $this->roleProvider->findOneByName($rolesNames[$value]);
+                
+                if ($tmpR instanceof RoleBuilder) {
+                    $rolesArray[] = $tmpR->getRole();
+                }
             }
             
             $validating = array(
@@ -238,7 +243,7 @@ class GroupAddCommand extends ContainerAwareCommand
                         GroupBuilder::DATE_BEFORE_NOW => "Expiration date before now"
                     )
                 ),
-                "addRoles" => array(
+                "addRole" => array(
                     $rolesArray,
                     "Role error",
                     array(

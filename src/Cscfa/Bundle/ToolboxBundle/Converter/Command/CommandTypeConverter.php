@@ -53,7 +53,11 @@ class CommandTypeConverter
     static function convertToString($element)
     {
         if (is_array($element)) {
-            $element = implode(", ", $element);
+            if(count($element)){
+                $element = implode(", ", $element);
+            }else{
+                $element = "NULL";
+            }
         } else if (is_bool($element)) {
             $element = $element ? 'true' : 'false';
         } else if ($element instanceof \DateTime) {

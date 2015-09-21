@@ -235,7 +235,7 @@ class UserAddCommand extends ContainerAwareCommand
                 "type" => CommandAskBuilder::TYPE_ASK_SELECT,
                 "limit" => $rolesNames,
                 "option" => CommandAskBuilder::OPTION_ASK_MULTI_SELECT,
-                "default" => null,
+                "default" => array(),
                 "extra" => array(
                     "active" => $rolesActive,
                     "unactive" => array()

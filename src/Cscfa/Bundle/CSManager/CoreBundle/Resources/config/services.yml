@@ -51,6 +51,8 @@ parameters:
     core.command.add_group.class: Cscfa\Bundle\CSManager\CoreBundle\Command\GroupAddCommand
     #The default class for the group view command
     core.command.view_group.class: Cscfa\Bundle\CSManager\CoreBundle\Command\GroupViewCommand
+    #The default class for the group remove command
+    core.command.remove_group.class: Cscfa\Bundle\CSManager\CoreBundle\Command\GroupRemoveCommand
     
 services:
     ##############################################################################
@@ -115,7 +117,7 @@ services:
     #tag: command     #The remove user command definition. This command allow a shell user to remove an existing user from the database.
     core.command.remove_user:
         class: "%core.command.remove_user.class%"
-        arguments: [ "@doctrine.orm.entity_manager" ]
+        arguments: [ "@core.manager.user_manager", "@core.provider.user_provider" ]
         tags:
             -  { name: console.command }
     ##############################################################################
@@ -153,5 +155,11 @@ services:
     core.command.view_group:
         class: "%core.command.view_group.class%"
         arguments: [ "@core.provider.group_provider" ]
+        tags:
+            -  { name: console.command }
+    #tag: command     #The view group command definition. This command allow a shell user to remove an existing groups from the database.
+    core.command.remove_group:
+        class: "%core.command.remove_group.class%"
+        arguments: [ "@core.manager.group_manager", "@core.provider.group_provider" ]
         tags:
             -  { name: console.command }

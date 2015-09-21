@@ -191,7 +191,20 @@ class CommandFacade
     {
         $dialog = $this->getDialog();
         
-        return $dialog->select($this->output, $builder->getQuestion(), $builder->getLimite(), $builder->getDefault(), false, 'Value "%s" is invalid', ($builder->getOptions() & CommandAskBuilder::OPTION_ASK_MULTI_SELECT));
+        $default = $builder->getDefault();
+        $limit = $builder->getLimite();
+        $index = count($limit);
+        $limit[] = CommandTypeConverter::convertToString($default);
+        $builder->setDefault($index);
+        $builder->setLimite($limit);
+        
+        $result = $dialog->select($this->output, $builder->getQuestion(), $builder->getLimite(), $builder->getDefault(), false, 'Value "%s" is invalid', ($builder->getOptions() & CommandAskBuilder::OPTION_ASK_MULTI_SELECT));
+        
+        if((is_array($result) && count($result) == 1 && in_array($index, $result)) || $result == $index){
+            return $default;
+        }else{
+            return $result;
+        }
     }
 
     /**
