@@ -26,6 +26,7 @@ use Cscfa\Bundle\ToolboxBundle\BaseInterface\Command\CommandColorInterface;
 use Cscfa\Bundle\ToolboxBundle\Builder\Command\CommandAskBuilder;
 use Cscfa\Bundle\CSManager\CoreBundle\Util\Manager\UserManager;
 use Cscfa\Bundle\CSManager\CoreBundle\Util\Provider\UserProvider;
+use Doctrine\ORM\OptimisticLockException;
 
 /**
  * UserRemoveCommand class.
