@@ -29,6 +29,8 @@ parameters:
     core.command.view_user.class:     Cscfa\Bundle\CSManager\CoreBundle\Command\UserViewCommand
     #The default class for the user deletion command
     core.command.remove_user.class:   Cscfa\Bundle\CSManager\CoreBundle\Command\UserRemoveCommand
+    #The default class for the user update command
+    core.command.update_user.class:   Cscfa\Bundle\CSManager\CoreBundle\Command\UserUpdateCommand
     ##############################################################################
     #                         The user tool classes                              #
     ##############################################################################
@@ -53,6 +55,8 @@ parameters:
     core.command.view_group.class: Cscfa\Bundle\CSManager\CoreBundle\Command\GroupViewCommand
     #The default class for the group remove command
     core.command.remove_group.class: Cscfa\Bundle\CSManager\CoreBundle\Command\GroupRemoveCommand
+    #The default class for the group update command
+    core.command.update_group.class: Cscfa\Bundle\CSManager\CoreBundle\Command\GroupUpdateCommand
     
 services:
     ##############################################################################
@@ -120,6 +124,12 @@ services:
         arguments: [ "@core.manager.user_manager", "@core.provider.user_provider" ]
         tags:
             -  { name: console.command }
+    #tag: command     #The update user command definition. This command allow a shell user to update an existing user from the database.
+    core.command.update_user:
+        class: "%core.command.update_user.class%"
+        arguments: [ "@core.provider.user_provider", "@core.manager.user_manager", "@core.provider.role_provider" ]
+        tags:
+            -  { name: console.command }
     ##############################################################################
     #                          The user tool services                            #
     ##############################################################################
@@ -161,5 +171,11 @@ services:
     core.command.remove_group:
         class: "%core.command.remove_group.class%"
         arguments: [ "@core.manager.group_manager", "@core.provider.group_provider" ]
+        tags:
+            -  { name: console.command }
+    #tag: command     #The update role command definition. This command allow a shell user to update an existing role into the database.
+    core.command.update_group:
+        class: "%core.command.update_group.class%"
+        arguments: [ "@core.manager.group_manager", "@core.provider.group_provider", "@core.provider.role_provider" ]
         tags:
             -  { name: console.command }

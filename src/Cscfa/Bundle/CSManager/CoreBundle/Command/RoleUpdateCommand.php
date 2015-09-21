@@ -20,11 +20,12 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Cscfa\Bundle\CSManager\CoreBundle\Util\Provider\RoleProvider;
 use Cscfa\Bundle\CSManager\CoreBundle\Util\Manager\RoleManager;
-use Cscfa\Bundle\CSManager\CoreBundle\Util\Builder\RoleBuilder;
-use Doctrine\ORM\OptimisticLockException;
+use Cscfa\Bundle\ToolboxBundle\Facade\Command\CommandFacade;
+use Cscfa\Bundle\ToolboxBundle\Builder\Command\CommandAskBuilder;
+use Cscfa\Bundle\ToolboxBundle\Facade\Command\CommandColorFacade;
+use Cscfa\Bundle\ToolboxBundle\BaseInterface\Command\CommandColorInterface;
 
 /**
  * RoleUpdateCommand class.
@@ -36,6 +37,7 @@ use Doctrine\ORM\OptimisticLockException;
  * @package  CscfaCSManagerCoreBundle
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
+ * @version  Release: 1.1
  * @link     http://cscfa.fr
  */
 class RoleUpdateCommand extends ContainerAwareCommand
@@ -47,7 +49,7 @@ class RoleUpdateCommand extends ContainerAwareCommand
      * This variable is used to get
      * Role instance from the database.
      *
-     * @var Cscfa\Bundle\CSManager\CoreBundle\Util\Provider\RoleProvider
+     * @var RoleProvider
      */
     protected $roleProvider;
 
@@ -58,7 +60,7 @@ class RoleUpdateCommand extends ContainerAwareCommand
      * logic and persist instance into
      * the database.
      *
-     * @var Cscfa\Bundle\CSManager\CoreBundle\Util\Manager\RoleManager
+     * @var RoleManager
      */
     protected $roleManager;
 
@@ -89,7 +91,7 @@ class RoleUpdateCommand extends ContainerAwareCommand
      *
      * This configuration purpose that calling this command
      * behind "app/console csmanager:update:role". It declare
-     * only one optional argument nae that represent the role
+     * only one optional argument name that represent the role
      * name to update.
      *
      * @see    \Symfony\Component\Console\Command\Command::configure()
@@ -99,7 +101,7 @@ class RoleUpdateCommand extends ContainerAwareCommand
     {
         // command configuration
         $this->setName('csmanager:update:role')
-            ->setDescription('Create and register new role')
+            ->setDescription('Update a role')
             ->addArgument('name', InputArgument::OPTIONAL, "What's the role name to update?");
     }
 
@@ -121,102 +123,114 @@ class RoleUpdateCommand extends ContainerAwareCommand
      * @param InputInterface  $input  The common command input
      * @param OutputInterface $output The common command output
      *            
-     * @see    \Symfony\Component\Console\Command\Command::execute()
-     * @return void
+     * @see     \Symfony\Component\Console\Command\Command::execute()
+     * @version Release: 1.1
+     * @return  void
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        // geting autocompletion string array to assist user to choose the right role
-        $autoComplete = $this->roleManager->getRolesName();
+        $commandFacade = new CommandFacade($input, $output, $this);
+        list ($name) = $commandFacade->getOrAskMulti(
+            array(
+                array(
+                    "var" => "name",
+                    "question" => "Role name",
+                    "type" => CommandAskBuilder::TYPE_ASK,
+                    "option" => CommandAskBuilder::OPTION_ASK_AUTOCOMPLETED,
+                    "completion" => $this->roleManager->getRolesName(),
+                    "extra" => array(
+                        "empty" => false,
+                        "default" => false
+                    )
+                )
+            )
+        );
         
-        // getting the dialog helper to allow interactive command
-        $dialog = $this->getHelper('dialog');
-        
-        // check if the name was precised into the command call. If not, answer the user about the role name.
-        $name = $input->getArgument('name');
-        if ($name) {
-            $roleName = $name;
-        } else {
-            $roleName = $dialog->ask($output, 'Please enter the name of the role to update : ', null, $autoComplete);
-        }
-        
-        // check if the role exist. If not, exit.
-        if (! $this->roleManager->roleExists($roleName)) {
-            $output->writeln("The role " . $roleName . " does not exist.");
+        $role = $this->roleProvider->findOneByName($name);
+        if (! $role) {
+            $cf = new CommandColorFacade($output);
+            $cf->addColor("error", CommandColorInterface::BLACK, CommandColorInterface::RED, null);
+            $cf->clear();
+            $cf->addText("\n");
+            $cf->addText("\nUnexisting role " . $name . ".\n", "error");
+            $cf->addText("\n");
+            $cf->write();
+            
             return;
         }
         
-        // getting the role to update.
-        $role = $this->roleProvider->findOneByName($roleName);
+        $commandFacade->askATWIL(
+            $role, 
+            "finish", 
+            "What to update", 
+            array(
+                "name" => array(
+                    "ask" => array(
+                        "question" => "Name : ",
+                        "type" => CommandAskBuilder::TYPE_ASK
+                    ),
+                    "success" => "done",
+                    "failure" => "failure"
+                ),
+                "child" => array(
+                    "preProcess" => function (&$param, $cf) {
+                        $roles = $param["extra"]->findAllNames();
+                        if (empty($roles)) {
+                            $param["active"] = false;
+                        } else {
+                            $param["ask"]["limit"] = $roles;
+                            $param["extraNames"] = $roles;
+                            $param["active"] = true;
+                        }
+                        
+                        return $param;
+                    },
+                    "ask" => array(
+                        "question" => "Child : ",
+                        "default" => null,
+                        "type" => CommandAskBuilder::TYPE_ASK_SELECT
+                    ),
+                    "extra" => $this->roleProvider,
+                    "success" => "done",
+                    "failure" => "failure",
+                    "postProcess" => function ($result, &$to, &$param, $cf, $color) {
+                        $role = null;
+                        $provider = $param["extra"];
+                        $rolesNames = $param["extraNames"];
+                        if ($result !== null) {
+                            if (array_key_exists($result, $rolesNames)) {
+                                $tmpR = $provider->findOneByName($rolesNames[$result]);
+                                if ($tmpR instanceof RoleBuilder) {
+                                    $role = $tmpR->getRole();
+                                }
+                            }
+                            if (! $to->setChild($role)) {
+                                $color->clear();
+                                $color->addText("\n");
+                                $color->addText($param["failure"], "failure");
+                                $color->addText("\n");
+                                $color->write();
+                            } else {
+                                $color->clear();
+                                $color->addText("\n");
+                                $color->addText($param["success"], "success");
+                                $color->addText("\n");
+                                $color->write();
+                            }
+                        }
+                        $param["active"] = false;
+                    }
+                )
+            )
+        );
         
-        // Getting a new name for the role. Loop while the given name is not valid or already exist.
-        $loop = true;
-        do {
-            // getting a name for the role with it's own name as default.
-            $name = $dialog->ask($output, 'Please enter a name for this role [<info>' . $role->getName() . '</info>]: ', $role->getName());
-            
-            // checking if the given name is valid and if none of other role already exist with this name.
-            if (! $role->setName($name)) {
-                if ($role->getLastError() === RoleBuilder::INVALID_ROLE_NAME) {
-                    $output->writeln($name . " is not a valid name for a role. The role name can contain only case unsensitive A to Z letters and underscore.");
-                } else if ($role->getLastError() === RoleBuilder::DUPLICATE_ROLE_NAME) {
-                    $output->writeln($name . " already exist.");
-                }
-            } else {
-                $loop = false;
-            }
-        } while ($loop);
+        $valid = array(
+            "name" => $role->getName(),
+            "child" => ($role->getChild() !== null ? $role->getChild()->getName() : null)
+        );
         
-        // Initialise the child to null.
-        $child = null;
-        // getting the question helper to allow interactive command
-        $confirm = $this->getHelper('question');
-        
-        // ask if the user want to register a child for this role.
-        $question = new ConfirmationQuestion('Want you assign a child for this role? ', false);
-        // if the user want to register a child, ask for the child role name.
-        if ($confirm->ask($input, $output, $question)) {
-            
-            // loop while none of the Role exist with the given role name.
-            $loop = true;
-            do {
-                // ask for the child role name with last child role name as default
-                $child = $dialog->ask(
-                    $output, 'Please enter a child for this role [<info>' . ($role->getChild() ? $role->getChild()
-                        ->getName() : null) . '</info>]: ', ($role->getChild() ? $role->getChild()
-                            ->getName() : null), $autoComplete
-                );
-                
-                // check if child role exist
-                if ($this->roleManager->roleExists($child)) {
-                    $loop = false;
-                } else {
-                    $output->writeln($child . " doesn't exist.");
-                }
-            } while ($loop);
-        }
-        
-        // if child exist getting it from the database
-        if ($child) {
-            $child = $this->roleProvider->findOneByName($child)->getRole();
-        }
-        
-        // setting the role parameter.
-        $role->setChild($child);
-        $role->setUpdatedAt(new \DateTime());
-        
-        // check if none of circular reference was created. Exit if one exist.
-        if (! $role->setChild($child)) {
-            $output->writeln($roleName . " create circular reference. Operation abort.");
-            return;
-        }
-        
-        // try to persisting the role into the database.
-        try {
+        if ($commandFacade->getConfirmation($valid)) {
             $this->roleManager->persist($role);
-            $output->writeln("Done");
-        } catch (OptimisticLockException $e) {
-            $output->writeln("An error occures : [" . $e->getCode() . "] " . $e->getMessage() . "\n\t In file : " . $e->getFile() . " line " . $e->getLine());
         }
     }
 }

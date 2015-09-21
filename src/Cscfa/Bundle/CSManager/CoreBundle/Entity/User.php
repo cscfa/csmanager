@@ -50,9 +50,6 @@ use Cscfa\Bundle\CSManager\CoreBundle\Entity\Base\StackableObject;
  */
 class User extends StackableObject implements UserInterface
 {
-
-    const ROLE_DEFAULT = "ROLE_ANONYMOUS";
-
     /**
      * The id field
      *
@@ -556,9 +553,6 @@ class User extends StackableObject implements UserInterface
         foreach ($this->roles as $role) {
             $roles[] = $role->getName();
         }
-        
-        // we need to make sure to have at least one role
-        $roles[] = static::ROLE_DEFAULT;
         
         return array_unique($roles);
     }

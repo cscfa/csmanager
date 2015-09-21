@@ -26,6 +26,7 @@ use Cscfa\Bundle\ToolboxBundle\Builder\Command\CommandColorBuilder;
 use Cscfa\Bundle\ToolboxBundle\Converter\Command\CommandTypeConverter;
 use Cscfa\Bundle\ToolboxBundle\BaseInterface\Error\ErrorRegisteryInterface;
 use Cscfa\Bundle\ToolboxBundle\BaseInterface\Command\CommandColorInterface;
+use Cscfa\Bundle\ToolboxBundle\Converter\Reflective\ReflectionTool;
 
 /**
  * CommandFacade class.
@@ -239,7 +240,11 @@ class CommandFacade
         try {
             $result = $this->input->getArgument($name);
         } catch (\InvalidArgumentException $e) {
-            $result = $this->input->getOption($name);
+            try {
+                $result = $this->input->getOption($name);
+            } catch (\InvalidArgumentException $e) {
+                $result = false;
+            }
         }
         
         if ($result) {
@@ -558,5 +563,211 @@ class CommandFacade
             
             return false;
         }
+    }
+    
+    /**
+     * Ask and apply to while not finish into a limit
+     * 
+     * This method allow to get a set of values from the
+     * user.
+     * 
+     * In this process, the user can use an interactive shell
+     * to navigate between each element of the set.
+     * 
+     * For each of this elements, the shell will provide a
+     * question.
+     * 
+     * The $to parameter allow to give an ErrorRegisteryInterface
+     * that will be hydrated.
+     * 
+     * The $stopValue parameter allow to give a value to display
+     * as stop element to quit the selection menu.
+     * 
+     * The $whileQuestion parameter allow to give a value that
+     * will be displayed for each selection menu occurence.
+     * 
+     * The $param parameter allow to give the specific configuration
+     * of the menu. This parameter must be an associative array that
+     * specify each ErrorRegisteryInterface parameters allowed to set
+     * as array. The value of this array are an associative array
+     * builded with the following values :
+     * <ul>
+     *      <li>
+     *          <h4>preProcess :</h4>
+     *          <p> 
+     *              a php function that is used before the question construction.
+     *              This function take two parameters that are the current array and the current
+     *              CommandFacade instance. Also, this function <strong>must</strong> return the
+     *              current array.
+     *          </p>
+     *          <aside>
+     *              <cite>Optional value :</cite> can be pull out if useless.
+     *          </aside>
+     *      </li>
+     *      <li>
+     *          <h4>ask :</h4>
+     *          <p>
+     *              an associative array that represent how to build the internal element question.
+     *              It will be build with the following values :
+     *              <ul>
+     *                  <li>type: the question type as CommandAskBuilder constant</li>
+     *                  <li>question: the question to display as string</li>
+     *                  <li>default: the default value to return if the user answer nothing</li>
+     *                  <li>completion: the completion array that assist the user</li>
+     *                  <li>limit: the select case array of answers</li>
+     *                  <li>option: the CommandAskBuilder options</li>
+     *              </ul>
+     *          </p>
+     *      </li>
+     *      <li>
+     *          <h4>active :</h4>
+     *          <p>
+     *              a boolean value that represent the state of the process to run. If it set to
+     *              false, the question will not be displayed. If set to true, the question will
+     *              be processed.
+     *              
+     *              If this value is set to false when the $param parameter is passed, the concerned
+     *              index will be not displayed in the principal menu.
+     *              
+     *              Note if this value is set to true before the $param parameter is passed, it can
+     *              be desable by the preProcess function.
+     *              
+     *              Also, note that the preProcess function can enable an active parameter set to
+     *              false and process to the question hydratation when the user select the concerned
+     *              index into the main menu.
+     *          </p>
+     *          <aside>
+     *              <cite>Optional value :</cite> can be pull out if useless. Set true as default.
+     *          </aside>
+     *      </li>
+     *      <li>
+     *          <h4>success :</h4>
+     *          <p>
+     *              a string that will be displayed when a value is successfull setted into the
+     *              ErrorRegisteryInterface.
+     *          </p>
+     *          <aside>
+     *              <cite>Optional value :</cite> can be pull out if useless. Set true as default.
+     *          </aside>
+     *      </li>
+     *      <li>
+     *          <h4>failure :</h4>
+     *          <p>
+     *              a string that will be displayed when a value is unsuccessfull setted into the
+     *              ErrorRegisteryInterface.
+     *          </p>
+     *          <aside>
+     *              <cite>Optional value :</cite> can be pull out if useless. Set true as default.
+     *          </aside>
+     *      </li>
+     *      <li>
+     *          <h4>postProcess :</h4>
+     *          <p>
+     *              a php function that will be called between the user answering and the builder
+     *              setter. This function will take five parameters that are first the result, 
+     *              the builder, the current configuration array, the current CommandFacade
+     *              instance and finaly the current CommandColorFacade.
+     *              
+     *              This function <strong>must</strong> return the processed result.
+     *          </p>
+     *          <aside>
+     *              <cite>Optional value :</cite> can be pull out if useless.
+     *          </aside>
+     *      </li>
+     * </ul>
+     *
+     * @param ErrorRegisteryInterface $to            The builder to affect
+     * @param mixed                   $stopValue     The value that will quit the main menu
+     * @param string                  $whileQuestion The question to display on top of the main menu
+     * @param array                   $param         An associative array that will configure the method
+     * 
+     * @return ErrorRegisteryInterface
+     */
+    public function askATWIL(ErrorRegisteryInterface &$to, $stopValue, $whileQuestion, array $param)
+    {
+        $reflex = new ReflectionTool($to);
+        $methods = $reflex->getSettable();
+        $options = array_keys($methods);
+
+        foreach ($options as $key=>$value) {
+            if(!array_key_exists($value, $param)){
+                unset($options[$key]);
+            } else if(isset($param[$value]["active"]) && $param[$value]["active"] == false) {
+                unset($options[$key]);
+            }
+        }
+        
+        if(!empty($options)){
+            while (true){
+                
+                $cf = new CommandColorFacade($this->output);
+                $cf->addColor("success", CommandColorInterface::BLACK, CommandColorInterface::GREEN, null)
+                ->addColor("failure", CommandColorInterface::BLACK, CommandColorInterface::RED, null);
+                
+                $ask = new CommandAskBuilder();
+                $ask->setType(CommandAskBuilder::TYPE_ASK_SELECT)
+                    ->setLimite($options)
+                    ->setDefault($stopValue)
+                    ->setQuestion($whileQuestion);
+            
+                $choice = $this->ask($ask);
+            
+                if($choice == $stopValue){
+                    break;
+                }else{
+                    $method = $methods[$options[$choice]];
+                    $paramOption = $param[$options[$choice]];
+                    
+                    if(isset($paramOption["preProcess"])){
+                        $paramOption = $paramOption["preProcess"]($paramOption, $this);
+                    }
+                    if(isset($paramOption["ask"]) && ((isset($paramOption["active"]) && $paramOption["active"]) || !isset($paramOption["active"]))){
+                        $defaultAsk = array(
+                            "type"=>CommandAskBuilder::TYPE_ASK_CONFIRMATION,
+                            "question"=>null,
+                            "default"=>null,
+                            "completion"=>null,
+                            "limit"=>null,
+                            "option"=>null
+                        );
+                        
+                        $ask = array_merge($defaultAsk, $paramOption["ask"]);
+                        $builder = new CommandAskBuilder();
+                        $builder->setType($ask["type"])
+                            ->setQuestion($ask["question"])
+                            ->setDefault($ask["default"])
+                            ->setCompletion($ask["completion"])
+                            ->setLimite($ask["limit"])
+                            ->setOptions($ask["option"]);
+                        
+                        $result = $this->ask($builder);
+                    }
+                    if(isset($paramOption["postProcess"]) && ((isset($paramOption["active"]) && $paramOption["active"]) || !isset($paramOption["active"]))){
+                        $result = $paramOption["postProcess"]($result, $to, $paramOption, $this, $cf);
+                    }
+                    if((isset($paramOption["active"]) && $paramOption["active"]) || !isset($paramOption["active"])){
+                        if($this->apply2Builder($to, $method, $result, "", array(), $cf)){
+                            if(isset($paramOption["success"])){
+                                $cf->clear();
+                                $cf->addText("\n");
+                                $cf->addText($paramOption["success"], "success");
+                                $cf->addText("\n");
+                                $cf->write();
+                            }
+                        }else{
+                            if(isset($paramOption["failure"])){
+                                $cf->clear();
+                                $cf->addText("\n");
+                                $cf->addText($paramOption["failure"], "failure");
+                                $cf->addText("\n");
+                                $cf->write();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        return $to;
     }
 }
