@@ -58,22 +58,11 @@ class UnexpectedTypeException extends \Exception
     {
         $this->allowed = $allowed;
         
-        parent::__construct($message, $code, $previous);
-    }
-
-    /**
-     * {@inheritdoc}
-     * 
-     * @return string
-     * @see    Exception::getMessage()
-     */
-    public function getMessage()
-    {
         if ($this->allowed !== null) {
-            return $this->message . "\n Allowed types : " . $this->printArray($this->allowed);
-        } else {
-            return parent::getMessage();
+            $message = $message . "\n Allowed types : " . $this->printArray($this->allowed);
         }
+        
+        parent::__construct($message, $code, $previous);
     }
 
     /**

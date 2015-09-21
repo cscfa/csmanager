@@ -49,6 +49,8 @@ parameters:
     ##############################################################################
     #The default class for the group generating command
     core.command.add_group.class: Cscfa\Bundle\CSManager\CoreBundle\Command\GroupAddCommand
+    #The default class for the group view command
+    core.command.view_group.class: Cscfa\Bundle\CSManager\CoreBundle\Command\GroupViewCommand
     
 services:
     ##############################################################################
@@ -107,7 +109,7 @@ services:
     #tag: command     #The view user command definition. This command allow a shell user to list all existing users from the database.
     core.command.view_user:
         class: "%core.command.view_user.class%"
-        arguments: [ "@doctrine.orm.entity_manager" ]
+        arguments: [ "@core.provider.user_provider" ]
         tags:
             -  { name: console.command }
     #tag: command     #The remove user command definition. This command allow a shell user to remove an existing user from the database.
@@ -145,5 +147,11 @@ services:
     core.command.add_group:
         class: "%core.command.add_group.class%"
         arguments: [ "@core.manager.group_manager", "@core.provider.group_provider", "@core.provider.role_provider" ]
+        tags:
+            -  { name: console.command }
+    #tag: command     #The view group command definition. This command allow a shell user to list all existing groups from the database.
+    core.command.view_group:
+        class: "%core.command.view_group.class%"
+        arguments: [ "@core.provider.group_provider" ]
         tags:
             -  { name: console.command }

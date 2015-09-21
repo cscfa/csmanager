@@ -17,51 +17,47 @@
 namespace Cscfa\Bundle\CSManager\CoreBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
-use Symfony\Component\Console\Output\OutputInterface;
+use Cscfa\Bundle\CSManager\CoreBundle\Util\Provider\GroupProvider;
 use Symfony\Component\Console\Input\InputInterface;
-use Cscfa\Bundle\CSManager\CoreBundle\Util\Provider\RoleProvider;
+use Symfony\Component\Console\Output\OutputInterface;
 use Cscfa\Bundle\ToolboxBundle\Builder\Command\CommandTableBuilder;
 
 /**
- * RoleViewCommand class.
+ * GroupViewCommand class.
  *
- * The RoleViewCommand class purpose feater to
- * view all of the database registered Roles.
+ * The GroupViewCommand class purpose feater to
+ * view all of the database registered Groups.
  *
  * @category Command
  * @package  CscfaCSManagerCoreBundle
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
- * @version  Release: 1.1
  * @link     http://cscfa.fr
  */
-class RoleViewCommand extends ContainerAwareCommand
+class GroupViewCommand extends ContainerAwareCommand
 {
 
     /**
-     * The RoleProvider.
+     * The GroupProvider.
      *
      * This variable is used to get
-     * Role instance from the database.
+     * Group instance from the database.
      *
-     * @var Cscfa\Bundle\CSManager\CoreBundle\Util\Provider\RoleProvider
+     * @var GroupProvider
      */
-    protected $roleProvider;
+    protected $groupProvider;
 
     /**
-     * RoleViewCommand constructor.
+     * GroupViewCommand constructor.
      *
-     * This constructor register a role Provider.
+     * This constructor register a group Provider.
      * Also it call the parent constructor.
      *
-     * @param RoleProvider $roleProvider The Role provider service
+     * @param GroupProvider $groupProvider The Group provider service
      */
-    public function __construct(RoleProvider $roleProvider)
+    public function __construct(GroupProvider $groupProvider)
     {
-        // register role provider
-        $this->roleProvider = $roleProvider;
-        
-        // call parent constructor
+        $this->groupProvider = $groupProvider;
         parent::__construct();
     }
 
@@ -70,53 +66,42 @@ class RoleViewCommand extends ContainerAwareCommand
      *
      * This command have a common configuration that
      * only specify the command calling method as
-     * "app/console csmanager:view:role".
+     * "app/console csmanager:view:group".
      *
      * @see    \Symfony\Component\Console\Command\Command::configure()
      * @return void
      */
     protected function configure()
     {
-        // command configuration
-        $this->setName('csmanager:view:role')->setDescription('View all roles');
+        $this->setName('csmanager:view:group')->setDescription('View all groups');
     }
 
     /**
      * Command execution.
      *
      * The execution of the command will display all
-     * of the roles into a table with some informations.
-     *
-     * This command will prompt the role identity, the
-     * role name, the creation date into Y-m-d H:i:s
-     * format, the user creator username, the date of
-     * the last update into the same format than creation
-     * date, the user username that process the last
-     * update and the child role name.
+     * of the groups into a table with some informations.
      *
      * @param InputInterface  $input  The common command input
      * @param OutputInterface $output The common command output
      *            
      * @see    \Symfony\Component\Console\Command\Command::execute()
-     * @version Release: 1.1
      * @return void
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $keys = array(
-            'UUID'=>"getId",
-            'Name'=>"getName",
+            "UUID"=>"getId",
+            "Name"=>"getName",
             "created at"=>"getCreatedAt",
-            "created by"=>"getCreatedBy",
-            "last update"=>"getUpdatedAt",
-            "updated by"=>"getUpdatedBy",
-            "Child role"=>"getChild"
+            "Locked"=>"getLocked",
+            "Expired"=>"isExpired"
         );
         
         $table = new CommandTableBuilder();
         $table->setType($table::TYPE_OBJECT)
             ->setKeys($keys)
-            ->setValues($this->roleProvider->findAll())
+            ->setValues($this->groupProvider->findAll())
             ->render($output);
     }
 }

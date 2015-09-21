@@ -72,7 +72,7 @@ class HowTo extends Controller implements ExampleInterface
             unset($groupInstance);
             
             // the provider allow to retreive the group by it name
-            $groupInstance = $this->getProvider()->getOneByName("GROUP_TEST");
+            $groupInstance = $this->getProvider()->findOneByName("GROUP_TEST");
             
             // we create a new Role instance
             $role = new Role();

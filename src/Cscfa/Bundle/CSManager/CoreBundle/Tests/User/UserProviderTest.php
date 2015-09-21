@@ -106,10 +106,10 @@ class UserProviderTest extends WebTestCase
         $this->doctrine->persist($user);
         $this->doctrine->flush();
         
-        $emails = $this->userProvider->getAllEmail();
+        $emails = $this->userProvider->findAllEmail();
         $this->assertTrue(in_array($user->getEmailCanonical(), $emails));
         
-        $usernames = $this->userProvider->getAllUsernames();
+        $usernames = $this->userProvider->findAllUsernames();
         $this->assertTrue(in_array($user->getUsernameCanonical(), $usernames));
         
         $retreivedUser = $this->userProvider->findOneByUsername($user->getUsername());

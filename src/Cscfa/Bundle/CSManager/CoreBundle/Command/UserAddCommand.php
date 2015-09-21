@@ -39,6 +39,7 @@ use Cscfa\Bundle\CSManager\CoreBundle\Util\Builder\UserBuilder;
  * @package  CscfaCSManagerCoreBundle
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
+ * @version  Release: 1.2
  * @link     http://cscfa.fr
  */
 class UserAddCommand extends ContainerAwareCommand
@@ -155,11 +156,12 @@ class UserAddCommand extends ContainerAwareCommand
      * @param OutputInterface $output The common command output
      *
      * @see    \Symfony\Component\Console\Command\Command::execute()
+     * @version Release: 1.2
      * @return void
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $rolesNames = $this->roleProvider->getAllNames();
+        $rolesNames = $this->roleProvider->findAllNames();
         if (empty($rolesNames)) {
             $rolesActive = false;
         } else {

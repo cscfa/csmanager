@@ -400,7 +400,7 @@ class UserBuilder implements ErrorRegisteryInterface
         if ($this->manager->isUsernameValid($username) || $force) {
             
             $canonical = strtolower($username);
-            if (! in_array($canonical, $this->provider->getAllUsernames()) || $force || $this->user->getUsernameCanonical() === $canonical) {
+            if (! in_array($canonical, $this->provider->findAllUsernames()) || $force || $this->user->getUsernameCanonical() === $canonical) {
                 $this->user->setUsername($username);
                 $this->user->setUsernameCanonical($canonical);
                 return true;
@@ -431,7 +431,7 @@ class UserBuilder implements ErrorRegisteryInterface
     {
         if ($this->manager->isEmailValid($email) || $force) {
             $canonical = strtolower($email);
-            if (! in_array($canonical, $this->provider->getAllEmail()) || $force || $this->user->getEmailCanonical() === $canonical) {
+            if (! in_array($canonical, $this->provider->findAllEmail()) || $force || $this->user->getEmailCanonical() === $canonical) {
                 $this->user->setEmail($email);
                 $this->user->setEmailCanonical($canonical);
                 return true;

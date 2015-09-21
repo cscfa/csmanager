@@ -144,7 +144,7 @@ class GroupAddCommand extends ContainerAwareCommand
     {
         $commandFacade = new CommandFacade($input, $output, $this);
         
-        $rolesNames = $this->roleProvider->getAllNames();
+        $rolesNames = $this->roleProvider->findAllNames();
         if (empty($rolesNames)) {
             $rolesActive = false;
         } else {

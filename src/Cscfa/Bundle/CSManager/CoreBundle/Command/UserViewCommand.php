@@ -19,8 +19,8 @@ namespace Cscfa\Bundle\CSManager\CoreBundle\Command;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputInterface;
-use Doctrine\ORM\EntityManager;
-use Symfony\Component\Console\Helper\Table;
+use Cscfa\Bundle\CSManager\CoreBundle\Util\Provider\UserProvider;
+use Cscfa\Bundle\ToolboxBundle\Builder\Command\CommandTableBuilder;
 
 /**
  * UserViewCommand class.
@@ -32,21 +32,22 @@ use Symfony\Component\Console\Helper\Table;
  * @package  CscfaCSManagerCoreBundle
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
+ * @version  Release: 1.1
  * @link     http://cscfa.fr
  */
 class UserViewCommand extends ContainerAwareCommand
 {
 
     /**
-     * The doctrine entity manager.
+     * The user provider service.
      *
      * This variable is used to manage
      * User instance storage into the
      * database.
      *
-     * @var EntityManager
+     * @var UserProvider
      */
-    protected $doctrineManager;
+    protected $userProvider;
 
     /**
      * UserViewCommand constructor.
@@ -55,11 +56,11 @@ class UserViewCommand extends ContainerAwareCommand
      *.entity manager. Also it call the parent
      * constructor.
      *
-     * @param EntityManager $doctrineManager An entity manager to manage User instance into the database.
+     * @param UserProvider $userProvider The user provider service to manage User instance into the database.
      */
-    public function __construct(EntityManager $doctrineManager)
+    public function __construct(UserProvider $userProvider)
     {
-        $this->doctrineManager = $doctrineManager;
+        $this->userProvider = $userProvider;
         
         parent::__construct();
     }
@@ -92,55 +93,27 @@ class UserViewCommand extends ContainerAwareCommand
      * @param InputInterface  $input  The common command input
      * @param OutputInterface $output The common command output
      *
-     * @see    \Symfony\Component\Console\Command\Command::execute()
-     * @return void
+     * @see     \Symfony\Component\Console\Command\Command::execute()
+     * @version Release: 1.1
+     * @return  void
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $users = $this->doctrineManager->getRepository("CscfaCSManagerCoreBundle:User")->findAll();
+        $keys = array(
+            'UUID'=>"getId",
+            'Name'=>"getUsername",
+            "Email"=>"getEmail",
+            "is enable"=>"isEnabled",
+            "is locked"=>"isLocked",
+            "is expired"=>"isExpired",
+            "last login"=>"getLastLogin",
+            "Roles"=>"getRoles"
+        );
         
-        if ($users) {
-            
-            $rows = array();
-            
-            foreach ($users as $user) {
-                $roleArray = $user->getRoles();
-                $roles = "";
-                
-                foreach ($roleArray as $role) {
-                    $roles .= $role . ", ";
-                }
-                
-                $rows[] = array(
-                    $user->getId(),
-                    $user->getUsername(),
-                    $user->getEmail(),
-                    $user->isEnabled(),
-                    $user->isLocked(),
-                    $user->isExpired(),
-                    ($user->getLastLogin() ? $user->getLastLogin()->format('Y-m-d H:i:s') : null),
-                    $roles
-                );
-            }
-            
-            $table = new Table($output);
-            $table->setHeaders(
-                array(
-                    'UUID',
-                    'Name',
-                    "Email",
-                    "is enable",
-                    "is locked",
-                    "is expired",
-                    "last login",
-                    "Roles"
-                )
-            )->setRows($rows);
-            
-            $table->render();
-        } else {
-            $output->writeln("An error occures or the user table is empty.");
-            return;
-        }
+        $table = new CommandTableBuilder();
+        $table->setType($table::TYPE_OBJECT)
+            ->setKeys($keys)
+            ->setValues($this->userProvider->findAll())
+            ->render($output);
     }
 }

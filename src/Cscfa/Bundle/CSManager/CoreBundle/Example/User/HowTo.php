@@ -98,8 +98,8 @@ class HowTo extends Controller implements ExampleInterface
         $builder = $provider->findOneByEmail("email@test.ts");
         unset($builder);
         // and to get all usernames and emails
-        $emails = $provider->getAllEmail();
-        $usernames = $provider->getAllUsernames();
+        $emails = $provider->findAllEmail();
+        $usernames = $provider->findAllUsernames();
         unset($emails);
         unset($usernames);
         

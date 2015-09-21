@@ -155,7 +155,7 @@ class RoleProvider
      *
      * @return array
      */
-    public function getAllNames()
+    public function findAllNames()
     {
         return $this->repository->getAllNames();
     }

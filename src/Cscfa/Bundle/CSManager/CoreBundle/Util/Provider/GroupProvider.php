@@ -90,7 +90,7 @@ class GroupProvider
      * 
      * @return array
      */
-    public function getAllNames()
+    public function findAllNames()
     {
         return $this->repository->getAllName();
     }
@@ -121,7 +121,7 @@ class GroupProvider
      * 
      * @return GroupBuilder|null
      */
-    public function getOneByName($name)
+    public function findOneByName($name)
     {
         $group = $this->repository->findOneByName($name);
         
@@ -130,5 +130,20 @@ class GroupProvider
         } else {
             return null;
         }
+    }
+    
+    /**
+     * Find all.
+     * 
+     * This method allow to
+     * get all the existings
+     * Groups instance from
+     * the database.
+     * 
+     * @return array
+     */
+    public function findAll()
+    {
+        return $this->repository->findAll();
     }
 }

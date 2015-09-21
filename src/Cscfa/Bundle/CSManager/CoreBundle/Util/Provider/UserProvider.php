@@ -103,7 +103,7 @@ class UserProvider
      *
      * @return string[]
      */
-    public function getAllUsernames()
+    public function findAllUsernames()
     {
         $result = $this->repository->getAllUsername();
         
@@ -124,7 +124,7 @@ class UserProvider
      *
      * @return string[]
      */
-    public function getAllEmail()
+    public function findAllEmail()
     {
         $result = $this->repository->getAllEmail();
         
@@ -181,5 +181,18 @@ class UserProvider
         } else {
             return null;
         }
+    }
+    
+    /**
+     * Find all.
+     * 
+     * This method allow to get all User
+     * instances from the database.
+     * 
+     * @return array
+     */
+    public function findAll()
+    {
+        return $this->repository->findAll();
     }
 }

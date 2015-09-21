@@ -97,11 +97,11 @@ class GroupProviderTest extends WebTestCase
         $this->doctrine->persist($group);
         $this->doctrine->flush();
         
-        $allNames = $this->groupProvider->getAllNames();
+        $allNames = $this->groupProvider->findAllNames();
         $this->assertTrue(in_array($groupName, $allNames));
         
-        $getOne = $this->groupProvider->getOneByName($groupName);
-        $getNull = $this->groupProvider->getOneByName($def);
+        $getOne = $this->groupProvider->findOneByName($groupName);
+        $getNull = $this->groupProvider->findOneByName($def);
         $this->assertTrue($getOne->getId() === $group->getId());
         $this->assertTrue($getNull === null);
         
