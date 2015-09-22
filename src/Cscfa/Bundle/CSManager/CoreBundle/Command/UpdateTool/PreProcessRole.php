@@ -16,7 +16,7 @@
  */
 namespace Cscfa\Bundle\CSManager\CoreBundle\Command\UpdateTool;
 
-use Cscfa\Bundle\ToolboxBundle\BaseInterface\Event\PreProcessEvent;
+use Cscfa\Bundle\ToolboxBundle\BaseInterface\Event\PreProcessEventInterface;
 use Cscfa\Bundle\ToolboxBundle\Facade\Command\CommandFacade;
 
 /**
@@ -31,7 +31,7 @@ use Cscfa\Bundle\ToolboxBundle\Facade\Command\CommandFacade;
  * @license  http://opensource.org/licenses/MIT MIT
  * @link     http://cscfa.fr
  */
-class PreProcessRole implements PreProcessEvent
+class PreProcessRole implements PreProcessEventInterface
 {
     /**
      * The provider method.

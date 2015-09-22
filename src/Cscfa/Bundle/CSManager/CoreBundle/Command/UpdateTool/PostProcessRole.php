@@ -16,7 +16,7 @@
  */
 namespace Cscfa\Bundle\CSManager\CoreBundle\Command\UpdateTool;
 
-use Cscfa\Bundle\ToolboxBundle\BaseInterface\Event\PostProcessEvent;
+use Cscfa\Bundle\ToolboxBundle\BaseInterface\Event\PostProcessEventInterface;
 use Cscfa\Bundle\ToolboxBundle\BaseInterface\Error\ErrorRegisteryInterface;
 use Cscfa\Bundle\ToolboxBundle\Facade\Command\CommandFacade;
 use Cscfa\Bundle\ToolboxBundle\Facade\Command\CommandColorFacade;
@@ -34,7 +34,7 @@ use Cscfa\Bundle\CSManager\CoreBundle\Util\Builder\RoleBuilder;
  * @license  http://opensource.org/licenses/MIT MIT
  * @link     http://cscfa.fr
  */
-class PostProcessRole implements PostProcessEvent
+class PostProcessRole implements PostProcessEventInterface
 {
 
     /**

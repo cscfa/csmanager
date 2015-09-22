@@ -27,7 +27,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Cscfa\Bundle\ToolboxBundle\Builder\Command\CommandAskBuilder;
 use Cscfa\Bundle\ToolboxBundle\Facade\Command\CommandColorFacade;
 use Cscfa\Bundle\ToolboxBundle\BaseInterface\Command\CommandColorInterface;
-use Cscfa\Bundle\CSManager\CoreBundle\Util\Builder\RoleBuilder;
 use Cscfa\Bundle\CSManager\CoreBundle\Command\UpdateTool\PostProcessDateTime;
 use Cscfa\Bundle\CSManager\CoreBundle\Command\UpdateTool\PreProcessRole;
 use Cscfa\Bundle\CSManager\CoreBundle\Command\UpdateTool\PostProcessRoleArray;

@@ -35,7 +35,7 @@ use Cscfa\Bundle\ToolboxBundle\BaseInterface\Error\ErrorRegisteryInterface;
  * @license  http://opensource.org/licenses/MIT MIT
  * @link     http://cscfa.fr
  */
-interface PostProcessEvent
+interface PostProcessEventInterface
 {
     /**
      * The post process method.

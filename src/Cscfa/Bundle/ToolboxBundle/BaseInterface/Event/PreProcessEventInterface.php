@@ -31,7 +31,7 @@ use Cscfa\Bundle\ToolboxBundle\Facade\Command\CommandFacade;
  * @license  http://opensource.org/licenses/MIT MIT
  * @link     http://cscfa.fr
  */
-interface PreProcessEvent
+interface PreProcessEventInterface
 {
     /**
      * The pre process method.

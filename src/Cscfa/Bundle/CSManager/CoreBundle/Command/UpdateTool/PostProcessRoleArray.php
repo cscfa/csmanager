@@ -16,11 +16,12 @@
  */
 namespace Cscfa\Bundle\CSManager\CoreBundle\Command\UpdateTool;
 
-use Cscfa\Bundle\ToolboxBundle\BaseInterface\Event\PostProcessEvent;
+use Cscfa\Bundle\ToolboxBundle\BaseInterface\Event\PostProcessEventInterface;
 use Cscfa\Bundle\ToolboxBundle\BaseInterface\Error\ErrorRegisteryInterface;
 use Cscfa\Bundle\ToolboxBundle\Facade\Command\CommandFacade;
 use Cscfa\Bundle\ToolboxBundle\Facade\Command\CommandColorFacade;
 use Cscfa\Bundle\CSManager\CoreBundle\Util\Builder\RoleBuilder;
+use Cscfa\Bundle\CSManager\CoreBundle\Entity\Role;
 
 /**
  * PostProcessRoleArray class.
@@ -34,7 +35,7 @@ use Cscfa\Bundle\CSManager\CoreBundle\Util\Builder\RoleBuilder;
  * @license  http://opensource.org/licenses/MIT MIT
  * @link     http://cscfa.fr
  */
-class PostProcessRoleArray implements PostProcessEvent
+class PostProcessRoleArray implements PostProcessEventInterface
 {
 
     /**
@@ -84,7 +85,17 @@ class PostProcessRoleArray implements PostProcessEvent
             }
         } else {
             foreach ($to->getRoles() as $role) {
-                $to->removeRole($role);
+                if ($role instanceof Role) {
+                    $to->removeRole($role);
+                } else if(is_string($role)) {
+                    $tmpR = $provider->findOneByName($role);
+                    
+                    if ($tmpR instanceof RoleBuilder) {
+                        $to->removeRole($tmpR->getRole());
+                    } else if($tmpR instanceof Role) {
+                        $to->removeRole($tmpR);
+                    }
+                }
             }
         }
         

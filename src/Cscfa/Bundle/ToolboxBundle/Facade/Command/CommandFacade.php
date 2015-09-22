@@ -28,8 +28,8 @@ use Cscfa\Bundle\ToolboxBundle\BaseInterface\Error\ErrorRegisteryInterface;
 use Cscfa\Bundle\ToolboxBundle\BaseInterface\Command\CommandColorInterface;
 use Cscfa\Bundle\ToolboxBundle\Converter\Reflective\ReflectionTool;
 use Cscfa\Bundle\ToolboxBundle\Type\Command\DebugingSubtype;
-use Cscfa\Bundle\ToolboxBundle\BaseInterface\Event\PreProcessEvent;
-use Cscfa\Bundle\ToolboxBundle\BaseInterface\Event\PostProcessEvent;
+use Cscfa\Bundle\ToolboxBundle\BaseInterface\Event\PreProcessEventInterface;
+use Cscfa\Bundle\ToolboxBundle\BaseInterface\Event\PostProcessEventInterface;
 
 /**
  * CommandFacade class.
@@ -736,7 +736,7 @@ class CommandFacade
                     $paramOption = $param[$options[$choice]];
                     
                     if(isset($paramOption["preProcess"])){
-                        if($paramOption["preProcess"] instanceof PreProcessEvent){
+                        if($paramOption["preProcess"] instanceof PreProcessEventInterface){
                             $paramOption = $paramOption["preProcess"]->preProcess($paramOption, $this);
                         }
                     }
@@ -762,7 +762,7 @@ class CommandFacade
                         $result = $this->ask($builder);
                     }
                     if(isset($paramOption["postProcess"]) && ((isset($paramOption["active"]) && $paramOption["active"]) || !isset($paramOption["active"]))){
-                        if($paramOption["postProcess"] instanceof PostProcessEvent){
+                        if($paramOption["postProcess"] instanceof PostProcessEventInterface){
                             $result = $paramOption["postProcess"]->postProcess($result, $to, $paramOption, $this, $cf);
                         }
                     }
