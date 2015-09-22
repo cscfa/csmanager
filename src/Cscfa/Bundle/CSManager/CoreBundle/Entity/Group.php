@@ -427,4 +427,18 @@ class Group extends StackableObject
         $this->locked = $locked;
         return $this;
     }
+
+    /**
+     * The to string method.
+     *
+     * This method return the
+     * current instance getName
+     * result.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getName();
+    }
 } 

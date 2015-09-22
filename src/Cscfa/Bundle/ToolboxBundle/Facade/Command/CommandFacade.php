@@ -27,6 +27,9 @@ use Cscfa\Bundle\ToolboxBundle\Converter\Command\CommandTypeConverter;
 use Cscfa\Bundle\ToolboxBundle\BaseInterface\Error\ErrorRegisteryInterface;
 use Cscfa\Bundle\ToolboxBundle\BaseInterface\Command\CommandColorInterface;
 use Cscfa\Bundle\ToolboxBundle\Converter\Reflective\ReflectionTool;
+use Cscfa\Bundle\ToolboxBundle\Type\Command\DebugingSubtype;
+use Cscfa\Bundle\ToolboxBundle\BaseInterface\Event\PreProcessEvent;
+use Cscfa\Bundle\ToolboxBundle\BaseInterface\Event\PostProcessEvent;
 
 /**
  * CommandFacade class.
@@ -220,6 +223,20 @@ class CommandFacade
     protected function getDialog()
     {
         return $this->command->getHelperSet()->get("dialog");
+    }
+
+    /**
+     * Get the progress helper.
+     * 
+     * This method allow to
+     * get the progress helper
+     * from the command.
+     * 
+     * @return \Symfony\Component\Console\Helper\ProgressHelper
+     */
+    protected function getProgress()
+    {
+        return $this->command->getHelperSet()->get("progress");
     }
 
     /**
@@ -692,7 +709,7 @@ class CommandFacade
         foreach ($options as $key=>$value) {
             if(!array_key_exists($value, $param)){
                 unset($options[$key]);
-            } else if(isset($param[$value]["active"]) && $param[$value]["active"] == false) {
+            } else if(isset($param[$value]["active"]) && $param[$value]["active"] === false) {
                 unset($options[$key]);
             }
         }
@@ -719,7 +736,9 @@ class CommandFacade
                     $paramOption = $param[$options[$choice]];
                     
                     if(isset($paramOption["preProcess"])){
-                        $paramOption = $paramOption["preProcess"]($paramOption, $this);
+                        if($paramOption["preProcess"] instanceof PreProcessEvent){
+                            $paramOption = $paramOption["preProcess"]->preProcess($paramOption, $this);
+                        }
                     }
                     if(isset($paramOption["ask"]) && ((isset($paramOption["active"]) && $paramOption["active"]) || !isset($paramOption["active"]))){
                         $defaultAsk = array(
@@ -743,7 +762,9 @@ class CommandFacade
                         $result = $this->ask($builder);
                     }
                     if(isset($paramOption["postProcess"]) && ((isset($paramOption["active"]) && $paramOption["active"]) || !isset($paramOption["active"]))){
-                        $result = $paramOption["postProcess"]($result, $to, $paramOption, $this, $cf);
+                        if($paramOption["postProcess"] instanceof PostProcessEvent){
+                            $result = $paramOption["postProcess"]->postProcess($result, $to, $paramOption, $this, $cf);
+                        }
                     }
                     if((isset($paramOption["active"]) && $paramOption["active"]) || !isset($paramOption["active"])){
                         if($this->apply2Builder($to, $method, $result, "", array(), $cf)){
@@ -769,5 +790,42 @@ class CommandFacade
         }
         
         return $to;
+    }
+    
+    /**
+     * Debug multiple instances.
+     * 
+     * This method allow to check
+     * if an array of instance
+     * are in an error state
+     * by testing a set of property.
+     * 
+     * @param array $values
+     * @param array $selector
+     * @param array $label
+     */
+    public function debugMulti(array $values, array $selector, array $label, $success, $error)
+    {
+        $progress = $this->getProgress();
+        $progress->start($this->output, count($values));
+        
+        $result = array();
+        
+        foreach ($values as $value) {
+            
+            $result[] = new DebugingSubtype($value, $selector, $label, $success, $error);
+            
+            $progress->advance();
+        }
+        $progress->finish();
+        
+        $rows = array();
+        $error = 0;
+        foreach ($result as $r){
+            $rows[] = $r->getRow();
+            $error += $r->getErrorCount();
+        }
+        
+        return array($rows, $error);
     }
 }

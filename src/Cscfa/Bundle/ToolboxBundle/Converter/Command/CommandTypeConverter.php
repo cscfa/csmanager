@@ -44,6 +44,7 @@ class CommandTypeConverter
      *      <li>boolean</li>
      *      <li>DateTime</li>
      *      <li>null</li>
+     *      <li>Object (behind __toString)</li>
      * </ul>
      * 
      * @param mixed $element The element to convert
@@ -64,6 +65,12 @@ class CommandTypeConverter
             $element = $element->format("Y-m-d H:i:s");
         } else if ($element === null) {
             $element = "NULL";
+        } else if (is_object($element)) {
+            if (method_exists($element, "__toString")) {
+                $element = self::convertToString($element->__toString());
+            } else {
+                $element = "[ PHP_OBJECT ]";
+            }
         }
         
         return $element;

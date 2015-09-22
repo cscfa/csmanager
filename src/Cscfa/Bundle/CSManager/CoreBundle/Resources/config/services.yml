@@ -57,6 +57,8 @@ parameters:
     core.command.remove_group.class: Cscfa\Bundle\CSManager\CoreBundle\Command\GroupRemoveCommand
     #The default class for the group update command
     core.command.update_group.class: Cscfa\Bundle\CSManager\CoreBundle\Command\GroupUpdateCommand
+    #The default class for the group debug command
+    core.command.debug_group.class: Cscfa\Bundle\CSManager\CoreBundle\Command\GroupDebugCommand
     
 services:
     ##############################################################################
@@ -173,9 +175,15 @@ services:
         arguments: [ "@core.manager.group_manager", "@core.provider.group_provider" ]
         tags:
             -  { name: console.command }
-    #tag: command     #The update role command definition. This command allow a shell user to update an existing role into the database.
+    #tag: command     #The update group command definition. This command allow a shell user to update an existing group into the database.
     core.command.update_group:
         class: "%core.command.update_group.class%"
+        arguments: [ "@core.manager.group_manager", "@core.provider.group_provider", "@core.provider.role_provider" ]
+        tags:
+            -  { name: console.command }
+    #tag: command     #The debug group command definition. This command allow a shell user to view the errors of groups into the database.
+    core.command.debug_group:
+        class: "%core.command.debug_group.class%"
         arguments: [ "@core.manager.group_manager", "@core.provider.group_provider", "@core.provider.role_provider" ]
         tags:
             -  { name: console.command }

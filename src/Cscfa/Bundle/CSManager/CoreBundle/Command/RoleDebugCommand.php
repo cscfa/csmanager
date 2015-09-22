@@ -129,6 +129,7 @@ class RoleDebugCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        
         // getting all of the roles to inspect them
         $roles = $this->roleProvider->findAll();
         

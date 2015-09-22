@@ -26,6 +26,9 @@ use Cscfa\Bundle\ToolboxBundle\Facade\Command\CommandFacade;
 use Cscfa\Bundle\ToolboxBundle\Builder\Command\CommandAskBuilder;
 use Cscfa\Bundle\ToolboxBundle\Facade\Command\CommandColorFacade;
 use Cscfa\Bundle\ToolboxBundle\BaseInterface\Command\CommandColorInterface;
+use Cscfa\Bundle\CSManager\CoreBundle\Util\Builder\RoleBuilder;
+use Cscfa\Bundle\CSManager\CoreBundle\Command\UpdateTool\PreProcessRole;
+use Cscfa\Bundle\CSManager\CoreBundle\Command\UpdateTool\PostProcessRole;
 
 /**
  * RoleUpdateCommand class.
@@ -173,18 +176,7 @@ class RoleUpdateCommand extends ContainerAwareCommand
                     "failure" => "failure"
                 ),
                 "child" => array(
-                    "preProcess" => function (&$param, $cf) {
-                        $roles = $param["extra"]->findAllNames();
-                        if (empty($roles)) {
-                            $param["active"] = false;
-                        } else {
-                            $param["ask"]["limit"] = $roles;
-                            $param["extraNames"] = $roles;
-                            $param["active"] = true;
-                        }
-                        
-                        return $param;
-                    },
+                    "preProcess" => new PreProcessRole("findAllNames"),
                     "ask" => array(
                         "question" => "Child : ",
                         "default" => null,
@@ -193,33 +185,7 @@ class RoleUpdateCommand extends ContainerAwareCommand
                     "extra" => $this->roleProvider,
                     "success" => "done",
                     "failure" => "failure",
-                    "postProcess" => function ($result, &$to, &$param, $cf, $color) {
-                        $role = null;
-                        $provider = $param["extra"];
-                        $rolesNames = $param["extraNames"];
-                        if ($result !== null) {
-                            if (array_key_exists($result, $rolesNames)) {
-                                $tmpR = $provider->findOneByName($rolesNames[$result]);
-                                if ($tmpR instanceof RoleBuilder) {
-                                    $role = $tmpR->getRole();
-                                }
-                            }
-                            if (! $to->setChild($role)) {
-                                $color->clear();
-                                $color->addText("\n");
-                                $color->addText($param["failure"], "failure");
-                                $color->addText("\n");
-                                $color->write();
-                            } else {
-                                $color->clear();
-                                $color->addText("\n");
-                                $color->addText($param["success"], "success");
-                                $color->addText("\n");
-                                $color->write();
-                            }
-                        }
-                        $param["active"] = false;
-                    }
+                    "postProcess" => new PostProcessRole("setChild")
                 )
             )
         );

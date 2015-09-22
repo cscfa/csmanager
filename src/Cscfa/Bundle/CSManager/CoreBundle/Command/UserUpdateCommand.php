@@ -27,6 +27,10 @@ use Cscfa\Bundle\ToolboxBundle\Facade\Command\CommandFacade;
 use Cscfa\Bundle\ToolboxBundle\Builder\Command\CommandAskBuilder;
 use Cscfa\Bundle\ToolboxBundle\BaseInterface\Command\CommandColorInterface;
 use Cscfa\Bundle\ToolboxBundle\Facade\Command\CommandColorFacade;
+use Cscfa\Bundle\CSManager\CoreBundle\Util\Builder\RoleBuilder;
+use Cscfa\Bundle\CSManager\CoreBundle\Command\UpdateTool\PostProcessDateTime;
+use Cscfa\Bundle\CSManager\CoreBundle\Command\UpdateTool\PreProcessRole;
+use Cscfa\Bundle\CSManager\CoreBundle\Command\UpdateTool\PostProcessRoleArray;
 
 /**
  * UserUpdateCommand class.
@@ -229,22 +233,7 @@ class UserUpdateCommand extends ContainerAwareCommand
                         "type" => CommandAskBuilder::TYPE_ASK,
                         "default" => null
                     ),
-                    "postProcess" => function ($result, $to, &$param, $cf, $color) {
-                        if ($result !== null) {
-                            $result = \DateTime::createFromFormat("Y-m-d H:i:s", $result);
-                            
-                            if (! ($result instanceof \DateTime)) {
-                                $color->clear();
-                                $color->addText("\n");
-                                $color->addText($param["failure"], "failure");
-                                $color->addText("\n");
-                                $color->write();
-                                
-                                $param["active"] = false;
-                            }
-                        }
-                        return $result;
-                    },
+                    "postProcess" => new PostProcessDateTime(),
                     "success" => "done",
                     "failure" => "failure"
                 ),
@@ -254,38 +243,12 @@ class UserUpdateCommand extends ContainerAwareCommand
                         "type" => CommandAskBuilder::TYPE_ASK,
                         "default" => null
                     ),
-                    "postProcess" => function ($result, $to, &$param, $cf, $color) {
-                        if ($result !== null) {
-                            $result = \DateTime::createFromFormat("Y-m-d H:i:s", $result);
-                            
-                            if (! ($result instanceof \DateTime)) {
-                                $color->clear();
-                                $color->addText("\n");
-                                $color->addText($param["failure"], "failure");
-                                $color->addText("\n");
-                                $color->write();
-                                
-                                $param["active"] = false;
-                            }
-                        }
-                        return $result;
-                    },
+                    "postProcess" => new PostProcessDateTime(),
                     "success" => "done",
                     "failure" => "failure"
                 ),
                 "role" => array(
-                    "preProcess" => function (&$param, $cf) {
-                        $roles = $param["extra"]->findAllNames();
-                        if (empty($roles)) {
-                            $param["active"] = false;
-                        } else {
-                            $param["ask"]["limit"] = $roles;
-                            $param["extraNames"] = $roles;
-                            $param["active"] = true;
-                        }
-                        
-                        return $param;
-                    },
+                    "preProcess" => new PreProcessRole("findAllNames"),
                     "ask" => array(
                         "question" => "Roles : ",
                         "default" => null,
@@ -295,60 +258,7 @@ class UserUpdateCommand extends ContainerAwareCommand
                     "extra" => $this->roleProvider,
                     "success" => "done",
                     "failure" => "failure",
-                    "postProcess" => function ($result, &$to, &$param, $cf, $color) {
-                        $roles = array();
-                        $provider = $param["extra"];
-                        $rolesNames = $param["extraNames"];
-                        $boolSuccess = true;
-                        if ($result !== null) {
-                            if (is_array($result)) {
-                                foreach ($result as $value) {
-                                    if (array_key_exists($value, $rolesNames)) {
-                                        $tmpR = $provider->findOneByName($rolesNames[$value]);
-                                        
-                                        if ($tmpR instanceof RoleBuilder) {
-                                            $roles[] = $tmpR->getRole();
-                                        }
-                                    }
-                                }
-                            } else if (array_key_exists($result, $rolesNames)) {
-                                $tmpR = $provider->findOneByName($rolesNames[$result]);
-                                
-                                if ($tmpR instanceof RoleBuilder) {
-                                    $roles[] = $tmpR->getRole();
-                                }
-                            }
-                            
-                            foreach ($roles as $role) {
-                                if (! $to->addRole($role)) {
-                                    $boolSuccess = false;
-                                }
-                            }
-                        } else {
-                            foreach ($to->getRoles() as $role) {
-                                var_dump($role);
-                                $tmpR = $provider->findOneByName($role);
-                                var_dump($tmpR);
-                                $to->removeRole($role);
-                            }
-                        }
-                        
-                        if (! $boolSuccess) {
-                            $color->clear();
-                            $color->addText("\n");
-                            $color->addText($param["failure"], "failure");
-                            $color->addText("\n");
-                            $color->write();
-                        } else {
-                            $color->clear();
-                            $color->addText("\n");
-                            $color->addText($param["success"], "success");
-                            $color->addText("\n");
-                            $color->write();
-                        }
-                        
-                        $param["active"] = false;
-                    }
+                    "postProcess" => new PostProcessRoleArray()
                 )
             )
         );
@@ -356,10 +266,6 @@ class UserUpdateCommand extends ContainerAwareCommand
         $userInst = $user->getUser();
         
         $userRoles = $userInst->getRoles();
-        $rolesNames = array();
-        foreach ($userRoles as $role) {
-            $rolesNames = $role->getName();
-        }
         
         $valid = array(
             "username" => $userInst->getUsername(),
@@ -369,7 +275,7 @@ class UserUpdateCommand extends ContainerAwareCommand
             "confirmation token" => $userInst->getConfirmationToken(),
             "enabled" => $userInst->isEnabled(),
             "locked" => $userInst->isLocked(),
-            "roles" => $rolesNames
+            "roles" => $userRoles
         );
         
         if ($commandFacade->getConfirmation($valid)) {

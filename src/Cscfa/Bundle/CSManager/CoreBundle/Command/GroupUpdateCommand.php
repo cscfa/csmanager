@@ -27,6 +27,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Cscfa\Bundle\ToolboxBundle\Builder\Command\CommandAskBuilder;
 use Cscfa\Bundle\ToolboxBundle\Facade\Command\CommandColorFacade;
 use Cscfa\Bundle\ToolboxBundle\BaseInterface\Command\CommandColorInterface;
+use Cscfa\Bundle\CSManager\CoreBundle\Util\Builder\RoleBuilder;
+use Cscfa\Bundle\CSManager\CoreBundle\Command\UpdateTool\PostProcessDateTime;
+use Cscfa\Bundle\CSManager\CoreBundle\Command\UpdateTool\PreProcessRole;
+use Cscfa\Bundle\CSManager\CoreBundle\Command\UpdateTool\PostProcessRoleArray;
 
 /**
  * GroupUpdateCommand class.
@@ -34,7 +38,7 @@ use Cscfa\Bundle\ToolboxBundle\BaseInterface\Command\CommandColorInterface;
  * The GroupUpdateCommand class purpose feater to
  * update an existing group into the database.
  *
- * @category Controller
+ * @category Command
  * @package  CscfaCSManagerCoreBundle
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
@@ -86,10 +90,8 @@ class GroupUpdateCommand extends ContainerAwareCommand
      */
     public function __construct(GroupManager $groupManager, GroupProvider $groupProvider, RoleProvider $roleProvider)
     {
-        // Register group provider
         $this->groupProvider = $groupProvider;
         
-        // Register group manager
         $this->groupManager = $groupManager;
         
         $this->roleProvider = $roleProvider;
@@ -192,38 +194,12 @@ class GroupUpdateCommand extends ContainerAwareCommand
                         "type" => CommandAskBuilder::TYPE_ASK,
                         "default" => null
                     ),
-                    "postProcess" => function ($result, $to, &$param, $cf, $color) {
-                        if ($result !== null) {
-                            $result = \DateTime::createFromFormat("Y-m-d H:i:s", $result);
-                            
-                            if (! ($result instanceof \DateTime)) {
-                                $color->clear();
-                                $color->addText("\n");
-                                $color->addText($param["failure"], "failure");
-                                $color->addText("\n");
-                                $color->write();
-                                
-                                $param["active"] = false;
-                            }
-                        }
-                        return $result;
-                    },
+                    "postProcess" => new PostProcessDateTime(),
                     "success" => "done",
                     "failure" => "failure"
                 ),
                 "role" => array(
-                    "preProcess" => function (&$param, $cf) {
-                        $roles = $param["extra"]->findAllNames();
-                        if (empty($roles)) {
-                            $param["active"] = false;
-                        } else {
-                            $param["ask"]["limit"] = $roles;
-                            $param["extraNames"] = $roles;
-                            $param["active"] = true;
-                        }
-                        
-                        return $param;
-                    },
+                    "preProcess" => new PreProcessRole("findAllNames"),
                     "ask" => array(
                         "question" => "Roles : ",
                         "default" => null,
@@ -233,57 +209,7 @@ class GroupUpdateCommand extends ContainerAwareCommand
                     "extra" => $this->roleProvider,
                     "success" => "done",
                     "failure" => "failure",
-                    "postProcess" => function ($result, &$to, &$param, $cf, $color) {
-                        $roles = array();
-                        $provider = $param["extra"];
-                        $rolesNames = $param["extraNames"];
-                        $boolSuccess = true;
-                        if ($result !== null) {
-                            if (is_array($result)) {
-                                foreach ($result as $value) {
-                                    if (array_key_exists($value, $rolesNames)) {
-                                        $tmpR = $provider->findOneByName($rolesNames[$value]);
-                                        
-                                        if ($tmpR instanceof RoleBuilder) {
-                                            $roles[] = $tmpR->getRole();
-                                        }
-                                    }
-                                }
-                            } else if (array_key_exists($result, $rolesNames)) {
-                                $tmpR = $provider->findOneByName($rolesNames[$result]);
-                                
-                                if ($tmpR instanceof RoleBuilder) {
-                                    $roles[] = $tmpR->getRole();
-                                }
-                            }
-                            
-                            foreach ($roles as $role) {
-                                if (! $to->addRole($role)) {
-                                    $boolSuccess = false;
-                                }
-                            }
-                        } else {
-                            foreach ($to->getRoles() as $role) {
-                                $to->removeRole($role);
-                            }
-                        }
-                        
-                        if (! $boolSuccess) {
-                            $color->clear();
-                            $color->addText("\n");
-                            $color->addText($param["failure"], "failure");
-                            $color->addText("\n");
-                            $color->write();
-                        } else {
-                            $color->clear();
-                            $color->addText("\n");
-                            $color->addText($param["success"], "success");
-                            $color->addText("\n");
-                            $color->write();
-                        }
-                        
-                        $param["active"] = false;
-                    }
+                    "postProcess" => new PostProcessRoleArray()
                 )
             )
         );
