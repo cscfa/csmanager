@@ -51,6 +51,8 @@ class PostProcessRoleArray implements PostProcessEventInterface
      * @param array                   &$param        The current param array
      * @param CommandFacade           $commandFacade The current CommandFacade instance
      * @param CommandColorFacade      $commandColor  A CommandColorFacade given by the command facade
+     * 
+     * @return void
      */
     public function postProcess($result, ErrorRegisteryInterface &$to, array &$param, CommandFacade $commandFacade, CommandColorFacade $commandColor)
     {
@@ -87,12 +89,12 @@ class PostProcessRoleArray implements PostProcessEventInterface
             foreach ($to->getRoles() as $role) {
                 if ($role instanceof Role) {
                     $to->removeRole($role);
-                } else if(is_string($role)) {
+                } else if (is_string($role)) {
                     $tmpR = $provider->findOneByName($role);
                     
                     if ($tmpR instanceof RoleBuilder) {
                         $to->removeRole($tmpR->getRole());
-                    } else if($tmpR instanceof Role) {
+                    } else if ($tmpR instanceof Role) {
                         $to->removeRole($tmpR);
                     }
                 }

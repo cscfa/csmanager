@@ -58,7 +58,7 @@ class PostProcessRole implements PostProcessEventInterface
      * the builder to set the
      * role instance.
      * 
-     * @param string $setterMethod
+     * @param string $setterMethod The setter method to use to insert role
      */
     public function __construct($setterMethod = "setRole")
     {
@@ -78,6 +78,8 @@ class PostProcessRole implements PostProcessEventInterface
      * @param array                   &$param        The current param array
      * @param CommandFacade           $commandFacade The current CommandFacade instance
      * @param CommandColorFacade      $commandColor  A CommandColorFacade given by the command facade
+     * 
+     * @return void
      */
     public function postProcess($result, ErrorRegisteryInterface &$to, array &$param, CommandFacade $commandFacade, CommandColorFacade $commandColor)
     {
@@ -91,7 +93,7 @@ class PostProcessRole implements PostProcessEventInterface
                 
                 if ($tmpR instanceof RoleBuilder) {
                     $role = $tmpR->getRole();
-                }else{
+                } else {
                     $this->printError($commandColor, $param);
                 }
             }
@@ -119,8 +121,11 @@ class PostProcessRole implements PostProcessEventInterface
      * 
      * @param CommandColorFacade $commandColor The current command facade that dislay the success message
      * @param array              $param        The current parameter array
+     * 
+     * @return void
      */
-    protected function printSuccess($commandColor, $param){
+    protected function printSuccess($commandColor, $param)
+    {
         $commandColor->clear();
         $commandColor->addText("\n");
         $commandColor->addText($param["success"], "success");
@@ -137,8 +142,11 @@ class PostProcessRole implements PostProcessEventInterface
      *
      * @param CommandColorFacade $commandColor The current command facade that dislay the error message
      * @param array              $param        The current parameter array
+     * 
+     * @return void
      */
-    protected function printError($commandColor, $param){
+    protected function printError($commandColor, $param)
+    {
         $commandColor->clear();
         $commandColor->addText("\n");
         $commandColor->addText($param["failure"], "failure");

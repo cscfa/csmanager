@@ -43,6 +43,8 @@ interface PreProcessEventInterface
      * 
      * @param array         &$param        The current param array
      * @param CommandFacade $commandFacade The current CommandFacade instance
+     * 
+     * @return void
      */
     public function preProcess(array &$param, CommandFacade $commandFacade);
 }

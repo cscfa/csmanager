@@ -34,6 +34,7 @@ use Cscfa\Bundle\ToolboxBundle\Converter\Command\CommandTypeConverter;
  */
 class CommandTableBuilder
 {
+
     /**
      * An element type.
      * 
@@ -43,7 +44,7 @@ class CommandTableBuilder
      * @var integer
      */
     const TYPE_ARRAY = 0;
-    
+
     /**
      * An element type.
      * 
@@ -53,7 +54,7 @@ class CommandTableBuilder
      * @var integer
      */
     const TYPE_OBJECT = 1;
-    
+
     /**
      * The array of value.
      * 
@@ -64,7 +65,7 @@ class CommandTableBuilder
      * @var array
      */
     protected $arrayValues;
-    
+
     /**
      * The array of keys.
      * 
@@ -83,7 +84,7 @@ class CommandTableBuilder
      * @var array
      */
     protected $elementKeys;
-    
+
     /**
      * The type of the element.
      * 
@@ -93,7 +94,7 @@ class CommandTableBuilder
      * @var integer
      */
     protected $elementType;
-    
+
     /**
      * The CommandTableBuilder constructor.
      * 
@@ -142,7 +143,7 @@ class CommandTableBuilder
      */
     public function setValues($values)
     {
-        if(!is_array($values)){
+        if (! is_array($values)) {
             return $this->setValues(array());
         }
         
@@ -179,7 +180,7 @@ class CommandTableBuilder
      */
     public function setKeys($keys)
     {
-        if(!is_array($keys)){
+        if (! is_array($keys)) {
             return $this->setKeys(array());
         }
         
@@ -217,7 +218,7 @@ class CommandTableBuilder
         $this->elementType = $type;
         return $this;
     }
-    
+
     /**
      * Get the rows.
      * 
@@ -237,19 +238,19 @@ class CommandTableBuilder
             $rows[] = array();
             $currentKey = count($rows) - 1;
             
-            if($this->elementType == self::TYPE_ARRAY){
+            if ($this->elementType == self::TYPE_ARRAY) {
                 foreach ($this->elementKeys as $key) {
-                    if(isset($value[$key])){
+                    if (isset($value[$key])) {
                         $rows[$currentKey][] = CommandTypeConverter::convertToString($value[$key]);
-                    }else{
+                    } else {
                         $rows[$currentKey][] = null;
                     }
                 }
-            }else if($this->elementType == self::TYPE_OBJECT){
+            } else if ($this->elementType == self::TYPE_OBJECT) {
                 foreach ($this->elementKeys as $key) {
-                    if(method_exists($value, $key)){
+                    if (method_exists($value, $key)) {
                         $rows[$currentKey][] = CommandTypeConverter::convertToString($value->$key());
-                    }else{
+                    } else {
                         $rows[$currentKey][] = null;
                     }
                 }
@@ -258,7 +259,7 @@ class CommandTableBuilder
         
         return $rows;
     }
-    
+
     /**
      * Get header.
      * 
@@ -269,17 +270,18 @@ class CommandTableBuilder
      * 
      * @return array
      */
-    public function getHeader(){
+    public function getHeader()
+    {
         $header = array();
         
         $keys = array_keys($this->elementKeys);
-        foreach ($keys as $key){
+        foreach ($keys as $key) {
             $header[] = $key;
         }
         
         return $header;
     }
-    
+
     /**
      * Render the table.
      * 
@@ -287,7 +289,9 @@ class CommandTableBuilder
      * create a table and 
      * render it.
      * 
-     * @param OutputInterface $output
+     * @param OutputInterface $output The current command output
+     * 
+     * @return void
      */
     public function render(OutputInterface $output)
     {
@@ -297,5 +301,4 @@ class CommandTableBuilder
         $table->setRows($this->getRows());
         $table->render();
     }
- 
 }

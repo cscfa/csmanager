@@ -71,7 +71,7 @@ class ColoredStringFactoryTest extends WebTestCase
             ColoredStringFactory::BLUE, 
             ColoredStringFactory::BOLD, 
             "text"
-            );
+        );
         
         $this->assertTrue($factory->getBackground() === ColoredStringFactory::BLUE);
         $this->assertTrue($factory->getForeground() === ColoredStringFactory::BLACK);

@@ -16,13 +16,20 @@
  */
 namespace Cscfa\Bundle\CSManager\CoreBundle\Command;
 
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Cscfa\Bundle\CSManager\CoreBundle\Util\Manager\RoleManager;
-use Symfony\Component\Console\Helper\Table;
-use Cscfa\Bundle\CSManager\CoreBundle\Util\Provider\RoleProvider;
 
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Cscfa\Bundle\CSManager\CoreBundle\Util\Provider\RoleProvider;
+use Cscfa\Bundle\CSManager\CoreBundle\Util\Manager\RoleManager;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Input\InputInterface;
+use Cscfa\Bundle\ToolboxBundle\Facade\Command\CommandFacade;
+use Cscfa\Bundle\CSManager\CoreBundle\Command\DebugTool\UpdateAtTest;
+use Cscfa\Bundle\CSManager\CoreBundle\Command\DebugTool\DateTimeTest;
+use Cscfa\Bundle\CSManager\CoreBundle\Command\DebugTool\UserInstanceTest;
+use Cscfa\Bundle\CSManager\CoreBundle\Command\DebugTool\UpdatorTest;
+use Cscfa\Bundle\ToolboxBundle\Builder\Command\CommandTableBuilder;
+use Cscfa\Bundle\ToolboxBundle\Facade\Command\CommandColorFacade;
+use Cscfa\Bundle\ToolboxBundle\BaseInterface\Command\CommandColorInterface;
 /**
  * RoleDebugCommand class.
  *
@@ -34,6 +41,7 @@ use Cscfa\Bundle\CSManager\CoreBundle\Util\Provider\RoleProvider;
  * @package  CscfaCSManagerCoreBundle
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
+ * @version  Release: 1.1
  * @link     http://cscfa.fr
  */
 class RoleDebugCommand extends ContainerAwareCommand
@@ -45,7 +53,7 @@ class RoleDebugCommand extends ContainerAwareCommand
      * This variable is used to get
      * Role instance from the database.
      *
-     * @var Cscfa\Bundle\CSManager\CoreBundle\Util\Provider\RoleProvider
+     * @var RoleProvider
      */
     protected $roleProvider;
 
@@ -55,7 +63,7 @@ class RoleDebugCommand extends ContainerAwareCommand
      * This is used to manage the Role
      * logic.
      *
-     * @var Cscfa\Bundle\CSManager\CoreBundle\Util\Manager\RoleManager
+     * @var RoleManager
      */
     protected $roleManager;
 
@@ -71,13 +79,10 @@ class RoleDebugCommand extends ContainerAwareCommand
      */
     public function __construct(RoleProvider $RoleProvider, RoleManager $roleManager)
     {
-        // register role provider
         $this->roleProvider = $RoleProvider;
         
-        // register role manager
         $this->roleManager = $roleManager;
         
-        // call parent constructor
         parent::__construct();
     }
 
@@ -93,7 +98,6 @@ class RoleDebugCommand extends ContainerAwareCommand
      */
     protected function configure()
     {
-        // command configuration
         $this->setName('csmanager:debug:role')->setDescription('Debug all roles');
     }
 
@@ -124,93 +128,61 @@ class RoleDebugCommand extends ContainerAwareCommand
      * @param InputInterface  $input  The common command input
      * @param OutputInterface $output The common command output
      *
-     * @see    \Symfony\Component\Console\Command\Command::execute()
-     * @return void
+     * @see     \Symfony\Component\Console\Command\Command::execute()
+     * @version Release: 1.1
+     * @return  void
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        
-        // getting all of the roles to inspect them
         $roles = $this->roleProvider->findAll();
+        $commandFacade = new CommandFacade($input, $output, $this);
+        list($rows, $error) = $commandFacade->debugMulti(
+            $roles, 
+            array(
+                array("target"=>"getUpdatedAt", "test"=>new UpdateAtTest()),
+                array("target"=>"getCreatedAt", "test"=>new DateTimeTest(DateTimeTest::BEFORE_NOW)),
+                array("target"=>"getCreatedBy", "test"=>new UserInstanceTest()),
+                array("target"=>"getUpdatedBy", "test"=>new UpdatorTest())
+            ),
+            array("getId", "getName"),
+            "<fg=green>V</fg=green>",
+            "<fg=red>X</fg=red>"
+        );
         
-        // if a request failure exist the roles will be empty or null. It can be because the role table is empty or because an error occured
-        if ($roles) {
-            // initialise render table rows to empty array
-            $rows = array();
+        foreach ($rows as $key=>$row) {
+            $result = $this->roleManager->hasCircularReference($roles[$key]);
             
-            // display a progress bar to inform about the operation progress
-            $progress = $this->getHelperSet()->get('progress');
-            // start the progress bar displaying and initialise it to the roles count as maximum value
-            $progress->start($output, count($roles));
-            
-            // start inspection of all roles
-            foreach ($roles as $role) {
-                // initialise the current debug state array as empty array
-                $currentDebug = array();
-                
-                // Check if the date are in correct things. This will register an error if one of them are more advanced than now orif the creation rise after the update.
-                if ($role->getCreatedAt() <= $role->getUpdatedAt() && $role->getCreatedAt() < new \DateTime() && $role->getUpdatedAt() < new \DateTime()) {
-                    $currentDebug["dateValidity"] = "<fg=green>valid</fg=green>";
-                } else {
-                    $currentDebug["dateValidity"] = "<error>error</error>";
-                }
-                
-                // Check if an user is registered for the role creation.
-                if ($role->getCreatedBy()) {
-                    $currentDebug["creator"] = "<fg=green>valid</fg=green>";
-                } else {
-                    $currentDebug["creator"] = "<error>error</error>";
-                }
-                
-                // check if an user is registered for the role update.
-                if ($role->getCreatedAt() < $role->getUpdatedAt() && $role->getUpdatedBy()) {
-                    $currentDebug["updator"] = "<fg=green>valid</fg=green>";
-                } else if ($role->getCreatedAt() < $role->getUpdatedAt()) {
-                    $currentDebug["updator"] = "<error>error</error>";
-                } else {
-                    $currentDebug["updator"] = "<fg=green>valid</fg=green>";
-                }
-                
-                // check if the role have a circular reference with his childs.
-                if (! $this->roleManager->hasCircularReference($role)) {
-                    $currentDebug["reference"] = "<fg=green>valid</fg=green>";
-                } else {
-                    $currentDebug["reference"] = "<error>error</error>";
-                }
-                
-                // register all of the results into a table row
-                $rows[] = array(
-                    $role->getId(),
-                    $role->getName(),
-                    $currentDebug["dateValidity"],
-                    $currentDebug["creator"],
-                    $currentDebug["updator"],
-                    $currentDebug["reference"]
-                );
-                // advance the progress bar.
-                $progress->advance();
+            if ($result) {
+                $row["circular"] = "<fg=red>X</fg=red>";
+            } else {
+                $row["circular"] = "<fg=green>V</fg=green>";
             }
-            // stop to display the progress bar.
-            $progress->finish();
             
-            // initialise the result rendered table with the header and the previous created rows
-            $table = new Table($output);
-            $table->setHeaders(
-                array(
-                    'UUID',
-                    'Name',
-                    "date validity",
-                    "creator validity",
-                    "updator validity",
-                    "no circular reference"
-                )
-            )->setRows($rows);
-            
-            // render the result table
-            $table->render();
-        } else {
-            $output->writeln("An error occures or the role table is empty.");
-            return;
+            $rows[$key] = $row;
         }
+        
+        $commandTable = new CommandTableBuilder();
+        $commandTable->setType(CommandTableBuilder::TYPE_ARRAY)
+            ->setValues($rows)
+            ->setKeys(
+                array(
+                    'UUID'=>"getId",
+                    'Name'=>"getName",
+                    "updated at"=>"getUpdatedAt",
+                    "created at"=>"getCreatedAt",
+                    "updated by"=>"getUpdatedBy",
+                    "created by"=>"getCreatedBy",
+                    "Circular reference"=>"circular"
+                )
+            )
+            ->render($output);
+        
+        $commandColor = new CommandColorFacade($output);
+        $commandColor->addColor("error", CommandColorInterface::BLACK, CommandColorInterface::RED)
+            ->addColor("success", CommandColorInterface::BLACK, CommandColorInterface::GREEN);
+        $commandColor->addText("\nTotal errors : ");
+        $commandColor->addText(" ".$error." ", ($error > 0 ? "error" : "success"));
+        $commandColor->addText("\n");
+        $commandColor->write();
     }
 }

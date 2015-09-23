@@ -46,10 +46,12 @@ interface PostProcessEventInterface
      * CommandFacade instance.
      * 
      * @param mixed                   $result        The result value
-     * @param ErrorRegisteryInterface $to            A builder that is used to apply the value
-     * @param array                   $param         The current param array
+     * @param ErrorRegisteryInterface &$to           A builder that is used to apply the value
+     * @param array                   &$param        The current param array
      * @param CommandFacade           $commandFacade The current CommandFacade instance
      * @param CommandColorFacade      $commandColor  A CommandColorFacade given by the command facade
+     * 
+     * @return mixed
      */
     public function postProcess($result, ErrorRegisteryInterface &$to, array &$param, CommandFacade $commandFacade, CommandColorFacade $commandColor);
 }

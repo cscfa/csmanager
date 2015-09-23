@@ -61,12 +61,18 @@ class PostProcessDateTime implements PostProcessEventInterface
     {
         $this->format = $format;
     }
-    
+
     /**
      * The post process method.
-     * 
+     *
      * This method parse a string
      * into a new DateTime instance.
+     *
+     * @param mixed                   $result        The result value
+     * @param ErrorRegisteryInterface &$to           A builder that is used to apply the value
+     * @param array                   &$param        The current param array
+     * @param CommandFacade           $commandFacade The current CommandFacade instance
+     * @param CommandColorFacade      $commandColor  A CommandColorFacade given by the command facade
      * 
      * @see    \Cscfa\Bundle\ToolboxBundle\BaseInterface\Event\PostProcessEvent::postProcess()
      * @return \DateTime

@@ -31,15 +31,26 @@ namespace Cscfa\Bundle\ToolboxBundle\Converter\Reflective;
 class ReflectionTool extends \ReflectionClass
 {
 
+    /**
+     * The settables methods.
+     * 
+     * This parameter represent
+     * an array that contain
+     * all of the setters method
+     * of the current class.
+     * 
+     * @var array
+     */
     protected $settables = array();
-    
+
     /**
      * Constructs a ReflectionClass
      * 
      * The ReflectionTool default constructor.
      * 
+     * @param class $argument The class to use as base class
+     * 
      * @link http://www.php.net/manual/en/reflectionclass.construct.php
-     * @param argument
      */
     public function __construct($argument)
     {
@@ -47,7 +58,7 @@ class ReflectionTool extends \ReflectionClass
         
         $this->setSettable();
     }
-    
+
     /**
      * Set settables.
      * 
@@ -65,14 +76,14 @@ class ReflectionTool extends \ReflectionClass
         $methods = array();
         
         foreach ($reflexMethods as $method) {
-            if(preg_match("/^(set.+)|(add.+)/", $method->getName())){
+            if (preg_match("/^(set.+)|(add.+)/", $method->getName())) {
                 $methods[lcfirst(substr($method->getName(), 3))] = $method->getName();
             }
         }
         
         $this->settables = $methods;
     }
-    
+
     /**
      * Get settables.
      * 

@@ -54,9 +54,9 @@ class CommandTypeConverter
     static function convertToString($element)
     {
         if (is_array($element)) {
-            if(count($element)){
+            if (count($element)) {
                 $element = implode(", ", $element);
-            }else{
+            } else {
                 $element = "NULL";
             }
         } else if (is_bool($element)) {

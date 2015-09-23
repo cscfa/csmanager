@@ -135,7 +135,16 @@ class CommandFacade
         case CommandAskBuilder::TYPE_ASK_SELECT:
             return $this->askSelect($builder);
         default:
-            throw new UnexpectedTypeException("The selected type is unknow.", 404, null, array("out.ask_confirmation", "out.ask", "out.select"));
+            throw new UnexpectedTypeException(
+                "The selected type is unknow.", 
+                404, 
+                null, 
+                array(
+                    "out.ask_confirmation",
+                    "out.ask",
+                    "out.select"
+                )
+            );
         }
     }
 
@@ -204,9 +213,9 @@ class CommandFacade
         
         $result = $dialog->select($this->output, $builder->getQuestion(), $builder->getLimite(), $builder->getDefault(), false, 'Value "%s" is invalid', ($builder->getOptions() & CommandAskBuilder::OPTION_ASK_MULTI_SELECT));
         
-        if((is_array($result) && count($result) == 1 && in_array($index, $result)) || $result == $index){
+        if ((is_array($result) && count($result) == 1 && in_array($index, $result)) || $result == $index) {
             return $default;
-        }else{
+        } else {
             return $result;
         }
     }
@@ -581,7 +590,7 @@ class CommandFacade
             return false;
         }
     }
-    
+
     /**
      * Ask and apply to while not finish into a limit
      * 
@@ -693,7 +702,7 @@ class CommandFacade
      *      </li>
      * </ul>
      *
-     * @param ErrorRegisteryInterface $to            The builder to affect
+     * @param ErrorRegisteryInterface &$to           The builder to affect
      * @param mixed                   $stopValue     The value that will quit the main menu
      * @param string                  $whileQuestion The question to display on top of the main menu
      * @param array                   $param         An associative array that will configure the method
@@ -705,49 +714,48 @@ class CommandFacade
         $reflex = new ReflectionTool($to);
         $methods = $reflex->getSettable();
         $options = array_keys($methods);
-
-        foreach ($options as $key=>$value) {
-            if(!array_key_exists($value, $param)){
+        
+        foreach ($options as $key => $value) {
+            if (! array_key_exists($value, $param)) {
                 unset($options[$key]);
-            } else if(isset($param[$value]["active"]) && $param[$value]["active"] === false) {
+            } else if (isset($param[$value]["active"]) && $param[$value]["active"] === false) {
                 unset($options[$key]);
             }
         }
         
-        if(!empty($options)){
-            while (true){
+        if (! empty($options)) {
+            while (true) {
                 
                 $cf = new CommandColorFacade($this->output);
-                $cf->addColor("success", CommandColorInterface::BLACK, CommandColorInterface::GREEN, null)
-                ->addColor("failure", CommandColorInterface::BLACK, CommandColorInterface::RED, null);
+                $cf->addColor("success", CommandColorInterface::BLACK, CommandColorInterface::GREEN, null)->addColor("failure", CommandColorInterface::BLACK, CommandColorInterface::RED, null);
                 
                 $ask = new CommandAskBuilder();
                 $ask->setType(CommandAskBuilder::TYPE_ASK_SELECT)
                     ->setLimite($options)
                     ->setDefault($stopValue)
                     ->setQuestion($whileQuestion);
-            
+                
                 $choice = $this->ask($ask);
-            
-                if($choice == $stopValue){
+                
+                if ($choice == $stopValue) {
                     break;
-                }else{
+                } else {
                     $method = $methods[$options[$choice]];
                     $paramOption = $param[$options[$choice]];
                     
-                    if(isset($paramOption["preProcess"])){
-                        if($paramOption["preProcess"] instanceof PreProcessEventInterface){
+                    if (isset($paramOption["preProcess"])) {
+                        if ($paramOption["preProcess"] instanceof PreProcessEventInterface) {
                             $paramOption = $paramOption["preProcess"]->preProcess($paramOption, $this);
                         }
                     }
-                    if(isset($paramOption["ask"]) && ((isset($paramOption["active"]) && $paramOption["active"]) || !isset($paramOption["active"]))){
+                    if (isset($paramOption["ask"]) && ((isset($paramOption["active"]) && $paramOption["active"]) || ! isset($paramOption["active"]))) {
                         $defaultAsk = array(
-                            "type"=>CommandAskBuilder::TYPE_ASK_CONFIRMATION,
-                            "question"=>null,
-                            "default"=>null,
-                            "completion"=>null,
-                            "limit"=>null,
-                            "option"=>null
+                            "type" => CommandAskBuilder::TYPE_ASK_CONFIRMATION,
+                            "question" => null,
+                            "default" => null,
+                            "completion" => null,
+                            "limit" => null,
+                            "option" => null
                         );
                         
                         $ask = array_merge($defaultAsk, $paramOption["ask"]);
@@ -761,22 +769,22 @@ class CommandFacade
                         
                         $result = $this->ask($builder);
                     }
-                    if(isset($paramOption["postProcess"]) && ((isset($paramOption["active"]) && $paramOption["active"]) || !isset($paramOption["active"]))){
-                        if($paramOption["postProcess"] instanceof PostProcessEventInterface){
+                    if (isset($paramOption["postProcess"]) && ((isset($paramOption["active"]) && $paramOption["active"]) || ! isset($paramOption["active"]))) {
+                        if ($paramOption["postProcess"] instanceof PostProcessEventInterface) {
                             $result = $paramOption["postProcess"]->postProcess($result, $to, $paramOption, $this, $cf);
                         }
                     }
-                    if((isset($paramOption["active"]) && $paramOption["active"]) || !isset($paramOption["active"])){
-                        if($this->apply2Builder($to, $method, $result, "", array(), $cf)){
-                            if(isset($paramOption["success"])){
+                    if ((isset($paramOption["active"]) && $paramOption["active"]) || ! isset($paramOption["active"])) {
+                        if ($this->apply2Builder($to, $method, $result, "", array(), $cf)) {
+                            if (isset($paramOption["success"])) {
                                 $cf->clear();
                                 $cf->addText("\n");
                                 $cf->addText($paramOption["success"], "success");
                                 $cf->addText("\n");
                                 $cf->write();
                             }
-                        }else{
-                            if(isset($paramOption["failure"])){
+                        } else {
+                            if (isset($paramOption["failure"])) {
                                 $cf->clear();
                                 $cf->addText("\n");
                                 $cf->addText($paramOption["failure"], "failure");
@@ -791,7 +799,7 @@ class CommandFacade
         
         return $to;
     }
-    
+
     /**
      * Debug multiple instances.
      * 
@@ -800,9 +808,13 @@ class CommandFacade
      * are in an error state
      * by testing a set of property.
      * 
-     * @param array $values
-     * @param array $selector
-     * @param array $label
+     * @param array  $values   The values set to test
+     * @param array  $selector The selector definition that contain the target and the test class
+     * @param array  $label    The label set
+     * @param string $success  The success string to display if the test success
+     * @param string $error    The success string to display if the test fail
+     * 
+     * @return array Contain as first index the row set and the error count as second
      */
     public function debugMulti(array $values, array $selector, array $label, $success, $error)
     {
@@ -821,11 +833,14 @@ class CommandFacade
         
         $rows = array();
         $error = 0;
-        foreach ($result as $r){
+        foreach ($result as $r) {
             $rows[] = $r->getRow();
             $error += $r->getErrorCount();
         }
         
-        return array($rows, $error);
+        return array(
+            $rows,
+            $error
+        );
     }
 }

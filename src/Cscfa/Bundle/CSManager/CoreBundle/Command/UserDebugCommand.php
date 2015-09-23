@@ -16,27 +16,25 @@
  */
 namespace Cscfa\Bundle\CSManager\CoreBundle\Command;
 
-
-use Cscfa\Bundle\CSManager\CoreBundle\Util\Provider\RoleProvider;
-use Cscfa\Bundle\CSManager\CoreBundle\Util\Provider\GroupProvider;
-use Cscfa\Bundle\CSManager\CoreBundle\Util\Manager\GroupManager;
-use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Cscfa\Bundle\CSManager\CoreBundle\Util\Provider\UserProvider;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 use Cscfa\Bundle\ToolboxBundle\Facade\Command\CommandFacade;
 use Cscfa\Bundle\CSManager\CoreBundle\Command\DebugTool\CanonicalTest;
-use Cscfa\Bundle\CSManager\CoreBundle\Command\DebugTool\UpdateAtTest;
 use Cscfa\Bundle\CSManager\CoreBundle\Command\DebugTool\DateTimeTest;
+use Cscfa\Bundle\CSManager\CoreBundle\Command\DebugTool\UpdateAtTest;
 use Cscfa\Bundle\CSManager\CoreBundle\Command\DebugTool\UserInstanceTest;
 use Cscfa\Bundle\CSManager\CoreBundle\Command\DebugTool\UpdatorTest;
 use Cscfa\Bundle\ToolboxBundle\Builder\Command\CommandTableBuilder;
 use Cscfa\Bundle\ToolboxBundle\Facade\Command\CommandColorFacade;
 use Cscfa\Bundle\ToolboxBundle\BaseInterface\Command\CommandColorInterface;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+
 /**
- * GroupDebugCommand class.
+ * UserDebugCommand class.
  *
- * The GroupDebugCommand class purpose feater to
- * view the groups instance errors into the database.
+ * The UserDebugCommand class purpose feater to
+ * view the user instance errors into the database.
  *
  * @category Controller
  * @package  CscfaCSManagerCoreBundle
@@ -44,56 +42,30 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
  * @license  http://opensource.org/licenses/MIT MIT
  * @link     http://cscfa.fr
  */
-class GroupDebugCommand extends ContainerAwareCommand
+class UserDebugCommand extends ContainerAwareCommand
 {
     /**
-     * The GroupManager.
-     *
-     * This variable is used to use
-     * Group validation.
-     *
-     * @var GroupManager
+     * The user provider service.
+     * 
+     * This parameter allow to
+     * get the users instances
+     * from the database.
+     * 
+     * @var UserProvider
      */
-    protected $groupManager;
-
+    protected $userProvider;
+    
     /**
-     * The GroupProvider.
-     *
-     * This variable is used to get
-     * Group instance from the database.
-     *
-     * @var GroupProvider
+     * Default constructor.
+     * 
+     * This constructor register
+     * the user provider service.
+     * 
+     * @param UserProvider $userProvider The user provider service.
      */
-    protected $groupProvider;
-
-    /**
-     * The RoleProvider.
-     *
-     * This variable is used to get
-     * Role instance from the database.
-     *
-     * @var RoleProvider
-     */
-    protected $roleProvider;
-
-    /**
-     * GroupDebugCommand constructor.
-     *
-     * This constructor register a Group
-     * provider and a group manager. Also
-     * it call the parent constructor.
-     *
-     * @param GroupManager  $groupManager  The group manager service
-     * @param GroupProvider $groupProvider The group provider service
-     * @param RoleProvider  $roleProvider  The role provider service
-     */
-    public function __construct(GroupManager $groupManager, GroupProvider $groupProvider, RoleProvider $roleProvider)
+    public function __construct(UserProvider $userProvider)
     {
-        $this->groupProvider = $groupProvider;
-        
-        $this->groupManager = $groupManager;
-        
-        $this->roleProvider = $roleProvider;
+        $this->userProvider = $userProvider;
         
         parent::__construct();
     }
@@ -102,52 +74,54 @@ class GroupDebugCommand extends ContainerAwareCommand
      * Command configuration.
      *
      * This configuration purpose that calling this command
-     * behind "app/console csmanager:debug:group".
+     * behind "app/console csmanager:debug:user".
      *
      * @see    \Symfony\Component\Console\Command\Command::configure()
      * @return void
      */
     protected function configure()
     {
-        $this->setName('csmanager:debug:group')
-            ->setDescription('Debug the groups instances');
+        $this->setName('csmanager:debug:user')
+            ->setDescription('Debug the users instances');
     }
-    
+
     /**
      * Command execution.
-     * 
+     *
      * This method display
      * a bug report for the
-     * Group instance.
-     * 
+     * User instance.
+     *
      * The validation given
      * view for canonical name,
      * update date, expiration
-     * date, creation date, 
+     * date, creation date,
      * creation user instance,
      * update user instance.
-     * 
+     *
      * @param InputInterface  $input  The common command input
      * @param OutputInterface $output The common command output
      * 
      * @see    \Symfony\Component\Console\Command\Command::execute()
      * @return void
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output) 
     {
-        $groups = $this->groupProvider->findAll();
+        $users = $this->userProvider->findAll();
         $commandFacade = new CommandFacade($input, $output, $this);
         list($rows, $error) = $commandFacade->debugMulti(
-            $groups, 
+            $users, 
             array(
-                array("target"=>"getNameCanonical", "test"=>new CanonicalTest("getName")),
+                array("target"=>"getUsernameCanonical", "test"=>new CanonicalTest("getUsername")),
+                array("target"=>"getEmailCanonical", "test"=>new CanonicalTest("getEmail")),
+                array("target"=>"getLastLogin", "test"=>new DateTimeTest(DateTimeTest::BEFORE_NOW + DateTimeTest::CURRENT + DateTimeTest::ALLOW_NULL)),
+                array("target"=>"getPasswordRequestedAt", "test"=>new DateTimeTest(DateTimeTest::BEFORE_NOW + DateTimeTest::CURRENT + DateTimeTest::ALLOW_NULL)),
                 array("target"=>"getUpdatedAt", "test"=>new UpdateAtTest()),
-                array("target" => "getExpiresAt","test"=>new DateTimeTest(DateTimeTest::ALL_ALLOWED)),
                 array("target"=>"getCreatedAt", "test"=>new DateTimeTest(DateTimeTest::BEFORE_NOW)),
                 array("target"=>"getCreatedBy", "test"=>new UserInstanceTest()),
                 array("target"=>"getUpdatedBy", "test"=>new UpdatorTest())
             ),
-            array("getId", "getName"),
+            array("getId", "getUsername"),
             "<fg=green>V</fg=green>",
             "<fg=red>X</fg=red>"
         );
@@ -158,9 +132,11 @@ class GroupDebugCommand extends ContainerAwareCommand
             ->setKeys(
                 array(
                     "UUID"=>"getId",
-                    "name"=>"getName",
-                    "nameCanonical"=>"getNameCanonical",
-                    "expire at"=>"getExpiresAt",
+                    "username"=>"getUsername",
+                    "usernameCanonical"=>"getUsernameCanonical",
+                    "emailCanonical"=>"getEmailCanonical",
+                    "last login"=>"getLastLogin",
+                    "password request"=>"getPasswordRequestedAt",
                     "updated at"=>"getUpdatedAt",
                     "created at"=>"getCreatedAt",
                     "updated by"=>"getUpdatedBy",
@@ -176,5 +152,7 @@ class GroupDebugCommand extends ContainerAwareCommand
         $commandColor->addText(" ".$error." ", ($error > 0 ? "error" : "success"));
         $commandColor->addText("\n");
         $commandColor->write();
+        
     }
+
 }

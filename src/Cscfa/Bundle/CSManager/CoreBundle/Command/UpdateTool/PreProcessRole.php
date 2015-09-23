@@ -52,7 +52,7 @@ class PreProcessRole implements PreProcessEventInterface
      * register the method to use
      * with the provider.
      * 
-     * @param string $providerMethod
+     * @param string $providerMethod The provider method to use to get the roles instances
      */
     public function __construct($providerMethod)
     {
@@ -69,6 +69,8 @@ class PreProcessRole implements PreProcessEventInterface
      * 
      * @param array         &$param        The current param array
      * @param CommandFacade $commandFacade The current CommandFacade instance
+     * 
+     * @return array
      */
     public function preProcess(array &$param, CommandFacade $commandFacade)
     {

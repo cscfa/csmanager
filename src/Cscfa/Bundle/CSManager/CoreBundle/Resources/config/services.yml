@@ -31,6 +31,10 @@ parameters:
     core.command.remove_user.class:   Cscfa\Bundle\CSManager\CoreBundle\Command\UserRemoveCommand
     #The default class for the user update command
     core.command.update_user.class:   Cscfa\Bundle\CSManager\CoreBundle\Command\UserUpdateCommand
+    #The default class for the user debuging command
+    core.command.update_user.class:   Cscfa\Bundle\CSManager\CoreBundle\Command\UserUpdateCommand
+    #The default class for the user provider tool
+    core.command.debug_user.class:  Cscfa\Bundle\CSManager\CoreBundle\Command\UserDebugCommand
     ##############################################################################
     #                         The user tool classes                              #
     ##############################################################################
@@ -130,6 +134,12 @@ services:
     core.command.update_user:
         class: "%core.command.update_user.class%"
         arguments: [ "@core.provider.user_provider", "@core.manager.user_manager", "@core.provider.role_provider" ]
+        tags:
+            -  { name: console.command }
+    #tag: command     #The debug user command definition. This command allow a shell user to get bug information about the existing users into the database.
+    core.command.debug_user:
+        class: "%core.command.debug_user.class%"
+        arguments: [ "@core.provider.user_provider" ]
         tags:
             -  { name: console.command }
     ##############################################################################
