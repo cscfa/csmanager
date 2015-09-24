@@ -13,21 +13,21 @@
             <directory>../src/*/Bundle/*Bundle/Tests</directory>
             <directory>../src/*Bundle/Tests</directory>
         </testsuite>
-        <testsuite name="cscfa csmanager core bundle role tests">
-          <file>../src/Cscfa/Bundle/CSManager/CoreBundle/Tests/Role/RoleBuilderTest.php</file>
-          <file>../src/Cscfa/Bundle/CSManager/CoreBundle/Tests/Role/RoleManagerTest.php</file>
-          <file>../src/Cscfa/Bundle/CSManager/CoreBundle/Tests/Role/RoleProviderTest.php</file>
-          <file>../src/Cscfa/Bundle/CSManager/CoreBundle/Tests/Role/RoleTest.php</file>
+        <testsuite name="cscfa security bundle role tests">
+          <file>../src/Cscfa/Bundle/SecurityBundle/Tests/Role/RoleBuilderTest.php</file>
+          <file>../src/Cscfa/Bundle/SecurityBundle/Tests/Role/RoleManagerTest.php</file>
+          <file>../src/Cscfa/Bundle/SecurityBundle/Tests/Role/RoleProviderTest.php</file>
+          <file>../src/Cscfa/Bundle/SecurityBundle/Tests/Role/RoleTest.php</file>
         </testsuite>
-        <testsuite name="cscfa csmanager core bundle user tests">
-          <file>../src/Cscfa/Bundle/CSManager/CoreBundle/Tests/User/UserBuilderTest.php</file>
-          <file>../src/Cscfa/Bundle/CSManager/CoreBundle/Tests/User/UserManagerTest.php</file>
-          <file>../src/Cscfa/Bundle/CSManager/CoreBundle/Tests/User/UserProviderTest.php</file>
+        <testsuite name="cscfa security core bundle user tests">
+          <file>../src/Cscfa/Bundle/SecurityBundle/Tests/User/UserBuilderTest.php</file>
+          <file>../src/Cscfa/Bundle/SecurityBundle/Tests/User/UserManagerTest.php</file>
+          <file>../src/Cscfa/Bundle/SecurityBundle/Tests/User/UserProviderTest.php</file>
         </testsuite>
-        <testsuite name="cscfa csmanager core bundle group tests">
-          <file>../src/Cscfa/Bundle/CSManager/CoreBundle/Tests/Group/GroupBuilderTest.php</file>
-          <file>../src/Cscfa/Bundle/CSManager/CoreBundle/Tests/Group/GroupManagerTest.php</file>
-          <file>../src/Cscfa/Bundle/CSManager/CoreBundle/Tests/Group/GroupProviderTest.php</file>
+        <testsuite name="cscfa security core bundle group tests">
+          <file>../src/Cscfa/Bundle/SecurityBundle/Tests/Group/GroupBuilderTest.php</file>
+          <file>../src/Cscfa/Bundle/SecurityBundle/Tests/Group/GroupManagerTest.php</file>
+          <file>../src/Cscfa/Bundle/SecurityBundle/Tests/Group/GroupProviderTest.php</file>
         </testsuite>
     </testsuites>
 

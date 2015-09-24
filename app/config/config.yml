@@ -83,4 +83,4 @@ swiftmailer:
 fos_user:
     db_driver: orm 
     firewall_name: main
-    user_class: Cscfa\Bundle\CSManager\CoreBundle\Entity\User
+    user_class: Cscfa\Bundle\SecurityBundle\Entity\User
