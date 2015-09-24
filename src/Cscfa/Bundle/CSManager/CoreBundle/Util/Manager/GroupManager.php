@@ -63,7 +63,7 @@ class GroupManager
      * @var EntityManager
      */
     protected $entityManager;
-    
+
     /**
      * The role manager service.
      * 
@@ -191,6 +191,15 @@ class GroupManager
     public function persist(GroupBuilder $groupBuilder, $onlyStack = false)
     {
         if (! $onlyStack) {
+            
+            if ($groupBuilder->getId()) {
+                $groupBuilder->getGroup()->setUpdatedBy($this->getSecurityUser());
+                $groupBuilder->getGroup()->setUpdatedAt(new \DateTime());
+            } else {
+                $groupBuilder->getGroup()->setCreatedBy($this->getSecurityUser());
+                $groupBuilder->getGroup()->setCreatedAt(new \DateTime());
+            }
+            
             $this->entityManager->persist($groupBuilder->getGroup());
         }
         
@@ -198,12 +207,9 @@ class GroupManager
         if ($stack !== null) {
             $stack->setDate(new \DateTime());
             
-            if (method_exists($this->security, "getToken") && $this->security->getToken() !== null && method_exists($this->security->getToken(), "getUser") && $this->security->getToken()->getUser() !== null) {
-                $stack->setUpdatedBy(
-                    $this->security->getToken()
-                        ->getUser()
-                        ->getId()
-                );
+            $securityUser = $this->getSecurityUser();
+            if ($securityUser !== null) {
+                $stack->setUpdatedBy($securityUser->getId());
             }
             $this->entityManager->persist($stack);
         }
@@ -229,7 +235,7 @@ class GroupManager
         $this->entityManager->remove($group->getGroup());
         $this->entityManager->flush();
     }
-    
+
     /**
      * Get RoleManager.
      * 
@@ -242,5 +248,23 @@ class GroupManager
     public function getRoleManager()
     {
         return $this->roleManager;
+    }
+    
+    /**
+     * Get security user.
+     * 
+     * This method allow to
+     * get the current security
+     * user.
+     * 
+     * @return User|NULL
+     */
+    protected function getSecurityUser()
+    {
+        if (method_exists($this->security, "getToken") && $this->security->getToken() !== null && method_exists($this->security->getToken(), "getUser") && $this->security->getToken()->getUser() !== null) {
+            return $this->security->getToken()->getUser();
+        } else {
+            return null;
+        }
     }
 }

@@ -195,7 +195,6 @@ class RoleAddCommand extends ContainerAwareCommand
             $isValid = $commandFacade->applyAndValidate($roleBuilder, $validating, "An error occured. Can't generate", "Generating succefull");
             
             if ($isValid) {
-                $roleBuilder->getRole()->setCreatedAt(new \DateTime());
                 $this->roleManager->persist($roleBuilder);
             }
         }

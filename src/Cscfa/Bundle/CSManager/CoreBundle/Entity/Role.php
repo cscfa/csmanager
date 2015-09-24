@@ -42,7 +42,7 @@ use Cscfa\Bundle\CSManager\CoreBundle\Entity\Base\StackableObject;
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
  * @link     http://cscfa.fr
- *         
+ *       
  * @ORM\Entity(repositoryClass="Cscfa\Bundle\CSManager\CoreBundle\Entity\Repository\RoleRepository")
  * @ORM\Table(
  *      name="cs_manager_role", 

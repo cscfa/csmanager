@@ -334,7 +334,6 @@ class UserAddCommand extends ContainerAwareCommand
             $isValid = $commandFacade->applyAndValidate($userBuilder, $validating, "An error occured. Can't generate", "Generating succefull");
             
             if ($isValid) {
-                $userBuilder->getUser()->setCreatedAt(new \DateTime());
                 $this->userManager->persist($userBuilder);
             }
         } else {

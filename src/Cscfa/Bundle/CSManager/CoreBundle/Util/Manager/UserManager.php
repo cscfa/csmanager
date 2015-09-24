@@ -22,6 +22,7 @@ use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Cscfa\Bundle\CSManager\CoreBundle\Entity\User;
+
 /**
  * UserManager class.
  *
@@ -49,7 +50,7 @@ class UserManager
      * @var RoleManager
      */
     protected $roleManager;
-    
+
     /**
      * The UserProvider service.
      * 
@@ -60,7 +61,7 @@ class UserManager
      * @var UserProvider
      */
     protected $userProvider;
-    
+
     /**
      * The EncoderFactory service.
      * 
@@ -172,7 +173,7 @@ class UserManager
     {
         return new UserBuilder($this, $this->userProvider, $this->encoder);
     }
-    
+
     /**
      * This method allow to store a UserBuilder
      * into the database. A UserBuilder is a
@@ -199,19 +200,25 @@ class UserManager
     public function persist(UserBuilder $userBuilder, $onlyStack = false)
     {
         if (! $onlyStack) {
+
+            if ($userBuilder->getId()) {
+                $userBuilder->getUser()->setUpdatedBy($this->getSecurityUser());
+                $userBuilder->getUser()->setUpdatedAt(new \DateTime());
+            } else {
+                $userBuilder->getUser()->setCreatedBy($this->getSecurityUser());
+                $userBuilder->getUser()->setCreatedAt(new \DateTime());
+            }
+            
             $this->entityManager->persist($userBuilder->getUser());
         }
         
         $stack = $userBuilder->getStackUpdate();
         if ($stack !== null) {
             $stack->setDate(new \DateTime());
-            
-            if (method_exists($this->security, "getToken") && $this->security->getToken() !== null && method_exists($this->security->getToken(), "getUser") && $this->security->getToken()->getUser() !== null) {
-                $stack->setUpdatedBy(
-                    $this->security->getToken()
-                        ->getUser()
-                        ->getId()
-                );
+
+            $securityUser = $this->getSecurityUser();
+            if ($securityUser !== null) {
+                $stack->setUpdatedBy($securityUser->getId());
             }
             $this->entityManager->persist($stack);
         }
@@ -259,5 +266,23 @@ class UserManager
     public function convertInstance(User $user)
     {
         return new UserBuilder($this, $this->userProvider, $this->encoder, $user);
+    }
+    
+    /**
+     * Get security user.
+     * 
+     * This method allow to
+     * get the current security
+     * user.
+     * 
+     * @return User|NULL
+     */
+    protected function getSecurityUser()
+    {
+        if (method_exists($this->security, "getToken") && $this->security->getToken() !== null && method_exists($this->security->getToken(), "getUser") && $this->security->getToken()->getUser() !== null) {
+            return $this->security->getToken()->getUser();
+        } else {
+            return null;
+        }
     }
 }

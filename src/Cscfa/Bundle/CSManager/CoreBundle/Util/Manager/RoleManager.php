@@ -266,19 +266,25 @@ class RoleManager
     public function persist(RoleBuilder $roleBuilder, $onlyStack = false)
     {
         if (! $onlyStack) {
+            
+            if ($roleBuilder->getId()) {
+                $roleBuilder->getRole()->setUpdatedBy($this->getSecurityUser());
+                $roleBuilder->getRole()->setUpdatedAt(new \DateTime());
+            } else {
+                $roleBuilder->getRole()->setCreatedBy($this->getSecurityUser());
+                $roleBuilder->getRole()->setCreatedAt(new \DateTime());
+            }
+            
             $this->entityManager->persist($roleBuilder->getRole());
         }
         
         $stack = $roleBuilder->getStackUpdate();
         if ($stack !== null) {
             $stack->setDate(new \DateTime());
-            
-            if (method_exists($this->security, "getToken") && $this->security->getToken() !== null && method_exists($this->security->getToken(), "getUser") && $this->security->getToken()->getUser() !== null) {
-                $stack->setUpdatedBy(
-                    $this->security->getToken()
-                        ->getUser()
-                        ->getId()
-                );
+
+            $securityUser = $this->getSecurityUser();
+            if ($securityUser !== null) {
+                $stack->setUpdatedBy($securityUser->getId());
             }
             $this->entityManager->persist($stack);
         }
@@ -326,5 +332,23 @@ class RoleManager
     public function convertInstance(Role $role)
     {
         return new RoleBuilder($this, $role);
+    }
+    
+    /**
+     * Get security user.
+     * 
+     * This method allow to
+     * get the current security
+     * user.
+     * 
+     * @return User|NULL
+     */
+    protected function getSecurityUser()
+    {
+        if (method_exists($this->security, "getToken") && $this->security->getToken() !== null && method_exists($this->security->getToken(), "getUser") && $this->security->getToken()->getUser() !== null) {
+            return $this->security->getToken()->getUser();
+        } else {
+            return null;
+        }
     }
 }

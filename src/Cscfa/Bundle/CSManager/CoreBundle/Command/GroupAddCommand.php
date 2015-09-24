@@ -257,7 +257,6 @@ class GroupAddCommand extends ContainerAwareCommand
             $isValid = $commandFacade->applyAndValidate($groupBuilder, $validating, "An error occured. Can't generate", "Generating succefull");
             
             if ($isValid) {
-                $groupBuilder->getGroup()->setCreatedAt(new \DateTime());
                 $this->groupManager->persist($groupBuilder);
             }
         } else {
