@@ -21,6 +21,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Cscfa\Bundle\SecurityBundle\Entity\Base\StackableObject;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * User class.
