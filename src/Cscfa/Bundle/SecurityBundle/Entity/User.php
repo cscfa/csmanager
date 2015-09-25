@@ -19,8 +19,8 @@ namespace Cscfa\Bundle\SecurityBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Cscfa\Bundle\SecurityBundle\Entity\Base\StackableObject;
+use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 
 /**
  * User class.
@@ -48,7 +48,7 @@ use Cscfa\Bundle\SecurityBundle\Entity\Base\StackableObject;
  *      indexes={@ORM\Index(name="cs_manager_user_indx", columns={"user_username_canonical", "user_email_canonical"})}
  *      )
  */
-class User extends StackableObject implements UserInterface
+class User extends StackableObject implements AdvancedUserInterface, \Serializable
 {
     /**
      * The id field
