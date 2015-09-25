@@ -1,0 +1,1 @@
+This file ise used by the DirectoryTest script to validate the Directories tool.

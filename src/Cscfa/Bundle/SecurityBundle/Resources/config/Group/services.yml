@@ -1,0 +1,45 @@
+services:
+    ##############################################################################
+    #                          The group tool services                           #
+    ##############################################################################
+    #tag: tool        #The group manager service offer various method to abstract group persistance and usage.
+    core.manager.group_manager:
+        class: "%core.manager.group_manager.class%"
+        arguments: [ "@core.provider.group_provider", "@doctrine.orm.entity_manager", "@core.manager.role_manager", "@security.context" ]
+    #tag: tool        #The group provider service offer various method to retreive group from the database.
+    core.provider.group_provider:
+        class: "%core.provider.group_provider.class%"
+        arguments: [ "@doctrine.orm.entity_manager", "@core.manager.role_manager", "@security.context" ]
+    ##############################################################################
+    #                         The group command services                         #
+    ##############################################################################
+    #tag: command     #The add user command definition. This command allow a shell user to create a new user into the database.
+    core.command.add_group:
+        class: "%core.command.add_group.class%"
+        arguments: [ "@core.manager.group_manager", "@core.provider.group_provider", "@core.provider.role_provider" ]
+        tags:
+            -  { name: console.command }
+    #tag: command     #The view group command definition. This command allow a shell user to list all existing groups from the database.
+    core.command.view_group:
+        class: "%core.command.view_group.class%"
+        arguments: [ "@core.provider.group_provider" ]
+        tags:
+            -  { name: console.command }
+    #tag: command     #The view group command definition. This command allow a shell user to remove an existing groups from the database.
+    core.command.remove_group:
+        class: "%core.command.remove_group.class%"
+        arguments: [ "@core.manager.group_manager", "@core.provider.group_provider" ]
+        tags:
+            -  { name: console.command }
+    #tag: command     #The update group command definition. This command allow a shell user to update an existing group into the database.
+    core.command.update_group:
+        class: "%core.command.update_group.class%"
+        arguments: [ "@core.manager.group_manager", "@core.provider.group_provider", "@core.provider.role_provider" ]
+        tags:
+            -  { name: console.command }
+    #tag: command     #The debug group command definition. This command allow a shell user to view the errors of groups into the database.
+    core.command.debug_group:
+        class: "%core.command.debug_group.class%"
+        arguments: [ "@core.manager.group_manager", "@core.provider.group_provider", "@core.provider.role_provider" ]
+        tags:
+            -  { name: console.command }

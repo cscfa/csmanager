@@ -1,0 +1,23 @@
+parameters:
+    ##############################################################################
+    #                         The user command classes                          #
+    ##############################################################################
+    #The default class for the user generating command
+    core.command.add_user.class:      Cscfa\Bundle\SecurityBundle\Command\UserAddCommand
+    #The default class for the user listing command
+    core.command.view_user.class:     Cscfa\Bundle\SecurityBundle\Command\UserViewCommand
+    #The default class for the user deletion command
+    core.command.remove_user.class:   Cscfa\Bundle\SecurityBundle\Command\UserRemoveCommand
+    #The default class for the user update command
+    core.command.update_user.class:   Cscfa\Bundle\SecurityBundle\Command\UserUpdateCommand
+    #The default class for the user debuging command
+    core.command.update_user.class:   Cscfa\Bundle\SecurityBundle\Command\UserUpdateCommand
+    #The default class for the user provider tool
+    core.command.debug_user.class:  Cscfa\Bundle\SecurityBundle\Command\UserDebugCommand
+    ##############################################################################
+    #                         The user tool classes                              #
+    ##############################################################################
+    #The default class for the user manager tool
+    core.manager.user_manager.class:  Cscfa\Bundle\SecurityBundle\Util\Manager\UserManager
+    #The default class for the user provider tool
+    core.provider.user_provider.class:  Cscfa\Bundle\SecurityBundle\Util\Provider\UserProvider

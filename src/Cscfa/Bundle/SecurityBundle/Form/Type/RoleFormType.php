@@ -1,8 +1,8 @@
 <?php
 /**
- * This file is a part of CSCFA csmanager project.
+ * This file is a part of CSCFA security project.
  * 
- * The csmanager project is a project manager written in php
+ * The security project is a security bundle written in php
  * with Symfony2 framework.
  * 
  * PHP version 5.5
@@ -95,13 +95,13 @@ class RoleFormType extends AbstractType
             ->add(
                 'name', 'text', array(
                 'max_length' => '255',
-                'label' => 'core.form.role.label.name',
+                'label' => 'security.form.role.label.name',
                 'translation_domain' => 'form'
                 )
             )->add(
                 'child', 'choice', array(
                 'choices' => $this->roleManager->getRolesName(),
-                'label' => 'core.form.role.label.child',
+                'label' => 'security.form.role.label.child',
                 'translation_domain' => 'form'
                 )
             )->add('save', 'submit');

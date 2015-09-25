@@ -1,8 +1,8 @@
 <?php
 /**
- * This file is a part of CSCFA csmanager project.
+ * This file is a part of CSCFA security project.
  * 
- * The csmanager project is a project manager written in php
+ * The security project is a security bundle written in php
  * with Symfony2 framework.
  * 
  * PHP version 5.5
@@ -70,7 +70,7 @@ class RoleViewCommand extends ContainerAwareCommand
      *
      * This command have a common configuration that
      * only specify the command calling method as
-     * "app/console csmanager:view:role".
+     * "app/console cs:view:role".
      *
      * @see    \Symfony\Component\Console\Command\Command::configure()
      * @return void
@@ -78,7 +78,7 @@ class RoleViewCommand extends ContainerAwareCommand
     protected function configure()
     {
         // command configuration
-        $this->setName('csmanager:view:role')->setDescription('View all roles');
+        $this->setName('cs:view:role')->setDescription('View all roles');
     }
 
     /**

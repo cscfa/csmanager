@@ -1,8 +1,8 @@
 <?php
 /**
- * This file is a part of CSCFA csmanager project.
+ * This file is a part of CSCFA security project.
  * 
- * The csmanager project is a project manager written in php
+ * The security project is a security bundle written in php
  * with Symfony2 framework.
  * 
  * PHP version 5.5
@@ -99,7 +99,7 @@ class UserUpdateCommand extends ContainerAwareCommand
      * Command configuration.
      *
      * This configuration purpose that calling this command
-     * behind "app/console csmanager:update:user". It declare
+     * behind "app/console cs:update:user". It declare
      * only one optional argument username that represent the 
      * user username to update.
      *
@@ -108,7 +108,7 @@ class UserUpdateCommand extends ContainerAwareCommand
      */
     protected function configure()
     {
-        $this->setName('csmanager:update:user')
+        $this->setName('cs:update:user')
             ->setDescription('Update an user')
             ->addArgument('username', InputArgument::OPTIONAL, "What's the user username to update?");
     }

@@ -1,8 +1,8 @@
 <?php
 /**
- * This file is a part of CSCFA csmanager project.
+ * This file is a part of CSCFA security project.
  * 
- * The csmanager project is a project manager written in php
+ * The security project is a security bundle written in php
  * with Symfony2 framework.
  * 
  * PHP version 5.5
@@ -86,51 +86,51 @@ class UserFormType extends AbstractType
             ->add(
                 'username', 'text', array(
                     'max_length' => '255',
-                    'label' => 'core.form.user.label.username',
+                    'label' => 'security.form.user.label.username',
                     'translation_domain' => 'form'
                     )
             )->add(
                 'email', 'email', array(
                     'max_length' => '255',
-                    'label' => 'core.form.user.label.email',
+                    'label' => 'security.form.user.label.email',
                     'translation_domain' => 'form'
                     )
             )->add(
                 'enabled', 'checkbox', array(
                     'value' => true,
-                    'label' => 'core.form.user.label.enabled',
+                    'label' => 'security.form.user.label.enabled',
                     'translation_domain' => 'form'
                     )
             )->add(
                 'salt', 'text', array(
-                    'label' => 'core.form.user.label.salt',
+                    'label' => 'security.form.user.label.salt',
                     'translation_domain' => 'form'
                     )
             )->add(
                 'password', 'password', array(
-                    'label' => 'core.form.user.label.password',
+                    'label' => 'security.form.user.label.password',
                     'translation_domain' => 'form'
                     )
             )->add(
                 'locked', 'checkbox', array(
                     'value' => false,
-                    'label' => 'core.form.user.label.locked',
+                    'label' => 'security.form.user.label.locked',
                     'translation_domain' => 'form'
                     )
             )->add(
                 'expiresAt', 'datetime', array(
-                    'label' => 'core.form.user.label.expiresAt',
+                    'label' => 'security.form.user.label.expiresAt',
                     'translation_domain' => 'form'
                     )
             )->add(
                 'roles', 'choice', array(
                     'choices' => $this->roleManager->getRolesName(),
-                    'label' => 'core.form.user.label.child',
+                    'label' => 'security.form.user.label.child',
                     'translation_domain' => 'form'
                     )
             )->add(
                 'credentialsExpireAt', 'datetime', array(
-                    'label' => 'core.form.user.label.credentialsExpireAt',
+                    'label' => 'security.form.user.label.credentialsExpireAt',
                     'translation_domain' => 'form'
                     )
             )->add('save', 'submit');

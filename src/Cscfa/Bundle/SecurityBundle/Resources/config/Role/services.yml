@@ -1,0 +1,45 @@
+services:
+    ##############################################################################
+    #                         The role command services                          #
+    ##############################################################################
+    #tag: command     #The add role command definition. This command allow a shell user to create a new role into the database.
+    core.command.add_role:
+        class: "%core.command.add_role.class%"
+        arguments: [ "@core.manager.role_manager", "@core.provider.role_provider" ]
+        tags:
+            -  { name: console.command }
+    #tag: command     #The update role command definition. This command allow a shell user to update an existing role into the database.
+    core.command.update_role:
+        class: "%core.command.update_role.class%"
+        arguments: [ "@core.manager.role_manager", "@core.provider.role_provider" ]
+        tags:
+            -  { name: console.command }
+    #tag: command     #The view role command definition. This command allow a shell user to list all existing roles from the database.
+    core.command.view_role:
+        class: "%core.command.view_role.class%"
+        arguments: [ "@core.provider.role_provider" ]
+        tags:
+            -  { name: console.command }
+    #tag: command     #The debug role command definition. This command allow a shell user to get bug information about the existing roles into the database.
+    core.command.debug_role:
+        class: "%core.command.debug_role.class%"
+        arguments: [ "@core.provider.role_provider", "@core.manager.role_manager" ]
+        tags:
+            -  { name: console.command }
+    #tag: command     #The remove role command definition. This command allow a shell user to remove an existing roles from the database.
+    core.command.remove_role:
+        class: "%core.command.remove_role.class%"
+        arguments: [ "@core.manager.role_manager", "@core.provider.role_provider" ]
+        tags:
+            -  { name: console.command }
+    ##############################################################################
+    #                          The role tool services                            #
+    ##############################################################################
+    #tag: tool        #The role manager service offer various method to abstract role persistance and usage.
+    core.manager.role_manager:
+        class: "%core.manager.role_manager.class%"
+        arguments: [ "@doctrine.orm.entity_manager", "@core.provider.role_provider", "@security.context" ]
+    #tag: tool        #The role provider service offer various method to retreive role from the database.
+    core.provider.role_provider:
+        class: "%core.provider.role_provider.class%"
+        arguments: [ "@doctrine.orm.entity_manager", "@security.context" ]

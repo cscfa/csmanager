@@ -1,8 +1,8 @@
 <?php
 /**
- * This file is a part of CSCFA csmanager project.
+ * This file is a part of CSCFA security project.
  * 
- * The csmanager project is a project manager written in php
+ * The security project is a security bundle written in php
  * with Symfony2 framework.
  * 
  * PHP version 5.5
@@ -91,7 +91,7 @@ class RoleRemoveCommand extends ContainerAwareCommand
      * Command configuration.
      *
      * This configuration purpose that calling this command
-     * behind "app/console csmanager:remove:role". It declare
+     * behind "app/console cs:remove:role". It declare
      * only one optional argument name that represent the role
      * name to delete.
      *
@@ -101,7 +101,7 @@ class RoleRemoveCommand extends ContainerAwareCommand
     protected function configure()
     {
         // command configuration
-        $this->setName('csmanager:remove:role')
+        $this->setName('cs:remove:role')
             ->setDescription('Remove a role')
             ->addArgument('name', InputArgument::OPTIONAL, "What's the role name?");
     }

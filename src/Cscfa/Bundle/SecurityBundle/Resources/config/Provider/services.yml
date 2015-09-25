@@ -1,0 +1,8 @@
+services:
+    ##############################################################################
+    #                      The user provider tool services                       #
+    ##############################################################################
+    #tag: tool        #The security user provider service allow the user providing into the security context.
+    core.security.user_provider:
+        class: "%core.security.user_provider.class%"
+        arguments: [ "@core.provider.user_provider" ]

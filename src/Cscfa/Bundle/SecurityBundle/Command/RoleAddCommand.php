@@ -1,8 +1,8 @@
 <?php
 /**
- * This file is a part of CSCFA csmanager project.
+ * This file is a part of CSCFA security project.
  * 
- * The csmanager project is a project manager written in php
+ * The security project is a security bundle written in php
  * with Symfony2 framework.
  * 
  * PHP version 5.5
@@ -88,7 +88,7 @@ class RoleAddCommand extends ContainerAwareCommand
      * Command configuration.
      *
      * This configuration purpose that calling this command
-     * behind "app/console csmanager:generate:role". It declare
+     * behind "app/console cs:generate:role". It declare
      * two optional arguments that are the new role name and
      * a child name to reference. If this informations are
      * omitted, they will be answer behind an interactive
@@ -100,7 +100,7 @@ class RoleAddCommand extends ContainerAwareCommand
     protected function configure()
     {
         // command configuration
-        $this->setName('csmanager:generate:role')
+        $this->setName('cs:generate:role')
             ->setDescription('Create and register new role')
             ->addArgument('name', InputArgument::OPTIONAL, "What's the role name?")
             ->addArgument('child', InputArgument::OPTIONAL, "What's the role child?");

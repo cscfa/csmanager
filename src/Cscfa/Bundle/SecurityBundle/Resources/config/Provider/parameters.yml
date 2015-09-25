@@ -1,0 +1,6 @@
+parameters:
+    ##############################################################################
+    #                     The user provider tool classes                         #
+    ##############################################################################
+    #The default class for the security user provider service
+    core.security.user_provider.class:  Cscfa\Bundle\SecurityBundle\Provider\SecurityUserProvider

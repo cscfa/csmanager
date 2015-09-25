@@ -1,8 +1,8 @@
 <?php
 /**
- * This file is a part of CSCFA csmanager project.
+ * This file is a part of CSCFA security project.
  * 
- * The csmanager project is a project manager written in php
+ * The security project is a security bundle written in php
  * with Symfony2 framework.
  * 
  * PHP version 5.5
@@ -20,6 +20,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
+use Cscfa\Bundle\ToolboxBundle\Search\Directory\DirectorySearchTool;
 
 /**
  * This is the class that loads and manages your bundle configuration
@@ -45,7 +46,18 @@ class CscfaSecurityExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container)
     {
-        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
-        $loader->load('services.yml');
+        $baseDir = __DIR__ . '/../Resources/config';
+        
+        $loader = new Loader\YamlFileLoader($container, new FileLocator($baseDir));
+        $directorySearch = new DirectorySearchTool($baseDir);
+        $parameters = $directorySearch->searchFilename("/parameters.yml/", true, $baseDir);
+        $services = $directorySearch->searchFilename("/services.yml/", true, $baseDir);
+        
+        foreach ($parameters as $parameter) {
+            $loader->load($parameter);
+        }
+        foreach ($services as $service) {
+            $loader->load($service);
+        }
     }
 }

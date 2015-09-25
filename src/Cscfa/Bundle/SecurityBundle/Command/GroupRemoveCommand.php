@@ -1,8 +1,8 @@
 <?php
 /**
- * This file is a part of CSCFA csmanager project.
+ * This file is a part of CSCFA security project.
  * 
- * The csmanager project is a project manager written in php
+ * The security project is a security bundle written in php
  * with Symfony2 framework.
  * 
  * PHP version 5.5
@@ -87,7 +87,7 @@ class GroupRemoveCommand extends ContainerAwareCommand
      * Command configuration.
      *
      * This configuration purpose that calling this command
-     * behind "app/console csmanager:remove:group". It declare
+     * behind "app/console cs:remove:group". It declare
      * only one optional argument name that represent the group
      * name to delete.
      *
@@ -96,7 +96,7 @@ class GroupRemoveCommand extends ContainerAwareCommand
      */
     protected function configure()
     {
-        $this->setName('csmanager:remove:group')
+        $this->setName('cs:remove:group')
             ->setDescription('Remove a group')
             ->addArgument('name', InputArgument::OPTIONAL, "What's the group name?");
     }

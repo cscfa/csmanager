@@ -1,0 +1,21 @@
+parameters:
+    ##############################################################################
+    #                         The group tool classes                             #
+    ##############################################################################
+    #The default class for the group manager tool
+    core.manager.group_manager.class: Cscfa\Bundle\SecurityBundle\Util\Manager\GroupManager
+    #The default class for the group provider tool
+    core.provider.group_provider.class:  Cscfa\Bundle\SecurityBundle\Util\Provider\GroupProvider
+    ##############################################################################
+    #                         The group command classes                          #
+    ##############################################################################
+    #The default class for the group generating command
+    core.command.add_group.class: Cscfa\Bundle\SecurityBundle\Command\GroupAddCommand
+    #The default class for the group view command
+    core.command.view_group.class: Cscfa\Bundle\SecurityBundle\Command\GroupViewCommand
+    #The default class for the group remove command
+    core.command.remove_group.class: Cscfa\Bundle\SecurityBundle\Command\GroupRemoveCommand
+    #The default class for the group update command
+    core.command.update_group.class: Cscfa\Bundle\SecurityBundle\Command\GroupUpdateCommand
+    #The default class for the group debug command
+    core.command.debug_group.class: Cscfa\Bundle\SecurityBundle\Command\GroupDebugCommand

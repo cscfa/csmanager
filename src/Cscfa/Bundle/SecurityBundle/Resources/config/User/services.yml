@@ -1,0 +1,45 @@
+services:
+    ##############################################################################
+    #                         The user command services                          #
+    ##############################################################################
+    #tag: command     #The add user command definition. This command allow a shell user to create a new user into the database.
+    core.command.add_user:
+        class: "%core.command.add_user.class%"
+        arguments: [ "@doctrine.orm.entity_manager", "@security.encoder_factory", "@core.provider.role_provider", "@core.manager.user_manager" ]
+        tags:
+            -  { name: console.command }
+    #tag: command     #The view user command definition. This command allow a shell user to list all existing users from the database.
+    core.command.view_user:
+        class: "%core.command.view_user.class%"
+        arguments: [ "@core.provider.user_provider" ]
+        tags:
+            -  { name: console.command }
+    #tag: command     #The remove user command definition. This command allow a shell user to remove an existing user from the database.
+    core.command.remove_user:
+        class: "%core.command.remove_user.class%"
+        arguments: [ "@core.manager.user_manager", "@core.provider.user_provider" ]
+        tags:
+            -  { name: console.command }
+    #tag: command     #The update user command definition. This command allow a shell user to update an existing user from the database.
+    core.command.update_user:
+        class: "%core.command.update_user.class%"
+        arguments: [ "@core.provider.user_provider", "@core.manager.user_manager", "@core.provider.role_provider" ]
+        tags:
+            -  { name: console.command }
+    #tag: command     #The debug user command definition. This command allow a shell user to get bug information about the existing users into the database.
+    core.command.debug_user:
+        class: "%core.command.debug_user.class%"
+        arguments: [ "@core.provider.user_provider" ]
+        tags:
+            -  { name: console.command }
+    ##############################################################################
+    #                          The user tool services                            #
+    ##############################################################################
+    #tag: tool        #The user manager service offer various method to abstract user persistance and usage.
+    core.manager.user_manager:
+        class: "%core.manager.user_manager.class%"
+        arguments: [ "@doctrine.orm.entity_manager", "@core.manager.role_manager", "@core.provider.user_provider", "@security.encoder_factory", "@security.context" ]
+    #tag: tool        #The user provider service offer various method to retreive user from the database.
+    core.provider.user_provider:
+        class: "%core.provider.user_provider.class%"
+        arguments: [ "@doctrine.orm.entity_manager", "@core.manager.role_manager", "@security.encoder_factory", "@security.context" ]

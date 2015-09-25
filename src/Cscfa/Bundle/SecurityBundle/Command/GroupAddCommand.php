@@ -1,8 +1,8 @@
 <?php
 /**
- * This file is a part of CSCFA csmanager project.
+ * This file is a part of CSCFA security project.
  * 
- * The csmanager project is a project manager written in php
+ * The security project is a security bundle written in php
  * with Symfony2 framework.
  * 
  * PHP version 5.5
@@ -101,7 +101,7 @@ class GroupAddCommand extends ContainerAwareCommand
      * Command configuration.
      *
      * This configuration purpose that calling this command
-     * behind "app/console csmanager:generate:group". It declare
+     * behind "app/console cs:generate:group". It declare
      * four optional arguments that are the name, the locked state,
      * the expiration date and a role collection. If this 
      * informations are omitted, they will be answer behind 
@@ -113,7 +113,7 @@ class GroupAddCommand extends ContainerAwareCommand
     protected function configure()
     {
         // command configuration
-        $this->setName('csmanager:generate:group')
+        $this->setName('cs:generate:group')
             ->setDescription('Create and register new group')
             ->addArgument('name', InputArgument::OPTIONAL, "What's the group name?")
             ->addArgument('locked', InputArgument::OPTIONAL, "What's the group locked state?")

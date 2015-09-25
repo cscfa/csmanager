@@ -1,8 +1,8 @@
 <?php
 /**
- * This file is a part of CSCFA csmanager project.
+ * This file is a part of CSCFA security project.
  * 
- * The csmanager project is a project manager written in php
+ * The security project is a security bundle written in php
  * with Symfony2 framework.
  * 
  * PHP version 5.5
@@ -102,7 +102,7 @@ class GroupUpdateCommand extends ContainerAwareCommand
      * Command configuration.
      *
      * This configuration purpose that calling this command
-     * behind "app/console csmanager:update:group". It declare
+     * behind "app/console cs:update:group". It declare
      * one optional arguments that are the name. If this 
      * informations is omitted, it will be answer behind 
      * an interactive shell interface into the execute method.
@@ -112,7 +112,7 @@ class GroupUpdateCommand extends ContainerAwareCommand
      */
     protected function configure()
     {
-        $this->setName('csmanager:update:group')
+        $this->setName('cs:update:group')
             ->setDescription('Update and register new group')
             ->addArgument('name', InputArgument::OPTIONAL, "What's the group name?");
     }

@@ -1,8 +1,8 @@
 <?php
 /**
- * This file is a part of CSCFA csmanager project.
+ * This file is a part of CSCFA security project.
  * 
- * The csmanager project is a project manager written in php
+ * The security project is a security bundle written in php
  * with Symfony2 framework.
  * 
  * PHP version 5.5
@@ -69,14 +69,14 @@ class UserViewCommand extends ContainerAwareCommand
      * Command configuration.
      *
      * This configuration purpose that calling this command
-     * behind "app/console csmanager:view:user".
+     * behind "app/console cs:view:user".
      *
      * @see    \Symfony\Component\Console\Command\Command::configure()
      * @return void
      */
     protected function configure()
     {
-        $this->setName('csmanager:view:user')->setDescription('View all users');
+        $this->setName('cs:view:user')->setDescription('View all users');
     }
 
     /**

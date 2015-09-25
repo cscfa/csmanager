@@ -1,8 +1,8 @@
 <?php
 /**
- * This file is a part of CSCFA csmanager project.
+ * This file is a part of CSCFA security project.
  * 
- * The csmanager project is a project manager written in php
+ * The security project is a security bundle written in php
  * with Symfony2 framework.
  * 
  * PHP version 5.5
@@ -66,14 +66,14 @@ class GroupViewCommand extends ContainerAwareCommand
      *
      * This command have a common configuration that
      * only specify the command calling method as
-     * "app/console csmanager:view:group".
+     * "app/console cs:view:group".
      *
      * @see    \Symfony\Component\Console\Command\Command::configure()
      * @return void
      */
     protected function configure()
     {
-        $this->setName('csmanager:view:group')->setDescription('View all groups');
+        $this->setName('cs:view:group')->setDescription('View all groups');
     }
 
     /**

@@ -1,8 +1,8 @@
 <?php
 /**
- * This file is a part of CSCFA csmanager project.
+ * This file is a part of CSCFA security project.
  * 
- * The csmanager project is a project manager written in php
+ * The security project is a security bundle written in php
  * with Symfony2 framework.
  * 
  * PHP version 5.5
@@ -86,7 +86,7 @@ class UserRemoveCommand extends ContainerAwareCommand
      * Command configuration.
      *
      * This configuration purpose that calling this command
-     * behind "app/console csmanager:remove:user". It declare
+     * behind "app/console cs:remove:user". It declare
      * only one optional argument nae that represent the user
      * name to delete.
      *
@@ -95,7 +95,7 @@ class UserRemoveCommand extends ContainerAwareCommand
      */
     protected function configure()
     {
-        $this->setName('csmanager:remove:user')
+        $this->setName('cs:remove:user')
             ->setDescription('Remove a user')
             ->addArgument('username', InputArgument::OPTIONAL, "What's the user name?");
     }

@@ -1,8 +1,8 @@
 <?php
 /**
- * This file is a part of CSCFA csmanager project.
- *
- * The csmanager project is a project manager written in php
+ * This file is a part of CSCFA security project.
+ * 
+ * The security project is a security bundle written in php
  * with Symfony2 framework.
  *
  * PHP version 5.5

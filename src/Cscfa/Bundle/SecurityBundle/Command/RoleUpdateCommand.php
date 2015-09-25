@@ -1,8 +1,8 @@
 <?php
 /**
- * This file is a part of CSCFA csmanager project.
+ * This file is a part of CSCFA security project.
  * 
- * The csmanager project is a project manager written in php
+ * The security project is a security bundle written in php
  * with Symfony2 framework.
  * 
  * PHP version 5.5
@@ -92,7 +92,7 @@ class RoleUpdateCommand extends ContainerAwareCommand
      * Command configuration.
      *
      * This configuration purpose that calling this command
-     * behind "app/console csmanager:update:role". It declare
+     * behind "app/console cs:update:role". It declare
      * only one optional argument name that represent the role
      * name to update.
      *
@@ -102,7 +102,7 @@ class RoleUpdateCommand extends ContainerAwareCommand
     protected function configure()
     {
         // command configuration
-        $this->setName('csmanager:update:role')
+        $this->setName('cs:update:role')
             ->setDescription('Update a role')
             ->addArgument('name', InputArgument::OPTIONAL, "What's the role name to update?");
     }

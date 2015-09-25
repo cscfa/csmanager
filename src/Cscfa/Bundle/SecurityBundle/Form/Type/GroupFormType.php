@@ -1,8 +1,8 @@
 <?php
 /**
- * This file is a part of CSCFA csmanager project.
+ * This file is a part of CSCFA security project.
  * 
- * The csmanager project is a project manager written in php
+ * The security project is a security bundle written in php
  * with Symfony2 framework.
  * 
  * PHP version 5.5
@@ -100,24 +100,24 @@ class GroupFormType extends AbstractType
             ->add(
                 'name', 'text', array(
                 'max_length' => '255',
-                'label' => 'core.form.group.label.name',
+                'label' => 'security.form.group.label.name',
                 'translation_domain' => 'form'
                 )
             )->add(
                 'locked', 'checkbox', array(
                     'value' => false,
-                    'label' => 'core.form.group.label.locked',
+                    'label' => 'security.form.group.label.locked',
                     'translation_domain' => 'form'
                     )
             )->add(
                 'expiresAt', 'datetime', array(
-                    'label' => 'core.form.group.label.expiresAt',
+                    'label' => 'security.form.group.label.expiresAt',
                     'translation_domain' => 'form'
                     )
             )->add(
                 'roles', 'choice', array(
                     'choices' => $this->roleManager->getRolesName(),
-                    'label' => 'core.form.group.label.child',
+                    'label' => 'security.form.group.label.child',
                     'translation_domain' => 'form'
                     )
             )->add('save', 'submit');

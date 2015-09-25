@@ -1,0 +1,21 @@
+parameters:
+    ##############################################################################
+    #                         The role command classes                           #
+    ##############################################################################
+    #The default class for the role generating command
+    core.command.add_role.class:      Cscfa\Bundle\SecurityBundle\Command\RoleAddCommand
+    #The default class for the role listing command
+    core.command.view_role.class:     Cscfa\Bundle\SecurityBundle\Command\RoleViewCommand
+    #The default class for the role deletion command
+    core.command.remove_role.class:   Cscfa\Bundle\SecurityBundle\Command\RoleRemoveCommand
+    #The default class for the role updating command
+    core.command.update_role.class:   Cscfa\Bundle\SecurityBundle\Command\RoleUpdateCommand
+    #The default class for the role debuging command
+    core.command.debug_role.class:    Cscfa\Bundle\SecurityBundle\Command\RoleDebugCommand
+    ##############################################################################
+    #                         The role tool classes                              #
+    ##############################################################################
+    #The default class for the role manager tool
+    core.manager.role_manager.class:  Cscfa\Bundle\SecurityBundle\Util\Manager\RoleManager
+    #The default class for the role provider tool
+    core.provider.role_provider.class:  Cscfa\Bundle\SecurityBundle\Util\Provider\RoleProvider
