@@ -117,7 +117,7 @@ class GroupFormType extends AbstractType
             )->add(
                 'roles', 'choice', array(
                     'choices' => $this->roleManager->getRolesName(),
-                    'label' => 'security.form.group.label.child',
+                    'label' => 'security.form.group.label.roles',
                     'translation_domain' => 'form'
                     )
             )->add('save', 'submit');

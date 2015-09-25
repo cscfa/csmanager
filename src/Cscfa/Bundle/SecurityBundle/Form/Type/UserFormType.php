@@ -125,7 +125,7 @@ class UserFormType extends AbstractType
             )->add(
                 'roles', 'choice', array(
                     'choices' => $this->roleManager->getRolesName(),
-                    'label' => 'security.form.user.label.child',
+                    'label' => 'security.form.user.label.roles',
                     'translation_domain' => 'form'
                     )
             )->add(

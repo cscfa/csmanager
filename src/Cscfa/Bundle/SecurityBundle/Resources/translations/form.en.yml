@@ -1,10 +1,23 @@
 security:
     form:
-        navbar:
+        group:
             label:
-                name:         "Name"
-                route:        "Route"
-                translation:  "Translation"
-                description:  "Description"
-                priority:     "Priority"
-                role:         "Role"
+                name:                "Name"
+                locked:              "Locked"
+                expiresAt:           "Expire at"
+                roles:               "Roles"
+        role:
+            label:
+                name:                "Name"
+                child:               "Child"
+        user:
+            label:
+                username:            "Username"
+                email:               "Email"
+                enabled:             "Enable"
+                salt:                "Salt"
+                password:            "Password"
+                locked:              "Locked"
+                expiresAt:           "Expire at"
+                roles:               "Roles"
+                credentialsExpireAt: "Credential expire at"
