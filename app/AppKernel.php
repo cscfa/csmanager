@@ -26,6 +26,7 @@ class AppKernel extends Kernel
             new Cscfa\Bundle\SecurityBundle\CscfaSecurityBundle(),
             new FOS\UserBundle\FOSUserBundle(),
             new Cscfa\Bundle\ToolboxBundle\CscfaToolboxBundle(),
+            new Cscfa\Bundle\MailBundle\CscfaMailBundle(),
         );
         
         if (in_array($this->getEnvironment(), array(
