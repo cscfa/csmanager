@@ -53,7 +53,7 @@ class SwiftMailerFacade implements MailerInterface
      * @var \Swift_Mailer
      */
     protected $mailer;
-    
+
     /**
      * The message.
      * 
@@ -64,7 +64,7 @@ class SwiftMailerFacade implements MailerInterface
      * @var Message
      */
     protected $message;
-    
+
     /**
      * Default constructor.
      * 
@@ -72,7 +72,7 @@ class SwiftMailerFacade implements MailerInterface
      * the properties and register
      * the mailer service.
      * 
-     * @param \Swift_Mailer $mailer
+     * @param \Swift_Mailer $mailer The mailer service to use
      */
     public function __construct(\Swift_Mailer $mailer)
     {
@@ -107,7 +107,7 @@ class SwiftMailerFacade implements MailerInterface
     {
         return $this->message;
     }
-    
+
     /**
      * Set message.
      * 
@@ -116,12 +116,14 @@ class SwiftMailerFacade implements MailerInterface
      * 
      * @param Message $message The new message instance
      * 
-     * @see \Cscfa\Bundle\MailBundle\BaseInterface\MailerInterface::setMessage()
+     * @see    \Cscfa\Bundle\MailBundle\BaseInterface\MailerInterface::setMessage()
+     * @return void
      */
-    public function setMessage(Message $message) {
+    public function setMessage(Message $message)
+    {
         $this->message = $message;
     }
-    
+
     /**
      * Parse.
      * 
@@ -139,13 +141,21 @@ class SwiftMailerFacade implements MailerInterface
         
         $swiftMessage = \Swift_Message::newInstance();
         
-        $this->parseOriginator($swiftMessage, $msg->getHeader()->getOriginator());
-        $this->parseReceiver($swiftMessage, $msg->getHeader()->getReceiver());
-        $this->parseSpecificator($swiftMessage, $msg->getHeader()->getSpecificator());
-        $this->parseSyntactic($swiftMessage, $msg->getHeader()->getSyntactic());
+        $this->parseOriginator($swiftMessage, $msg->getHeader()
+            ->getOriginator());
+        $this->parseReceiver($swiftMessage, $msg->getHeader()
+            ->getReceiver());
+        $this->parseSpecificator($swiftMessage, $msg->getHeader()
+            ->getSpecificator());
+        $this->parseSyntactic($swiftMessage, $msg->getHeader()
+            ->getSyntactic());
         
-        if($msg->getHeader()->getEncoder()->getEncoding() !== null){
-            $swiftMessage->setEncoder($msg->getHeader()->getEncoder()->getEncoding());
+        if ($msg->getHeader()
+            ->getEncoder()
+            ->getEncoding() !== null) {
+            $swiftMessage->setEncoder($msg->getHeader()
+                ->getEncoder()
+                ->getEncoding());
         }
         
         $swiftMessage->setBoundary($msg->getBoundary());
@@ -154,7 +164,8 @@ class SwiftMailerFacade implements MailerInterface
         $bodies = $msg->getBodyParts()->getAll();
         foreach ($bodies as $bodyPart) {
             if ($bodyPart instanceof BodyPart) {
-                $swiftMessage->addPart($bodyPart->getContent(), $bodyPart->getSyntactic()->getContentType());
+                $swiftMessage->addPart($bodyPart->getContent(), $bodyPart->getSyntactic()
+                    ->getContentType());
             }
         }
         
@@ -163,8 +174,10 @@ class SwiftMailerFacade implements MailerInterface
             if ($attachment instanceof Attachment) {
                 
                 $att = \Swift_Attachment::newInstance();
-                $att->setDisposition($attachment->getSyntactic()->getContentDisposition());
-                $att->setContentType($attachment->getSyntactic()->getContentType());
+                $att->setDisposition($attachment->getSyntactic()
+                    ->getContentDisposition());
+                $att->setContentType($attachment->getSyntactic()
+                    ->getContentType());
                 $att->setBody($attachment->getContent());
                 $att->setFilename($attachment->getFileName());
                 
@@ -174,7 +187,7 @@ class SwiftMailerFacade implements MailerInterface
         
         return $swiftMessage;
     }
-    
+
     /**
      * Parse syntactic.
      * 
@@ -185,20 +198,22 @@ class SwiftMailerFacade implements MailerInterface
      * 
      * @param \Swift_Message &$swiftMessage The current Swift_Message instance reference
      * @param Syntactic      $syntactic     The Syntactic instance to parse
+     * 
+     * @return void
      */
     protected function parseSyntactic(\Swift_Message &$swiftMessage, Syntactic $syntactic)
     {
         $contentType = $syntactic->getContentType();
         $contentDescription = $syntactic->getContentDescription();
-
-        if($contentType !== null){
+        
+        if ($contentType !== null) {
             $swiftMessage->setContentType($contentType);
         }
-        if($contentDescription !== null){
+        if ($contentDescription !== null) {
             $swiftMessage->setDescription($contentDescription);
         }
     }
-    
+
     /**
      * Parse specificator.
      * 
@@ -209,20 +224,22 @@ class SwiftMailerFacade implements MailerInterface
      * 
      * @param \Swift_Message &$swiftMessage The current Swift_Message instance reference
      * @param Specificator   $specificator  The Specificator instance to parse
+     * 
+     * @return void
      */
     protected function parseSpecificator(\Swift_Message &$swiftMessage, Specificator $specificator)
     {
         $date = $specificator->getDate();
         $id = $specificator->getMessageId();
-
-        if($date !== null && $date instanceof \DateTime){
+        
+        if ($date !== null && $date instanceof \DateTime) {
             $swiftMessage->setDate($date->getTimestamp());
         }
         if ($id !== null) {
             $swiftMessage->setId($id);
         }
     }
-    
+
     /**
      * Parse receiver.
      * 
@@ -233,6 +250,8 @@ class SwiftMailerFacade implements MailerInterface
      * 
      * @param \Swift_Message &$swiftMessage The current Swift_Message instance reference
      * @param Receiver       $receiver      The Receiver instance to parse
+     * 
+     * @return void
      */
     protected function parseReceiver(\Swift_Message &$swiftMessage, Receiver $receiver)
     {
@@ -241,17 +260,17 @@ class SwiftMailerFacade implements MailerInterface
         $bcc = $receiver->getBcc();
         $bnf = new BNFFormater();
         
-        if($to !== null){
+        if ($to !== null) {
             $this->hydrateMultipleValueName($swiftMessage, $bnf->parse($to), "addTo");
         }
-        if($cc !== null){
+        if ($cc !== null) {
             $this->hydrateMultipleValueName($swiftMessage, $bnf->parse($cc), "addCc");
         }
-        if($bcc !== null){
+        if ($bcc !== null) {
             $this->hydrateMultipleValueName($swiftMessage, $bnf->parse($bcc), "addCc");
         }
     }
-    
+
     /**
      * Parse originator.
      * 
@@ -262,6 +281,8 @@ class SwiftMailerFacade implements MailerInterface
      * 
      * @param \Swift_Message &$swiftMessage The current Swift_Message instance reference
      * @param Originator     $originator    The originator instance to parse
+     * 
+     * @return void
      */
     protected function parseOriginator(\Swift_Message &$swiftMessage, Originator $originator)
     {
@@ -273,14 +294,14 @@ class SwiftMailerFacade implements MailerInterface
         if ($from !== null) {
             $this->hydrateMultipleValueName($swiftMessage, $bnf->parse($from), "addFrom");
         }
-        if($replyTo !== null){
+        if ($replyTo !== null) {
             $this->hydrateMultipleValueName($swiftMessage, $bnf->parse($replyTo), "addReplyTo");
         }
-        if($sender !== null){
+        if ($sender !== null) {
             $this->hydrateMultipleValueName($swiftMessage, $bnf->parse($sender), "setSender");
         }
     }
-    
+
     /**
      * Hydrate multiple value and name.
      * 
@@ -291,18 +312,20 @@ class SwiftMailerFacade implements MailerInterface
      * @param \Swift_Message &$swiftMessage The current Swift_Message instance reference
      * @param BNFFormater    $formater      The provider of values and names
      * @param unknown        $method        The method to use for hydrate the Swift_Message
+     * 
+     * @return void
      */
     protected function hydrateMultipleValueName(\Swift_Message &$swiftMessage, BNFFormater $formater, $method)
     {
         foreach ($formater->getAllElements() as $element) {
-            if($element instanceof BNFElement){
-                if(!$element->hasSignificant()){
+            if ($element instanceof BNFElement) {
+                if (! $element->hasSignificant()) {
                     continue;
                 }
                 
-                if($element->hasLabel()){
+                if ($element->hasLabel()) {
                     $swiftMessage->$method($element->getSignificant(), $element->getLabel());
-                }else{
+                } else {
                     $swiftMessage->$method($element->getSignificant());
                 }
             }

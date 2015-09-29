@@ -51,6 +51,8 @@ interface MailerInterface
      * current message instance.
      * 
      * @param Message $message The new message instance
+     * 
+     * @return MailerInterface
      */
     public function setMessage(Message $message);
     

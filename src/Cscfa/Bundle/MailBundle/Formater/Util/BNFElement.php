@@ -32,7 +32,7 @@ namespace Cscfa\Bundle\MailBundle\Formater\Util;
  */
 class BNFElement
 {
-    
+
     /**
      * The element name.
      * 
@@ -42,7 +42,7 @@ class BNFElement
      * @var string
      */
     protected $name;
-    
+
     /**
      * The element litteral string.
      * 
@@ -53,7 +53,7 @@ class BNFElement
      * @var string
      */
     protected $litteral;
-    
+
     /**
      * The element comment.
      * 
@@ -63,7 +63,7 @@ class BNFElement
      * @var string
      */
     protected $comment;
-    
+
     /**
      * Default constructor.
      * 
@@ -164,7 +164,7 @@ class BNFElement
         $this->comment = $comment;
         return $this;
     }
-    
+
     /**
      * Has name.
      * 
@@ -176,7 +176,7 @@ class BNFElement
      */
     public function hasName()
     {
-        return !empty($this->name);
+        return ! empty($this->name);
     }
 
     /**
@@ -190,7 +190,7 @@ class BNFElement
      */
     public function hasLitteral()
     {
-        return !empty($this->litteral);
+        return ! empty($this->litteral);
     }
 
     /**
@@ -204,9 +204,9 @@ class BNFElement
      */
     public function hasComment()
     {
-        return !empty($this->comment);
+        return ! empty($this->comment);
     }
- 
+
     /**
      * Has significant.
      * 
@@ -219,13 +219,13 @@ class BNFElement
      */
     public function hasSignificant()
     {
-        if($this->hasLitteral() || $this->hasName()){
+        if ($this->hasLitteral() || $this->hasName()) {
             return true;
         } else {
             return false;
         }
     }
-    
+
     /**
      * Get significant.
      * 
@@ -237,15 +237,15 @@ class BNFElement
      */
     public function getSignificant()
     {
-        if($this->hasLitteral()){
+        if ($this->hasLitteral()) {
             return $this->litteral;
-        } else if($this->hasName()) {
+        } else if ($this->hasName()) {
             return $this->name;
         } else {
             return null;
         }
     }
-    
+
     /**
      * Has label.
      * 
@@ -256,13 +256,13 @@ class BNFElement
      */
     public function hasLabel()
     {
-        if($this->hasLitteral() && $this->hasName()){
+        if ($this->hasLitteral() && $this->hasName()) {
             return true;
         } else {
             return false;
         }
     }
-    
+
     /**
      * Get label.
      * 
@@ -274,13 +274,13 @@ class BNFElement
      */
     public function getLabel()
     {
-        if($this->hasLitteral() && $this->hasName()){
+        if ($this->hasLitteral() && $this->hasName()) {
             return $this->name;
         } else {
             return null;
         }
     }
-    
+
     /**
      * Litteral to name.
      * 
@@ -292,7 +292,7 @@ class BNFElement
      */
     public function litteralToName()
     {
-        if($this->hasLitteral()){
+        if ($this->hasLitteral()) {
             $this->setName($this->getLitteral())
                 ->setLitteral("");
         }

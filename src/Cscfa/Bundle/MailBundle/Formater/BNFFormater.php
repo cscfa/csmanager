@@ -34,6 +34,7 @@ use Cscfa\Bundle\MailBundle\Formater\Util\BNFElement;
  */
 class BNFFormater
 {
+
     /**
      * The header.
      * 
@@ -43,7 +44,7 @@ class BNFFormater
      * @var string
      */
     protected $header;
-    
+
     /**
      * The elements.
      * 
@@ -54,7 +55,7 @@ class BNFFormater
      * @var array
      */
     protected $elements;
-    
+
     /**
      * Default constructor.
      * 
@@ -66,7 +67,7 @@ class BNFFormater
         $this->elements = array();
         $this->header = "";
     }
-    
+
     /**
      * Add an element.
      * 
@@ -82,7 +83,7 @@ class BNFFormater
         $this->elements[] = new BNFElement();
         return $key;
     }
-    
+
     /**
      * Remove an element.
      * 
@@ -90,14 +91,16 @@ class BNFFormater
      * from his index if exist.
      * 
      * @param integer $key the element index to remove
+     * 
+     * @return void
      */
     public function removeElement($key)
     {
-        if($this->hasElement($key)){
+        if ($this->hasElement($key)) {
             unset($this->elements[$key]);
         }
     }
-    
+
     /**
      * Get an element.
      * 
@@ -112,13 +115,13 @@ class BNFFormater
      */
     public function getElement($key)
     {
-        if($this->hasElement($key)){
+        if ($this->hasElement($key)) {
             return $this->elements[$key];
-        }else{
+        } else {
             return null;
         }
     }
-    
+
     /**
      * Has element.
      * 
@@ -126,12 +129,14 @@ class BNFFormater
      * the element storage array.
      * 
      * @param integer $key The index to check
+     * 
+     * @return boolean
      */
     public function hasElement($key)
     {
         return isset($this->elements[$key]);
     }
-    
+
     /**
      * Set element.
      * 
@@ -150,16 +155,16 @@ class BNFFormater
      */
     public function setElement(BNFElement $element, $key)
     {
-        if($this->hasElement($key)){
+        if ($this->hasElement($key)) {
             $this->elements[$key] = $element;
-        }else{
+        } else {
             $key = $this->addElement();
             $this->elements[$key] = $element;
         }
         
         return $key;
     }
-    
+
     /**
      * Get all elements.
      * 
@@ -172,7 +177,7 @@ class BNFFormater
     {
         return $this->elements;
     }
-    
+
     /**
      * Get header.
      * 
@@ -185,7 +190,7 @@ class BNFFormater
     {
         return $this->header;
     }
-    
+
     /**
      * Set header.
      * 
@@ -202,7 +207,7 @@ class BNFFormater
         $this->header = $header;
         return $this;
     }
-    
+
     /**
      * Clear.
      * 
@@ -219,7 +224,7 @@ class BNFFormater
         
         return $this;
     }
-    
+
     /**
      * Dump current line.
      * 
@@ -239,56 +244,56 @@ class BNFFormater
     {
         $result = "";
         
-        if($this->header !== ""){
-            $result .= $this->header.": ";
+        if ($this->header !== "") {
+            $result .= $this->header . ": ";
         }
         
         $keySet = array_keys($this->elements);
         
-        foreach ($this->elements as $key=>$element) {
+        foreach ($this->elements as $key => $element) {
             
-            if($element instanceof BNFElement){
+            if ($element instanceof BNFElement) {
                 
-                if($element->hasLitteral() && !$element->hasName()){
+                if ($element->hasLitteral() && ! $element->hasName()) {
                     $element->litteralToName();
                 }
-
-                if((! $element->hasSignificant() && $onlySignificant) || (!$element->hasSignificant() && $withoutComment)){
-                    if($key === $keySet[0]){
+                
+                if ((! $element->hasSignificant() && $onlySignificant) || (! $element->hasSignificant() && $withoutComment)) {
+                    if ($key === $keySet[0]) {
                         array_shift($keySet);
                     }
                     continue;
                 }
                 
-                if($key !== $keySet[0]){
+                if ($key !== $keySet[0]) {
                     $result .= ", ";
                 }
                 
-                if($element->getName() !== ""){
+                if ($element->getName() !== "") {
                     $result .= $element->getName();
                     
-                    if($element->getLitteral() !== "" || ($element->getComment() !== "" && !$withoutComment)){
+                    if ($element->getLitteral() !== "" || ($element->getComment() !== "" && ! $withoutComment)) {
                         $result .= ' ';
                     }
                 }
                 
-                if($element->getLitteral() !== ""){
-                    $result .= '<'.$element->getLitteral().'>';
+                if ($element->getLitteral() !== "") {
+                    $result .= '<' . $element->getLitteral() . '>';
                     
-                    if($element->getComment() !== "" && !$withoutComment){
+                    if ($element->getComment() !== "" && ! $withoutComment) {
                         $result .= ' ';
                     }
                 }
                 
-                if($element->getComment() !== "" && !$withoutComment){
-                    $result .= '('.$element->getComment().')';
+                if ($element->getComment() !== "" && ! $withoutComment) {
+                    $result .= '(' . $element->getComment() . ')';
                 }
             }
         }
         
         return $result;
     }
-    
+
     /**
      * Parse line.
      * 
@@ -329,7 +334,7 @@ class BNFFormater
         
         return $this;
     }
-    
+
     /**
      * Extract comments.
      * 
@@ -352,9 +357,9 @@ class BNFFormater
         
         preg_match_all("/(\([^)]+\))/", $string, $commentMatches, PREG_OFFSET_CAPTURE);
         
-        foreach($commentMatches[1] as $match){
+        foreach ($commentMatches[1] as $match) {
             $comments[] .= substr($match[0], 1, strlen($match[0]) - 2);
-        
+            
             $tmpString = substr($string, 0, $match[1] - $cutted);
             $tmpString .= substr($string, $match[1] + strlen($match[0]) - $cutted);
             $string = $tmpString;
@@ -362,9 +367,12 @@ class BNFFormater
         }
         $comment = implode(', ', $comments);
         
-        return array($comment, $string);
+        return array(
+            $comment,
+            $string
+        );
     }
-    
+
     /**
      * Extract litterals.
      * 
@@ -387,16 +395,19 @@ class BNFFormater
         
         preg_match_all("/(<[^>]+>)/", $string, $commentMatches, PREG_OFFSET_CAPTURE);
         
-        foreach($commentMatches[1] as $match){
+        foreach ($commentMatches[1] as $match) {
             $litterals[] .= substr($match[0], 1, strlen($match[0]) - 2);
-        
+            
             $tmpString = substr($string, 0, $match[1] - $cutted);
             $tmpString .= substr($string, $match[1] + strlen($match[0]) - $cutted);
             $string = $tmpString;
             $cutted += strlen($match[0]);
         }
         $litteral = implode(' ', $litterals);
-
-        return array($litteral, $string);
+        
+        return array(
+            $litteral,
+            $string
+        );
     }
 }
