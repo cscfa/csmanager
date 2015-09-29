@@ -130,7 +130,7 @@ class TypedList implements SetInterface
      * @see    \Cscfa\Bundle\ToolboxBundle\BaseInterface\Collection\SetInterface::removeAll()
      * @return void
      */
-    public function removeAll($elements)
+    public function removeAll(array $elements)
     {
         foreach ($elements as $element) {
             $this->remove($element);
@@ -178,7 +178,7 @@ class TypedList implements SetInterface
      * @see    \Cscfa\Bundle\ToolboxBundle\BaseInterface\Collection\SetInterface::addAll()
      * @return void
      */
-    public function addAll($elements)
+    public function addAll(array $elements)
     {
         foreach ($elements as $element) {
             $this->add($element);
@@ -196,7 +196,7 @@ class TypedList implements SetInterface
      * @see    \Cscfa\Bundle\ToolboxBundle\BaseInterface\Collection\SetInterface::containsAll()
      * @return boolean
      */
-    public function containsAll($elements)
+    public function containsAll(array $elements)
     {
         foreach ($elements as $element) {
             if (! $this->contain($element)) {

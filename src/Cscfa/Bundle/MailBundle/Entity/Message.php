@@ -48,9 +48,42 @@ class Message
     /**
      * The message body.
      * 
+     * This property contain all
+     * of the bodies parts.
+     * 
      * @var TypedList
      */
     protected $bodyParts;
+    
+    /**
+     * The message boundary.
+     * 
+     * This property conatin
+     * the message boundary.
+     * 
+     * @var string
+     */
+    protected $boundary;
+    
+    /**
+     * The message subject.
+     * 
+     * This property indicate
+     * the message subject.
+     * 
+     * @var string
+     */
+    protected $subject;
+    
+    /**
+     * The message attachments.
+     * 
+     * This property contain all
+     * of the attachments.
+     * 
+     * @var TypedList
+     */
+    protected $attachments;
     
     /**
      * Message default constructor.
@@ -62,6 +95,9 @@ class Message
     {
         $this->header = new Header();
         $this->bodyParts = new TypedList(new BodyPart());
+        $this->boundary = "-----=".md5(rand());
+        $this->subject = "";
+        $this->attachments = new TypedList(new Attachment());
     }
 
     /**
@@ -100,7 +136,7 @@ class Message
      * the current message body
      * parts.
      *
-     * @return Header
+     * @return TypedList
      */
     public function getBodyParts()
     {
@@ -116,12 +152,106 @@ class Message
      *
      * @param TypedList $bodyParts The new bodyParts TypedList instance.
      * 
-     * @return \Cscfa\Bundle\MailBundle\Entity\Message
+     * @return Message
      */
     protected function setBodyParts(TypedList $bodyParts)
     {
         $this->bodyParts = $bodyParts;
         return $this;
     }
+    
+    /**
+     * Get boundary.
+     *
+     * This method allow to get
+     * the current message 
+     * boundary.
+     * 
+     * @return string
+     */
+    public function getBoundary()
+    {
+        return $this->boundary;
+    }
+ 
+    /**
+     * Set boundary.
+     *
+     * This method allow to set
+     * the current message 
+     * boundary.
+     * 
+     * @param string $boundary The message boundary
+     * 
+     * @return Message
+     */
+    protected function setBoundary($boundary)
+    {
+        $this->boundary = $boundary;
+        return $this;
+    }
+
+    /**
+     * Get subject.
+     *
+     * This method allow to get
+     * the current message 
+     * subject.
+     * 
+     * @return string
+     */
+    public function getSubject()
+    {
+        return $this->subject;
+    }
+
+    /**
+     * Set subject.
+     *
+     * This method allow to set
+     * the current message 
+     * subject.
+     * 
+     * @param string $subject The new message subject.
+     * 
+     * @return Message
+     */
+    public function setSubject($subject)
+    {
+        $this->subject = $subject;
+        return $this;
+    }
+
+    /**
+     * Get attachment.
+     * 
+     * This method return the
+     * set of attachment of
+     * the current message.
+     * 
+     * @return TypedList
+     */
+    public function getAttachments()
+    {
+        return $this->attachments;
+    }
+
+    /**
+     * Set attachment.
+     * 
+     * This method allow to set
+     * the set of attachment of
+     * the current message.
+     * 
+     * @param TypedList $attachments The new TypedList of attachment
+     * 
+     * @return Message
+     */
+    public function setAttachments(TypedList $attachments)
+    {
+        $this->attachments = $attachments;
+        return $this;
+    }
+ 
  
 }
