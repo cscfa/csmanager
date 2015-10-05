@@ -17,7 +17,6 @@
 namespace Cscfa\Bundle\ToolboxBundle\Set;
 
 use Cscfa\Bundle\ToolboxBundle\BaseInterface\Collection\SetInterface;
-use Cscfa\Bundle\ToolboxBundle\Exception\Type\UnexpectedTypeException;
 
 /**
  * ListSet class.

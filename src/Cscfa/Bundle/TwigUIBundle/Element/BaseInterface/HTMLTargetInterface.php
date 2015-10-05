@@ -28,7 +28,7 @@ namespace Cscfa\Bundle\TwigUIBundle\Element\BaseInterface;
  * @license  http://opensource.org/licenses/MIT MIT
  * @link     http://cscfa.fr
  */
-interface HTMLTarget
+interface HTMLTargetInterface
 {
 
     /**

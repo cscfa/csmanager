@@ -19,7 +19,7 @@ namespace Cscfa\Bundle\TwigUIBundle\Element\Advanced\Head;
 use Cscfa\Bundle\TwigUIBundle\Element\Base\Tag;
 use Cscfa\Bundle\ToolboxBundle\Set\TypedList;
 use Cscfa\Bundle\TwigUIBundle\Element\Base\TextTag;
-use Cscfa\Bundle\TwigUIBundle\Element\BaseInterface\HTMLTarget;
+use Cscfa\Bundle\TwigUIBundle\Element\BaseInterface\HTMLTargetInterface;
 use Cscfa\Bundle\TwigUIBundle\Element\Base\TagContainer;
 
 /**
@@ -222,7 +222,7 @@ class Head extends Tag
      * 
      * @return Head
      */
-    public function setBase($href = null, $target = HTMLTarget::BLANK_TARGET)
+    public function setBase($href = null, $target = HTMLTargetInterface::BLANK_TARGET)
     {
         if ($href === null) {
             $this->base = null;

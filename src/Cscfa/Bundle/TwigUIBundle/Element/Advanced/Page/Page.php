@@ -105,31 +105,7 @@ class Page extends Tag
     protected function computeTag()
     {
         $this->doctype->setNestedLevel($this->nestedLevel);
-        $start = $this->doctype->__toString();
         
-        $start .= str_repeat("\t", $this->getNestedLevel()) . "<";
-        $tagName = strtolower($this->tagName);
-        $start .= $tagName;
-        
-        $attrs = $this->computeAttributesToString();
-        if (strlen($attrs) > 0) {
-            $start .= " " . $attrs;
-        }
-        
-        if ($this->isInline()) {
-            return $start . "/>\n";
-        } else {
-            $start .= ">\n";
-            $end = str_repeat("\t", $this->getNestedLevel()) . "</$tagName>\n";
-        }
-        
-        $content = "";
-        foreach ($this->childs->getAll() as $child) {
-            if (is_object($child) && method_exists($child, "__toString")) {
-                $content .= $child->__toString();
-            }
-        }
-        
-        return $start . $content . $end;
+        return $this->doctype->__toString() . parent::computeTag();
     }
 }

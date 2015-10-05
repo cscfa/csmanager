@@ -1,0 +1,4 @@
+core_home_index:
+    path:     /
+    defaults: { _controller: "CscfaCSManagerCoreBundle:CoreHome:index" }
+    methods:  [GET]

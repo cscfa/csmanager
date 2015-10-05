@@ -19,7 +19,6 @@ namespace Cscfa\Bundle\TwigUIBundle\Element\Processor\Style;
 use Cscfa\Bundle\TwigUIBundle\Element\BaseInterface\SubTagedInterface;
 use Cscfa\Bundle\TwigUIBundle\Element\BaseInterface\StylizedInterface;
 use Cscfa\Bundle\TwigUIBundle\Element\Twig\StyleSheet\TwigStylesheet;
-use Cscfa\Bundle\TwigUIBundle\Element\Advanced\Head\Head;
 
 /**
  * StyleProcessor class.

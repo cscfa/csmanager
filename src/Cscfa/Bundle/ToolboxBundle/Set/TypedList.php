@@ -16,7 +16,7 @@
  */
 namespace Cscfa\Bundle\ToolboxBundle\Set;
 
-use Cscfa\Bundle\ToolboxBundle\BaseInterface\Collection\SetInterface;
+use Cscfa\Bundle\ToolboxBundle\Set\ListSet;
 use Cscfa\Bundle\ToolboxBundle\Exception\Type\UnexpectedTypeException;
 
 /**
@@ -32,7 +32,7 @@ use Cscfa\Bundle\ToolboxBundle\Exception\Type\UnexpectedTypeException;
  * @license  http://opensource.org/licenses/MIT MIT
  * @link     http://cscfa.fr
  */
-class TypedList implements SetInterface
+class TypedList extends ListSet
 {
 
     /**
@@ -44,17 +44,6 @@ class TypedList implements SetInterface
      * @var string
      */
     protected $type;
-
-    /**
-     * The set container.
-     * 
-     * This property is an
-     * array that contain
-     * the values.
-     * 
-     * @var array
-     */
-    protected $container;
 
     /**
      * Default constructor.
@@ -120,94 +109,6 @@ class TypedList implements SetInterface
     }
 
     /**
-     * Remove all
-     * 
-     * Remove all contained elements
-     * by a set from the current set.
-     * 
-     * @param array $elements The elements list to remove
-     * 
-     * @see    \Cscfa\Bundle\ToolboxBundle\BaseInterface\Collection\SetInterface::removeAll()
-     * @return void
-     */
-    public function removeAll(array $elements)
-    {
-        foreach ($elements as $element) {
-            $this->remove($element);
-        }
-    }
-
-    /**
-     * Contain
-     * 
-     * Check if the set contain
-     * a specified element.
-     * 
-     * @param mixed $element The element to check
-     * 
-     * @see    \Cscfa\Bundle\ToolboxBundle\BaseInterface\Collection\SetInterface::contain()
-     * @return boolean
-     */
-    public function contain($element)
-    {
-        return in_array($element, $this->container);
-    }
-
-    /**
-     * Get all
-     * 
-     * Get all of the set
-     * contained elements.
-     * 
-     * @see    \Cscfa\Bundle\ToolboxBundle\BaseInterface\Collection\SetInterface::getAll()
-     * @return array
-     */
-    public function getAll()
-    {
-        return $this->container;
-    }
-
-    /**
-     * Add all
-     * 
-     * add an array of elements 
-     * to the set.
-     * 
-     * @param array $elements The array of elements to add
-     * 
-     * @see    \Cscfa\Bundle\ToolboxBundle\BaseInterface\Collection\SetInterface::addAll()
-     * @return void
-     */
-    public function addAll(array $elements)
-    {
-        foreach ($elements as $element) {
-            $this->add($element);
-        }
-    }
-
-    /**
-     * Contain all
-     * 
-     * Check if the set contain all
-     * of the elements of an other set.
-     * 
-     * @param array $elements The element list to check
-     * 
-     * @see    \Cscfa\Bundle\ToolboxBundle\BaseInterface\Collection\SetInterface::containsAll()
-     * @return boolean
-     */
-    public function containsAll(array $elements)
-    {
-        foreach ($elements as $element) {
-            if (! $this->contain($element)) {
-                return false;
-            }
-        }
-        
-        return true;
-    }
-
-    /**
      * Get
      * 
      * Get an element from
@@ -228,34 +129,6 @@ class TypedList implements SetInterface
         } else {
             return null;
         }
-    }
-
-    /**
-     * Clear
-     * 
-     * Remove all elements from
-     * this set.
-     * 
-     * @see    \Cscfa\Bundle\ToolboxBundle\BaseInterface\Collection\SetInterface::clear()
-     * @return void
-     */
-    public function clear()
-    {
-        $this->container = array();
-    }
-
-    /**
-     * Is empty
-     * 
-     * Check if the set is
-     * empty.
-     * 
-     * @see    \Cscfa\Bundle\ToolboxBundle\BaseInterface\Collection\SetInterface::isEmpty()
-     * @return boolean
-     */
-    public function isEmpty()
-    {
-        return empty($this->container);
     }
 
     /**
