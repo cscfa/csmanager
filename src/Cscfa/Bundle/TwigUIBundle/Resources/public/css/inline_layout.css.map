@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": ";;;;;;;;AAmBA,sBAAsB;EAClB,KAAK,ECXkB,IAAI;EDa9B,oCAAwD;IAHzD,sBAAsB;MAIpB,KAAK,EAAE,IAAI;;AAYb,sBAAsB;EAClB,KAAK,EC3BkB,IAAI",
+"sources": ["../../scss/inline_layout.scss","../../scss/base/variables.scss"],
+"names": [],
+"file": "inline_layout.css"
+}

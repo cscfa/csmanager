@@ -141,21 +141,33 @@ class SwiftMailerFacade implements MailerInterface
         
         $swiftMessage = \Swift_Message::newInstance();
         
-        $this->parseOriginator($swiftMessage, $msg->getHeader()
-            ->getOriginator());
-        $this->parseReceiver($swiftMessage, $msg->getHeader()
-            ->getReceiver());
-        $this->parseSpecificator($swiftMessage, $msg->getHeader()
-            ->getSpecificator());
-        $this->parseSyntactic($swiftMessage, $msg->getHeader()
-            ->getSyntactic());
+        $this->parseOriginator(
+            $swiftMessage, 
+            $msg->getHeader()
+                ->getOriginator()
+        );
+        $this->parseReceiver(
+            $swiftMessage, 
+            $msg->getHeader()
+                ->getReceiver()
+        );
+        $this->parseSpecificator(
+            $swiftMessage, 
+            $msg->getHeader()
+                ->getSpecificator()
+        );
+        $this->parseSyntactic(
+            $swiftMessage, 
+            $msg->getHeader()
+                ->getSyntactic()
+        );
         
-        if ($msg->getHeader()
-            ->getEncoder()
-            ->getEncoding() !== null) {
-            $swiftMessage->setEncoder($msg->getHeader()
-                ->getEncoder()
-                ->getEncoding());
+        if ($msg->getHeader()->getEncoder()->getEncoding() !== null) {
+            $swiftMessage->setEncoder(
+                $msg->getHeader()
+                    ->getEncoder()
+                    ->getEncoding()
+            );
         }
         
         $swiftMessage->setBoundary($msg->getBoundary());
@@ -164,8 +176,11 @@ class SwiftMailerFacade implements MailerInterface
         $bodies = $msg->getBodyParts()->getAll();
         foreach ($bodies as $bodyPart) {
             if ($bodyPart instanceof BodyPart) {
-                $swiftMessage->addPart($bodyPart->getContent(), $bodyPart->getSyntactic()
-                    ->getContentType());
+                $swiftMessage->addPart(
+                    $bodyPart->getContent(), 
+                    $bodyPart->getSyntactic()
+                        ->getContentType()
+                );
             }
         }
         
@@ -174,10 +189,14 @@ class SwiftMailerFacade implements MailerInterface
             if ($attachment instanceof Attachment) {
                 
                 $att = \Swift_Attachment::newInstance();
-                $att->setDisposition($attachment->getSyntactic()
-                    ->getContentDisposition());
-                $att->setContentType($attachment->getSyntactic()
-                    ->getContentType());
+                $att->setDisposition(
+                    $attachment->getSyntactic()
+                        ->getContentDisposition()
+                );
+                $att->setContentType(
+                    $attachment->getSyntactic()
+                        ->getContentType()
+                );
                 $att->setBody($attachment->getContent());
                 $att->setFilename($attachment->getFileName());
                 

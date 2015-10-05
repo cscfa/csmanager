@@ -29,6 +29,18 @@
           <file>../src/Cscfa/Bundle/SecurityBundle/Tests/Group/GroupManagerTest.php</file>
           <file>../src/Cscfa/Bundle/SecurityBundle/Tests/Group/GroupProviderTest.php</file>
         </testsuite>
+        <testsuite name="cscfa toolbox bundle tests">
+          <file>../src/Cscfa/Bundle/ToolboxBundle/Tests/Builder/Command/CommandAskBuilderTest.php</file>
+          <file>../src/Cscfa/Bundle/ToolboxBundle/Tests/Builder/Command/CommandTableBuilderTest.php</file>
+          <file>../src/Cscfa/Bundle/ToolboxBundle/Tests/Converter/Command/CommandTypeConverterTest.php</file>
+          <file>../src/Cscfa/Bundle/ToolboxBundle/Tests/Exception/Type/UnexpectedTypeExceptionTest.php</file>
+          <file>../src/Cscfa/Bundle/ToolboxBundle/Tests/Factory/Command/ColoredStringFactoryTest.php</file>
+          <file>../src/Cscfa/Bundle/ToolboxBundle/Tests/Search/DirectoryTest.php</file>
+          <file>../src/Cscfa/Bundle/ToolboxBundle/Tests/Set/SetTest.php</file>
+        </testsuite>
+        <testsuite name="cscfa TwigUi bundle tests">
+          <file>../src/Cscfa/Bundle/TwigUIBundle/Test/Base/TagTest.php</file>
+        </testsuite>
     </testsuites>
 
     <!--

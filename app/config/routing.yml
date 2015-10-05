@@ -19,10 +19,10 @@
 #    resource: "@CscfaCSManagerDashboardBundle/Resources/config/routing.yml"
 #    prefix:   /
 
-#cscfa_cs_manager_core:
-#    resource: "@CscfaCSManagerCoreBundle/Resources/config/routing.yml"
-#    prefix:   /
+cscfa_cs_core_routing:
+    resource: "@CscfaCSManagerCoreBundle/Resources/config/routing.yml"
+    prefix:   /
     
-cscfa_core:
+cscfa_cs_security_routing:
     resource: "@CscfaSecurityBundle/Resources/config/routing.yml"
     prefix:   /

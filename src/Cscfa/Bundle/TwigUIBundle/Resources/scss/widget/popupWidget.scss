@@ -1,0 +1,70 @@
+/*
+ * This file is a part of CSCFA TwigUi project.
+ * 
+ * @category CSS
+ * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
+ * @license  http://opensource.org/licenses/MIT MIT
+ * @link     http://cscfa.fr
+ */
+ 
+@import '../base/variables.scss';
+@import '../base/colors.scss';
+
+.popup_widget_base_hidden{
+	display:none;
+}
+
+.popup_widget_base{
+	
+	border: $popup_widget_border;
+    border-radius: $popup_widget_border_radius;
+    padding: 0;
+    width: $popup_widget_width;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+	
+	.popup_widget_titleContainer{
+		background-color: $popup_widget_title_background_color;
+	    border-bottom-left-radius: 0;
+	    border-bottom-right-radius: 0;
+	    border-top-left-radius: $popup_widget_border_radius - 1px;
+	    border-top-right-radius: $popup_widget_border_radius - 1px;
+	    margin: 0;
+	    padding: $popup_widget_title_padding;
+	    
+		.popup_widget_title{
+			color: $popup_widget_title_text_color;
+			font-size: $popup_widget_title_text_size;
+			float: left;
+    		margin: 0;
+		}
+		
+		.popup_widget_close{
+			float: right;
+			padding: 0px;
+			border-radius: $popup_widget_close_radius;
+		    bottom: $popup_widget_close_position_bottom;
+		    left: $popup_widget_close_position_left;
+		    position: relative;
+		    background-color: $popup_widget_close_background-color;
+		    border: $popup_widget_close_border;
+		    width: $popup_widget_close_width;
+		    height: $popup_widget_close_height;
+		    background-image: url($popup_widget_close_icon);
+		    background-position: center;
+		    
+		    &:active{
+		    	border: $popup_widget_close_border_active;
+		    }
+		}
+		
+		.popup_widget_title_clear{
+			clear: both;
+		}
+	}
+	
+	.popup_widget_contentContainer{
+	}
+}

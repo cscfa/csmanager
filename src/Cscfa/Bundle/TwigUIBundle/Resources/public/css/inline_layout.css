@@ -1,0 +1,18 @@
+/*
+ * This file is a part of CSCFA TwigUi project.
+ * 
+ * @category CSS
+ * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
+ * @license  http://opensource.org/licenses/MIT MIT
+ * @link     http://cscfa.fr
+ */
+.inline_layout_element {
+  float: left; }
+  @media screen and (max-width: 800px) {
+    .inline_layout_element {
+      float: none; } }
+
+.inline_layout_endLine {
+  clear: left; }
+
+/*# sourceMappingURL=inline_layout.css.map */

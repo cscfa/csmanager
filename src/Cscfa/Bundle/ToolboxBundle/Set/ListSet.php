@@ -20,11 +20,10 @@ use Cscfa\Bundle\ToolboxBundle\BaseInterface\Collection\SetInterface;
 use Cscfa\Bundle\ToolboxBundle\Exception\Type\UnexpectedTypeException;
 
 /**
- * TypedList class.
+ * ListSet class.
  *
- * The TypedList class is used to create 
- * a set collection constrained to a 
- * specifical type.
+ * The ListSet class is used to create 
+ * a set collection.
  *
  * @category Set
  * @package  CscfaToolboxBundle
@@ -32,19 +31,8 @@ use Cscfa\Bundle\ToolboxBundle\Exception\Type\UnexpectedTypeException;
  * @license  http://opensource.org/licenses/MIT MIT
  * @link     http://cscfa.fr
  */
-class TypedList implements SetInterface
+class ListSet implements SetInterface
 {
-
-    /**
-     * The constraint type.
-     * 
-     * This property inform
-     * on the type constraint.
-     * 
-     * @var string
-     */
-    protected $type;
-
     /**
      * The set container.
      * 
@@ -59,47 +47,12 @@ class TypedList implements SetInterface
     /**
      * Default constructor.
      * 
-     * This constructor constraint the type
-     * of the set values by passing a string
-     * or an object as parameter.
-     * 
-     * @param mixed $type the supported type constraint.
-     * 
-     * @throws UnexpectedTypeException if the given type is not a string value or an object
+     * This constructor initialize the
+     * properties.
      */
-    public function __construct($type)
+    public function __construct()
     {
-        if (is_string($type)) {
-            $this->type = $type;
-        } else if (is_object($type)) {
-            $this->type = get_class($type);
-        } else {
-            throw new UnexpectedTypeException("TypedList need an object as type.", 500);
-        }
-        
         $this->container = array();
-    }
-
-    /**
-     * Test if support class.
-     * 
-     * This method check if a given
-     * class is currently supported
-     * by the set.
-     * 
-     * @param mixed $class The class to test
-     * 
-     * @return boolean
-     */
-    protected function supportClass($class)
-    {
-        if (is_string($class) && $class === $this->type) {
-            return true;
-        } else if (is_object($class) && get_class($class) === $this->type) {
-            return true;
-        }
-        
-        return false;
     }
 
     /**
@@ -114,9 +67,7 @@ class TypedList implements SetInterface
      */
     public function add($element)
     {
-        if ($this->supportClass($element)) {
-            $this->container[] = $element;
-        }
+        $this->container[] = $element;
     }
 
     /**
@@ -222,7 +173,7 @@ class TypedList implements SetInterface
     {
         if (isset($this->container[$element])) {
             return $this->container[$element];
-        } else if (!is_object($element) && in_array($element, $this->container)) {
+        } else if (in_array($element, $this->container)) {
             $key = array_search($element, $this->container);
             return $this->container[$key];
         } else {
@@ -271,14 +222,14 @@ class TypedList implements SetInterface
      */
     public function remove($element)
     {
-        if (in_array($element, $this->container)) {
+        if (isset($this->container[$element])) {
+            $element = $this->container[$element];
+            unset($this->container[$element]);
+            return $element;
+        } else if (in_array($element, $this->container)) {
             $key = array_search($element, $this->container);
             $element = $this->container[$key];
             unset($this->container[$key]);
-            return $element;
-        } else if (!is_object($element) && isset($this->container[$element])) {
-            $element = $this->container[$element];
-            unset($this->container[$element]);
             return $element;
         } else {
             return null;
