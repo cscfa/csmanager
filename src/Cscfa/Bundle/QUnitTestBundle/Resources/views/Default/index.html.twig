@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>QUnit test</title>
+    {% stylesheets '@CscfaQUnitTestBundle/Resources/public/css/*' filter='cssrewrite' %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+    <link rel="stylesheet" href="//code.jquery.com/qunit/qunit-1.19.0.css">
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script type="text/javascript" src="//code.jquery.com/qunit/qunit-1.19.0.js"></script>
+</head>
+<body>
+    <div id="loader">
+        <div id="headImg">
+            {% image '@CscfaQUnitTestBundle/Resources/public/image/ajax-loader_bar.gif' %}
+                <img src="{{ asset_url }}" alt="loading" id="loadImg" />
+            {% endimage %}
+            {% image '@CscfaQUnitTestBundle/Resources/public/image/error.png' %}
+                <img src="{{ asset_url }}" alt="error" class="imgDN" id="errImg" />
+            {% endimage %}
+        </div>
+        
+        {% image '@CscfaQUnitTestBundle/Resources/public/image/ajax-loader_circle.gif' %}
+            {% set alCircle = asset_url %}
+        {% endimage %}
+        {% image '@CscfaQUnitTestBundle/Resources/public/image/valid.png' %}
+            {% set valid = asset_url %}
+        {% endimage %}
+        {% image '@CscfaQUnitTestBundle/Resources/public/image/unvalid.png' %}
+            {% set unvalid = asset_url %}
+        {% endimage %}
+        
+        {% import 'CscfaQUnitTestBundle:macro:macro.html.twig' as info %}
+        {{ info.info("Looking for src tests", "src", alCircle, valid, unvalid) }}
+        {{ info.info("Looking for vendor tests", "vendor", alCircle, valid, unvalid, 1) }}
+        {{ info.info("Retreiving test scripts", "script", alCircle, valid, unvalid, 1) }}
+    </div>
+    <div id="qunit" class="qunitDiv"></div>
+    <div id="qunit-fixture" class="qunitDiv"></div>
+    <script id="script"></script>
+    {% javascripts '@CscfaQUnitTestBundle/Resources/public/js/*' %}
+        <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+</body>
+</html>

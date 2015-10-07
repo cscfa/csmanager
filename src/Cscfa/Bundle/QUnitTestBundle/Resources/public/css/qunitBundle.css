@@ -1,0 +1,26 @@
+/*
+ * This file is a part of CSCFA QUnit test project.
+ * 
+ * @category CSS
+ * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
+ * @license  http://opensource.org/licenses/MIT MIT
+ * @link     http://cscfa.fr
+ */
+
+@CHARSET "UTF-8";
+
+.qunitDiv, .imgDN, .infoParaDN, .loaderDN{
+    display: none;
+}
+#loader{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+.infoPara{
+    text-align: center;
+}
+#headImg{
+    text-align: center;
+}

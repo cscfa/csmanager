@@ -104,6 +104,54 @@ class DirectorySearchTool
     }
 
     /**
+     * Search directories.
+     * 
+     * This method allow to search each 
+     * directories matching a pattern into the
+     * current directory or recursively from
+     * the current directory.
+     * 
+     * @param string $directoriesPattern The complete path pattern
+     * @param string $recursive          The recursive state
+     * @param string $asRoot             The base path to remove from the filename
+     * 
+     * @throws UnexpectedTypeException
+     * @return array
+     */
+    public function searchDirectories($directoriesPattern, $recursive = false, $asRoot = "")
+    {
+        if ($asRoot !== "") {
+            $asRoot = realpath($asRoot) . '/';
+        }
+        
+        try {
+            $scanResult = $this->scanDirectory($this->directory, $recursive);
+        } catch (UnexpectedTypeException $e) {
+            throw new UnexpectedTypeException("Type error", 500, $e);
+        }
+        
+        $directoriesMatches = array();
+        
+        if (! $scanResult->hasDirectory()) {
+            return array();
+        } else {
+            foreach ($scanResult->getDirectories() as $fileSystem) {
+                if ($fileSystem instanceof FileSystemElement) {
+                    if (preg_match($directoriesPattern, $fileSystem->getEmplacement())) {
+                        $completePath = realpath($fileSystem->getEmplacement());
+                        $directoriesMatches[] = substr($completePath, strlen($asRoot));
+                    }
+                } else {
+                    $fileSystemElementClass = "Cscfa\Bundle\ToolboxBundle\Search\FileSystem\FileSystemElement";
+                    throw new UnexpectedTypeException(sprintf("%s class excpected but get %s class", $fileSystemElementClass, get_class($fileSystem)), 500);
+                }
+            }
+        }
+        
+        return $directoriesMatches;
+    }
+
+    /**
      * Search filename.
      * 
      * This method allow to search each 
@@ -177,7 +225,9 @@ class DirectorySearchTool
         if ($recursive && $scan->hasDirectory()) {
             foreach ($scan->getDirectories() as $inDir) {
                 if ($inDir instanceof FileSystemElement) {
-                    $scan->merge($this->scanDirectory(dir($inDir->getEmplacement()), true));
+                    $dir = dir($inDir->getEmplacement());
+                    $scan->merge($this->scanDirectory($dir, true));
+                    $dir->close();
                 } else {
                     $fileSystemElementClass = "Cscfa\Bundle\ToolboxBundle\Search\FileSystem\FileSystemElement";
                     throw new UnexpectedTypeException(sprintf("%s class excpected but get %s class", $fileSystemElementClass, get_class($inDir)), 500);
@@ -212,5 +262,33 @@ class DirectorySearchTool
         }
         
         return $elements;
+    }
+
+    /**
+     * Close.
+     * 
+     * This method close the
+     * current instance directory.
+     * 
+     * @return void
+     */
+    public function close()
+    {
+        if ($this->directory !== null) {
+            $this->directory->close();
+        }
+    }
+
+    /**
+     * Default desctructor.
+     * 
+     * This destructor remove
+     * the properties.
+     * 
+     * @return void
+     */
+    public function __destruct()
+    {
+        $this->close();
     }
 }

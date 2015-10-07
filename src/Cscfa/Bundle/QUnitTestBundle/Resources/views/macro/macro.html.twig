@@ -1,0 +1,13 @@
+{% macro info(msg, type, alCircle, valid, unvalid, dn) %}
+    {% if dn %}
+        {% set class = "infoPara infoParaDN" %}
+    {% else %}
+        {% set class = "infoPara" %}
+    {% endif %}
+    <p id="{{ type }}TestSearch" class="{{ class }}">
+        {{ msg }} : 
+        <img src="{{ alCircle }}" alt="loading" id="{{ type }}LoadingImg" />
+        <img src="{{ valid }}" alt="valid"  id="{{ type }}ValidImg" class="imgDN"/>
+        <img src="{{ unvalid }}" alt="valid"  id="{{ type }}UnvalidImg" class="imgDN"/>
+    </p>
+{% endmacro %}

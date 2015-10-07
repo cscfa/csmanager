@@ -202,5 +202,13 @@ class DirectoryTest extends WebTestCase
         $this->assertTrue(in_array("usageFile1.txt", $sf));
         $this->assertTrue(in_array("usageFile2.txt", $sf));
         $this->assertTrue(in_array("usage2/usageFile21.txt", $sf));
+        
+        $sd = $dst->searchDirectories("/usage/", true);
+        $this->assertTrue(!empty($sd));
+        $this->assertTrue(in_array(__DIR__."/usage/usage2", $sd));
+        
+        $sd = $dst->searchDirectories("/usage\/usage/", true);
+        $this->assertTrue(!empty($sd));
+        $this->assertTrue(in_array(__DIR__."/usage/usage2", $sd));
     }
 }

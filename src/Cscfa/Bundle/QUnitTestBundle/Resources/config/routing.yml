@@ -1,0 +1,14 @@
+cscfa_q_unit_test_homepage:
+    path:     /qunit
+    defaults: { _controller: "CscfaQUnitTestBundle:Default:index" }
+    methods:  [GET]
+cscfa_q_unit_test_running:
+    path:     /qunit/test
+    defaults: { _controller: "CscfaQUnitTestBundle:Default:test" }
+    methods:  [POST]
+cscfa_q_unit_search_dir:
+    path:     /qunit/search/{place}
+    defaults: { _controller: "CscfaQUnitTestBundle:Default:searchDir" }
+    methods:  [GET]
+    requirements:
+        place:  src|vendor
