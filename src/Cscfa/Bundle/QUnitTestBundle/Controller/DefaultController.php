@@ -95,53 +95,23 @@ class DefaultController extends Controller
         
         $qunitDirectories = $request->request->get("paths");
         
-        $files = array();
+        $files = $requires = $imports = array();
         $scripts = "";
-        $requires = array();
-        $imports = array();
         
         if ($qunitDirectories !== null) {
             foreach ($qunitDirectories as $qunitDirectory) {
                 $directorySearch->setDir($qunitDirectory);
-                
                 $dirName = str_replace($basePath, "", $qunitDirectory);
-                
                 $scripts .= "QUnit.module( \"$dirName\" );";
                 $files = $directorySearch->searchFilename("/\.js/", true);
                 
                 foreach ($files as $file) {
-                    $fileName = str_replace($qunitDirectory . "/", "", $file);
-                    
-                    $content = file_get_contents($file);
-                    $matches = array();
-                    if (preg_match_all("/\/\/@require:(.+)\\n/", $content, $matches)) {
-                        foreach ($matches[1] as $match) {
-                            $content = str_replace("//@require:" . $match, "", $content);
-                            
-                            $path = substr($file, 0, strrpos($file, "/") + 1);
-                            $requirePath = $path . trim($match);
-                            $requires[] = $requirePath;
-                        }
-                    }
-                    if (preg_match_all("/\/\/@import:(.+)\\n/", $content, $matches)) {
-                        foreach ($matches[1] as $match) {
-                            $content = str_replace("//@import:" . $match, "", $content);
-                            
-                            $match = trim($match);
-                            $imports[] = $match;
-                        }
-                    }
-                    
-                    $scripts .= "QUnit.test( \"$fileName\", function( assert ) {\n";
-                    $scripts .= $content;
-                    $scripts .= "});\n";
+                    $this->processFile($file, $qunitDirectory, $requires, $imports, $scripts);
                 }
             }
         }
         
-        $importSkip = array(
-            "https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"
-        );
+        $importSkip = array("https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js");
         
         return $this->render(
             "CscfaQUnitTestBundle:Default:test.html.twig", 
@@ -151,6 +121,50 @@ class DefaultController extends Controller
                 "testScript" => $scripts
             )
         );
+    }
+
+    /**
+     * Process file.
+     * 
+     * This method process a file
+     * and extract resuire script,
+     * import script and text script.
+     * 
+     * @param string $file           The file emplacement to process
+     * @param string $qunitDirectory The base directory emplacement
+     * @param array  $requires       The require script emplacements array
+     * @param array  $imports        The import script emplacements array
+     * @param string $scripts        The text script
+     * 
+     * @return void
+     */
+    protected function processFile($file, $qunitDirectory, &$requires, &$imports, &$scripts)
+    {
+        $fileName = str_replace($qunitDirectory . "/", "", $file);
+        
+        $content = file_get_contents($file);
+        $matches = array();
+        if (preg_match_all("/\/\/@require:(.+)\\n/", $content, $matches)) {
+            foreach ($matches[1] as $match) {
+                $content = str_replace("//@require:" . $match, "", $content);
+                
+                $path = substr($file, 0, strrpos($file, "/") + 1);
+                $requirePath = $path . trim($match);
+                $requires[] = $requirePath;
+            }
+        }
+        if (preg_match_all("/\/\/@import:(.+)\\n/", $content, $matches)) {
+            foreach ($matches[1] as $match) {
+                $content = str_replace("//@import:" . $match, "", $content);
+                
+                $match = trim($match);
+                $imports[] = $match;
+            }
+        }
+        
+        $scripts .= "QUnit.test( \"$fileName\", function( assert ) {\n";
+        $scripts .= $content;
+        $scripts .= "});\n";
     }
 
     /**
@@ -174,8 +188,7 @@ class DefaultController extends Controller
         foreach (array_unique($files) as $file) {
             try {
                 $result .= file_get_contents($file);
-            } catch (Exception $e) {
-            }
+            } catch (\Exception $e) {}
         }
         
         return $result;

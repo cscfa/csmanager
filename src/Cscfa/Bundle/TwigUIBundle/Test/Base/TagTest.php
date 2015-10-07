@@ -18,15 +18,6 @@ namespace Cscfa\Bundle\TwigUIBundle\Test\Base;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Cscfa\Bundle\TwigUIBundle\Element\Base\Tag;
-use Cscfa\Bundle\TwigUIBundle\Element\Base\TextTag;
-use Cscfa\Bundle\TwigUIBundle\Element\Singleton\IdGenerator;
-use Cscfa\Bundle\TwigUIBundle\Element\Advanced\Page\Page;
-use Cscfa\Bundle\TwigUIBundle\Element\Advanced\Head\Head;
-use Cscfa\Bundle\TwigUIBundle\Element\BaseInterface\HTMLTargetInterface;
-use Cscfa\Bundle\TwigUIBundle\Element\Advanced\Layout\InlineLayout;
-use Cscfa\Bundle\TwigUIBundle\Element\Twig\StyleSheet\TwigStylesheet;
-use Cscfa\Bundle\TwigUIBundle\Element\Processor\Style\StyleProcessor;
-use Cscfa\Bundle\TwigUIBundle\Element\Advanced\Widget\PopupWidget;
 use Cscfa\Bundle\ToolboxBundle\Set\HackSet;
 use Cscfa\Bundle\ToolboxBundle\Set\ListSet;
 use Cscfa\Bundle\TwigUIBundle\Element\Base\Attr\MultipleAttr;
