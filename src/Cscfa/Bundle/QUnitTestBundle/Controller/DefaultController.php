@@ -113,14 +113,11 @@ class DefaultController extends Controller
         
         $importSkip = array("https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js");
         
-        return $this->render(
-            "CscfaQUnitTestBundle:Default:test.html.twig", 
-            array(
-                "scriptImport" => $this->getFileContent($imports, $importSkip),
-                "scriptRequire" => $this->getFileContent($requires),
-                "testScript" => $scripts
-            )
-        );
+        $response = $this->getFileContent($imports, $importSkip);
+        $response .= $this->getFileContent($requires);
+        $response .= $scripts;
+        $response = new Response($response);
+        return $response;
     }
 
     /**
