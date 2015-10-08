@@ -90,10 +90,25 @@ class DefaultController extends Controller
      */
     public function testAction(Request $request)
     {
+        $qunitDirectories = $request->request->get("paths");
+        return $this->getTestScript($qunitDirectories);
+    }
+
+    /**
+     * Get test script.
+     * 
+     * This method return the
+     * test script from the
+     * Resources/QUnit directories.
+     * 
+     * @param array $qunitDirectories The Resources/QUnit directories array
+     * 
+     * @return Response
+     */
+    protected function getTestScript($qunitDirectories)
+    {
         $basePath = realpath($this->get('kernel')->getRootDir() . "/../");
         $directorySearch = new DirectorySearchTool();
-        
-        $qunitDirectories = $request->request->get("paths");
         
         $files = $requires = $imports = array();
         $scripts = "";
@@ -111,12 +126,15 @@ class DefaultController extends Controller
             }
         }
         
-        $importSkip = array("https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js");
+        $importSkip = array(
+            "https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"
+        );
         
         $response = $this->getFileContent($imports, $importSkip);
         $response .= $this->getFileContent($requires);
         $response .= $scripts;
         $response = new Response($response);
+        
         return $response;
     }
 
