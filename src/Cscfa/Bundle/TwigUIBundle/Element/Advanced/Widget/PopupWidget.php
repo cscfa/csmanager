@@ -17,10 +17,8 @@
 namespace Cscfa\Bundle\TwigUIBundle\Element\Advanced\Widget;
 
 use Cscfa\Bundle\TwigUIBundle\Element\Advanced\Widget\Widget;
-use Cscfa\Bundle\TwigUIBundle\Element\BaseInterface\StylizedInterface;
 use Cscfa\Bundle\TwigUIBundle\Element\Base\Tag;
 use Cscfa\Bundle\TwigUIBundle\Element\Base\TextTag;
-use Cscfa\Bundle\TwigUIBundle\Element\BaseInterface\ScriptedInterface;
 use Cscfa\Bundle\ToolboxBundle\Tool\Cache\CacheTool;
 
 /**
