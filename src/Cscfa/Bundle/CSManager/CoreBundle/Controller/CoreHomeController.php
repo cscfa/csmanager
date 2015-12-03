@@ -18,6 +18,11 @@ namespace Cscfa\Bundle\CSManager\CoreBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Cscfa\Bundle\ToolboxBundle\Tool\Cache\CacheTool;
+use Cscfa\Bundle\TwigUIBundle\Element\Advanced\Widget\PopupWidget;
+use Cscfa\Bundle\TwigUIBundle\Element\Base\TextTag;
+use Cscfa\Bundle\TwigUIBundle\Element\Processor\Style\StyleProcessor;
+use Cscfa\Bundle\TwigUIBundle\Element\Processor\Script\ScriptProcessor;
 
 /**
  * CoreHomeController class.

@@ -1,0 +1,4 @@
+services:
+    cs.toolbox.cacheTool:
+        class: Cscfa\Bundle\ToolboxBundle\Tool\Cache\CacheTool
+        arguments: ["%kernel.root_dir%", "%kernel.environment%"]

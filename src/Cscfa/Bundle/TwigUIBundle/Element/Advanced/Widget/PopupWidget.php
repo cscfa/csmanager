@@ -20,6 +20,8 @@ use Cscfa\Bundle\TwigUIBundle\Element\Advanced\Widget\Widget;
 use Cscfa\Bundle\TwigUIBundle\Element\BaseInterface\StylizedInterface;
 use Cscfa\Bundle\TwigUIBundle\Element\Base\Tag;
 use Cscfa\Bundle\TwigUIBundle\Element\Base\TextTag;
+use Cscfa\Bundle\TwigUIBundle\Element\BaseInterface\ScriptedInterface;
+use Cscfa\Bundle\ToolboxBundle\Tool\Cache\CacheTool;
 
 /**
  * PopupWidget class.
@@ -34,7 +36,7 @@ use Cscfa\Bundle\TwigUIBundle\Element\Base\TextTag;
  * @license  http://opensource.org/licenses/MIT MIT
  * @link     http://cscfa.fr
  */
-class PopupWidget extends Widget implements StylizedInterface
+class PopupWidget extends Widget
 {
 
     /**
@@ -79,9 +81,9 @@ class PopupWidget extends Widget implements StylizedInterface
      * @param boolean $closeable The widget closeable state. (true as default)
      * @param boolean $displayed The widget default display state. (false as default)
      */
-    public function __construct($title = "", $closeable = true, $displayed = false)
+    public function __construct(CacheTool $cacheTool, $title = "", $closeable = true, $displayed = false)
     {
-        parent::__construct();
+        parent::__construct($cacheTool);
         
         $this->title = $title;
         $this->closeable = $closeable;
@@ -222,7 +224,7 @@ class PopupWidget extends Widget implements StylizedInterface
         $content->getClass()->add("popup_widget_contentContainer");
         
         foreach ($this->childs->getAll() as $child) {
-            if ($child instanceof Tag || $child instanceof TextTag) {
+            if (is_object($child) && method_exists($child, "__toString")) {
                 $content->addChild($child);
             }
         }
@@ -258,5 +260,105 @@ class PopupWidget extends Widget implements StylizedInterface
         return array(
             "@CscfaTwigUIBundle/Resources/public/css/widget/popupWidget.css"
         );
+    }
+
+    /**
+     * Has script link.
+     *
+     * This method indicate the
+     * script link existance
+     * of the current instance.
+     *
+     * @return boolean
+     */
+    public function hasScriptLink()
+    {
+        return true;
+    }
+
+    /**
+     * Get script link.
+     *
+     * This method return all
+     * of the existings script
+     * links of the current
+     * instance.
+     *
+     * @return array
+     */
+    public function getScriptLink()
+    {
+        return array(
+            "@CscfaTwigUIBundle/Resources/public/js/widget/popupWidget.js"
+        );
+    }
+
+    /**
+     * Get script link count.
+     *
+     * This method return the
+     * current instance script
+     * links counts.
+     *
+     * @return integer
+     */
+    public function getScriptLinkCount()
+    {
+        return 0;
+    }
+
+    /**
+     * Get custom script.
+     *
+     * This method indicate the
+     * existance of customized
+     * script.
+     *
+     * @return boolean
+     */
+    public function hasCustomScript()
+    {
+        return true;
+    }
+
+    /**
+     * Get custom script.
+     *
+     * This method return the
+     * current instance custom
+     * script.
+     *
+     * @return string
+     */
+    public function getCustomScript()
+    {
+        $varName = $this->getCache("popup_widget_varname");
+        if($varName === null){
+            $varNum = 0;
+            do{
+                $varNum ++;
+                $varName = "popupWidget".dechex($varNum);
+            }while($this->getCacheFile()->hasValue($varName));
+            
+            $this->setCache("popup_widget_varname", $varName);
+        }
+        
+        $script = "var $varName = new PopupWidget();\n$varName.process();\n";
+        
+        return array($script);
+    }
+
+    /**
+     * Get custom script length.
+     *
+     * This method return the
+     * current instance custom
+     * script length.
+     *
+     * @return integer
+     */
+    public function getCustomScriptLength()
+    {
+        return strlen($this->getCustomScript());
     }
 }
