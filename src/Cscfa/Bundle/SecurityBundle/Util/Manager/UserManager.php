@@ -22,6 +22,7 @@ use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Cscfa\Bundle\SecurityBundle\Entity\User;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * UserManager class.
@@ -92,27 +93,28 @@ class UserManager
      * @var Symfony\Component\Security\Core\SecurityContextInterface
      */
     protected $security;
+    
+    /**
+     * The current service container
+     * 
+     * This container is used to get
+     * other services from the container.
+     * 
+     * @var ContainerInterface
+     */
+    protected $container;
 
     /**
      * The UserManager constructor.
+     * 
+     * This constructor register the service container
+     * to allow retreiving serices.
      *
-     * This constructor register a RoleManager
-     * to provide access to Role validation into
-     * some class that depend of User instance.
-     *
-     * @param EntityManager            $entityManager The entity manager to use to interact with database.
-     * @param RoleManager              $roleManager   The role manager to be returned by the getRoleManager method
-     * @param UserProvider             $userProvider  The user provider service
-     * @param EncoderFactoryInterface  $encoder       The encoder factory service to hack user password
-     * @param SecurityContextInterface $security      The security context to use to get current user.
+     * @param ContainerInterface ContainerInterface The service container
      */
-    public function __construct(EntityManager $entityManager, RoleManager $roleManager, UserProvider $userProvider, EncoderFactoryInterface $encoder, SecurityContextInterface $security)
+    public function __construct(ContainerInterface $container)
     {
-        $this->entityManager = $entityManager;
-        $this->roleManager = $roleManager;
-        $this->userProvider = $userProvider;
-        $this->encoder = $encoder;
-        $this->security = $security;
+        $this->container = $container;
     }
 
     /**
@@ -126,7 +128,7 @@ class UserManager
      */
     public function getRoleManager()
     {
-        return $this->roleManager;
+        return $this->container->get("core.manager.role_manager");
     }
 
     /**
@@ -171,7 +173,10 @@ class UserManager
      */
     public function getNewInstance()
     {
-        return new UserBuilder($this, $this->userProvider, $this->encoder);
+        $userProvider = $this->container->get("core.provider.user_provider");
+        $encoder = $this->container->get("security.encoder_factory");
+        
+        return new UserBuilder($this, $userProvider, $encoder);
     }
 
     /**
@@ -199,6 +204,8 @@ class UserManager
      */
     public function persist(UserBuilder $userBuilder, $onlyStack = false)
     {
+        $manager = $this->container->get("doctrine.orm.entity_manager");
+        
         if (! $onlyStack) {
 
             if ($userBuilder->getId()) {
@@ -209,7 +216,7 @@ class UserManager
                 $userBuilder->getUser()->setCreatedAt(new \DateTime());
             }
             
-            $this->entityManager->persist($userBuilder->getUser());
+            $manager->persist($userBuilder->getUser());
         }
         
         $stack = $userBuilder->getStackUpdate();
@@ -220,10 +227,10 @@ class UserManager
             if ($securityUser !== null) {
                 $stack->setUpdatedBy($securityUser->getId());
             }
-            $this->entityManager->persist($stack);
+            $manager->persist($stack);
         }
         
-        $this->entityManager->flush();
+        $manager->flush();
     }
 
     /**
@@ -240,9 +247,11 @@ class UserManager
      */
     public function remove(UserBuilder $user)
     {
+        $manager = $this->container->get("doctrine.orm.entity_manager");
+        
         $this->persist($user, true);
-        $this->entityManager->remove($user->getUser());
-        $this->entityManager->flush();
+        $manager->remove($user->getUser());
+        $manager->flush();
     }
 
     /**
@@ -265,7 +274,10 @@ class UserManager
      */
     public function convertInstance(User $user)
     {
-        return new UserBuilder($this, $this->userProvider, $this->encoder, $user);
+        $userProvider = $this->container->get("core.provider.user_provider");
+        $encoder = $this->container->get("security.encoder_factory");
+        
+        return new UserBuilder($this, $userProvider, $encoder, $user);
     }
     
     /**
@@ -279,8 +291,10 @@ class UserManager
      */
     protected function getSecurityUser()
     {
-        if (method_exists($this->security, "getToken") && $this->security->getToken() !== null && method_exists($this->security->getToken(), "getUser") && $this->security->getToken()->getUser() !== null) {
-            return $this->security->getToken()->getUser();
+        $security = $this->container->get('security.context');
+        
+        if (method_exists($security, "getToken") && $security->getToken() !== null && method_exists($security->getToken(), "getUser") && $security->getToken()->getUser() !== null) {
+            return $security->getToken()->getUser();
         } else {
             return null;
         }

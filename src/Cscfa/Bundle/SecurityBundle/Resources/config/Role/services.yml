@@ -38,8 +38,8 @@ services:
     #tag: tool        #The role manager service offer various method to abstract role persistance and usage.
     core.manager.role_manager:
         class: "%core.manager.role_manager.class%"
-        arguments: [ "@doctrine.orm.entity_manager", "@core.provider.role_provider", "@security.context" ]
+        arguments: [ "@service_container" ]
     #tag: tool        #The role provider service offer various method to retreive role from the database.
     core.provider.role_provider:
         class: "%core.provider.role_provider.class%"
-        arguments: [ "@doctrine.orm.entity_manager", "@security.context" ]
+        arguments: [ "@service_container" ]

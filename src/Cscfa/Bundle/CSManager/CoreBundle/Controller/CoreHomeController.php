@@ -18,6 +18,7 @@ namespace Cscfa\Bundle\CSManager\CoreBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * CoreHomeController class.
@@ -33,11 +34,28 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
  */
 class CoreHomeController extends Controller
 {
+
     /**
+     * Core index action.
+     * 
+     * This action provide logic 
+     * for the index page.
+     * 
      * @Template
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
-        return array();
+        if (!$this->isGranted("IS_AUTHENTICATED_FULLY")){
+            $authenticationUtils = $this->get('security.authentication_utils');
+            $error = $authenticationUtils->getLastAuthenticationError();
+            $lastUsername = $authenticationUtils->getLastUsername();
+            
+            return array(
+                'last_username' => $lastUsername,
+                'error' => $error
+            );
+        }else{
+            return array();
+        }
     }
 }

@@ -1,7 +1,15 @@
-<header class="header">
-    {% image '@CscfaCSManagerCoreBundle/Resources/public/image/csmLogo_h320_l320.png' %}
-        <img src="{{ asset_url }}" alt="csmLogo" class="header_img"/>
-    {% endimage %}
+<header class="header row">
+    <div class="header_main col-xs-12 col-sm-8">
+        {% image '@CscfaCSManagerCoreBundle/Resources/public/image/csmLogo_h320_l320.png' %}
+            <img src="{{ asset_url }}" alt="csmLogo" class="header_img"/>
+        {% endimage %}
+        
+        <h1 class="header_h1">Cscfa csmanager</h1>
+    </div>
     
-    <h1 class="header_h1">Cscfa csmanager</h1>
+    <div class="header_ConnectingDiv col-xs-12 col-sm-4">
+        {% include "CscfaCSManagerSecurityBundle:Tool:headerConnectingDiv.html.twig" %}
+    </div>
+    
+    <div class="header_clear"></div>
 </header>

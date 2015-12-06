@@ -38,8 +38,8 @@ services:
     #tag: tool        #The user manager service offer various method to abstract user persistance and usage.
     core.manager.user_manager:
         class: "%core.manager.user_manager.class%"
-        arguments: [ "@doctrine.orm.entity_manager", "@core.manager.role_manager", "@core.provider.user_provider", "@security.encoder_factory", "@security.context" ]
+        arguments: [ "@service_container" ]
     #tag: tool        #The user provider service offer various method to retreive user from the database.
     core.provider.user_provider:
         class: "%core.provider.user_provider.class%"
-        arguments: [ "@doctrine.orm.entity_manager", "@core.manager.role_manager", "@security.encoder_factory", "@security.context" ]
+        arguments: [ "@service_container" ]

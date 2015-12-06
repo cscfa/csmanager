@@ -20,6 +20,7 @@ use Doctrine\ORM\EntityManager;
 use Cscfa\Bundle\SecurityBundle\Util\Builder\RoleBuilder;
 use Cscfa\Bundle\SecurityBundle\Util\Manager\RoleManager;
 use Symfony\Component\Security\Core\SecurityContextInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * RoleProvider class.
@@ -43,43 +44,26 @@ class RoleProvider
 {
 
     /**
-     * The Role repository.
+     * The current service container
      *
-     * This repository purpose access
-     * to doctrine service and method to
-     * get Role instances.
+     * This container is used to get
+     * other services from the container.
      *
-     * @var Doctrine\ORM\EntityRepository
+     * @var ContainerInterface
      */
-    protected $repository;
-
-    /**
-     * The RoleManager.
-     *
-     * This manager is needed for create
-     * a RoleBuilder instance. It purpose
-     * methods to validate a Role instance.
-     *
-     * @var Cscfa\Bundle\SecurityBundle\Util\Manager\RoleManager
-     */
-    protected $roleManager;
+    protected $container;
 
     /**
      * RoleProvider constructor.
+     * 
+     * This constructor register the service container
+     * to allow retreiving serices.
      *
-     * This method create an instance of RoleProvider
-     * and store a doctrine repository fixed to Role
-     * table and a SecurityContextInterface to create
-     * a RoleManager and reference it when create a
-     * RoleBuilder instances.
-     *
-     * @param EntityManager            $doctrineManager The doctrine manager instance to use to get Role instance from the database.
-     * @param SecurityContextInterface $security        The security context to use to retreive the current user.
+     * @param ContainerInterface ContainerInterface The service container
      */
-    public function __construct(EntityManager $doctrineManager, SecurityContextInterface $security)
+    public function __construct(ContainerInterface $container)
     {
-        $this->repository = $doctrineManager->getRepository("CscfaSecurityBundle:Role");
-        $this->roleManager = new RoleManager($doctrineManager, $this, $security);
+        $this->container = $container;
     }
 
     /**
@@ -103,10 +87,12 @@ class RoleProvider
      */
     public function findOneByName($name)
     {
-        $role = $this->repository->findOneByName($name);
+        $repository = $this->container->get("doctrine.orm.entity_manager")->getRepository("CscfaSecurityBundle:Role");
+        
+        $role = $repository->findOneByName($name);
         
         if ($role !== null) {
-            return new RoleBuilder($this->roleManager, $role);
+            return new RoleBuilder($this->container->get("core.manager.role_manager"), $role);
         } else {
             return null;
         }
@@ -125,7 +111,8 @@ class RoleProvider
      */
     public function findAll()
     {
-        return $this->repository->findAll();
+        $repository = $this->container->get("doctrine.orm.entity_manager")->getRepository("CscfaSecurityBundle:Role");
+        return $repository->findAll();
     }
 
     /**
@@ -143,7 +130,8 @@ class RoleProvider
      */
     public function isExistingByName($name)
     {
-        return $this->repository->isExistingByName($name) === null ? false : true;
+        $repository = $this->container->get("doctrine.orm.entity_manager")->getRepository("CscfaSecurityBundle:Role");
+        return $repository->isExistingByName($name) === null ? false : true;
     }
 
     /**
@@ -157,6 +145,7 @@ class RoleProvider
      */
     public function findAllNames()
     {
-        return $this->repository->getAllNames();
+        $repository = $this->container->get("doctrine.orm.entity_manager")->getRepository("CscfaSecurityBundle:Role");
+        return $repository->getAllNames();
     }
 }

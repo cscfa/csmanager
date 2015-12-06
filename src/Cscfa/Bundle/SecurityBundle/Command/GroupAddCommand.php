@@ -27,6 +27,7 @@ use Cscfa\Bundle\ToolboxBundle\Builder\Command\CommandAskBuilder;
 use Cscfa\Bundle\SecurityBundle\Util\Provider\RoleProvider;
 use Cscfa\Bundle\SecurityBundle\Util\Builder\GroupBuilder;
 use Cscfa\Bundle\SecurityBundle\Util\Builder\RoleBuilder;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * GroupAddCommand class.
@@ -84,15 +85,15 @@ class GroupAddCommand extends ContainerAwareCommand
      * @param GroupProvider $groupProvider The group provider service
      * @param RoleProvider  $roleProvider  The role provider service
      */
-    public function __construct(GroupManager $groupManager, GroupProvider $groupProvider, RoleProvider $roleProvider)
+    public function __construct(ContainerInterface $container)
     {
         // Register group provider
-        $this->groupProvider = $groupProvider;
+        $this->groupProvider = $container->get("core.provider.group_provider");
         
         // Register group manager
-        $this->groupManager = $groupManager;
+        $this->groupManager = $container->get("core.manager.group_manager");
         
-        $this->roleProvider = $roleProvider;
+        $this->roleProvider = $container->get("core.provider.role_provider");
         
         parent::__construct();
     }

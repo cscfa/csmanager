@@ -1,0 +1,20 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}SCM{% endblock %}
+
+{% block stylesheets %}
+
+    {{ parent() }}
+
+    <link rel="stylesheet" type="text/css" href="{{ path("core_css_base") }}" media="all"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ path("core_css_header") }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ path("security_css_headerConnecting") }}"/>
+    
+{% endblock %}
+
+{% block body %}
+    {% include "CscfaCSManagerCoreBundle:Default:header.html.twig" %}
+{% endblock %}
+
+{% block javascripts %}{% endblock %}

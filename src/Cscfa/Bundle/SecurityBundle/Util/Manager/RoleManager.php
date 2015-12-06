@@ -22,6 +22,7 @@ use Cscfa\Bundle\SecurityBundle\Exception\CircularReferenceException;
 use Cscfa\Bundle\SecurityBundle\Util\Builder\RoleBuilder;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Cscfa\Bundle\SecurityBundle\Util\Provider\RoleProvider;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * RoleManager class.
@@ -39,54 +40,28 @@ use Cscfa\Bundle\SecurityBundle\Util\Provider\RoleProvider;
  */
 class RoleManager
 {
-
+    
     /**
-     * The entity manager.
-     *
-     * This allow to register or remove the
-     * current Role instance into the database.
-     *
-     * @var EntityManager
+     * The current service container
+     * 
+     * This container is used to get
+     * other services from the container.
+     * 
+     * @var ContainerInterface
      */
-    protected $entityManager;
-
-    /**
-     * The RoleProvider.
-     *
-     * This variable is used to get
-     * Role instance from the database.
-     *
-     * @var Cscfa\Bundle\SecurityBundle\Util\Provider\RoleProvider
-     */
-    protected $roleProvider;
-
-    /**
-     * The security context.
-     *
-     * This allow to register the current
-     * application user into the Role instance
-     * as creator or updator.
-     *
-     * @var Symfony\Component\Security\Core\SecurityContextInterface
-     */
-    protected $security;
+    protected $container;
 
     /**
      * RoleManager constructor.
+     * 
+     * This constructor register the service container
+     * to allow retreiving serices.
      *
-     * This constructor allow to store role
-     * provider and security context for
-     * later use.
-     *
-     * @param EntityManager            $entityManager The entity manager to use to interact with database.
-     * @param RoleProvider             $roleProvider  The role provider to use to get Role instances.
-     * @param SecurityContextInterface $security      The security context to use to get current user.
+     * @param ContainerInterface ContainerInterface The service container
      */
-    public function __construct(EntityManager $entityManager, RoleProvider $roleProvider, SecurityContextInterface $security)
+    public function __construct(ContainerInterface $container)
     {
-        $this->entityManager = $entityManager;
-        $this->roleProvider = $roleProvider;
-        $this->security = $security;
+        $this->container = $container;
     }
 
     /**
@@ -103,7 +78,8 @@ class RoleManager
      */
     public function roleExists($roleName)
     {
-        return $this->roleProvider->isExistingByName($roleName);
+        $provider = $this->container->get("core.provider.role_provider");
+        return $provider->isExistingByName($roleName);
     }
 
     /**
@@ -119,8 +95,10 @@ class RoleManager
      */
     public function hasCircularReference($roleReference)
     {
+        $provider = $this->container->get("core.provider.role_provider");
+        
         if (is_string($roleReference)) {
-            $role = $this->roleProvider->findOneByName($roleReference);
+            $role = $provider->findOneByName($roleReference);
         } else if ($roleReference instanceof Role) {
             $role = $roleReference;
         } else if ($roleReference instanceof RoleBuilder) {
@@ -165,9 +143,11 @@ class RoleManager
      */
     public function getRoleWire($roleName)
     {
+        $provider = $this->container->get("core.provider.role_provider");
+        
         if (! $this->hasCircularReference($roleName)) {
             
-            $role = $this->roleProvider->findOneByName($roleName);
+            $role = $provider->findOneByName($roleName);
             $roles = array(
                 $role->getName()
             );
@@ -177,7 +157,7 @@ class RoleManager
                 $roles[] = $role->getName();
             }
         } else {
-            Throw new CircularReferenceException($this->roleProvider->findOneByName($roleName));
+            Throw new CircularReferenceException($provider->findOneByName($roleName));
         }
         
         return $roles;
@@ -215,7 +195,9 @@ class RoleManager
      */
     public function getRolesName()
     {
-        $roles = $this->roleProvider->findAll();
+        $provider = $this->container->get("core.provider.role_provider");
+        
+        $roles = $provider->findAll();
         $names = array();
         foreach ($roles as $role) {
             $names[] = $role->getName();
@@ -265,6 +247,8 @@ class RoleManager
      */
     public function persist(RoleBuilder $roleBuilder, $onlyStack = false)
     {
+        $manager = $this->container->get("doctrine.orm.entity_manager");
+        
         if (! $onlyStack) {
             
             if ($roleBuilder->getId()) {
@@ -275,7 +259,7 @@ class RoleManager
                 $roleBuilder->getRole()->setCreatedAt(new \DateTime());
             }
             
-            $this->entityManager->persist($roleBuilder->getRole());
+            $manager->persist($roleBuilder->getRole());
         }
         
         $stack = $roleBuilder->getStackUpdate();
@@ -286,10 +270,10 @@ class RoleManager
             if ($securityUser !== null) {
                 $stack->setUpdatedBy($securityUser->getId());
             }
-            $this->entityManager->persist($stack);
+            $manager->persist($stack);
         }
         
-        $this->entityManager->flush();
+        $manager->flush();
     }
 
     /**
@@ -306,9 +290,11 @@ class RoleManager
      */
     public function remove(RoleBuilder $role)
     {
+        $manager = $this->container->get("doctrine.orm.entity_manager");
+        
         $this->persist($role, true);
-        $this->entityManager->remove($role->getRole());
-        $this->entityManager->flush();
+        $manager->remove($role->getRole());
+        $manager->flush();
     }
 
     /**
@@ -345,8 +331,10 @@ class RoleManager
      */
     protected function getSecurityUser()
     {
-        if (method_exists($this->security, "getToken") && $this->security->getToken() !== null && method_exists($this->security->getToken(), "getUser") && $this->security->getToken()->getUser() !== null) {
-            return $this->security->getToken()->getUser();
+        $security = $this->container->get('security.context');
+        
+        if (method_exists($security, "getToken") && $security->getToken() !== null && method_exists($security->getToken(), "getUser") && $security->getToken()->getUser() !== null) {
+            return $security->getToken()->getUser();
         } else {
             return null;
         }

@@ -1,0 +1,65 @@
+{% extends 'CscfaCSManagerCoreBundle:Default:base.html.twig' %}
+
+{% block title %}SCM - home{% endblock %}
+
+{% block stylesheets %}
+
+    {{ parent() }}
+
+    <link rel="stylesheet" type="text/css" href="{{ path("core_css_tool") }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ path("security_css_forgot") }}"/>
+    
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+    
+    {% set text %}
+        {% if config.getForgotPasswordReaction() == 0 %}
+            Please, contact the administrator to receive a new password
+        {% else %}
+            The password of you'r account will be updated. Please, give the Email adress to receive the new password.
+        {% endif %}
+    {% endset %}
+    
+    <p class="p-center col-xs-12 infoText text-info">
+        {{ config.getForgotPasswordText|default(text) }}
+    </p>
+    
+    
+    {% if config.getForgotPasswordReaction() == 1 %}
+    <div class="col-xs-12">
+        {{ form_start(form) }}
+        
+            {% for flash_message in app.session.flashbag.get('success') %}
+                <p class="bg-success successMessage">
+                    {{ flash_message }}
+                </p>
+            {% endfor %}
+            
+            {% if form.email.vars.errors|length %}
+            <div class="bg-danger cs-center col-xs-12 dlist">
+                {{ form_errors(form.email) }}
+            </div>
+            {% endif %}
+            
+            <div class="form-group">
+                <label class="col-sm-2 col-xs-12 col-md-offset-1 emailLabel" for="emailAdress">Email adress : </label>
+                <div class="col-sm-7 col-xs-12 col-md-8">
+                    {{ form_widget(form.email) }}
+                </div>
+            </div>
+            
+            <div class="cs-center col-xs-12 buttonContainer">
+                <div>
+                    {{ form_widget(form.send) }}
+                    <a class="btn btn-info" href="{{ path("core_home_index") }}">Return to homepage</a>
+                </div>
+            </div>
+        {{ form_end(form) }}
+    </div>
+    {% endif %}
+    
+{% endblock %}
+
+{% block javascripts %}{% endblock %}

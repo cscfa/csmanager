@@ -1,0 +1,28 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}SCM - password updated{% endblock %}
+
+{% block stylesheets %}
+
+    {{ parent() }}
+    
+{% endblock %}
+
+{% block body %}
+    <h4>Dear user of CSManager,</h4>
+    <p>
+        You have submit a request to get a new password. The system has created a new for you.<br/>
+        We suggest you to remove this email and quikly change it.
+    </p>
+    <p>
+        You're new password is : {{ plainPassword }}
+    </p>
+    
+    {% if preference.getSiteBaseUrl() %}
+        <p>
+            Connect to <a href="{{ preference.getSiteBaseUrl() }}{{ path("core_home_index") }}">csmanager</a>
+        </p>
+    {% endif %}
+{% endblock %}
+
+{% block javascripts %}{% endblock %}

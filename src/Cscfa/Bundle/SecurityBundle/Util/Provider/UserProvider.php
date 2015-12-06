@@ -22,6 +22,7 @@ use Cscfa\Bundle\SecurityBundle\Util\Manager\RoleManager;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Cscfa\Bundle\SecurityBundle\Util\Manager\UserManager;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * UserProvider class.
@@ -43,37 +44,16 @@ use Cscfa\Bundle\SecurityBundle\Util\Manager\UserManager;
  */
 class UserProvider
 {
-
-    /**
-     * The User repository.
-     *
-     * This repository purpose access
-     * to doctrine service and method to
-     * get User instances.
-     *
-     * @var Doctrine\ORM\EntityRepository
-     */
-    protected $repository;
     
     /**
-     * The User manager.
+     * The current service container
      * 
-     * This manager is used
-     * to create user builder.
+     * This container is used to get
+     * other services from the container.
      * 
-     * @var UserManager
+     * @var ContainerInterface
      */
-    protected $userManager;
-    
-    /**
-     * The encoder factory.
-     * 
-     * This encoder is used
-     * to create user builder.
-     * 
-     * @var EncoderFactoryInterface
-     */
-    protected $encoder;
+    protected $container;
 
     /**
      * The UserProvider constructor.
@@ -86,11 +66,9 @@ class UserProvider
      * @param EncoderFactoryInterface  $encoder         The encoder factory service to hack user password
      * @param SecurityContextInterface $security        The security context to use to get current user.
      */
-    public function __construct(EntityManager $doctrineManager, RoleManager $roleManager, EncoderFactoryInterface $encoder, SecurityContextInterface $security)
+    public function __construct(ContainerInterface $container)
     {
-        $this->repository = $doctrineManager->getRepository("CscfaSecurityBundle:User");
-        $this->userManager = new UserManager($doctrineManager, $roleManager, $this, $encoder, $security);
-        $this->encoder = $encoder;
+        $this->container = $container;
     }
 
     /**
@@ -105,7 +83,8 @@ class UserProvider
      */
     public function findAllUsernames()
     {
-        $result = $this->repository->getAllUsername();
+        $repository = $this->container->get("doctrine.orm.entity_manager")->getRepository("CscfaSecurityBundle:User");
+        $result = $repository->getAllUsername();
         
         if ($result === null) {
             return array();
@@ -126,7 +105,8 @@ class UserProvider
      */
     public function findAllEmail()
     {
-        $result = $this->repository->getAllEmail();
+        $repository = $this->container->get("doctrine.orm.entity_manager")->getRepository("CscfaSecurityBundle:User");
+        $result = $repository->getAllEmail();
         
         if ($result === null) {
             return array();
@@ -150,10 +130,14 @@ class UserProvider
      */
     public function findOneByUsername($username)
     {
-        $user = $this->repository->findOneByUsername($username);
+        $repository = $this->container->get("doctrine.orm.entity_manager")->getRepository("CscfaSecurityBundle:User");
+        $user = $repository->findOneByUsername($username);
         
         if ($user !== null) {
-            return new UserBuilder($this->userManager, $this, $this->encoder, $user);
+            $userManager = $this->container->get("core.manager.user_manager");
+            $encoder = $this->container->get("security.encoder_factory");
+            
+            return new UserBuilder($userManager, $this, $encoder, $user);
         } else {
             return null;
         }
@@ -174,10 +158,14 @@ class UserProvider
      */
     public function findOneByEmail($email)
     {
-        $user = $this->repository->findOneByEmail($email);
+        $repository = $this->container->get("doctrine.orm.entity_manager")->getRepository("CscfaSecurityBundle:User");
+        $user = $repository->findOneByEmail($email);
         
         if ($user !== null) {
-            return new UserBuilder($this->userManager, $this, $this->encoder, $user);
+            $userManager = $this->container->get("core.manager.user_manager");
+            $encoder = $this->container->get("security.encoder_factory");
+            
+            return new UserBuilder($userManager, $this, $encoder, $user);
         } else {
             return null;
         }
@@ -193,6 +181,7 @@ class UserProvider
      */
     public function findAll()
     {
-        return $this->repository->findAll();
+        $repository = $this->container->get("doctrine.orm.entity_manager")->getRepository("CscfaSecurityBundle:User");
+        return $repository->findAll();
     }
 }

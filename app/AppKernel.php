@@ -21,12 +21,13 @@ class AppKernel extends Kernel
             // new Cscfa\Bundle\CSManager\ProjectBundle\CscfaCSManagerProjectBundle(),
             // new Cscfa\Bundle\CSManager\TaskBundle\CscfaCSManagerTaskBundle(),
             // new Cscfa\Bundle\CSManager\UserBundle\CscfaCSManagerUserBundle(),
-            // new Cscfa\Bundle\CSManager\ConfigBundle\CscfaCSManagerConfigBundle(),
+            new Cscfa\Bundle\CSManager\ConfigBundle\CscfaCSManagerConfigBundle(),
             new Cscfa\Bundle\TwigUIBundle\CscfaTwigUIBundle(),
             new Cscfa\Bundle\SecurityBundle\CscfaSecurityBundle(),
             new FOS\UserBundle\FOSUserBundle(),
             new Cscfa\Bundle\ToolboxBundle\CscfaToolboxBundle(),
             new Cscfa\Bundle\MailBundle\CscfaMailBundle(),
+            new Cscfa\Bundle\CSManager\SecurityBundle\CscfaCSManagerSecurityBundle(),
         );
         
         if (in_array($this->getEnvironment(), array(
@@ -38,6 +39,7 @@ class AppKernel extends Kernel
             $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
             $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
             $bundles[] = new Cscfa\Bundle\QUnitTestBundle\CscfaQUnitTestBundle();
+            $bundles[] = new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle();
         }
         
         return $bundles;

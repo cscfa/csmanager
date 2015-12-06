@@ -5,18 +5,18 @@ services:
     #tag: tool        #The group manager service offer various method to abstract group persistance and usage.
     core.manager.group_manager:
         class: "%core.manager.group_manager.class%"
-        arguments: [ "@core.provider.group_provider", "@doctrine.orm.entity_manager", "@core.manager.role_manager", "@security.context" ]
+        arguments: [ "@service_container" ]
     #tag: tool        #The group provider service offer various method to retreive group from the database.
     core.provider.group_provider:
         class: "%core.provider.group_provider.class%"
-        arguments: [ "@doctrine.orm.entity_manager", "@core.manager.role_manager", "@security.context" ]
+        arguments: [ "@service_container" ]
     ##############################################################################
     #                         The group command services                         #
     ##############################################################################
     #tag: command     #The add user command definition. This command allow a shell user to create a new user into the database.
     core.command.add_group:
         class: "%core.command.add_group.class%"
-        arguments: [ "@core.manager.group_manager", "@core.provider.group_provider", "@core.provider.role_provider" ]
+        arguments: [ "@service_container" ]
         tags:
             -  { name: console.command }
     #tag: command     #The view group command definition. This command allow a shell user to list all existing groups from the database.

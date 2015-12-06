@@ -21,6 +21,7 @@ use Cscfa\Bundle\SecurityBundle\Util\Builder\GroupBuilder;
 use Cscfa\Bundle\SecurityBundle\Util\Provider\GroupProvider;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Security\Core\SecurityContextInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * GroupManager class.
@@ -38,71 +39,28 @@ use Symfony\Component\Security\Core\SecurityContextInterface;
  */
 class GroupManager
 {
-
+    
     /**
-     * The group provider service.
+     * The current service container
      * 
-     * This service allow to get
-     * specific information and
-     * instance from the database.
+     * This container is used to get
+     * other services from the container.
      * 
-     * It will used to validate
-     * some things about groups.
-     * 
-     * @var GroupProvider
+     * @var ContainerInterface
      */
-    protected $provider;
-
-    /**
-     * The doctrinemanager service.
-     * 
-     * This service allow to persist
-     * and remove Group instance from
-     * the database.
-     * 
-     * @var EntityManager
-     */
-    protected $entityManager;
-
-    /**
-     * The role manager service.
-     * 
-     * This service allow to use
-     * the role validations.
-     * 
-     * @var RoleManager
-     */
-    protected $roleManager;
-
-    /**
-     * The security context.
-     *
-     * This allow to register the current
-     * application user into the User instance
-     * as creator or updator.
-     *
-     * @var Symfony\Component\Security\Core\SecurityContextInterface
-     */
-    protected $security;
+    protected $container;
 
     /**
      * The group manager constructor.
      * 
-     * This constructor register
-     * a group provider that provide
-     * access to database store.
-     * 
-     * @param GroupProvider            $provider        The group provider service
-     * @param EntityManager            $doctrineManager The doctrine manager service
-     * @param RoleManager              $roleManager     The role manager service
-     * @param SecurityContextInterface $security        The security context service
+     * This constructor register the service container
+     * to allow retreiving serices.
+     *
+     * @param ContainerInterface ContainerInterface The service container
      */
-    public function __construct(GroupProvider $provider, EntityManager $doctrineManager, RoleManager $roleManager, SecurityContextInterface $security)
+    public function __construct(ContainerInterface $container)
     {
-        $this->provider = $provider;
-        $this->roleManager = $roleManager;
-        $this->entityManager = $doctrineManager;
-        $this->security = $security;
+        $this->container = $container;
     }
 
     /**
@@ -133,7 +91,7 @@ class GroupManager
      */
     public function nameExist($name)
     {
-        return $this->provider->isNameExist($name);
+        return $this->container->get("core.provider.group_provider")->isNameExist($name);
     }
 
     /**
@@ -190,6 +148,8 @@ class GroupManager
      */
     public function persist(GroupBuilder $groupBuilder, $onlyStack = false)
     {
+        $manager = $this->container->get("doctrine.orm.entity_manager");
+        
         if (! $onlyStack) {
             
             if ($groupBuilder->getId()) {
@@ -200,7 +160,7 @@ class GroupManager
                 $groupBuilder->getGroup()->setCreatedAt(new \DateTime());
             }
             
-            $this->entityManager->persist($groupBuilder->getGroup());
+            $manager->persist($groupBuilder->getGroup());
         }
         
         $stack = $groupBuilder->getStackUpdate();
@@ -211,10 +171,10 @@ class GroupManager
             if ($securityUser !== null) {
                 $stack->setUpdatedBy($securityUser->getId());
             }
-            $this->entityManager->persist($stack);
+            $manager->persist($stack);
         }
         
-        $this->entityManager->flush();
+        $manager->flush();
     }
 
     /**
@@ -231,9 +191,11 @@ class GroupManager
      */
     public function remove(GroupBuilder $group)
     {
+        $manager = $this->container->get("doctrine.orm.entity_manager");
+        
         $this->persist($group, true);
-        $this->entityManager->remove($group->getGroup());
-        $this->entityManager->flush();
+        $manager->remove($group->getGroup());
+        $manager->flush();
     }
 
     /**
@@ -247,7 +209,7 @@ class GroupManager
      */
     public function getRoleManager()
     {
-        return $this->roleManager;
+        return $this->container->get("core.manager.role_manager");
     }
     
     /**
@@ -261,8 +223,10 @@ class GroupManager
      */
     protected function getSecurityUser()
     {
-        if (method_exists($this->security, "getToken") && $this->security->getToken() !== null && method_exists($this->security->getToken(), "getUser") && $this->security->getToken()->getUser() !== null) {
-            return $this->security->getToken()->getUser();
+        $security = $this->container->get('security.context');
+        
+        if (method_exists($security, "getToken") && $security->getToken() !== null && method_exists($security->getToken(), "getUser") && $security->getToken()->getUser() !== null) {
+            return $security->getToken()->getUser();
         } else {
             return null;
         }

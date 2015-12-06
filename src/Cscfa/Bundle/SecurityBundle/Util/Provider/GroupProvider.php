@@ -22,6 +22,7 @@ use Cscfa\Bundle\SecurityBundle\Entity\Repository\GroupRepository;
 use Cscfa\Bundle\SecurityBundle\Util\Builder\GroupBuilder;
 use Cscfa\Bundle\SecurityBundle\Util\Manager\RoleManager;
 use Symfony\Component\Security\Core\SecurityContextInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * GroupProvider class.
@@ -43,43 +44,28 @@ use Symfony\Component\Security\Core\SecurityContextInterface;
  */
 class GroupProvider
 {
-
+    
     /**
-     * The Group repository.
+     * The current service container
      * 
-     * This allow the provider to access
-     * quikly to the group table into
-     * the database.
+     * This container is used to get
+     * other services from the container.
      * 
-     * @var GroupRepository
+     * @var ContainerInterface
      */
-    protected $repository;
-
-    /**
-     * A group manager.
-     * 
-     * This manager allow
-     * to create new Group
-     * builder instance.
-     * 
-     * @var GroupManager
-     */
-    protected $manager;
+    protected $container;
 
     /**
      * The GroupProvider constructor.
      *
-     * This constructor register a doctrine manager
-     * from what the Group repository is retreived.
+     * This constructor register the service container
+     * to allow retreiving serices.
      *
-     * @param EntityManager            $doctrineManager The entity manager to use to interact with database.
-     * @param RoleManager              $roleManager     The role manager service to create a group manager.
-     * @param SecurityContextInterface $security        The security context service
+     * @param ContainerInterface ContainerInterface The service container
      */
-    public function __construct(EntityManager $doctrineManager, RoleManager $roleManager, SecurityContextInterface $security)
+    public function __construct(ContainerInterface $container)
     {
-        $this->repository = $doctrineManager->getRepository("CscfaSecurityBundle:Group");
-        $this->manager = new GroupManager($this, $doctrineManager, $roleManager, $security);
+        $this->container = $container;
     }
 
     /**
@@ -92,7 +78,8 @@ class GroupProvider
      */
     public function findAllNames()
     {
-        return $this->repository->getAllName();
+        $repository = $this->container->get("doctrine.orm.entity_manager")->getRepository("CscfaSecurityBundle:Group");
+        return $repository->getAllName();
     }
 
     /**
@@ -108,7 +95,8 @@ class GroupProvider
      */
     public function isNameExist($name)
     {
-        return $this->repository->isExistingByName($name) !== null ? true : false;
+        $repository = $this->container->get("doctrine.orm.entity_manager")->getRepository("CscfaSecurityBundle:Group");
+        return $repository->isExistingByName($name) !== null ? true : false;
     }
 
     /**
@@ -123,10 +111,13 @@ class GroupProvider
      */
     public function findOneByName($name)
     {
-        $group = $this->repository->findOneByName($name);
+        $repository = $this->container->get("doctrine.orm.entity_manager")->getRepository("CscfaSecurityBundle:Group");
+        $manager = new GroupManager($this->container);
+        
+        $group = $repository->findOneByName($name);
         
         if ($group !== null) {
-            return new GroupBuilder($this->manager, $group);
+            return new GroupBuilder($manager, $group);
         } else {
             return null;
         }
@@ -144,6 +135,7 @@ class GroupProvider
      */
     public function findAll()
     {
-        return $this->repository->findAll();
+        $repository = $this->container->get("doctrine.orm.entity_manager")->getRepository("CscfaSecurityBundle:Group");
+        return $repository->findAll();
     }
 }

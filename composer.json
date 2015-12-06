@@ -1,65 +1,63 @@
 {
-    "name": "vallance/csmanager",
-    "description": "The csmanager is a scrum project manager.",
-    "license": "MIT",
-    "type": "project",
-    "autoload": {
-        "psr-4": {
-            "": "src/",
-            "SymfonyStandard\\": "app/SymfonyStandard/"
-        }
-    },
-    "require": {
-        "php": ">=5.3.9",
-        "symfony/symfony": "2.7.*@stable",
-        "doctrine/orm": "2.5.*@stable",
-        "doctrine/dbal": "2.5.*@stable",
-        "doctrine/doctrine-bundle": "1.5.*@stable",
-        "gedmo/doctrine-extensions": "2.4.*@stable",
-        "symfony/assetic-bundle": "2.*@stable",
-        "symfony/swiftmailer-bundle": "2.*@stable",
-        "symfony/monolog-bundle": "2.*@stable",
-        "sensio/distribution-bundle": "4.*@stable",
-        "sensio/framework-extra-bundle": "3.*@stable",
-        "incenteev/composer-parameter-handler": "2.*@stable",
-        "friendsofsymfony/user-bundle" : "1.*@stable",
-        "friendsofsymfony/rest-bundle" : "1.*@stable"
-    },
-    "require-dev": {
-        "sensio/generator-bundle": "2.*@stable"
-    },
-    "scripts": {
-        "post-root-package-install": [
-            "SymfonyStandard\\Composer::hookRootPackageInstall"
-        ],
-        "post-install-cmd": [
-            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::removeSymfonyStandardFiles",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget"
-        ],
-        "post-update-cmd": [
-            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::removeSymfonyStandardFiles",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget"
-        ]
-    },
-    "config": {
-        "bin-dir": "bin"
-    },
-    "extra": {
-        "symfony-app-dir": "app",
-        "symfony-web-dir": "web",
-        "symfony-assets-install": "relative",
-        "incenteev-parameters": {
-            "file": "app/config/parameters.yml"
-        }
-    }
+	"name" : "vallance/csmanager",
+	"description" : "The csmanager is a scrum project manager.",
+	"license" : "MIT",
+	"type" : "project",
+	"autoload" : {
+		"psr-4" : {
+			"" : "src/",
+			"SymfonyStandard\\" : "app/SymfonyStandard/"
+		}
+	},
+	"require" : {
+		"php" : ">=5.3.9",
+		"symfony/symfony" : "2.7.*@stable",
+		"doctrine/orm" : "2.5.*@stable",
+		"doctrine/dbal" : "2.5.*@stable",
+		"doctrine/doctrine-bundle" : "1.5.*@stable",
+		"gedmo/doctrine-extensions" : "2.4.*@stable",
+		"symfony/assetic-bundle" : "2.*@stable",
+		"symfony/swiftmailer-bundle" : "2.*@stable",
+		"symfony/monolog-bundle" : "2.*@stable",
+		"sensio/distribution-bundle" : "4.*@stable",
+		"sensio/framework-extra-bundle" : "3.*@stable",
+		"incenteev/composer-parameter-handler" : "2.*@stable",
+		"friendsofsymfony/user-bundle" : "1.*@stable",
+		"friendsofsymfony/rest-bundle" : "1.*@stable",
+		"doctrine/doctrine-fixtures-bundle" : "2.*@stable"
+	},
+	"require-dev" : {
+		"sensio/generator-bundle" : "2.*@stable"
+	},
+	"scripts" : {
+		"post-install-cmd" : [
+			"Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
+			"Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
+			"Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
+			"Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
+			"Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
+			"Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::removeSymfonyStandardFiles",
+			"Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget"
+		],
+		"post-update-cmd" : [
+			"Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
+			"Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
+			"Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
+			"Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
+			"Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
+			"Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::removeSymfonyStandardFiles",
+			"Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget"
+		]
+	},
+	"config" : {
+		"bin-dir" : "bin"
+	},
+	"extra" : {
+		"symfony-app-dir" : "app",
+		"symfony-web-dir" : "web",
+		"symfony-assets-install" : "relative",
+		"incenteev-parameters" : {
+			"file" : "app/config/parameters.yml"
+		}
+	}
 }

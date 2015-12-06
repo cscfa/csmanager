@@ -2,3 +2,38 @@ core_home_index:
     path:     /
     defaults: { _controller: "CscfaCSManagerCoreBundle:CoreHome:index" }
     methods:  [GET]
+
+
+
+
+
+
+
+
+
+
+
+core_css_base:
+    path:     /css/{media}/coreBase.css
+    defaults: { _controller: "CscfaCSManagerCoreBundle:CSS:base", media: "screen" }
+    methods:  [GET]
+    requirements:
+        media:  screen|handheld|print|aural|speech|braille|embossed|projection|tty|tv|all
+core_css_header:
+    path:     /css/{media}/coreHeader.css
+    defaults: { _controller: "CscfaCSManagerCoreBundle:CSS:header", media: "screen" }
+    methods:  [GET]
+    requirements:
+        media:  screen|handheld|print|aural|speech|braille|embossed|projection|tty|tv|all
+core_css_tool:
+    path:     /css/{media}/coreTool.css
+    defaults: { _controller: "CscfaCSManagerCoreBundle:CSS:tool", media: "screen" }
+    methods:  [GET]
+    requirements:
+        media:  screen|handheld|print|aural|speech|braille|embossed|projection|tty|tv|all
+core_css_index:
+    path:     /css/{media}/coreIndex.css
+    defaults: { _controller: "CscfaCSManagerCoreBundle:CSS:index", media: "screen" }
+    methods:  [GET]
+    requirements:
+        media:  screen|handheld|print|aural|speech|braille|embossed|projection|tty|tv|all

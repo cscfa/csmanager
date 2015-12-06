@@ -1,0 +1,42 @@
+@CHARSET "UTF-8";
+
+.header{
+	background-color: {{ base_color|raw }};
+	
+    border: 5px solid {{ base_color|raw }};
+    border-top: 0px;
+    border-left: 0px;
+    border-right: 0px;
+    {% image '@CscfaCSManagerCoreBundle/Resources/public/image/csmHeaderBorderBottom.png' %}
+    -webkit-border-image: url("{{ asset_url }}") 10 round;
+    -moz-border-image: url("{{ asset_url }}") 10 round;
+    -O-border-image: url("{{ asset_url }}") 10 round;
+    border-image: url("{{ asset_url }}") 10 round;
+    {% endimage %}
+}
+
+.header_main{
+}
+
+.header_main .header_img{
+	height: 100px;
+	float: left;
+}
+
+.header_main .header_h1{
+	float: left;
+	padding-left: 50px;
+}
+
+.header_ConnectingDiv{
+	min-height: 100px;
+    background-color: rgba(0, 0, 0, 0.1);
+    border-bottom-left-radius: 50% 90%;
+    padding-left: 2%;
+    min-width: 30%;
+    text-align: right;
+}
+
+.header_clear{
+	clear: both;
+}

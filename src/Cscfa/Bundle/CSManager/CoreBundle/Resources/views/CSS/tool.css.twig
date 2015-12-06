@@ -1,0 +1,36 @@
+@CHARSET "UTF-8";
+
+.cs-window{
+    border: 1px solid black;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.cs-window .cs-head{
+    background-color: {{ base_color|raw }};
+    margin-top: 0px;
+    padding: 5px 20px;
+    
+    background-image: -webkit-repeating-linear-gradient(-50deg, transparent, transparent 10px, rgba(255,255,255,.2) 20px, rgba(255,255,255,.1) 40px);
+    background-image: -moz-repeating-linear-gradient(-50deg, transparent, transparent 10px, rgba(255,255,255,.2) 20px, rgba(255,255,255,.1) 40px);
+    background-image: -o-repeating-linear-gradient(-50deg, transparent, transparent 10px, rgba(255,255,255,.2) 20px, rgba(255,255,255,.1) 40px);
+    background-image: repeating-linear-gradient(-50deg, transparent, transparent 10px, rgba(255,255,255,.2) 20px, rgba(255,255,255,.1) 40px);
+}
+
+.cs-window .cs-body{
+    padding: 5px 20px;
+}
+
+.cs-center{
+  padding-left: 50%;
+  transform-style: preserve-3d;
+}
+
+.cs-center > *{
+  display: inline-block;
+  transform: translateX(-50%);
+}
+
+.p-center{
+    text-align: center;
+}
