@@ -84,7 +84,7 @@ class SecurityController extends Controller
                 $userRepository = $this->getDoctrine()->getRepository("CscfaSecurityBundle:User");
                 $user = $userRepository->findOneByEmail($data["email"]);
                 
-                if ($user) {
+                if ($user && $user instanceof User) {
                     $factory = $this->get('security.encoder_factory');
                     $encoder = $factory->getEncoder($user);
                     

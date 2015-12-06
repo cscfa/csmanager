@@ -21,7 +21,6 @@ use Cscfa\Bundle\SecurityBundle\Util\Builder\UserBuilder;
 use Cscfa\Bundle\SecurityBundle\Util\Manager\RoleManager;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Symfony\Component\Security\Core\SecurityContextInterface;
-use Cscfa\Bundle\SecurityBundle\Util\Manager\UserManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**

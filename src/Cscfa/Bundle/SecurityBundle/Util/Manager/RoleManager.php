@@ -16,12 +16,9 @@
  */
 namespace Cscfa\Bundle\SecurityBundle\Util\Manager;
 
-use Doctrine\ORM\EntityManager;
 use Cscfa\Bundle\SecurityBundle\Entity\Role;
 use Cscfa\Bundle\SecurityBundle\Exception\CircularReferenceException;
 use Cscfa\Bundle\SecurityBundle\Util\Builder\RoleBuilder;
-use Symfony\Component\Security\Core\SecurityContextInterface;
-use Cscfa\Bundle\SecurityBundle\Util\Provider\RoleProvider;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**

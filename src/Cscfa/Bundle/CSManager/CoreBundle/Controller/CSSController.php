@@ -34,7 +34,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class CSSController extends Controller
 {
-    const BASE_COLOR = "#d3d3d3";
+    const BASE_COLOR = "d3d3d3";
 
     /**
      * Base action.

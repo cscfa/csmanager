@@ -18,10 +18,7 @@ namespace Cscfa\Bundle\SecurityBundle\Util\Provider;
 
 use Cscfa\Bundle\SecurityBundle\Util\Manager\GroupManager;
 use Doctrine\ORM\EntityManager;
-use Cscfa\Bundle\SecurityBundle\Entity\Repository\GroupRepository;
 use Cscfa\Bundle\SecurityBundle\Util\Builder\GroupBuilder;
-use Cscfa\Bundle\SecurityBundle\Util\Manager\RoleManager;
-use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**

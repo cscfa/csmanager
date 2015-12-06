@@ -16,10 +16,7 @@
  */
 namespace Cscfa\Bundle\SecurityBundle\Util\Provider;
 
-use Doctrine\ORM\EntityManager;
 use Cscfa\Bundle\SecurityBundle\Util\Builder\RoleBuilder;
-use Cscfa\Bundle\SecurityBundle\Util\Manager\RoleManager;
-use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**

@@ -19,8 +19,6 @@ namespace Cscfa\Bundle\SecurityBundle\Util\Manager;
 use Cscfa\Bundle\SecurityBundle\Util\Builder\UserBuilder;
 use Cscfa\Bundle\SecurityBundle\Util\Provider\UserProvider;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
-use Doctrine\ORM\EntityManager;
-use Symfony\Component\Security\Core\SecurityContextInterface;
 use Cscfa\Bundle\SecurityBundle\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 

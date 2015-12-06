@@ -18,9 +18,6 @@ namespace Cscfa\Bundle\SecurityBundle\Util\Manager;
 
 use Cscfa\Bundle\SecurityBundle\Entity\Group;
 use Cscfa\Bundle\SecurityBundle\Util\Builder\GroupBuilder;
-use Cscfa\Bundle\SecurityBundle\Util\Provider\GroupProvider;
-use Doctrine\ORM\EntityManager;
-use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
