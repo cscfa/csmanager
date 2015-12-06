@@ -17,7 +17,6 @@
 namespace Cscfa\Bundle\SecurityBundle\Util\Provider;
 
 use Cscfa\Bundle\SecurityBundle\Util\Manager\GroupManager;
-use Doctrine\ORM\EntityManager;
 use Cscfa\Bundle\SecurityBundle\Util\Builder\GroupBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
