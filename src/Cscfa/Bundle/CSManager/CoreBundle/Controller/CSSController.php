@@ -79,7 +79,12 @@ class CSSController extends Controller
      */
     public function toolAction($media)
     {
-        $ar = array("base_color"=>self::BASE_COLOR);
+        $ar = array(
+            "base_color"=>self::BASE_COLOR,
+            "fieldset_background"=>array(0, 0, 0, 0.02),
+            "fieldset_border"=>array(0, 0, 0, 0.1),
+            "fieldset_shadow"=>"grey"
+        );
         
         return $this->getResponse($this->renderView("CscfaCSManagerCoreBundle:CSS:tool.css.twig", $ar));
     }

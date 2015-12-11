@@ -19,6 +19,7 @@ namespace Cscfa\Bundle\CSManager\CoreBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
+use Cscfa\Bundle\CSManager\SecurityBundle\Objects\singin\SignInObject;
 
 /**
  * CoreHomeController class.
@@ -50,9 +51,13 @@ class CoreHomeController extends Controller
             $error = $authenticationUtils->getLastAuthenticationError();
             $lastUsername = $authenticationUtils->getLastUsername();
             
+            $signin = new SignInObject();
+            $signinForm = $this->createForm("signin", $signin, array("action"=>$this->generateUrl('register')));
+            
             return array(
                 'last_username' => $lastUsername,
-                'error' => $error
+                'error' => $error,
+                'signinForm' => $signinForm->createView()
             );
         }else{
             return array();

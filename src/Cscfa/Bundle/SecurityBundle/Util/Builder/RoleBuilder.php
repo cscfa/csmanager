@@ -597,4 +597,17 @@ class RoleBuilder implements ErrorRegisteryInterface
     {
         return $this->lastError;
     }
+
+    /**
+     * Remove the last error.
+     *
+     * This method allow to remove the
+     * last error state.
+     *
+     * @return void
+     */
+    public function removeLastError() {
+        $this->lastError = self::NO_ERROR;
+    }
+
 }

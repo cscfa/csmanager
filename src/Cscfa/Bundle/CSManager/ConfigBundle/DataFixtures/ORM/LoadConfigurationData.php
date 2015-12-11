@@ -52,7 +52,10 @@ class LoadConfigurationData implements FixtureInterface
         if(!$configuration){
             $configuration = new Configuration();
         }
-        $configuration->setName("default");
+        $configuration->setName("default")
+            ->setForgotPasswordReaction(Configuration::PASSWORD_FORGOT_AUTOMAIL)
+            ->setSignInAllowed(true)
+            ->setSignInVerifyEmail(true);
         
         $manager->persist($configuration);
 

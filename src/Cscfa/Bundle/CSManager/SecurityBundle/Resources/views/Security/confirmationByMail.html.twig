@@ -1,0 +1,61 @@
+{% extends 'CscfaCSManagerCoreBundle:Default:base.html.twig' %}
+
+{% block title %}SCM - signin{% endblock %}
+
+{% block stylesheets %}
+
+    {{ parent() }}
+
+    <link rel="stylesheet" type="text/css" href="{{ path("core_css_tool") }}"/> 
+    
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+        
+    {% if success %}
+        <div class="col-xs-12 col-md-10 col-md-offset-1">
+            
+            <h3>Signin success</h3>
+            
+            <p>
+                You have successfully activate your account.
+            </p>
+            
+            <p>
+                Have a good day.
+            </p>
+            
+            <div class="cs-center">
+                <div>
+                    <a class="btn btn-primary" href="{{ path("core_home_index") }}">return to homepage</a>
+                </div>
+            </div>
+            
+        </div>
+    {% else %}
+        <div class="col-xs-12 col-md-10 col-md-offset-1">
+            
+            <h3>Signin error</h3>
+            
+            <p>
+                An error occured durring validating your account. Please, use the validation mail link to validate.
+            </p>
+            
+            <p>
+                Have a good day.
+            </p>
+            
+            <div class="cs-center">
+                <div>
+                    <a class="btn btn-primary" href="{{ path("core_home_index") }}">return to homepage</a>
+                </div>
+            </div>
+            
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

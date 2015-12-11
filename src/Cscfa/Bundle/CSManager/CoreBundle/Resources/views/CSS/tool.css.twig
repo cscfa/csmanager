@@ -1,3 +1,19 @@
+/**
+ * This file is a part of CSCFA csmanager project.
+ *
+ * The csmanager project is a project manager written in php
+ * with Symfony2 framework.
+ *
+ * PHP version 5.5
+ *
+ * @category CSS
+ * @package  CscfaCSManagerCoreBundle
+ * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
+ * @license  http://opensource.org/licenses/MIT MIT
+ * @filesource
+ * @link     http://cscfa.fr
+ */
+ 
 @CHARSET "UTF-8";
 
 .cs-window{
@@ -33,4 +49,61 @@
 
 .p-center{
     text-align: center;
+}
+
+.cs-fieldset{
+    background-color: rgba({{ fieldset_background.0 }}, {{ fieldset_background.1 }}, {{ fieldset_background.2 }}, {{ fieldset_background.3 }});
+    border: 1px solid rgba({{ fieldset_border.0 }}, {{ fieldset_border.1 }}, {{ fieldset_border.2 }}, {{ fieldset_border.3 }});
+    border-radius: 10px;
+    box-shadow: 2px 3px 3px {{ fieldset_shadow }};
+    margin: 1%;
+    overflow: hidden;
+    
+    -webkit-transition: background-color 1s;
+    -moz-transition: background-color 1s;
+    -o-transition: background-color 1s;
+    transition: background-color 1s;
+}
+
+.cs-fieldset:hover{
+    background-color: rgba({{ fieldset_background.0 }}, {{ fieldset_background.1 }}, {{ fieldset_background.2 }}, {{ fieldset_background.3 + 0.08 }});
+}
+
+.cs-fieldset-head{
+    background-image: -webkit-repeating-linear-gradient(top, transparent 80%, rgba(0,0,0,.05) 90%, transparent 100%);
+    background-image: -moz-repeating-linear-gradient(top, transparent 80%, rgba(0,0,0,.05) 90%, transparent 100%);
+    background-image: -o-repeating-linear-gradient(top, transparent 80%, rgba(0,0,0,.05) 90%, transparent 100%);
+    background-image: repeating-linear-gradient(top, transparent 80%, rgba(0,0,0,.05) 90%, transparent 100%);
+    padding: 0.5% 0% 0.5% 8%;
+    margin: 0%;
+    overflow: hidden;
+}
+
+.cs-fieldset-body{
+    padding: 0% 1% 1% 1%;
+}
+
+.cs-form-error ul{
+    list-style-type: none;
+    padding-left: 1%;
+}
+
+.cs-lib-red{
+    overflow: hidden;
+    margin: 0px;
+    padding: 0px;
+    background-image: -webkit-linear-gradient(left, rgba(255, 0, 0, .6) 0%, rgba(255, 0, 0, .6) 5px, transparent 6px);
+    background-image: -moz-linear-gradient(left, rgba(255, 0, 0, .6) 0%, rgba(255, 0, 0, .6) 5px, transparent 6px);
+    background-image: -o-linear-gradient(left, rgba(255, 0, 0, .6) 0%, rgba(255, 0, 0, .6) 5px, transparent 6px);
+    background-image: linear-gradient(left, rgba(255, 0, 0, .6) 0%, rgba(255, 0, 0, .6) 5px, transparent 6px);
+}
+
+.cs-lib-green{
+    overflow: hidden;
+    margin: 0px;
+    padding: 0px;
+    background-image: -webkit-linear-gradient(left, rgba(0, 255, 0, .6) 0%, rgba(0, 255, 0, .6) 5px, transparent 6px);
+    background-image: -moz-linear-gradient(left, rgba(0, 255, 0, .6) 0%, rgba(0, 255, 0, .6) 5px, transparent 6px);
+    background-image: -o-linear-gradient(left, rgba(0, 255, 0, .6) 0%, rgba(0, 255, 0, .6) 5px, transparent 6px);
+    background-image: linear-gradient(left, rgba(0, 255, 0, .6) 0%, rgba(0, 0, 255, .6) 5px, transparent 6px);
 }

@@ -1,0 +1,10 @@
+Dear user of CSManager,
+
+You have submit a request to create a new account.
+This task was completed with success.
+    
+{% if preference.getSiteBaseUrl() %}
+Activate by connecting to : {{ preference.getSiteBaseUrl() }}{{ path("mail_confirm", {'user':id, 'confirmationToken':token}) }}
+{% else %}
+Please, connect to : {{ path("mail_confirm", {'user':id, 'confirmationToken':token}) }}
+{% endif %}

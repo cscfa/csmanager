@@ -1,0 +1,29 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}SCM - signin confirmation email{% endblock %}
+
+{% block stylesheets %}
+
+    {{ parent() }}
+    
+{% endblock %}
+
+{% block body %}
+    <h4>Dear user of CSManager,</h4>
+    <p>
+        You have submit a request to create a new account.<br/>
+        This task was completed with success.
+    </p>
+    
+    {% if preference.getSiteBaseUrl() %}
+        <p>
+            Connect to : <a href="{{ preference.getSiteBaseUrl() }}{{ path("core_home_index") }}">csmanager</a>
+        </p>
+    {% else %}
+        <p>
+            Please, connect to : {{ path("core_home_index") }}
+        </p>
+    {% endif %}
+{% endblock %}
+
+{% block javascripts %}{% endblock %}

@@ -1,4 +1,6 @@
 services:
-#    cscfa_cs_manager_security.example:
-#        class: Cscfa\Bundle\CSManager\SecurityBundle\Example
-#        arguments: [@service_id, "plain_value", %parameter%]
+    csmanager.security_form.signin:
+        class: Cscfa\Bundle\CSManager\SecurityBundle\Objects\singin\SignInType
+        arguments: [ "@doctrine.orm.entity_manager" ]
+        tags: 
+            - { name: form.type, alias: signin }

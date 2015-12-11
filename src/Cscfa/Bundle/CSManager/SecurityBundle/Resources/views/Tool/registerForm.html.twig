@@ -1,0 +1,44 @@
+{% macro registerForm(form, secondary) %}
+{% import "CscfaCSManagerCoreBundle:Macro:form.html.twig" as formTool %}
+    
+    {{ form_start(form) }}
+        
+        {{ formTool.fieldset(
+            "General",
+            [[form.pseudo, 1, 1, 0], [form.email, 1, 1, 1], [form.password, 1, 1, 1]])
+        }}
+        
+        {{ formTool.fieldset(
+            "Phone (optional)",
+            [[form.phoneType, 1, 0, 0], [form.phoneNumber, 1, 1, 0]])
+        }}
+        
+        {{ formTool.fieldset(
+            "Yourself (optional)",
+            [[form.firstName, 1, 1, 0], [form.lastName, 1, 1, 0], [form.sex, 1, 0, 0], [form.birthday, 1, 0, 0], 
+            [form.biography, 1, 1, 0]])
+        }}
+        
+        {{ formTool.fieldset(
+            "Your company (optional)",
+            [[form.company, 1, 1, 0], [form.companyReferer, 1, 1, 0], [form.companyAdress, 1, 1, 0], 
+            [form.companyComplement, 1, 1, 0], [form.companyTown, 1, 1, 0], [form.companyPostalCode, 1, 1, 0], 
+            [form.companyCountry, 1, 1, 0], [form.service, 1, 1, 0], [form.job, 1, 1, 0]])
+        }}
+        
+        {{ formTool.fieldset(
+            "Your address (optional)",
+            [[form.referer, 1, 1, 0], [form.adress, 1, 1, 0], [form.complement, 1, 1, 0], [form.town, 1, 1, 0], 
+            [form.postalCode, 1, 1, 0], [form.country, 1, 1, 0]])
+        }}
+        
+        <div class="cs-center registerBottom">
+            <div>
+                {{ form_widget(form.register) }}
+                {{ secondary }}
+            </div>
+        </div>
+        
+    {{ form_end(form) }}
+    
+{% endmacro %}

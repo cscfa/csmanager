@@ -1,0 +1,29 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}SCM - signin confirmation email{% endblock %}
+
+{% block stylesheets %}
+
+    {{ parent() }}
+    
+{% endblock %}
+
+{% block body %}
+    <h4>Dear user of CSManager,</h4>
+    <p>
+        You have submit a request to create a new account.<br/>
+        This task was completed with success.
+    </p>
+    
+    {% if preference.getSiteBaseUrl() %}
+        <p>
+            Activate by clicking : <a href="{{ preference.getSiteBaseUrl() }}{{ path("mail_confirm", {'user':id, 'confirmationToken':token}) }}">csmanager</a>
+        </p>
+    {% else %}
+        <p>
+            Please, connect to : {{ path("mail_confirm", {'user':id, 'confirmationToken':token}) }}
+        </p>
+    {% endif %}
+{% endblock %}
+
+{% block javascripts %}{% endblock %}

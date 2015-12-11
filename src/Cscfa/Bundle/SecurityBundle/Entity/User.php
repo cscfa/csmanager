@@ -79,7 +79,7 @@ class User extends StackableObject implements AdvancedUserInterface, \Serializab
      * @var string
      * 
      * @ORM\Column(
-     *      type="string", length=255, name="user_username", options={"comment":"user name"}
+     *      type="string", length=50, name="user_username", options={"comment":"user name"}
      * )
      */
     protected $username;
@@ -335,6 +335,8 @@ class User extends StackableObject implements AdvancedUserInterface, \Serializab
         $this->expired = false;
         $this->roles = new ArrayCollection();
         $this->credentialsExpired = false;
+        $this->confirmationToken = base64_encode(utf8_encode(openssl_random_pseudo_bytes(10)));
+        $this->createdAt = new \DateTime();
     }
 
     /**

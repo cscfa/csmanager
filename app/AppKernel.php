@@ -20,7 +20,7 @@ class AppKernel extends Kernel
             // new Cscfa\Bundle\CSManager\DashboardBundle\CscfaCSManagerDashboardBundle(),
             // new Cscfa\Bundle\CSManager\ProjectBundle\CscfaCSManagerProjectBundle(),
             // new Cscfa\Bundle\CSManager\TaskBundle\CscfaCSManagerTaskBundle(),
-            // new Cscfa\Bundle\CSManager\UserBundle\CscfaCSManagerUserBundle(),
+            new Cscfa\Bundle\CSManager\UserBundle\CscfaCSManagerUserBundle(),
             new Cscfa\Bundle\CSManager\ConfigBundle\CscfaCSManagerConfigBundle(),
             new Cscfa\Bundle\TwigUIBundle\CscfaTwigUIBundle(),
             new Cscfa\Bundle\SecurityBundle\CscfaSecurityBundle(),

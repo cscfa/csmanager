@@ -1,0 +1,127 @@
+{% macro block(form, nse) %}
+
+    {% if nse != false %}
+        {% set nse = true %}
+    {% endif %}
+        
+    {% set error = false %}
+    {% if form.vars.errors|length %}
+        {% set error = true %}
+        <div class="bg-danger cs-form-error">
+            {{ form_errors(form) }}
+        </div>
+    {% endif %}
+    <div class="form-group{% if error %} has-error has-feedback{% elseif form.vars.value|length and nse  %} has-success has-feedback{% endif %}">
+        
+        {{ form_label(form) }}
+        
+        {% if error or form.vars.value|length %}
+            {% set attr = {'aria-describedby':'adb'~form.vars.id, 'class':'form-control'} %}
+        {%  else %}
+            {% set attr = {'class':'form-control'} %}
+        {% endif %}
+        {{ form_widget(form, {'attr': attr}) }}
+        {% if error %}
+            <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+            <span id="{{ 'adb'~form.vars.id }}" class="sr-only">(error)</span>
+        {% elseif form.vars.value|length  and nse %}
+            <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+            <span id="{{ 'adb'~form.vars.id }}" class="sr-only">(success)</span>
+        {% endif %}
+  
+    </div>
+    
+{% endmacro %}
+
+{% macro multiBlock(form, nse) %}
+
+    {% if nse != false %}
+        {% set nse = true %}
+    {% endif %}
+    
+    {% set errors = false %}
+    {% set notEmpy = false %}
+    {% for field in form %}
+        {% if field.vars.errors|length %}
+            {% set errors = true %}
+            <div class="bg-danger cs-form-error">
+                {{ form_errors(field) }}
+            </div>
+        {% elseif field.vars.value|length %}
+            {% set notEmpy = true %}
+        {% endif %}
+    {% endfor %}
+    <div class="form-group{% if errors %} has-error has-feedback{% elseif notEmpy and nse  %} has-success has-feedback{% endif %}">
+        {% for field in form %}
+            
+        
+            {{ form_label(field) }}
+            
+            {% if errors or field.vars.value|length %}
+                {% set attr = {'aria-describedby':'adb'~field.vars.id, 'class':'form-control'} %}
+            {%  else %}
+                {% set attr = {'class':'form-control'} %}
+            {% endif %}
+            
+            {{ form_widget(field, {'attr':attr}) }}
+            {% if errors %}
+                <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                <span id="{{ 'adb'~field.vars.id }}" class="sr-only">(error)</span>
+            {% elseif field.vars.value|length and nse  %}
+                <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+                <span id="{{ 'adb'~field.vars.id }}" class="sr-only">(success)</span>
+            {% endif %}
+            
+        {% endfor %}
+    </div>
+    
+{% endmacro %}
+
+{% macro fieldset(title, forms) %}
+    {% import _self as current %}
+    
+    {% set lib = "green" %}
+    {% for fields in forms %}
+        {% if fields.1 == 1 and fields.3 != 1 %}
+            {% if fields.0.vars.errors|length %}
+                {% set lib = "red" %}
+            {% endif %}
+        {% elseif fields.1 == 1 %}
+            {% for child in fields.0 %}
+                {% if child.vars.errors|length %}
+                    {% set lib = "red" %}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    {% endfor %}
+    
+    {% set libexist = false %}
+    {% for fields in forms %}
+        {% if fields.2 == 1 and fields.3 != 1 %}
+            {% if fields.0.vars.value|length %}
+                {% set libexist = true %}
+            {% endif %}
+        {% elseif fields.2 == 1 %}
+            {% for child in fields.0 %}
+                {% if child.vars.value|length %}
+                    {% set libexist = true %}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    {% endfor %}
+        
+    <fieldset class="registerForm-phone cs-fieldset">
+        {% if libexist %}<div class="cs-lib-{{ lib }}" style="border-radius: 10px">{% endif %}
+            <h3 class="cs-fieldset-head">{{ title }}</h3>
+            <div class="cs-fieldset-body">
+                {% for field in forms %}
+                    {% if field.3 == 1 %}
+                        {{ current.multiBlock(field.0, field.2) }}
+                    {% else %}
+                        {{ current.block(field.0, field.2) }}
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% if libexist %}</div>{% endif %}
+    </fieldset>
+{% endmacro %}

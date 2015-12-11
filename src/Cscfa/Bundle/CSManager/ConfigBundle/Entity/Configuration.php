@@ -71,6 +71,16 @@ class Configuration
      * @ORM\Column(type="text", nullable=true, name="csmanager_config_forgotPasswordText", options={"comment":"The configuration for the forgot password information text."})
      */
     protected $forgotPasswordText;
+
+    /** 
+     * @ORM\Column(type="boolean", options={"default" = true, "comment":"The configuration sign in allowed state"}, nullable=false, name="csmanager_config_signInAllowed") 
+     */
+    protected $signInAllowed;
+
+    /** 
+     * @ORM\Column(type="boolean", options={"default" = true, "comment":"The configuration sign in email verification state"}, nullable=false, name="csmanager_config_signInVerifyEmail") 
+     */
+    protected $signInVerifyEmail;
     
     /**
      * Configuration constructor
@@ -171,7 +181,31 @@ class Configuration
     {
         return $this->forgotPasswordText;
     }
-     
+
+    /**
+     * Get sign-in allowed
+     * 
+     * Return the sign-in allowed state
+     * 
+     * @return boolean - the sign in allowed state
+     */
+    public function getSignInAllowed()
+    {
+        return $this->signInAllowed;
+    }
+
+    /**
+     * Get sign-in email verification
+     * 
+     * Return the sign-in email verification state
+     * 
+     * @return boolean - the sign in email verification state
+     */
+    public function getSignInVerifyEmail()
+    {
+        return $this->signInVerifyEmail;
+    }
+      
     /**
      * Set updated
      * 
@@ -253,7 +287,37 @@ class Configuration
         $this->forgotPasswordText = $forgotPasswordText;
         return $this;
     }
-  
+    
+    /**
+     * Set sign in allowed state
+     * 
+     * Set sign in allowed state
+     * 
+     * @param boolean $signInAllowed - the sign in allowed state
+     * 
+     * @return Configuration - the current entity
+     */
+    public function setSignInAllowed($signInAllowed)
+    {
+        $this->signInAllowed = $signInAllowed;
+        return $this;
+    }
+    
+    /**
+     * Set sign in email verification state
+     * 
+     * Set sign in email verification state
+     * 
+     * @param boolean $signInVerifyEmail - the sign in email verification state
+     * 
+     * @return Configuration - the current entity
+     */
+    public function setSignInVerifyEmail($signInVerifyEmail)
+    {
+        $this->signInVerifyEmail = $signInVerifyEmail;
+        return $this;
+    }
+   
     /**
      * Update
      * 

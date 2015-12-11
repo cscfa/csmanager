@@ -1,0 +1,65 @@
+{% extends 'CscfaCSManagerCoreBundle:Default:base.html.twig' %}
+{% import "CscfaCSManagerSecurityBundle:Tool:registerForm.html.twig" as formTool %}
+
+{% block title %}SCM - register{% endblock %}
+
+{% block stylesheets %}
+
+    {{ parent() }}
+
+    <link rel="stylesheet" type="text/css" href="{{ path("core_css_tool") }}"/> 
+    <link rel="stylesheet" type="text/css" href="{{ path("security_css_register") }}"/>
+    
+    
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+    
+    {% if success %}
+        
+        <div class="col-xs-12 col-md-10 col-md-offset-1">
+            
+            <h3>Signin success</h3>
+            
+            <p>
+                Your account was successfully created. We hope you'll have a good experience with the csmanager system.
+            </p>
+            
+            {% if preference.getConfiguration().getSignInVerifyEmail() %}
+                <p class="text-info">
+                    An email will be sent to your email box. You'll find an activation link inscribed into it.
+                </p>
+            {% endif %}
+            
+            <p>
+                Have a good day.
+            </p>
+            
+            <div class="cs-center">
+                <div>
+                    <a class="btn btn-primary" href="{{ path("core_home_index") }}">return to homepage</a>
+                </div>
+            </div>
+            
+        </div>
+        
+    {% else %}
+        
+        {% if signinAllowed %}
+        
+            <div class="col-xs-12 col-md-10 col-md-offset-1">
+                {% set secondary %}
+                    <a class="btn btn-info" href="{{ path("core_home_index") }}">Return to homepage</a>
+                {% endset %}
+                {{ formTool.registerForm(form, secondary) }}
+            </div>
+        {% endif %}
+        
+    {% endif %}
+    
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

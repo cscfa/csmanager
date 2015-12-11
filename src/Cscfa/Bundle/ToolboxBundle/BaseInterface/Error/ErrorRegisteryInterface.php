@@ -54,4 +54,14 @@ interface ErrorRegisteryInterface
      * @return number
      */
     public function getLastError();
+    
+    /**
+     * Remove the last error.
+     * 
+     * This method allow to remove the
+     * last error state.
+     * 
+     * @return void
+     */
+    public function removeLastError();
 }

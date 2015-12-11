@@ -65,6 +65,20 @@ class CSSController extends Controller
     }
 
     /**
+     * register action.
+     * 
+     * This method return the register
+     * css file of the csmanager
+     * security bundle.
+     * 
+     * @return Response
+     */
+    public function registerAction($media)
+    {
+        return $this->getResponse($this->renderView("CscfaCSManagerSecurityBundle:CSS:register.css.twig"));
+    }
+
+    /**
      * Get response.
      * 
      * This method return a
