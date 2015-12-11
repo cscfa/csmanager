@@ -21,6 +21,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Form\FormInterface;
+use Cscfa\Bundle\CSManager\SecurityBundle\Objects\singin\SignInObject;
 
 /**
  * SignInType class.
