@@ -24,7 +24,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\FormError;
 use Cscfa\Bundle\SecurityBundle\Entity\User;
 use Cscfa\Bundle\CSManager\SecurityBundle\Objects\singin\SignInObject;
-use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Form\Form;
 use Cscfa\Bundle\CSManager\SecurityBundle\Objects\singin\SigninHydrator;
 use Cscfa\Bundle\CSManager\UserBundle\Entity\Person;
@@ -106,10 +105,6 @@ class SecurityController extends Controller
      */
     public function registerAction(Request $request)
     {
-        $bundles = $this->get("kernel")->getBundles();
-        foreach ($bundles as $bundle){
-            var_dump($bundle->getPath());
-        }die();
         $preference = $this->getPreference();
         $signinAllowed = $preference->getConfiguration()->getSignInAllowed();
         
@@ -235,9 +230,7 @@ class SecurityController extends Controller
         $reaction = $preference->getConfiguration()->getForgotPasswordReaction();
         
         if ($reaction == Configuration::PASSWORD_FORGOT_NOREACT) {
-            return array(
-                "config" => $preference->getConfiguration()
-            );
+            return array("config" => $preference->getConfiguration());
         } else if ($reaction == Configuration::PASSWORD_FORGOT_AUTOMAIL) {
             
             $formData = array();
@@ -274,12 +267,8 @@ class SecurityController extends Controller
                     $password = $encoder->encodePassword($textPassword, $user->getSalt());
                     $user->setPassword($password);
                     
-                    $this->getDoctrine()
-                        ->getManager()
-                        ->persist($user);
-                    $this->getDoctrine()
-                        ->getManager()
-                        ->flush();
+                    $this->getDoctrine()->getManager()->persist($user);
+                    $this->getDoctrine()->getManager()->flush();
                     
                     $message = \Swift_Message::newInstance()->setSubject('CSManager : password updated')
                         ->setFrom($preference->getEmailSender())

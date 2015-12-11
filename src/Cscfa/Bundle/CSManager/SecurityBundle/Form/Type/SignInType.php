@@ -14,7 +14,7 @@
  * @filesource
  * @link     http://cscfa.fr
  */
-namespace Cscfa\Bundle\CSManager\SecurityBundle\Objects\singin;
+namespace Cscfa\Bundle\CSManager\SecurityBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;

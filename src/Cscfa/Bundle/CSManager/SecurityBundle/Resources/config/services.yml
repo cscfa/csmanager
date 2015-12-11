@@ -1,6 +1,6 @@
 services:
     csmanager.security_form.signin:
-        class: Cscfa\Bundle\CSManager\SecurityBundle\Objects\singin\SignInType
+        class: Cscfa\Bundle\CSManager\SecurityBundle\Form\Type\SignInType
         arguments: [ "@doctrine.orm.entity_manager" ]
         tags: 
             - { name: form.type, alias: signin }
