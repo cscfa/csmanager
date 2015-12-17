@@ -1,0 +1,19 @@
+{% if path(app.request.get('_route')) == element.getPath() %}
+    {% set active = true %}
+{% else %}
+    {% set active = false %}
+{% endif %}
+
+<li class="navbar-nesting-{{ nestedLevel }}{% if active %} active{% endif %}">
+    {% if element.getChild() %}
+    <li class="dropdown">
+    <a href="{{ element.getPath() }}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ element.getName() }}<span class="caret"></span></a>
+    <ul class="dropdown-menu">
+    {% for child in element.getChild() %}
+        {{ child|navbarChild(nestedLevel) }}
+    {% endfor %}
+    </ul>
+    {% else %}
+    <a href="{{ element.getPath() }}">{{ element.getName() }}{% if active %}<span class="sr-only">(current)</span>{% endif %}</a>
+    {% endif %}
+</li>

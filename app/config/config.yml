@@ -84,3 +84,13 @@ fos_user:
     db_driver: orm 
     firewall_name: main
     user_class: Cscfa\Bundle\SecurityBundle\Entity\User
+
+cscfa_nav_bar:
+    template: "CscfaCSManagerNavbarBundle:Default:navbar.html.twig"
+    child_template: "CscfaCSManagerNavbarBundle:Default:child.html.twig"
+    files_path: "/Resources/config/csmanager/navbar.yml"
+
+cscfa_cache_system:
+    prefix:    'cscfa'
+    timestamp: 30
+  

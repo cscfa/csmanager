@@ -16,6 +16,7 @@
     {{ parent() }}
     
     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+        {{ renderNavbar() }}
     {% else %}
     <div class="row core-index-formRow">
         <div class="col-xs-12 col-md-6 core-index-formContainer">

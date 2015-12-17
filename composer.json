@@ -24,7 +24,9 @@
 		"incenteev/composer-parameter-handler" : "2.*@stable",
 		"friendsofsymfony/user-bundle" : "1.*@stable",
 		"friendsofsymfony/rest-bundle" : "1.*@stable",
-		"doctrine/doctrine-fixtures-bundle" : "2.*@stable"
+		"doctrine/doctrine-fixtures-bundle" : "2.*@stable",
+		"cscfa/navbar-bundle" : "dev-master",
+		"cscfa/cache-system-bundle" : "dev-master"
 	},
 	"require-dev" : {
 		"sensio/generator-bundle" : "2.*@stable"
