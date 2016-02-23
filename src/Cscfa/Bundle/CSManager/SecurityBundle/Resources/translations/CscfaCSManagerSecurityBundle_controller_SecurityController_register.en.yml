@@ -1,0 +1,4 @@
+access:
+    forbiden: "Access forbiden due to signin desallowed"
+signin:
+    subject:  "CSManager : signin confirmation email"

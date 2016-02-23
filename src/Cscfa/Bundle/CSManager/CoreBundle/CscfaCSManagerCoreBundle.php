@@ -22,7 +22,7 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
  * CscfaCSManagerCoreBundle class.
  *
  * The CscfaCSManagerCoreBundle class define
- * the cor bundle.
+ * the core bundle.
  *
  * @category Bundle
  * @package  CscfaCSManagerCoreBundle

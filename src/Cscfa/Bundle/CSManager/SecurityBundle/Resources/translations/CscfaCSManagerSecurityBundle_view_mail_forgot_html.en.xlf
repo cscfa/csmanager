@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" datatype="plaintext" original="file.ext">
+        <body>
+            <trans-unit id="e74f244f">
+                <source>pageTitle</source>
+                <target>password updated</target>
+            </trans-unit>
+            <trans-unit id="79f44fa0">
+                <source>greeting</source>
+                <target>
+                	<![CDATA[
+                		<h4>Dear user of CSManager,</h4>
+					]]>
+				</target>
+            </trans-unit>
+            <trans-unit id="2d1947a0">
+                <source>message</source>
+                <target>
+                	<![CDATA[
+                		<p>
+					        You have submit a request to get a new password. The system has created a new for you.<br/>
+					        We suggest you to remove this email and quikly change it.
+					    </p>
+					]]>
+				</target>
+            </trans-unit>
+            <trans-unit id="7336efd7">
+                <source>password</source>
+                <target>
+                	<![CDATA[
+                		<p>
+					        You're new password is : %plainPassword%
+					    </p>
+					]]>
+				</target>
+            </trans-unit>
+            <trans-unit id="47a56e94">
+                <source>connect</source>
+                <target>
+                	<![CDATA[
+				        <p>
+				            Connect to <a href="%base%%path%">csmanager</a>
+				        </p>
+					]]>
+				</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

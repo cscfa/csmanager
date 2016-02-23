@@ -1,0 +1,5 @@
+pageTitle:          "password forgot"
+contactAdmin:       "Please, contact the administrator to receive a new password"
+passwordWillUpdate: "The password of you'r account will be updated. Please, give the Email adress to receive the new password."
+emailLabel:         "Email adress : "
+return:             "Return to homepage"

@@ -1,6 +1,8 @@
 {% extends '::base.html.twig' %}
 
-{% block title %}SCM - password updated{% endblock %}
+{% trans_default_domain "CscfaCSManagerSecurityBundle_view_mail_forgot_html" %}
+
+{% block title %}SCM - {{ "pageTitle"|trans }}{% endblock %}
 
 {% block stylesheets %}
 
@@ -9,19 +11,16 @@
 {% endblock %}
 
 {% block body %}
-    <h4>Dear user of CSManager,</h4>
-    <p>
-        You have submit a request to get a new password. The system has created a new for you.<br/>
-        We suggest you to remove this email and quikly change it.
-    </p>
-    <p>
-        You're new password is : {{ plainPassword }}
-    </p>
+    {{ "greeting"|trans }}
+    
+    {{ "message"|trans }}
+    
+    {{ "password"|trans({'%plainPassword%': plainPassword}) }}
     
     {% if preference.getSiteBaseUrl() %}
-        <p>
-            Connect to <a href="{{ preference.getSiteBaseUrl() }}{{ path("core_home_index") }}">csmanager</a>
-        </p>
+    
+        {{ "connect"|trans({'%base%': preference.getSiteBaseUrl(), '%path%': path("core_home_index")}) }}
+        
     {% endif %}
 {% endblock %}
 

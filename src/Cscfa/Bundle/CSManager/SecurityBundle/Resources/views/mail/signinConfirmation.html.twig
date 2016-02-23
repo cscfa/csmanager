@@ -1,6 +1,7 @@
 {% extends '::base.html.twig' %}
+{% trans_default_domain "CscfaCSManagerSecurityBundle_view_mail_signinConfirmation_html" %}
 
-{% block title %}SCM - signin confirmation email{% endblock %}
+{% block title %}SCM - {{ "pageTitle"|trans }}{% endblock %}
 
 {% block stylesheets %}
 
@@ -9,20 +10,14 @@
 {% endblock %}
 
 {% block body %}
-    <h4>Dear user of CSManager,</h4>
-    <p>
-        You have submit a request to create a new account.<br/>
-        This task was completed with success.
-    </p>
+    {{ "greeting"|trans }}
+    
+    {{ "message"|trans }}
     
     {% if preference.getSiteBaseUrl() %}
-        <p>
-            Activate by clicking : <a href="{{ preference.getSiteBaseUrl() }}{{ path("mail_confirm", {'user':id, 'confirmationToken':token}) }}">csmanager</a>
-        </p>
+        {{ "active"|trans({"%base%": preference.getSiteBaseUrl(), "%path%": path("mail_confirm", {'user':id, 'confirmationToken':token})}) }}
     {% else %}
-        <p>
-            Please, connect to : {{ path("mail_confirm", {'user':id, 'confirmationToken':token}) }}
-        </p>
+        {{ "connect"|trans({"%path%": path("mail_confirm", {'user':id, 'confirmationToken':token})}) }}
     {% endif %}
 {% endblock %}
 

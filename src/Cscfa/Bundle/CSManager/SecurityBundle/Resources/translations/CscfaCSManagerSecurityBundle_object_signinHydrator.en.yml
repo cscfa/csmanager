@@ -1,0 +1,11 @@
+pseudo:
+    invalid:   "This value is not valid"
+    duplicate: "This pseudo is already used"
+    undefined: "Undefined error"
+email:
+    invalid:   "This value is not valid"
+    duplicate: "This email is already used"
+    undefined: "Undefined error"
+password:
+    empty:     "This password can't be empty"
+    undefined: "Undefined error"

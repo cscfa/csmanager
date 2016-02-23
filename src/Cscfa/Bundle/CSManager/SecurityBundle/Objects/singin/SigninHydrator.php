@@ -1,4 +1,19 @@
 <?php
+/**
+ * This file is a part of CSCFA csmanager project.
+ *
+ * The csmanager project is a project manager written in php
+ * with Symfony2 framework.
+ *
+ * PHP version 5.5
+ *
+ * @category Objects
+ * @package  CscfaCSManagerSecurityBundle
+ * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
+ * @license  http://opensource.org/licenses/MIT MIT
+ * @filesource
+ * @link     http://cscfa.fr
+ */
 namespace Cscfa\Bundle\CSManager\SecurityBundle\Objects\singin;
 
 use Symfony\Component\Form\Form;
@@ -10,9 +25,58 @@ use Cscfa\Bundle\CSManager\UserBundle\Entity\Person;
 use Cscfa\Bundle\CSManager\UserBundle\Entity\Phone;
 use Cscfa\Bundle\CSManager\UserBundle\Entity\Adress;
 use Cscfa\Bundle\CSManager\ConfigBundle\Entity\Preference;
+use Symfony\Component\Translation\TranslatorInterface;
 
+/**
+ * SigninHydrator class.
+ *
+ * The SigninHydrator provide
+ * method to manage the sgnin
+ * form hydratation.
+ *
+ * @category Objects
+ * @package  CscfaCSManagerSecurityBundle
+ * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
+ * @license  http://opensource.org/licenses/MIT MIT
+ * @link     http://cscfa.fr
+ */
 class SigninHydrator
 {
+    
+    /**
+     * SigninHydrator attribute
+     * 
+     * This attribute register
+     * the translator service.
+     * 
+     * @var TranslatorInterface
+     */
+    protected $translator;
+    
+    /**
+     * SigninHydrator attribute
+     * 
+     * This attribute indicate
+     * the translation domain
+     * to be used.
+     * 
+     * @var string
+     */
+    protected $domain;
+    
+    /**
+     * SigninHydrator constructor
+     * 
+     * Default SigninHydrator constructor.
+     * 
+     * @param TranslatorInterface $translator The translator service
+     * @param string              $domain     The translation domain
+     */
+    public function __construct(TranslatorInterface $translator, $domain)
+    {
+        $this->translator = $translator;
+        $this->domain = $domain;
+    }
 
     /**
      * Get SigninObject
@@ -182,11 +246,11 @@ class SigninHydrator
         if ($user->getLastError() !== UserBuilder::NO_ERROR) {
             $errors = true;
             if ($user->getLastError() == UserBuilder::INVALID_USERNAME) {
-                $form->get("pseudo")->addError(new FormError("This value is not valid"));
+                $form->get("pseudo")->addError(new FormError($this->translator->trans("pseudo.invalid", [], $this->domain)));
             } else if ($user->getLastError() == UserBuilder::DUPLICATE_USERNAME) {
-                $form->get("pseudo")->addError(new FormError("This pseudo is already used"));
+                $form->get("pseudo")->addError(new FormError($this->translator->trans("pseudo.duplicate", [], $this->domain)));
             } else {
-                $form->get("pseudo")->addError(new FormError("Undefined error"));
+                $form->get("pseudo")->addError(new FormError($this->translator->trans("pseudo.undefined", [], $this->domain)));
             }
         }
         
@@ -195,11 +259,11 @@ class SigninHydrator
         if ($user->getLastError() !== UserBuilder::NO_ERROR) {
             $errors = true;
             if ($user->getLastError() == UserBuilder::INVALID_EMAIL) {
-                $form->get("email")->addError(new FormError("This value is not valid"));
+                $form->get("email")->addError(new FormError($this->translator->trans("email.invalid", [], $this->domain)));
             } else if ($user->getLastError() == UserBuilder::DUPLICATE_EMAIL) {
-                $form->get("email")->addError(new FormError("This email is already used"));
+                $form->get("email")->addError(new FormError($this->translator->trans("email.duplicate", [], $this->domain)));
             } else {
-                $form->get("email")->addError(new FormError("Undefined error"));
+                $form->get("email")->addError(new FormError($this->translator->trans("email.undefined", [], $this->domain)));
             }
         }
         
@@ -208,9 +272,9 @@ class SigninHydrator
         if ($user->getLastError() !== UserBuilder::NO_ERROR) {
             $errors = true;
             if ($user->getLastError() == UserBuilder::EMPTY_PASSWORD) {
-                $form->get("password")->addError(new FormError("Undefined error"));
+                $form->get("password")->addError(new FormError($this->translator->trans("password.empty", [], $this->domain)));
             } else {
-                $form->get("password")->addError(new FormError("Undefined error"));
+                $form->get("password")->addError(new FormError($this->translator->trans("password.undefined", [], $this->domain)));
             }
         }
         

@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" datatype="plaintext" original="file.ext">
+        <body>
+            <trans-unit id="87e381da">
+                <source>greeting</source>
+                <target>Dear user of CSManager,</target>
+            </trans-unit>
+            <trans-unit id="6c67e092">
+                <source>message</source>
+                <target>You have submit a request to get a new password. The system has created a new for you.
+We suggest you to remove this email and quikly change it.</target>
+            </trans-unit>
+            <trans-unit id="8d2121ad">
+                <source>password</source>
+                <target>You're new password is : %plainPassword%</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

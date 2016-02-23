@@ -1,0 +1,22 @@
+
+{{ renderDatagrid(data) }}
+
+<div class="row">
+    
+    <div class="col-md-7 col-md-offset-1 col-sm-7 col-xs-12">
+        <div class="cs-center cs-pager">
+            {{ renderPaginator(pager, null, 8) }}
+        </div>
+    </div>
+    
+    <div class="col-md-3 col-md-offset-1 col-sm-4 col-xs-4 col-xs-offset-8">
+        <div>
+            {{ renderPaginatorLimit(pager) }}
+        </div>
+    </div>
+    
+</div>
+
+{% javascripts '@CscfaCSManagerProjectBundle/Resources/public/js/viewProject.js' %}
+<script src="{{ asset_url }}"></script>
+{% endjavascripts %}

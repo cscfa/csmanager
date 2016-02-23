@@ -1,0 +1,6 @@
+name:
+    label:       "Project tag name : "
+    placeholder: "tag name"
+description:
+    label:       "Project tag description : "
+    placeholder: "tag description"

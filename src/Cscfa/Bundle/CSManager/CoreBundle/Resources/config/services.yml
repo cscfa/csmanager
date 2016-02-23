@@ -1,0 +1,11 @@
+services:
+    cscfa.core.paginator_stepper:
+        class: Cscfa\Bundle\CSManager\CoreBundle\BootstrapStepper\PaginatorStepper
+        calls: 
+            - [setArguments, [ "@router" ]]
+            - [setCallBacks]
+    cscfa.core.datagrid_stepper:
+        class: Cscfa\Bundle\CSManager\CoreBundle\BootstrapStepper\DatagridStepper
+        calls: 
+            - [setArguments, [ "@router" ]]
+            - [setCallBacks]

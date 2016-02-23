@@ -1,6 +1,7 @@
 {% extends 'CscfaCSManagerCoreBundle:Default:base.html.twig' %}
+{% trans_default_domain "CscfaCSManagerSecurityBundle_view_security_confirmationByMail" %}
 
-{% block title %}SCM - signin{% endblock %}
+{% block title %}SCM - {{ "pageTitle"|trans }}{% endblock %}
 
 {% block stylesheets %}
 
@@ -16,19 +17,19 @@
     {% if success %}
         <div class="col-xs-12 col-md-10 col-md-offset-1">
             
-            <h3>Signin success</h3>
+            <h3>{{ "success.title"|trans }}</h3>
             
             <p>
-                You have successfully activate your account.
+                {{ "success.info"|trans }}
             </p>
             
             <p>
-                Have a good day.
+                {{ "success.bye"|trans }}
             </p>
             
             <div class="cs-center">
                 <div>
-                    <a class="btn btn-primary" href="{{ path("core_home_index") }}">return to homepage</a>
+                    <a class="btn btn-primary" href="{{ path("core_home_index") }}">{{ "success.return"|trans }}</a>
                 </div>
             </div>
             
@@ -36,19 +37,19 @@
     {% else %}
         <div class="col-xs-12 col-md-10 col-md-offset-1">
             
-            <h3>Signin error</h3>
+            <h3>{{ "error.title"|trans }}</h3>
             
             <p>
-                An error occured durring validating your account. Please, use the validation mail link to validate.
+                {{ "error.info"|trans }}
             </p>
             
             <p>
-                Have a good day.
+                {{ "error.bye"|trans }}
             </p>
             
             <div class="cs-center">
                 <div>
-                    <a class="btn btn-primary" href="{{ path("core_home_index") }}">return to homepage</a>
+                    <a class="btn btn-primary" href="{{ path("core_home_index") }}">{{ "error.return"|trans }}</a>
                 </div>
             </div>
             

@@ -1,6 +1,7 @@
 {% extends 'CscfaCSManagerCoreBundle:Default:base.html.twig' %}
+{% trans_default_domain "CscfaCSManagerSecurityBundle_view_security_forgot" %}
 
-{% block title %}SCM - password forgot{% endblock %}
+{% block title %}SCM - {{ "pageTitle"|trans }}{% endblock %}
 
 {% block stylesheets %}
 
@@ -16,9 +17,9 @@
     
     {% set text %}
         {% if config.getForgotPasswordReaction() == 0 %}
-            Please, contact the administrator to receive a new password
+            {{ "contactAdmin"|trans }}
         {% else %}
-            The password of you'r account will be updated. Please, give the Email adress to receive the new password.
+            {{ "passwordWillUpdate"|trans }}
         {% endif %}
     {% endset %}
     
@@ -44,7 +45,7 @@
             {% endif %}
             
             <div class="form-group">
-                <label class="col-sm-2 col-xs-12 col-md-offset-1 emailLabel" for="emailAdress">Email adress : </label>
+                <label class="col-sm-2 col-xs-12 col-md-offset-1 emailLabel" for="emailAdress">{{ "emailLabel"|trans }}</label>
                 <div class="col-sm-7 col-xs-12 col-md-8">
                     {{ form_widget(form.email) }}
                 </div>
@@ -53,7 +54,7 @@
             <div class="cs-center col-xs-12 buttonContainer">
                 <div>
                     {{ form_widget(form.send) }}
-                    <a class="btn btn-info" href="{{ path("core_home_index") }}">Return to homepage</a>
+                    <a class="btn btn-info" href="{{ path("core_home_index") }}">{{ "return"|trans }}</a>
                 </div>
             </div>
         {{ form_end(form) }}

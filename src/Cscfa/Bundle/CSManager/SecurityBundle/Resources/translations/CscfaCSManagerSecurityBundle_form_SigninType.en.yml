@@ -1,0 +1,87 @@
+form:
+    register:
+        label:           "register"
+address:
+    referer:
+        label:           "Receiver name : "
+        placeholder:     "referer name"
+    address:
+        label:           "Address : "
+        placeholder:     "XX address street"
+    complement:
+        label:           "Address complement : "
+        placeholder:     "address complement"
+    town:
+        label:           "Address town : "
+        placeholder:     "address town name"
+    postalCode:
+        label:           "Address postal code : "
+        placeholder:     "postal code"
+    country:
+        label:           "Address country : "
+        placeholder:     "address country"
+company:
+    company:
+        label:           "Company : "
+        placeholder:     "you'r company name"
+    service:
+        label:           "Company service : "
+        placeholder:     "you'r job service"
+    job:
+        label:           "You'r job : "
+        placeholder:     "you'r job name"
+    companyReferer:
+        label:           "Company receiver name : "
+        placeholder:     "you'r company address referer"
+    companyAdress:
+        label:           "Company address : "
+        placeholder:     "XX you'r company address street"
+    companyComplement:
+        label:           "Company address complement : "
+        placeholder:     "you'r company address complement"
+    companyTown:
+        label:           "Company address town : "
+        placeholder:     "you'r company town"
+    companyPostalCode:
+        label:           "Company address postal code : "
+        placeholder:     "you'r company postal code"
+    companyCountry:
+        label:           "Company address country : "
+        placeholder:     "you'r company country"
+yourself:
+    firstName:
+        label:           "First name : "
+        placeholder:     "first name"
+    lastName:
+        label:           "Last name : "
+        placeholder:     "last name"
+    sex:
+        label:           "Gender : "
+    birthday:
+        label:           "Bith date : "
+    biography:
+        label:           "Biogaphy : "
+phone:
+    phoneType:
+        label:           "Phone type : "
+    phoneNumber:
+        label:           "Number : "
+        placeholder:     "Phone number"
+base:
+    pseudo:
+        label:           "Pseudo : "
+        placeholder:     "pseudo"
+    email:
+        first:
+            label:       "Email : "
+            placeholder: "email"
+        second:
+            label:       "Email confirmation : "
+            placeholder: "rewrite"
+    password:
+        first:
+            label:       "Password : "
+            placeholder: "password"
+        second:
+            label:       "Password confirmation : "
+            placeholder: "rewrite"

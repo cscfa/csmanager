@@ -34,34 +34,29 @@ use Cscfa\Bundle\CSManager\UserBundle\Entity\Type;
  */
 class LoadTypeData implements FixtureInterface
 {
+    /**
+     * Load
+     * 
+     * This method allow to load
+     * the type data into the
+     * database.
+     * 
+     * @see \Doctrine\Common\DataFixtures\FixtureInterface::load()
+     */
     public function load(ObjectManager $manager)
     {
         $repository = $manager->getRepository("Cscfa\Bundle\CSManager\UserBundle\Entity\Type");
-        $workType = $repository->findOneByLabel("work");
-        if($workType){
-            $work = $workType;
-        }else{
-            $work = new Type();
-            $work->setLabel("work");
-            $manager->persist($work);
-        }
 
-        $personnalType = $repository->findOneByLabel("personnal");
-        if($personnalType){
-            $personnal = $personnalType;
-        }else{
-            $personnal = new Type();
-            $personnal->setLabel("personnal");
-            $manager->persist($personnal);
-        }
-
-        $alternativeType = $repository->findOneByLabel("alternative");
-        if($alternativeType){
-            $alternative = $alternativeType;
-        }else{
-            $alternative = new Type();
-            $alternative->setLabel("alternative");
-            $manager->persist($alternative);
+        $labels = array("work", "personnal", "alternative");
+        foreach ($labels as $label) {
+            $type = $repository->findOneByLabel($label);
+            if($type){
+                $entity = $type;
+            }else{
+                $entity = new Type();
+                $entity->setLabel($label);
+                $manager->persist($entity);
+            }
         }
         
         $manager->flush();

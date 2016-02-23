@@ -1,3 +1,30 @@
-#cscfa_cs_manager_project_homepage:
-#    path:     /hello/{name}
-#    defaults: { _controller: CscfaCSManagerProjectBundle:Default:index }
+cscfa_cs_manager_project_home:
+    path:     /
+    defaults: { _controller: "CscfaCSManagerProjectBundle:Project:index" }
+    methods:  [GET]
+cscfa_cs_manager_project_create_project:
+    path:     /ajax/create/project
+    defaults: { _controller: "CscfaCSManagerProjectBundle:Project:createProject" }
+    methods:  [GET, POST]
+cscfa_cs_manager_project_view_project:
+    path:     /ajax/view/projects/{page}/{limit}
+    defaults: { _controller: "CscfaCSManagerProjectBundle:Project:viewProject", page: 1, limit: 5 }
+    methods:  [GET]
+cscfa_cs_manager_project_change_view_limit:
+    path:     /ajax/view/limitExchange
+    defaults: { _controller: "CscfaCSManagerProjectBundle:Project:viewLimit" }
+    methods:  [POST]
+cscfa_cs_manager_project_select_project:
+    path:     /ajax/select/project/{id}
+    defaults: { _controller: "CscfaCSManagerProjectBundle:Project:selectProject" }
+    methods:  [GET]
+
+
+
+
+project_css_base:
+    path:     /css/{media}/projectBase.css
+    defaults: { _controller: "CscfaCSManagerProjectBundle:CSS:base", media: "screen" }
+    methods:  [GET]
+    requirements:
+        media:  screen|handheld|print|aural|speech|braille|embossed|projection|tty|tv|all

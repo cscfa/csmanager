@@ -1,7 +1,8 @@
 {% extends 'CscfaCSManagerCoreBundle:Default:base.html.twig' %}
 {% import "CscfaCSManagerSecurityBundle:Tool:registerForm.html.twig" as formTool %}
+{% trans_default_domain "CscfaCSManagerCoreBundle_view_CoreHome_index" %}
 
-{% block title %}SCM - home{% endblock %}
+{% block title %}SCM - {{ "pageTitle"|trans }}{% endblock %}
 
 {% block stylesheets %}
 
@@ -22,7 +23,7 @@
         <div class="col-xs-12 col-md-6 core-index-formContainer">
         
             <div class="cs-window window-margin">
-                <h4 class="cs-head">Login</h4>
+                <h4 class="cs-head">{{ "sectionTitle1"|trans }}</h4>
                 
                 <div class="cs-body">
                     {% if error %}
@@ -32,23 +33,23 @@
                     <p>
                         <form action="{{ path('login_check') }}" method="post">
                             <div class="form-group">
-                                <label for="username">Username:</label>
+                                <label for="username">{{ "section1.usernameLabel"|trans }} :</label>
                                 <input type="text" id="username" name="_username" value="{{ last_username }}" class="form-control" />
                             </div>
                             
                             <div class="form-group">
-                                <label for="password">Password:</label>
+                                <label for="password">{{ "section1.passwordLabel"|trans }} :</label>
                                 <input type="password" id="password" name="_password" class="form-control" />
                             </div>
                             
                             <p class="p-center">
-                                <a href="{{ path("forgot_password") }}">forgot password</a>
+                                <a href="{{ path("forgot_password") }}">{{ "section1.passwordForgot"|trans }}</a>
                             </p>
                             
                             <div class="cs-center">
                                 <div>
-                                    <button type="submit" class="btn btn-primary">login</button>
-                                    <button type="reset" class="btn btn-info">reset</button>
+                                    <button type="submit" class="btn btn-primary">{{ "section1.submit"|trans }}</button>
+                                    <button type="reset" class="btn btn-info">{{ "section1.reset"|trans }}</button>
                                 </div>
                             </div>
                         </form>
@@ -60,11 +61,11 @@
         <div class="col-xs-12 col-md-6 core-index-formContainer">
         
             <div class="cs-window window-margin">
-                <h4 class="cs-head">Sign in</h4>
+                <h4 class="cs-head">{{ "sectionTitle2"|trans }}</h4>
                 
                 <div class="cs-body">
                     {% set secondary %}
-                        <button class="btn btn-info" type="reset">reset</button>
+                        <button class="btn btn-info" type="reset">{{ "section2.reset"|trans }}</button>
                     {% endset %}
                     {{ formTool.registerForm(signinForm, secondary) }}
                 </div>

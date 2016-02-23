@@ -1,6 +1,7 @@
-Dear user of CSManager,
+{% trans_default_domain "CscfaCSManagerSecurityBundle_view_mail_forgot_txt" %}
 
-You have submit a request to get a new password. The system has created a new for you.
-We suggest you to remove this email and quikly change it.
+{{ "greeting"|trans }}
 
-You're new password is : {{ plainPassword }}
+{{ "message"|trans }}
+
+{{ "password"|trans({'%plainPassword%': plainPassword}) }}

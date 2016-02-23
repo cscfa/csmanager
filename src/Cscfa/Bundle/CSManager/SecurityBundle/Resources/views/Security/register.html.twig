@@ -1,7 +1,8 @@
 {% extends 'CscfaCSManagerCoreBundle:Default:base.html.twig' %}
 {% import "CscfaCSManagerSecurityBundle:Tool:registerForm.html.twig" as formTool %}
+{% trans_default_domain "CscfaCSManagerSecurityBundle_view_security_register" %}
 
-{% block title %}SCM - register{% endblock %}
+{% block title %}SCM - {{ "pageTitle"|trans }}{% endblock %}
 
 {% block stylesheets %}
 
@@ -20,25 +21,25 @@
         
         <div class="col-xs-12 col-md-10 col-md-offset-1">
             
-            <h3>Signin success</h3>
+            <h3>{{ "success.title"|trans }}</h3>
             
             <p>
-                Your account was successfully created. We hope you'll have a good experience with the csmanager system.
+                {{ "success.created"|trans }}
             </p>
             
             {% if preference.getConfiguration().getSignInVerifyEmail() %}
                 <p class="text-info">
-                    An email will be sent to your email box. You'll find an activation link inscribed into it.
+                    {{ "success.email"|trans }}
                 </p>
             {% endif %}
             
             <p>
-                Have a good day.
+                {{ "success.bye"|trans }}
             </p>
             
             <div class="cs-center">
                 <div>
-                    <a class="btn btn-primary" href="{{ path("core_home_index") }}">return to homepage</a>
+                    <a class="btn btn-primary" href="{{ path("core_home_index") }}">{{ "success.return"|trans }}</a>
                 </div>
             </div>
             
@@ -50,7 +51,7 @@
         
             <div class="col-xs-12 col-md-10 col-md-offset-1">
                 {% set secondary %}
-                    <a class="btn btn-info" href="{{ path("core_home_index") }}">Return to homepage</a>
+                    <a class="btn btn-info" href="{{ path("core_home_index") }}">{{ "error.return"|trans }}</a>
                 {% endset %}
                 {{ formTool.registerForm(form, secondary) }}
             </div>

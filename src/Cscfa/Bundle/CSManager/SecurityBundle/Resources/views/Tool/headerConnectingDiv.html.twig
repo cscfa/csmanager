@@ -1,9 +1,10 @@
+{% trans_default_domain "CscfaCSManagerSecurityBundle_view_Tool_headerConnectingDiv" %}
 <div>
 {% if is_granted('IS_AUTHENTICATED_FULLY') %}
     <p class="headerConnecting_welcome">Logged as {{ app.user.getUsername()|default("unknowed") }}</p>
-    <a href="{{ path('logout') }}" class="btn btn-danger btn-lg headerConnecting_disconnectBtn">Disconnect</a>
+    <a href="{{ path('logout') }}" class="btn btn-danger btn-lg headerConnecting_disconnectBtn">{{ "disconnect"|trans }}</a>
 {% else %}
     <p class="headerConnecting_welcome">Not logged</p>
-    <a href="{{ path("core_home_index") }}" class="btn btn-success btn-lg headerConnecting_connectBtn">Connect</a>
+    <a href="{{ path("core_home_index") }}" class="btn btn-success btn-lg headerConnecting_connectBtn">{{ "connect"|trans }}</a>
 {% endif %}
 </div>

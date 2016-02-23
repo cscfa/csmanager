@@ -1,4 +1,42 @@
 services:
-#    cscfa_cs_manager_project.example:
-#        class: Cscfa\Bundle\CSManager\ProjectBundle\Example
-#        arguments: [@service_id, "plain_value", %parameter%]
+    csmanager.project_form.createProject:
+        class: Cscfa\Bundle\CSManager\ProjectBundle\Form\Type\CreateProjectType
+        calls: 
+            - [setArguments, [ "@translator" ]]
+        tags: 
+            - { name: form.type, alias: createProject }
+    csmanager.project_form.projectTag:
+        class: Cscfa\Bundle\CSManager\ProjectBundle\Form\Type\TagType
+        tags: 
+            - { name: form.type, alias: projectTag }
+    csmanager.project_form.projectLink:
+        class: Cscfa\Bundle\CSManager\ProjectBundle\Form\Type\LinkType
+        calls: 
+            - [setArguments, [ "@translator" ]]
+        tags: 
+            - { name: form.type, alias: projectLink }
+    csmanager.project_form.projectNote:
+        class: Cscfa\Bundle\CSManager\ProjectBundle\Form\Type\NoteType
+        calls: 
+            - [setArguments, [ "@translator" ]]
+        tags: 
+            - { name: form.type, alias: projectNote }
+
+    cscfa.view_project.paginator_stepper:
+        class: Cscfa\Bundle\CSManager\CoreBundle\BootstrapStepper\PaginatorStepper
+        calls: 
+            - [setArguments, [ "@router", "cscfa_cs_manager_project_view_project", "cscfa_cs_manager_project_change_view_limit" ]]
+            - [setCallBacks]
+    cscfa.view_project.datagrid_stepper:
+        class: Cscfa\Bundle\CSManager\CoreBundle\BootstrapStepper\DatagridStepper
+        calls: 
+            - [setArguments, [ "@router", "cscfa_cs_manager_project_select_project" ]]
+            - [setCallBacks]
+    cscfa_project.project_role.extension:
+        class: Cscfa\Bundle\CSManager\ProjectBundle\Twig\Extension\ProjectRoleExtension
+        calls: 
+            - [setArguments, [ "@security.context", "@doctrine.orm.entity_manager" ]]
+        public: false
+        tags:
+            - { name: twig.extension }
+            

@@ -189,6 +189,26 @@ class Role extends StackableObject
     }
     
     /**
+     * Get the recursives names.
+     * 
+     * This method return the current
+     * role name and merge the childs
+     * names into an array.
+     * 
+     * @return array
+     */
+    public function getRecursiveNames(){
+        $names = array();
+        
+        $names[] = $this->getName();
+        if ($this->getChild() !== null) {
+            $names = array_merge($names, $this->getChild()->getRecursiveNames());
+        }
+        
+        return $names;
+    }
+    
+    /**
      * The to string method.
      * 
      * This method return the

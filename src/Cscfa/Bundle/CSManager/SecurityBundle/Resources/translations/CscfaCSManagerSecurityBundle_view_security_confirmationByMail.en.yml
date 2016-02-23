@@ -1,0 +1,11 @@
+pageTitle:  "signin"
+success:
+    title:  "Signin success"
+    info:   "You have successfully activate your account."
+    bye:    "Have a good day."
+    return: "return to homepage"
+error:
+    title:  "Signin error"
+    info:   "An error occured durring validating your account. Please, use the validation mail link to validate."
+    bye:    "Have a good day."
+    return: "return to homepage"

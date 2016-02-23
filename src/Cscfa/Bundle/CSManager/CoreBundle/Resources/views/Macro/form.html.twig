@@ -16,9 +16,9 @@
         {{ form_label(form) }}
         
         {% if error or form.vars.value|length %}
-            {% set attr = {'aria-describedby':'adb'~form.vars.id, 'class':'form-control'} %}
+            {% set attr = {'aria-describedby':'adb'~form.vars.id} %}
         {%  else %}
-            {% set attr = {'class':'form-control'} %}
+            {% set attr = {} %}
         {% endif %}
         {{ form_widget(form, {'attr': attr}) }}
         {% if error %}
@@ -58,9 +58,9 @@
             {{ form_label(field) }}
             
             {% if errors or field.vars.value|length %}
-                {% set attr = {'aria-describedby':'adb'~field.vars.id, 'class':'form-control'} %}
+                {% set attr = {'aria-describedby':'adb'~field.vars.id} %}
             {%  else %}
-                {% set attr = {'class':'form-control'} %}
+                {% set attr = {} %}
             {% endif %}
             
             {{ form_widget(field, {'attr':attr}) }}
@@ -77,7 +77,7 @@
     
 {% endmacro %}
 
-{% macro fieldset(title, forms) %}
+{% macro fieldset(title, forms, endAdd) %}
     {% import _self as current %}
     
     {% set lib = "green" %}
@@ -121,6 +121,9 @@
                         {{ current.block(field.0, field.2) }}
                     {% endif %}
                 {% endfor %}
+                {% if endAdd %}
+                    {{ endAdd }}
+                {% endif %}
             </div>
         {% if libexist %}</div>{% endif %}
     </fieldset>

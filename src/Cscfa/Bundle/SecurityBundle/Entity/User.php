@@ -554,7 +554,7 @@ class User extends StackableObject implements AdvancedUserInterface, \Serializab
         $roles = array();
         
         foreach ($this->roles as $role) {
-            $roles[] = $role->getName();
+            $roles = array_merge($roles, $role->getRecursiveNames());
         }
         
         return array_unique($roles);
@@ -576,7 +576,7 @@ class User extends StackableObject implements AdvancedUserInterface, \Serializab
      */
     public function hasRole($role)
     {
-        return in_array($role, $this->getRoles(), true);
+        return in_array($role, $this->getRoles());
     }
 
     /**

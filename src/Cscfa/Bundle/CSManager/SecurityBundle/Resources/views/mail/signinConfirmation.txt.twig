@@ -1,10 +1,10 @@
-Dear user of CSManager,
+{% trans_default_domain "CscfaCSManagerSecurityBundle_view_mail_signinConfirmation_txt" %}
+{{ "greeting"|trans }}
 
-You have submit a request to create a new account.
-This task was completed with success.
+{{ "message"|trans }}
     
 {% if preference.getSiteBaseUrl() %}
-Activate by connecting to : {{ preference.getSiteBaseUrl() }}{{ path("mail_confirm", {'user':id, 'confirmationToken':token}) }}
+{{ "active"|trans({"%base%": preference.getSiteBaseUrl , "%path%": path("mail_confirm", {'user':id, 'confirmationToken':token})}) }}
 {% else %}
-Please, connect to : {{ path("mail_confirm", {'user':id, 'confirmationToken':token}) }}
+{{ "connect"|trans({"%path%": path("mail_confirm", {'user':id, 'confirmationToken':token})}) }}
 {% endif %}

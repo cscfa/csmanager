@@ -107,3 +107,64 @@
     background-image: -o-linear-gradient(left, rgba(0, 255, 0, .6) 0%, rgba(0, 255, 0, .6) 5px, transparent 6px);
     background-image: linear-gradient(left, rgba(0, 255, 0, .6) 0%, rgba(0, 0, 255, .6) 5px, transparent 6px);
 }
+
+.cs-loader-head{
+}
+
+.cs-loader-head a{
+    cursor: pointer;
+}
+
+.cs-loader{
+    display: none;
+}
+
+.cs-loading{
+    display: block;
+    border: 2px ridge #{{ base_color }};
+    border-right: none;
+    border-bottom: none;
+    box-shadow: 2px 2px 3px #{{ base_color }};
+    padding: 1%;
+}
+
+.cs-loading > img{
+    display: block;
+    margin: auto;
+}
+
+.cs-loading > div{
+    display: none;
+}
+
+.cs-loaded{
+    display: block;
+    border: 2px ridge #{{ base_color }};
+    border-right: none;
+    border-bottom: none;
+    box-shadow: 2px 2px 3px #{{ base_color }};
+    padding: 1%;
+}
+
+.cs-loaded > img{
+    display: none;
+}
+
+.cs-loaded > div{
+    display: block;
+}
+
+.cs-btnset > div{
+    display: inline;
+}
+
+.cs-right > div{
+    display: inline-block;
+    float: right;
+}
+
+.cs-right:after{
+    content: " ";
+    display: block;
+    clear: right;
+}

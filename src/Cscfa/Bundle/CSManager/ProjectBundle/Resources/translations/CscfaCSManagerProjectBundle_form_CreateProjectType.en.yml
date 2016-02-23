@@ -1,0 +1,13 @@
+name:
+    label:        "Project name : "
+    placeholder:  "project name"
+summary:
+    label:        "Project summary : "
+    placeholder:  "A short description of the project"
+status:
+    choice_label: "name"
+    placeholder:  "choose a status"
+reset:
+    label:        "reset"
+submit:
+    label:        "save"

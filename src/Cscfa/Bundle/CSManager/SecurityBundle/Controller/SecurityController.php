@@ -61,11 +61,15 @@ class SecurityController extends Controller
      */
     public function confirmationByMailAction(Request $request, User $user, $confirmationToken)
     {
+        
         $confirmationToken = urldecode($confirmationToken);
         
         if (! $this->getPreference()->getConfiguration()->getSignInAllowed() || 
             ! $this->getPreference()->getConfiguration()->getSignInVerifyEmail()) {
-            throw $this->createAccessDeniedException("Access forbiden due to signin desallowed");
+                
+            $domain = "CscfaCSManagerSecurityBundle_controller_SecurityController_confirmationByMail";
+            $message = $this->get("translator")->trans("access.forbiden", [], $domain);
+            throw $this->createAccessDeniedException($message);
         }
         
         if ($user->getConfirmationToken() == $confirmationToken) {
@@ -105,6 +109,8 @@ class SecurityController extends Controller
      */
     public function registerAction(Request $request)
     {
+        $domain = "CscfaCSManagerSecurityBundle_controller_SecurityController_register";
+        
         $preference = $this->getPreference();
         $signinAllowed = $preference->getConfiguration()->getSignInAllowed();
         
@@ -120,7 +126,7 @@ class SecurityController extends Controller
                 $errors = false;
                 $data = $signinForm->getData();
                 $manager = $this->getDoctrine()->getManager();
-                $hydrator = new SigninHydrator();
+                $hydrator = new SigninHydrator($this->get("translator"), "CscfaCSManagerSecurityBundle_object_signinHydrator");
                 
                 if ($data instanceof SignInObject) {
                     $groups = $data->getGroups();
@@ -161,9 +167,11 @@ class SecurityController extends Controller
                 
                 if (! $errors) {
                     $manager->flush();
+
+                    $subject = $this->get("translator")->trans("signin.subject", [], $domain);
                     
                     if ($preference->getConfiguration()->getSignInVerifyEmail() && $user instanceof UserBuilder) {
-                        $message = \Swift_Message::newInstance()->setSubject('CSManager : signin confirmation email')
+                        $message = \Swift_Message::newInstance()->setSubject($subject)
                             ->setFrom($preference->getEmailSender())
                             ->setTo($user->getEmail())
                             ->setBody($this->renderView('CscfaCSManagerSecurityBundle:mail:signinConfirmation.html.twig', array(
@@ -179,7 +187,7 @@ class SecurityController extends Controller
                         
                         $this->get('mailer')->send($message);
                     } else {
-                        $message = \Swift_Message::newInstance()->setSubject('CSManager : signin confirmation email')
+                        $message = \Swift_Message::newInstance()->setSubject($subject)
                             ->setFrom($preference->getEmailSender())
                             ->setTo($user->getEmail())
                             ->setBody($this->renderView('CscfaCSManagerSecurityBundle:mail:signin.html.twig', array(
@@ -211,7 +219,8 @@ class SecurityController extends Controller
                 "signinAllowed" => true
             );
         } else {
-            throw $this->createAccessDeniedException("Access forbiden due to signin desallowed");
+            $message = $this->get("translator")->trans("access.forbiden", [], $domain);
+            throw $this->createAccessDeniedException($message);
         }
     }
 
@@ -226,6 +235,8 @@ class SecurityController extends Controller
      */
     public function forgotAction(Request $request)
     {
+        $domain = "CscfaCSManagerSecurityBundle_controller_SecurityController_forgot";
+        
         $preference = $this->getPreference();
         $reaction = $preference->getConfiguration()->getForgotPasswordReaction();
         
@@ -238,11 +249,11 @@ class SecurityController extends Controller
                 ->add("email", "text", array(
                 'attr' => array(
                     'class' => 'form-control',
-                    'placeholder' => 'email'
+                    'placeholder' => $this->get("translator")->trans("form.email.placeholder", [], $domain)
                 )
             ))
                 ->add("send", "submit", array(
-                'label' => 'Send request',
+                'label' => $this->get("translator")->trans("form.send.label", [], $domain),
                 'attr' => array(
                     'class' => 'btn btn-primary'
                 )
@@ -270,7 +281,9 @@ class SecurityController extends Controller
                     $this->getDoctrine()->getManager()->persist($user);
                     $this->getDoctrine()->getManager()->flush();
                     
-                    $message = \Swift_Message::newInstance()->setSubject('CSManager : password updated')
+                    $subject = $this->get("translator")->trans("message.subject", [], $domain);
+                    
+                    $message = \Swift_Message::newInstance()->setSubject($subject)
                         ->setFrom($preference->getEmailSender())
                         ->setTo($user->getEmail())
                         ->setBody($this->renderView('CscfaCSManagerSecurityBundle:mail:forgot.html.twig', array(
@@ -283,9 +296,10 @@ class SecurityController extends Controller
                     
                     $this->get('mailer')->send($message);
                     
-                    $this->addFlash("success", "Y'our password is succefully updated. Please, check you'r mail box");
+                    $this->addFlash("success", $this->get("translator")->trans("flash.success", [], $domain));
                 } else {
-                    $formArray->get("email")->addError(new FormError("The given email doesn't exist"));
+                    $message = $this->get("translator")->trans("error.userUnfound", [], $domain);
+                    $formArray->get("email")->addError(new FormError($message));
                 }
             }
             

@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" datatype="plaintext" original="file.ext">
+        <body>
+            <trans-unit id="419c9962">
+                <source>pageTitle</source>
+                <target>signin confirmation email</target>
+            </trans-unit>
+            <trans-unit id="a7d201ba">
+                <source>greeting</source>
+                <target>
+                	<![CDATA[
+                		<h4>Dear user of CSManager,</h4>
+					]]>
+				</target>
+            </trans-unit>
+            <trans-unit id="868328f3">
+                <source>message</source>
+                <target>
+                	<![CDATA[
+					    <p>
+					        You have submit a request to create a new account.<br/>
+					        This task was completed with success.
+					    </p>
+					]]>
+				</target>
+            </trans-unit>
+            <trans-unit id="3646585f">
+                <source>active</source>
+                <target>
+                	<![CDATA[
+				        <p>
+				            Activate by clicking : <a href="%base%%path%">csmanager</a>
+				        </p>
+					]]>
+				</target>
+            </trans-unit>
+            <trans-unit id="ec3f01c7">
+                <source>connect</source>
+                <target>
+                	<![CDATA[
+				        <p>
+				            Please, connect to : %path%
+				        </p>
+					]]>
+				</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

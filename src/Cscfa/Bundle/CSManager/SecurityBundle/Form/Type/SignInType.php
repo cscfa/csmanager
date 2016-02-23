@@ -22,6 +22,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Form\FormInterface;
 use Cscfa\Bundle\CSManager\SecurityBundle\Objects\singin\SignInObject;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * SignInType class.
@@ -48,15 +49,37 @@ class SignInType extends AbstractType
     protected $manager;
     
     /**
+     * SignInType attribute
+     * 
+     * This attribute allow to
+     * process a translation.
+     * 
+     * @var TranslatorInterface
+     */
+    protected $translator;
+    
+    /**
+     * SignInType attribute
+     * 
+     * This attribute indicate
+     * the translation domain.
+     * 
+     * @var string
+     */
+    protected $domain = "CscfaCSManagerSecurityBundle_form_SigninType";
+    
+    /**
      * SignInType constructor
      * 
      * This register the entity
      * manager service
      * 
-     * @param EntityManager $manager - the entity manager service
+     * @param EntityManager $manager    - the entity manager service
+     * @param Translator    $translator - The translator service
      */
-    public function __construct(EntityManager $manager){
+    public function __construct(EntityManager $manager, TranslatorInterface $translator){
         $this->manager = $manager;
+        $this->translator = $translator;
     }
     
     /**
@@ -77,7 +100,14 @@ class SignInType extends AbstractType
         $this->buildCompany($builder, $options);
         $this->buildAddress($builder, $options);
         
-        $builder->add("register", "submit", array('label'=>'register', 'attr'=>array('class'=>'btn btn-success')));
+        $builder->add(
+            "register", 
+            "submit", 
+            array(
+                'label'=>$this->translator->trans("form.register.label", [], $this->domain),
+                'attr'=>array('class'=>'btn btn-success')
+            )
+        );
         
         if(array_key_exists("action", $options)){
             $builder->setAction($options['action']);
@@ -100,11 +130,11 @@ class SignInType extends AbstractType
             "referer",
             "text",
             array(
-                'label'=>'Receiver name : ',
+                'label'=>$this->translator->trans("address.referer.label", [], $this->domain),
                 'required'=>false,
                 'attr'=>array(
                     'class'=>'form-control',
-                    'placeholder'=>'referer name'
+                    'placeholder'=>$this->translator->trans("address.referer.placeholder", [], $this->domain)
                 )
             )
         );
@@ -114,11 +144,11 @@ class SignInType extends AbstractType
             "adress",
             "text",
             array(
-                'label'=>'Address : ',
+                'label'=>$this->translator->trans("address.address.label", [], $this->domain),
                 'required'=>false,
                 'attr'=>array(
                     'class'=>'form-control',
-                    'placeholder'=>'XX address street'
+                    'placeholder'=>$this->translator->trans("address.address.placeholder", [], $this->domain)
                 )
             )
         );
@@ -128,11 +158,11 @@ class SignInType extends AbstractType
             "complement",
             "text",
             array(
-                'label'=>'Address complement : ',
+                'label'=>$this->translator->trans("address.complement.label", [], $this->domain),
                 'required'=>false,
                 'attr'=>array(
                     'class'=>'form-control',
-                    'placeholder'=>'address complement'
+                    'placeholder'=>$this->translator->trans("address.complement.placeholder", [], $this->domain)
                 )
             )
         );
@@ -142,11 +172,11 @@ class SignInType extends AbstractType
             "town",
             "text",
             array(
-                'label'=>'Address town : ',
+                'label'=>$this->translator->trans("address.town.label", [], $this->domain),
                 'required'=>false,
                 'attr'=>array(
                     'class'=>'form-control',
-                    'placeholder'=>'address town name'
+                    'placeholder'=>$this->translator->trans("address.town.placeholder", [], $this->domain)
                 )
             )
         );
@@ -156,11 +186,11 @@ class SignInType extends AbstractType
             "postalCode",
             "number",
             array(
-                'label'=>'Address postal code : ',
+                'label'=>$this->translator->trans("address.postalCode.label", [], $this->domain),
                 'required'=>false,
                 'attr'=>array(
                     'class'=>'form-control',
-                    'placeholder'=>'postal code'
+                    'placeholder'=>$this->translator->trans("address.postalCode.placeholder", [], $this->domain)
                 )
             )
         );
@@ -170,11 +200,11 @@ class SignInType extends AbstractType
             "country",
             "text",
             array(
-                'label'=>'Address country : ',
+                'label'=>$this->translator->trans("address.country.label", [], $this->domain),
                 'required'=>false,
                 'attr'=>array(
                     'class'=>'form-control',
-                    'placeholder'=>'address country'
+                    'placeholder'=>$this->translator->trans("address.country.placeholder", [], $this->domain)
                 )
             )
         );
@@ -196,11 +226,11 @@ class SignInType extends AbstractType
             "company",
             "text",
             array(
-                'label'=>'Company : ',
+                'label'=>$this->translator->trans("company.company.label", [], $this->domain),
                 'required'=>false,
                 'attr'=>array(
                     'class'=>'form-control',
-                    'placeholder'=>'you\'r company name'
+                    'placeholder'=>$this->translator->trans("company.company.placeholder", [], $this->domain)
                 )
             )
         );
@@ -210,11 +240,11 @@ class SignInType extends AbstractType
             "service",
             "text",
             array(
-                'label'=>'Company service : ',
+                'label'=>$this->translator->trans("company.service.label", [], $this->domain),
                 'required'=>false,
                 'attr'=>array(
                     'class'=>'form-control',
-                    'placeholder'=>'you\'r job service'
+                    'placeholder'=>$this->translator->trans("company.service.placeholder", [], $this->domain)
                 )
             )
         );
@@ -224,11 +254,11 @@ class SignInType extends AbstractType
             "job",
             "text",
             array(
-                'label'=>'You\'r job : ',
+                'label'=>$this->translator->trans("company.job.label", [], $this->domain),
                 'required'=>false,
                 'attr'=>array(
                     'class'=>'form-control',
-                    'placeholder'=>'you\'r job name'
+                    'placeholder'=>$this->translator->trans("company.job.placeholder", [], $this->domain)
                 )
             )
         );
@@ -238,11 +268,11 @@ class SignInType extends AbstractType
             "companyReferer",
             "text",
             array(
-                'label'=>'Company receiver name : ',
+                'label'=>$this->translator->trans("company.companyReferer.label", [], $this->domain),
                 'required'=>false,
                 'attr'=>array(
                     'class'=>'form-control',
-                    'placeholder'=>'you\'r company address referer'
+                    'placeholder'=>$this->translator->trans("company.companyReferer.placeholder", [], $this->domain)
                 )
             )
         );
@@ -252,11 +282,11 @@ class SignInType extends AbstractType
             "companyAdress",
             "text",
             array(
-                'label'=>'Company address : ',
+                'label'=>$this->translator->trans("company.companyAdress.label", [], $this->domain),
                 'required'=>false,
                 'attr'=>array(
                     'class'=>'form-control',
-                    'placeholder'=>'XX you\'r company address street'
+                    'placeholder'=>$this->translator->trans("company.companyAdress.placeholder", [], $this->domain)
                 )
             )
         );
@@ -266,11 +296,11 @@ class SignInType extends AbstractType
             "companyComplement",
             "text",
             array(
-                'label'=>'Company address complement : ',
+                'label'=>$this->translator->trans("company.companyComplement.label", [], $this->domain),
                 'required'=>false,
                 'attr'=>array(
                     'class'=>'form-control',
-                    'placeholder'=>'you\'r company address complement'
+                    'placeholder'=>$this->translator->trans("company.companyComplement.placeholder", [], $this->domain)
                 )
             )
         );
@@ -280,11 +310,11 @@ class SignInType extends AbstractType
             "companyTown",
             "text",
             array(
-                'label'=>'Company address town : ',
+                'label'=>$this->translator->trans("company.companyTown.label", [], $this->domain),
                 'required'=>false,
                 'attr'=>array(
                     'class'=>'form-control',
-                    'placeholder'=>'you\'r company town'
+                    'placeholder'=>$this->translator->trans("company.companyTown.placeholder", [], $this->domain)
                 )
             )
         );
@@ -294,11 +324,11 @@ class SignInType extends AbstractType
             "companyPostalCode",
             "number",
             array(
-                'label'=>'Company address postal code : ',
+                'label'=>$this->translator->trans("company.companyPostalCode.label", [], $this->domain),
                 'required'=>false,
                 'attr'=>array(
                     'class'=>'form-control',
-                    'placeholder'=>'you\'r company postal code'
+                    'placeholder'=>$this->translator->trans("company.companyPostalCode.placeholder", [], $this->domain)
                 )
             )
         );
@@ -308,11 +338,11 @@ class SignInType extends AbstractType
             "companyCountry",
             "text",
             array(
-                'label'=>'Company address country : ',
+                'label'=>$this->translator->trans("company.companyCountry.label", [], $this->domain),
                 'required'=>false,
                 'attr'=>array(
                     'class'=>'form-control',
-                    'placeholder'=>'you\'r company country'
+                    'placeholder'=>$this->translator->trans("company.companyCountry.placeholder", [], $this->domain)
                 )
             )
         );
@@ -335,11 +365,11 @@ class SignInType extends AbstractType
             "firstName",
             "text",
             array(
-                'label'=>'First name : ',
+                'label'=>$this->translator->trans("yourself.firstName.label", [], $this->domain),
                 'required'=>false,
                 'attr'=>array(
                     'class'=>'form-control',
-                    'placeholder'=>'first name'
+                    'placeholder'=>$this->translator->trans("yourself.firstName.placeholder", [], $this->domain)
                 )
             )
         );
@@ -349,11 +379,11 @@ class SignInType extends AbstractType
             "lastName",
             "text",
             array(
-                'label'=>'Last name : ',
+                'label'=>$this->translator->trans("yourself.lastName.label", [], $this->domain),
                 'required'=>false,
                 'attr'=>array(
                     'class'=>'form-control',
-                    'placeholder'=>'last name'
+                    'placeholder'=>$this->translator->trans("yourself.lastName.placeholder", [], $this->domain)
                 )
             )
         );
@@ -363,7 +393,7 @@ class SignInType extends AbstractType
             "sex",
             "choice",
             array(
-                'label'=>'Gender : ',
+                'label'=>$this->translator->trans("yourself.sex.label", [], $this->domain),
                 'choices'=>array(1=>"Male", 0=>"Female"),
                 'attr'=>array(
                     'class'=>'form-control'
@@ -384,7 +414,7 @@ class SignInType extends AbstractType
             "birthday",
             "date",
             array(
-                'label'=>'Bith date : ',
+                'label'=>$this->translator->trans("yourself.birthday.label", [], $this->domain),
                 'widget'=>'choice',
                 'years'=>$years,
                 'required'=>false,
@@ -399,7 +429,7 @@ class SignInType extends AbstractType
             "biography",
             "textarea",
             array(
-                'label'=>'Biogaphy : ',
+                'label'=>$this->translator->trans("yourself.biography.label", [], $this->domain),
                 'required'=>false,
                 'attr'=>array(
                     'class'=>'form-control'
@@ -424,7 +454,7 @@ class SignInType extends AbstractType
                 "phoneType", 
                 "entity",
                 array(
-                    'label'=>'Phone type : ',
+                    'label'=>$this->translator->trans("phone.phoneType.label", [], $this->domain),
                     'class'=>'Cscfa\Bundle\CSManager\UserBundle\Entity\Type',
                     'choice_label'=>'label',
                     'attr'=>array(
@@ -438,11 +468,11 @@ class SignInType extends AbstractType
             "phoneNumber",
             "text",
             array(
-                'label'=>'Number : ',
+                'label'=>$this->translator->trans("phone.phoneNumber.label", [], $this->domain),
                     'required'=>false,
                 'attr'=>array(
                     'class'=>'form-control',
-                    'placeholder'=>'Phone number'
+                    'placeholder'=>$this->translator->trans("phone.phoneNumber.placeholder", [], $this->domain)
                 )
             )
         );
@@ -464,10 +494,10 @@ class SignInType extends AbstractType
                 "pseudo", 
                 "text",
                 array(
-                    'label'=>'Pseudo : ',
+                    'label'=>$this->translator->trans("base.pseudo.label", [], $this->domain),
                     'attr'=>array(
                         'class'=>'form-control',
-                        'placeholder'=>'pseudo'
+                        'placeholder'=>$this->translator->trans("base.pseudo.placeholder", [], $this->domain)
                     )
                 )
             );
@@ -481,17 +511,17 @@ class SignInType extends AbstractType
                 'first_name' => 'email',
                 'second_name' => 'email_confirm',
                 'first_options'  => array(
-                    'label' => 'Email : ',
+                    'label' => $this->translator->trans("base.email.first.label", [], $this->domain),
                     'attr'=>array(
                         'class'=>'form-control',
-                        'placeholder'=>'email'
+                        'placeholder'=>$this->translator->trans("base.email.first.placeholder", [], $this->domain)
                     )
                 ),
                 'second_options' => array(
-                    'label' => 'Email confirmation : ',
+                    'label' => $this->translator->trans("base.email.second.label", [], $this->domain),
                     'attr'=>array(
                         'class'=>'form-control',
-                        'placeholder'=>'rewrite'
+                        'placeholder'=>$this->translator->trans("base.email.second.placeholder", [], $this->domain)
                     )
                 ), 
                 
@@ -507,17 +537,17 @@ class SignInType extends AbstractType
                 'first_name' => 'password',
                 'second_name' => 'password_confirm',
                 'first_options'  => array(
-                    'label' => 'Password : ',
+                    'label' => $this->translator->trans("base.password.first.label", [], $this->domain),
                     'attr'=>array(
                         'class'=>'form-control',
-                        'placeholder'=>'password'
+                        'placeholder'=>$this->translator->trans("base.password.first.placeholder", [], $this->domain)
                     )
                 ),
                 'second_options' => array(
-                    'label' => 'Password confirmation : ',
+                    'label' => $this->translator->trans("base.password.second.label", [], $this->domain),
                     'attr'=>array(
                         'class'=>'form-control',
-                        'placeholder'=>'rewrite'
+                        'placeholder'=>$this->translator->trans("base.password.second.placeholder", [], $this->domain)
                     )
                 ), 
                 

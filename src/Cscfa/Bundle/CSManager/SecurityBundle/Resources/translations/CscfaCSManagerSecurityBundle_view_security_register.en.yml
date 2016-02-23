@@ -1,0 +1,9 @@
+pageTitle:   "register"
+success:
+    title:   "Signin success"
+    created: "Your account was successfully created. We hope you'll have a good experience with the csmanager system."
+    email:   "An email will be sent to your email box. You'll find an activation link inscribed into it."
+    bye:     "Have a good day."
+    return:  "return to homepage"
+error:
+    return:  "Return to homepage"

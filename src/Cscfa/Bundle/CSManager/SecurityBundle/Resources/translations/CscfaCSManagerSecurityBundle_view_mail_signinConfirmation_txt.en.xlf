@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" datatype="plaintext" original="file.ext">
+        <body>
+            <trans-unit id="2c79ee89">
+                <source>greeting</source>
+                <target>Dear user of CSManager,</target>
+            </trans-unit>
+            <trans-unit id="f08a94d6">
+                <source>message</source>
+                <target>You have submit a request to create a new account.
+This task was completed with success.</target>
+            </trans-unit>
+            <trans-unit id="e99a9ab6">
+                <source>active</source>
+                <target>Activate by connecting to : %base%%path%</target>
+            </trans-unit>
+            <trans-unit id="9a36bde2">
+                <source>connect</source>
+                <target>Please, connect to : %path%</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

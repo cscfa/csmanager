@@ -1,0 +1,6 @@
+section:
+    general:  "General"
+    phone:    "Phone (optional)"
+    yourself: "Yourself (optional)"
+    company:  "Your company (optional)"
+    address:  "Your address (optional)"

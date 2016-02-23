@@ -1,0 +1,50 @@
+{% extends 'CscfaCSManagerCoreBundle:Default:base.html.twig' %}
+
+{% trans_default_domain "CscfaCSManagerProjectBundle_view_Project_index" %}
+
+{% block title %}SCM - {{ "pageTitle"|trans }}{% endblock %}
+
+{% block stylesheets %}
+
+    {{ parent() }}
+
+    <link rel="stylesheet" type="text/css" href="{{ path("core_css_tool") }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ path("project_css_base") }}"/>
+    
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+    
+    {{ renderNavbar() }}
+    
+    <div class="row">
+        <div class="col-xs-12 col-md-10 col-md-offset-1 cs-loader-container">
+            <div class="nav nav-tabs cs-loader-head">
+                <li><a href="{{ path('cscfa_cs_manager_project_view_project') }}">{{ "navTab1"|trans }}</a></li>
+            {% if is_granted("ROLE_ADMIN") %}
+                <li><a href="{{ path('cscfa_cs_manager_project_create_project') }}">{{ "navTab2"|trans }}</a></li>
+            {% endif %}
+            </div>
+            <div class="row cs-loader">
+            {% image '@CscfaCSManagerCoreBundle/Resources/public/image/Loader/gears.svg' %}
+                <img src="{{ asset_url }}" alt="loading"/>
+            {% endimage %}
+                <div class="loader-content"></div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    
+    {% javascripts '@CscfaCSManagerCoreBundle/Resources/public/js/csCore.js' %}
+        <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    
+    <script type="text/javascript">
+        var pageLoader = cs.loader(".cs-loader-container");
+        pageLoader.run();
+    </script>
+{% endblock %}

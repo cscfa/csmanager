@@ -1,0 +1,30 @@
+{% import "CscfaCSManagerCoreBundle:Macro:form.html.twig" as formTool %}
+
+{% trans_default_domain "CscfaCSManagerProjectBundle_view_Project_createProject" %}
+
+<div>
+    {{ form_start(form) }}
+    
+    <div class="cs-right">
+        <div class="cs-btnset">
+        {{ form_row(form.reset) }}
+        {{ form_row(form.submit) }}
+        </div>
+    </div>
+    
+    {{ formTool.fieldset(
+        "sectionTitle1"|trans,
+        [[form.name, 1, 1, 0], [form.summary, 1, 1, 0]])
+    }}
+    
+    {{ formTool.fieldset(
+        "sectionTitle2"|trans, 
+        [[form.status, 1, 1, 0]]) 
+    }}
+        
+    {{ form_end(form) }}
+</div>
+
+{% javascripts '@CscfaCSManagerProjectBundle/Resources/public/js/createProject.js' %}
+<script src="{{ asset_url }}"></script>
+{% endjavascripts %}

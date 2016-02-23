@@ -1,0 +1,11 @@
+pageTitle:          "home"
+sectionTitle1:      "Login"
+section1:
+    usernameLabel:  "Username"
+    passwordLabel:  "Password"
+    passwordForgot: "forgot password"
+    reset:          "reset"
+    submit:         "login"
+sectionTitle2:      "Sign in"
+section2:
+    reset:          "reset"

@@ -1,11 +1,10 @@
-Dear user of CSManager,
-
-You have submit a request to create a new account.<br/>
-This task was completed with success.
-
+{% trans_default_domain "CscfaCSManagerSecurityBundle_view_mail_signin_txt" %}
+{{ "greeting"|trans }}
+    
+{{ "message"|trans }}
 
 {% if preference.getSiteBaseUrl() %}
-Connect to : {{ preference.getSiteBaseUrl() }}{{ path("core_home_index") }}
+{{ "connect"|trans({"%base%": preference.getSiteBaseUrl(), "%path%": path("core_home_index")}) }}
 {% else %}
-Connect to : {{ path("core_home_index") }}
+{{ "connectAlternate"|trans({"%path%": path("core_home_index")}) }}
 {% endif %}

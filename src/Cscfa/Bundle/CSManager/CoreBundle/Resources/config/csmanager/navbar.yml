@@ -2,3 +2,4 @@ navbar:
     home:
         label: "home"
         path: {route: "core_home_index"}
+        position: 0

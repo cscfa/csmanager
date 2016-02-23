@@ -1,0 +1,12 @@
+form:
+    email:
+        placeholder: "email"
+    send:
+        label:       "Send request"
+        placeholder: "btn btn-primary"
+message:
+    subject:         "CSManager : password updated"
+flash:
+    success:         "Y'our password is succefully updated. Please, check you'r mail box"
+error:
+    userUnfound:     "The given email doesn't exist"

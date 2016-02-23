@@ -1,0 +1,20 @@
+projectName:      "Name :"
+projectSummary:   "Summary :"
+projectStatus:    "Status :"
+projectCreated:   "Created :"
+projectUpdated:
+    title:        "Updated :"
+    neverUpdated: "Never"
+projectActive:
+    title:        "Active :"
+    deleted:      "False"
+    undeleted:    "True"
+projectTags:
+    title:        "Tags"
+    noTags:       "No tags founds"
+projectLinks:
+    title:        "Links"
+    noLinks:      "No links founds"
+projectNotes:
+    title:        "Notes"
+    noNotes:      "No notes founds"

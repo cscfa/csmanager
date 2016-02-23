@@ -1,33 +1,34 @@
+{% trans_default_domain "CscfaCSManagerSecurityBundle_view_Tool_registerForm" %}
 {% macro registerForm(form, secondary) %}
 {% import "CscfaCSManagerCoreBundle:Macro:form.html.twig" as formTool %}
     
     {{ form_start(form) }}
         
         {{ formTool.fieldset(
-            "General",
+            "section.general"|trans,
             [[form.pseudo, 1, 1, 0], [form.email, 1, 1, 1], [form.password, 1, 1, 1]])
         }}
         
         {{ formTool.fieldset(
-            "Phone (optional)",
+            "section.phone"|trans,
             [[form.phoneType, 1, 0, 0], [form.phoneNumber, 1, 1, 0]])
         }}
         
         {{ formTool.fieldset(
-            "Yourself (optional)",
+            "section.yourself"|trans,
             [[form.firstName, 1, 1, 0], [form.lastName, 1, 1, 0], [form.sex, 1, 0, 0], [form.birthday, 1, 0, 0], 
             [form.biography, 1, 1, 0]])
         }}
         
         {{ formTool.fieldset(
-            "Your company (optional)",
+            "section.company"|trans,
             [[form.company, 1, 1, 0], [form.companyReferer, 1, 1, 0], [form.companyAdress, 1, 1, 0], 
             [form.companyComplement, 1, 1, 0], [form.companyTown, 1, 1, 0], [form.companyPostalCode, 1, 1, 0], 
             [form.companyCountry, 1, 1, 0], [form.service, 1, 1, 0], [form.job, 1, 1, 0]])
         }}
         
         {{ formTool.fieldset(
-            "Your address (optional)",
+            "section.address"|trans,
             [[form.referer, 1, 1, 0], [form.adress, 1, 1, 0], [form.complement, 1, 1, 0], [form.town, 1, 1, 0], 
             [form.postalCode, 1, 1, 0], [form.country, 1, 1, 0]])
         }}
