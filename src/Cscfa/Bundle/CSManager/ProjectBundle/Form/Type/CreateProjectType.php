@@ -90,7 +90,8 @@ class CreateProjectType extends AbstractType
             )
         ))->add("status", "entity", array(
             "class"=>"Cscfa\Bundle\CSManager\ProjectBundle\Entity\ProjectStatus",
-            "choice_label"=>$this->translator->trans("status.choice_label", [], $domain),
+            "label"=>$this->translator->trans("status.choice_label", [], $domain),
+            "choice_label"=>"name",
             "placeholder"=>$this->translator->trans("status.placeholder", [], $domain),
             'attr' => array(
                 'class' => 'form-control'

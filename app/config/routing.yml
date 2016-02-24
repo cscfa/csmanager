@@ -9,23 +9,23 @@ cscfa_q_unit_test:
 
 #cscfa_cs_manager_config:
 #    resource: "@CscfaCSManagerConfigBundle/Resources/config/routing.yml"
-#    prefix:   /
+#    prefix:   /csm/
 
 #cscfa_cs_manager_user:
 #    resource: "@CscfaCSManagerUserBundle/Resources/config/routing.yml"
-#    prefix:   /
+#    prefix:   /csm/
 
 #cscfa_cs_manager_task:
 #    resource: "@CscfaCSManagerTaskBundle/Resources/config/routing.yml"
-#    prefix:   /
+#    prefix:   /csm/
 
-#cscfa_cs_manager_project:
-#    resource: "@CscfaCSManagerProjectBundle/Resources/config/routing.yml"
-#    prefix:   /
+cscfa_cs_manager_project:
+    resource: "@CscfaCSManagerProjectBundle/Resources/config/routing.yml"
+    prefix:   /csm/project
 
 #cscfa_cs_manager_dashboard:
 #    resource: "@CscfaCSManagerDashboardBundle/Resources/config/routing.yml"
-#    prefix:   /
+#    prefix:   /csm/
 
 cscfa_cs_core_routing:
     resource: "@CscfaCSManagerCoreBundle/Resources/config/routing.yml"

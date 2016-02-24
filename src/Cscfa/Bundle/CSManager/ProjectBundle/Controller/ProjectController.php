@@ -29,6 +29,8 @@ use Cscfa\Bundle\DataGridBundle\Objects\DataGridPaginator;
 use Cscfa\Bundle\CSManager\CoreBundle\BootstrapStepper\PaginatorStepper;
 use Cscfa\Bundle\DataGridBundle\Objects\PaginatorLimitForm;
 use Symfony\Component\HttpFoundation\Response;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use Symfony\Component\Form\FormError;
 
 /**
  * ProjectController class.
@@ -171,7 +173,12 @@ class ProjectController extends Controller
             $projectOwner->getRoles()->add($projectRole);
             $manager->persist($projectOwner);
             
-            $manager->flush();
+            try {
+                $manager->flush();
+            } catch (UniqueConstraintViolationException $e) {
+                $createForm->get("name")->addError(new FormError("This name already exist"));
+                return array("form"=>$createForm->createView());
+            }
             
         }
         

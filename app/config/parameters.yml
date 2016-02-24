@@ -1,0 +1,13 @@
+# This file is auto-generated during the composer install
+parameters:
+    database_host: 127.0.0.1
+    database_port: null
+    database_name: csmanager
+    database_user: csmanager
+    database_password: csmanager
+    mailer_transport: mail
+    mailer_host: auth.smtp.1and1.fr
+    mailer_user: matthieu.vallance@cscfa.fr
+    mailer_password: 'Michaela1,'
+    mailer_encryption: tls
+    secret: 496cafd602850184351aa59d20992c3ff645e250ab2ed0bc62be8b8f4984ee77336ea1aa3d285277a4c53b9a5e1b46ed022019c968eaf4adb127f2ca35328bd2

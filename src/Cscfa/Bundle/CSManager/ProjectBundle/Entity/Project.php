@@ -78,7 +78,7 @@ class Project
      * 
      * The project name
      * 
-     * @ORM\Column(type="string", length=255, options={"comment":"The Project name"}, nullable=false, name="csmanager_Project_name") 
+     * @ORM\Column(type="string", length=255, options={"comment":"The Project name"}, nullable=false, unique=true, name="csmanager_Project_name") 
      * @Assert\NotBlank()
      */
     protected $name;

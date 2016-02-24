@@ -18,7 +18,7 @@ class AppKernel extends Kernel
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new Cscfa\Bundle\CSManager\CoreBundle\CscfaCSManagerCoreBundle(),
             // new Cscfa\Bundle\CSManager\DashboardBundle\CscfaCSManagerDashboardBundle(),
-            // new Cscfa\Bundle\CSManager\ProjectBundle\CscfaCSManagerProjectBundle(),
+            new Cscfa\Bundle\CSManager\ProjectBundle\CscfaCSManagerProjectBundle(),
             // new Cscfa\Bundle\CSManager\TaskBundle\CscfaCSManagerTaskBundle(),
             new Cscfa\Bundle\CSManager\UserBundle\CscfaCSManagerUserBundle(),
             new Cscfa\Bundle\CSManager\ConfigBundle\CscfaCSManagerConfigBundle(),
@@ -31,6 +31,7 @@ class AppKernel extends Kernel
             new Cscfa\Bundle\CSManager\NavbarBundle\CscfaCSManagerNavbarBundle(),
             new Cscfa\Bundle\NavBarBundle\CscfaNavBarBundle(),
             new Cscfa\Bundle\CacheSystemBundle\CscfaCacheSystemBundle(),
+            new Cscfa\Bundle\DataGridBundle\CscfaDataGridBundle(),
         );
         
         if (in_array($this->getEnvironment(), array(
