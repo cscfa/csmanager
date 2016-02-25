@@ -1,0 +1,15 @@
+nameSource:
+    name:
+        label: "new name :"
+    submit:
+        label: "apply"
+summarySource:
+    summary:
+        label: "summary :"
+    submit:
+        label: "apply"
+statusSource:
+    status:
+        label: "new status :"
+    submit:
+        label: "apply"

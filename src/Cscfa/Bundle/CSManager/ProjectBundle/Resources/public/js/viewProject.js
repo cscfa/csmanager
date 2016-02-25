@@ -48,8 +48,6 @@ function runElementSelector(selector){
 		$(this).on("click", function(event){
 			
 			pageLoader.setLoading();
-			console.log($(event.currentTarget).attr('href'));
-			console.log($(event.currentTarget));
 			$.ajax({type:"GET", url:$(event.currentTarget).attr('href'),
 				success: function(data){
 					$(".loader-content").html(data);

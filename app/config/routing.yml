@@ -23,6 +23,10 @@ cscfa_cs_manager_project:
     resource: "@CscfaCSManagerProjectBundle/Resources/config/routing.yml"
     prefix:   /csm/project
 
+cscfa_cs_manager_ajaxApi_project:
+    resource: "@CscfaCSManagerProjectBundle/Resources/config/ajaxRouting.yml"
+    prefix:   /csm/ajax/project
+
 #cscfa_cs_manager_dashboard:
 #    resource: "@CscfaCSManagerDashboardBundle/Resources/config/routing.yml"
 #    prefix:   /csm/

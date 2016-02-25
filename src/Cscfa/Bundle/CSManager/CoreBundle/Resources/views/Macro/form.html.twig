@@ -128,3 +128,12 @@
         {% if libexist %}</div>{% endif %}
     </fieldset>
 {% endmacro %}
+
+{% macro ajaxField(pathFrom, data, disable) %}
+	<span class="cs-ajax-field" pathFrom="{{ pathFrom }}" value="{{ data }}" {% if disable %}disabled{% endif %}>
+	    {{ data }}
+        {% if disable != true %}
+        	<span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+        {% endif %}
+    </span>
+{% endmacro %}

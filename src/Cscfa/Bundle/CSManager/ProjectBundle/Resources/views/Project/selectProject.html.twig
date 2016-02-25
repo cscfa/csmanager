@@ -1,20 +1,40 @@
+{% import "CscfaCSManagerCoreBundle:Macro:form.html.twig" as formTool %}
 {% trans_default_domain "CscfaCSManagerProjectBundle_view_Project_selectProject" %}
-
-{{ dump(project) }}
 
 <div class="col-xs-12">
     <div class="col-xs-12 col-md-8">
         <span class="col-xs-4 col-md-3 col-lg-2">{{ "projectName"|trans }}</span>
-        <span class="col-xs-8 col-md-9 col-lg-10">{{ project.getName() }}</span>
-        
+        <span class="col-xs-8 col-md-9 col-lg-10">
+            {{ formTool.ajaxField(
+            	path("cscfa_cs_manager_project_ajaxSource_project_name", {"project": project.getId()}), 
+            	project.getName(), 
+            	(grantProjectAttribute("name", project, false, true) != true)
+            	) 
+            }}
+        </span>
+
         <span class="col-xs-4 col-md-3 col-lg-2">{{ "projectSummary"|trans }}</span>
-        <span class="col-xs-8 col-md-9 col-lg-10">{{ project.getSummary() }}</span>
+        <span class="col-xs-8 col-md-9 col-lg-10">
+            {{ formTool.ajaxField(
+            	path("cscfa_cs_manager_project_ajaxSource_project_summary", {"project": project.getId()}), 
+            	project.getSummary(), 
+            	(grantProjectAttribute("summary", project, false, true) != true)
+            	) 
+            }}
+        </span>
     </div>
     
     <div class="col-xs-12 col-md-4">
         {% if grantProjectAttribute("status", project) %}
             <span class="col-xs-4 col-md-6 col-lg-4">{{ "projectStatus"|trans }}</span>
-            <span class="col-xs-8 col-md-6 col-lg-8">{{ project.getStatus().getName() }}</span>
+            <span class="col-xs-8 col-md-6 col-lg-8">
+                {{ formTool.ajaxField(
+            	path("cscfa_cs_manager_project_ajaxSource_project_status", {"project": project.getId()}), 
+                	project.getStatus().getName(), 
+                	(grantProjectAttribute("status", project, false, true) != true)
+                	) 
+                }}
+            </span>
         {% endif %}
         
         {% if grantProjectAttribute("created", project) %}
@@ -80,3 +100,36 @@
     </div>
 </div>
 {% endif %}
+
+{% javascripts '@CscfaCSManagerCoreBundle/Resources/public/js/csAjaxForm.js' %}
+    <script src="{{ asset_url }}"></script>
+{% endjavascripts %}
+{% image '@CscfaCSManagerCoreBundle/Resources/public/image/Loader/gears100.svg' %}
+    <script>
+    	var ajaxFormTool = ajaxForm({
+        	htmlTarget: "<div class='dialog-helper' title='{{ "ajaxFromScript.title"|trans }}'><div class='cs-center'><img src='{{ asset_url }}' alt='loading'/></div></div>",
+    		submitingHtml: "<div class='dialog-helper' title='{{ "ajaxFromScript.title"|trans }}'><div class='cs-center'><img src='{{ asset_url }}' alt='loading'/></div></div>",
+    		submitErrorHtml: "<p style='text-align: center;'>{{ "ajaxFromScript.errorOccured"|trans }}</p>",
+    		ajaxErrorHtml: "<p style='text-align: center;'>{{ "ajaxFromScript.errorOccured"|trans }}</p>",
+    		submit: function(selfRef, form, htmlTarget, firstEvent){
+    			$.ajax({
+    				type:form.method, 
+    				data: $(form).serialize(), 
+    				url:form.action,
+    				beforeSend: function(){
+    					$(htmlTarget).html(selfRef.submitingHtml);
+    				},
+    				success: function(data){
+    					$(firstEvent.currentTarget).attr("value", data);
+    					$(firstEvent.currentTarget).html(data+'<span class="glyphicon glyphicon-edit" aria-hidden="true"></span>');
+    					$(htmlTarget).remove();
+    				},
+    				error: function(jqXHR, textStatus, errorThrown){
+    					$(htmlTarget).html(selfRef.submitErrorHtml+jqXHR.responseText);
+    				}
+    			});
+    		}
+        });
+    	ajaxFormTool.run();
+    </script>
+{% endimage %}

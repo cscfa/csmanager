@@ -1,0 +1,26 @@
+cscfa_cs_manager_project_ajaxSource_project_name:
+    path:     /ajaxSource/project/name/{project}
+    defaults: { _controller: "CscfaCSManagerProjectBundle:AjaxApi/Project:nameSource" }
+    methods:  [GET]
+cscfa_cs_manager_project_ajaxTarget_project_name:
+    path:     /ajaxTarget/project/name/{project}
+    defaults: { _controller: "CscfaCSManagerProjectBundle:AjaxApi/Project:nameTarget" }
+    methods:  [POST]
+
+cscfa_cs_manager_project_ajaxSource_project_summary:
+    path:     /ajaxSource/project/summary/{project}
+    defaults: { _controller: "CscfaCSManagerProjectBundle:AjaxApi/Project:summarySource" }
+    methods:  [GET]
+cscfa_cs_manager_project_ajaxTarget_project_summary:
+    path:     /ajaxTarget/project/summary/{project}
+    defaults: { _controller: "CscfaCSManagerProjectBundle:AjaxApi/Project:summaryTarget" }
+    methods:  [POST]
+
+cscfa_cs_manager_project_ajaxSource_project_status:
+    path:     /ajaxSource/project/status/{project}
+    defaults: { _controller: "CscfaCSManagerProjectBundle:AjaxApi/Project:statusSource" }
+    methods:  [GET]
+cscfa_cs_manager_project_ajaxTarget_project_status:
+    path:     /ajaxTarget/project/status/{project}
+    defaults: { _controller: "CscfaCSManagerProjectBundle:AjaxApi/Project:statusTarget" }
+    methods:  [POST]
