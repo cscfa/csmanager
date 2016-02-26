@@ -3,9 +3,42 @@
 {% if grantProjectAttribute("links", project) %}
 <div class="col-xs-11 cs-fieldset">
     <h4 class="cs-fieldset-head">{{ "projectLinks.title"|trans }}</h4>
+    
     <div class="cs-fieldset-body">
+    	<div class="cs-right">
+    		<div>
+                {{ formTool.ajaxFieldButton(
+                    path("cscfa_cs_manager_project_ajaxSource_link_add", {"project": project.getId()}), 
+                	"ajaxAddLink"|trans, 
+                	(grantProjectAttribute("links", project, false, true) != true),
+                	"cs-ajax-field-button"
+                	) 
+                }}
+            </div>
+        </div>
+        
         {% for link in project.getLinks() %}
-            {{ dump(link) }}
+        	{% if loop.first %}
+        	<table class="table table-striped">
+        	{% endif %}
+        		<tr>
+        			<td>{{ link.getLink() }}</td>
+        			<td class="cs-right">
+        				<div>
+                        {{ formTool.ajaxFieldButton(
+                            path("cscfa_cs_manager_project_ajaxSource_link_remove", {"project": project.getId(), "link": link.getId()}),
+                        	"ajaxRemLink"|trans, 
+                        	(grantProjectAttribute("links", project, false, true) != true),
+                        	"cs-ajax-field-button pull-xs-right",
+                        	"btn btn-danger"
+                        	) 
+                        }}
+                        </div>
+                	</td>
+        		</tr>
+            {% if loop.last %}
+    		</table>
+            {% endif %}
         {% else %}
             <p>{{ "projectLinks.noLinks"|trans }}</p>
         {% endfor %}

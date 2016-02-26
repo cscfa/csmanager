@@ -1,0 +1,9 @@
+addSource:
+    link:
+        label:       "link :"
+        placeholder: "link"
+    submit:
+        label:       "add"
+removeSource:
+    submit:
+        label:       "yes"

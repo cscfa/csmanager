@@ -41,3 +41,20 @@ cscfa_cs_manager_project_ajaxTarget_tag_remove:
     path:     /ajaxTarget/tag/remove/{project}/{tag}
     defaults: { _controller: "CscfaCSManagerProjectBundle:AjaxApi/Tag:removeTagTarget" }
     methods:  [POST]
+
+cscfa_cs_manager_project_ajaxSource_link_add:
+    path:     /ajaxSource/link/add/{project}
+    defaults: { _controller: "CscfaCSManagerProjectBundle:AjaxApi/Links:addSource" }
+    methods:  [GET]
+cscfa_cs_manager_project_ajaxTarget_link_add:
+    path:     /ajaxTarget/link/add/{project}
+    defaults: { _controller: "CscfaCSManagerProjectBundle:AjaxApi/Links:addTarget" }
+    methods:  [POST]
+cscfa_cs_manager_project_ajaxSource_link_remove:
+    path:     /ajaxSource/link/remove/{project}/{link}
+    defaults: { _controller: "CscfaCSManagerProjectBundle:AjaxApi/Links:removeSource" }
+    methods:  [GET]
+cscfa_cs_manager_project_ajaxTarget_link_remove:
+    path:     /ajaxTarget/link/remove/{project}/{link}
+    defaults: { _controller: "CscfaCSManagerProjectBundle:AjaxApi/Links:removeTarget" }
+    methods:  [POST]

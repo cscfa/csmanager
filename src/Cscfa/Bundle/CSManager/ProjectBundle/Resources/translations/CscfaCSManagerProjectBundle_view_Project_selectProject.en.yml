@@ -26,3 +26,5 @@ ajaxFromScript:
     errorOccured: "An error occured"
 ajaxAddTag:       "add"
 ajaxRemTag:       "remove"
+ajaxAddLink:      "add"
+ajaxRemLink:      "remove"

@@ -41,7 +41,6 @@ class ProjectLink
     /**
      * @ORM\ManyToOne(targetEntity="Project", inversedBy="links")
      * @ORM\JoinColumn(name="csmanager_ProjectLink_id", referencedColumnName="csmanager_Project_id")
-     * @Assert\NotNull()
      */
     protected $project;
     
