@@ -12,7 +12,9 @@ function ajaxForm(constructor){
 		ajaxDataProperty: "value",
 		ajaxSourceMethod: "GET",
 		select: function(){
-			this.selected = $(this.selector);
+			this.selected = $(this.selector).filter(function(index, element){
+				return !$(element).is("[disabled]");
+			});
 			return this.selected.length;
 		},
 		attachEvent : function(){

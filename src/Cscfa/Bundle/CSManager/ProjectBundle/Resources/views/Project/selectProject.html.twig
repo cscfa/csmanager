@@ -29,7 +29,7 @@
             <span class="col-xs-4 col-md-6 col-lg-4">{{ "projectStatus"|trans }}</span>
             <span class="col-xs-8 col-md-6 col-lg-8">
                 {{ formTool.ajaxField(
-            	path("cscfa_cs_manager_project_ajaxSource_project_status", {"project": project.getId()}), 
+                    path("cscfa_cs_manager_project_ajaxSource_project_status", {"project": project.getId()}), 
                 	project.getStatus().getName(), 
                 	(grantProjectAttribute("status", project, false, true) != true)
                 	) 
@@ -65,12 +65,53 @@
 {% if grantProjectAttribute("tags", project) %}
 <div class="col-xs-11 cs-fieldset">
     <h4 class="cs-fieldset-head">{{ "projectTags.title"|trans }}</h4>
+            
     <div class="cs-fieldset-body">
+    	<div class="cs-right">
+    		<div>
+                {{ formTool.ajaxFieldButton(
+                    path("cscfa_cs_manager_project_ajaxSource_tag_tag", {"project": project.getId()}), 
+                	"ajaxAddTag"|trans, 
+                	(grantProjectAttribute("tags", project, false, true) != true),
+                	"cs-ajax-field-button"
+                	) 
+                }}
+            </div>
+        </div>
+            
+        <div class="col-xs-12">
         {% for tag in project.getTags() %}
-            {{ dump(tag) }}
+        	{% if loop.first %}
+        	<table class="table table-striped">
+        		<tr>
+        			<th>{{ "projectTags.headName"|trans }}</th>
+        			<th>{{ "projectTags.headDesc"|trans }}</th>
+        			<th>{{ "projectTags.headButn"|trans }}</th>
+        		</tr>
+        	{% endif %}
+        		<tr>
+        			<td>{{ tag.getName() }}</td>
+        			<td>{{ tag.getDescription() }}</td>
+        			<td class="cs-right">
+        				<div>
+                        {{ formTool.ajaxFieldButton(
+                            path("cscfa_cs_manager_project_ajaxSource_tag_remove", {"project": project.getId(), "tag": tag.getId()}),
+                        	"ajaxRemTag"|trans, 
+                        	(grantProjectAttribute("tags", project, false, true) != true),
+                        	"cs-ajax-field-button pull-xs-right",
+                        	"btn btn-danger"
+                        	) 
+                        }}
+                        </div>
+                	</td>
+        		</tr>
+        	{% if loop.last %}
+    		</table>
+        	{% endif %}
         {% else %}
             <p>{{ "projectTags.noTags"|trans }}</p>
         {% endfor %}
+        </div>
     </div>
 </div>
 {% endif %}
@@ -131,5 +172,31 @@
     		}
         });
     	ajaxFormTool.run();
+    	
+    	var ajaxFormToolButton = ajaxForm({
+        	selector: ".cs-ajax-field-button",
+        	htmlTarget: "<div class='dialog-helper' title='{{ "ajaxFromScript.title"|trans }}'><div class='cs-center'><img src='{{ asset_url }}' alt='loading'/></div></div>",
+    		submitingHtml: "<div class='dialog-helper' title='{{ "ajaxFromScript.title"|trans }}'><div class='cs-center'><img src='{{ asset_url }}' alt='loading'/></div></div>",
+    		submitErrorHtml: "<p style='text-align: center;'>{{ "ajaxFromScript.errorOccured"|trans }}</p>",
+    		ajaxErrorHtml: "<p style='text-align: center;'>{{ "ajaxFromScript.errorOccured"|trans }}</p>",
+    		submit: function(selfRef, form, htmlTarget, firstEvent){
+    			$.ajax({
+    				type:form.method, 
+    				data: $(form).serialize(), 
+    				url:form.action,
+    				beforeSend: function(){
+    					$(htmlTarget).html(selfRef.submitingHtml);
+    				},
+    				success: function(data){
+    					$(htmlTarget).remove();
+    					pageLoader.reload();
+    				},
+    				error: function(jqXHR, textStatus, errorThrown){
+    					$(htmlTarget).html(selfRef.submitErrorHtml+jqXHR.responseText);
+    				}
+    			});
+    		}
+        });
+    	ajaxFormToolButton.run();
     </script>
 {% endimage %}

@@ -12,6 +12,9 @@ projectActive:
 projectTags:
     title:        "Tags"
     noTags:       "No tags founds"
+    headName:     "name"
+    headDesc:     "description"
+    headButn:     ""
 projectLinks:
     title:        "Links"
     noLinks:      "No links founds"
@@ -21,3 +24,5 @@ projectNotes:
 ajaxFromScript:
     title:        "modify"
     errorOccured: "An error occured"
+ajaxAddTag:       "add"
+ajaxRemTag:       "remove"

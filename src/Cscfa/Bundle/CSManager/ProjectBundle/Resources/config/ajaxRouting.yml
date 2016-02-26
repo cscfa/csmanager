@@ -24,3 +24,20 @@ cscfa_cs_manager_project_ajaxTarget_project_status:
     path:     /ajaxTarget/project/status/{project}
     defaults: { _controller: "CscfaCSManagerProjectBundle:AjaxApi/Project:statusTarget" }
     methods:  [POST]
+
+cscfa_cs_manager_project_ajaxSource_tag_tag:
+    path:     /ajaxSource/tag/tag/{project}
+    defaults: { _controller: "CscfaCSManagerProjectBundle:AjaxApi/Tag:tagSource" }
+    methods:  [GET]
+cscfa_cs_manager_project_ajaxTarget_tag_tag:
+    path:     /ajaxTarget/tag/tag/{project}
+    defaults: { _controller: "CscfaCSManagerProjectBundle:AjaxApi/Tag:tagTarget" }
+    methods:  [POST]
+cscfa_cs_manager_project_ajaxSource_tag_remove:
+    path:     /ajaxSource/tag/remove/{project}/{tag}
+    defaults: { _controller: "CscfaCSManagerProjectBundle:AjaxApi/Tag:removeTagSource" }
+    methods:  [GET]
+cscfa_cs_manager_project_ajaxTarget_tag_remove:
+    path:     /ajaxTarget/tag/remove/{project}/{tag}
+    defaults: { _controller: "CscfaCSManagerProjectBundle:AjaxApi/Tag:removeTagTarget" }
+    methods:  [POST]

@@ -1,0 +1,23 @@
+{% trans_default_domain "CscfaCSManagerProjectBundle_view_AjaxApi_tagSource" %}
+
+{% if formSelect.tag.vars.choices is not empty %}
+<div class="row" style="overflow: hidden;">
+{{ form_start(formSelect) }}
+	<div class="col-xs-12">
+		<div class="cs-center col-xs-12">
+			{{ form_label(formSelect.tag) }}
+		</div>
+		<div class="cs-center col-xs-12">
+			{{ form_widget(formSelect.tag) }}
+		</div>
+		{{ form_row(formSelect.tag) }}
+	</div>
+	
+	<div class="cs-center col-xs-12">
+		{{ form_row(formSelect.submit) }}
+	</div>
+{{ form_end(formSelect) }}
+</div>
+{% else %}
+<p style="text-align: center">{{ "message.noExistant"|trans }}</p>
+{% endif %}

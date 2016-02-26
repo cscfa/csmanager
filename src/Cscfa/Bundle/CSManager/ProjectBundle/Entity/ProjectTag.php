@@ -39,7 +39,7 @@ class ProjectTag
     protected $id;
 
     /**
-     * @ORM\Column(type="string", length=255, options={"comment":"The tag name"}, nullable=false, name="csmanager_ProjectTag_name")
+     * @ORM\Column(type="string", unique=true, length=255, options={"comment":"The tag name"}, nullable=false, name="csmanager_ProjectTag_name")
      * @Assert\NotBlank()
      */
     protected $name;
@@ -136,7 +136,7 @@ class ProjectTag
      * 
      * Return the project
      * 
-     * @return Project - the project
+     * @return ArrayCollection - the project collection
      */
     public function getProject()
     {
@@ -146,9 +146,9 @@ class ProjectTag
     /**
      * Set project
      * 
-     * Set the project
+     * Set the project collection
      * 
-     * @param Project $project - the project
+     * @param ArrayCollection $project - the project collection
      * 
      * @return ProjectTag - the current instance
      */

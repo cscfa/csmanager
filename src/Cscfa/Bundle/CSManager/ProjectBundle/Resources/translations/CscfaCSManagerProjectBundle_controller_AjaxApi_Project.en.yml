@@ -13,3 +13,7 @@ statusSource:
         label: "new status :"
     submit:
         label: "apply"
+nameTarget:
+    textError: "This name already exist"
+statusTarget:
+    textError: "Choose an existing state"

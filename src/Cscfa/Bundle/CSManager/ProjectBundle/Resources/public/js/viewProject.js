@@ -23,20 +23,7 @@ function runFormSubmit(selector){
 function runPageSelector(selector){
 	$(selector).each(function(){
 		$(this).on("click", function(event){
-			
-			pageLoader.setLoading();
-			
-			$.ajax({type:"GET", url:event.currentTarget.href,
-				success: function(data){
-					$(".loader-content").html(data);
-					pageLoader.setLoaded();
-				},
-				error: function(){
-					$(".loader-content").html('Une erreur est survenue.');
-					pageLoader.setLoaded();
-				}
-			});
-			
+			pageLoader.load(event.currentTarget.href);
 			event.preventDefault();
 			return false;
 		})
@@ -46,19 +33,7 @@ function runPageSelector(selector){
 function runElementSelector(selector){
 	$(selector).each(function(){
 		$(this).on("click", function(event){
-			
-			pageLoader.setLoading();
-			$.ajax({type:"GET", url:$(event.currentTarget).attr('href'),
-				success: function(data){
-					$(".loader-content").html(data);
-					pageLoader.setLoaded();
-				},
-				error: function(){
-					$(".loader-content").html('Une erreur est survenue.');
-					pageLoader.setLoaded();
-				}
-			});
-			
+			pageLoader.load($(event.currentTarget).attr('href'));
 			event.preventDefault();
 			return false;
 		})

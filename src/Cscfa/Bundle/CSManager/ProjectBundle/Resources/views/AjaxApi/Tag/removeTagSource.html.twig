@@ -1,0 +1,11 @@
+{% trans_default_domain "CscfaCSManagerProjectBundle_view_AjaxApi_removeTagSource" %}
+
+<p style="text-align: center;">
+{{ "message"|trans({"%tag%": tag.getName(), "%project%": project.getName()}) }}
+</p>
+
+{{ form_start(form) }}
+	<div class="cs-center">
+		{{ form_row(form.submit) }}
+	</div>
+{{ form_end(form) }}

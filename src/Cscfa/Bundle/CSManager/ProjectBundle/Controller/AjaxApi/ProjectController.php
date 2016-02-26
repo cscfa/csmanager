@@ -121,7 +121,8 @@ class ProjectController extends Controller
             try{
                 $this->getDoctrine()->getManager()->flush();
             } catch(UniqueConstraintViolationException $e) {
-                return new Response("<p style='text-align: center;'>This name already exist</p>", 500);
+                $text = $this->get("translator")->trans("nameTarget.textError", [], $this->transDomain);
+                return new Response("<p style='text-align: center;'>".$text."</p>", 500);
             }
             
             return new Response($project->getName(), 200);
@@ -227,7 +228,8 @@ class ProjectController extends Controller
             
             return new Response($project->getStatus()->getName(), 200);
         } else {
-            return new Response("<p style='text-align: center;'>Choose an existing state</p>", 500);
+            $text = $this->get("translator")->trans("statusTarget.textError", [], $this->transDomain);
+            return new Response("<p style='text-align: center;'>".$text."</p>", 500);
         }
     }
 }

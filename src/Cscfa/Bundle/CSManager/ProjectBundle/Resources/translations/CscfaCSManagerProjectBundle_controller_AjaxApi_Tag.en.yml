@@ -1,0 +1,11 @@
+tagSource:
+    selectTagForm:
+        tag:
+            label: "Tag :"
+        submit:
+            label: "select"
+    removeTagForm:
+        submit:
+            label: "yes"
+addTagTarget:
+    textError:     "This name already exist"
