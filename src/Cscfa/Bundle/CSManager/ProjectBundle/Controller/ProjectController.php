@@ -175,13 +175,14 @@ class ProjectController extends Controller
             
             try {
                 $manager->flush();
+                return $this->redirect($this->generateUrl("cscfa_cs_manager_project_select_project", array("id"=>$project->getId())), 302);
             } catch (UniqueConstraintViolationException $e) {
                 $createForm->get("name")->addError(new FormError("This name already exist"));
-                return array("form"=>$createForm->createView());
+                return $this->render("CscfaCSManagerProjectBundle:Project:createProject.html.twig", array("form"=>$createForm->createView()));
             }
             
         }
         
-        return array("form"=>$createForm->createView());
+        return $this->render("CscfaCSManagerProjectBundle:Project:createProject.html.twig", array("form"=>$createForm->createView()));
     }
 }
