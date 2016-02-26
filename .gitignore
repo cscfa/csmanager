@@ -1,0 +1,15 @@
+/vendor/
+/web/
+/bin/
+app/cache/
+app/SymfonyRequirements.php
+app/check.php
+.buildpath
+.project
+.settings
+app/bootstrap.php.cache
+app/logs
+cc.sh
+chwind.sh
+composer.lock
+

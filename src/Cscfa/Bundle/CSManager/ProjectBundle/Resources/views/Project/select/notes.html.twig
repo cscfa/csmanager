@@ -1,0 +1,14 @@
+{% trans_default_domain "CscfaCSManagerProjectBundle_view_Project_selectProject" %}
+
+{% if grantProjectAttribute("notes", project) %}
+<div class="col-xs-11 cs-fieldset">
+    <h4 class="cs-fieldset-head">{{ "projectNotes.title"|trans }}</h4>
+    <div class="cs-fieldset-body">
+        {% for notes in project.getNotes() %}
+            {{ dump(notes) }}
+        {% else %}
+            <p>{{ "projectNotes.noNotes"|trans }}</p>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}

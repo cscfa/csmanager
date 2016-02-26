@@ -1,0 +1,55 @@
+{% trans_default_domain "CscfaCSManagerProjectBundle_view_Project_selectProject" %}
+
+{% if grantProjectAttribute("tags", project) %}
+<div class="col-xs-11 cs-fieldset">
+    <h4 class="cs-fieldset-head">{{ "projectTags.title"|trans }}</h4>
+            
+    <div class="cs-fieldset-body">
+    	<div class="cs-right">
+    		<div>
+                {{ formTool.ajaxFieldButton(
+                    path("cscfa_cs_manager_project_ajaxSource_tag_tag", {"project": project.getId()}), 
+                	"ajaxAddTag"|trans, 
+                	(grantProjectAttribute("tags", project, false, true) != true),
+                	"cs-ajax-field-button"
+                	) 
+                }}
+            </div>
+        </div>
+            
+        <div class="col-xs-12">
+        {% for tag in project.getTags() %}
+        	{% if loop.first %}
+        	<table class="table table-striped">
+        		<tr>
+        			<th>{{ "projectTags.headName"|trans }}</th>
+        			<th>{{ "projectTags.headDesc"|trans }}</th>
+        			<th>{{ "projectTags.headButn"|trans }}</th>
+        		</tr>
+        	{% endif %}
+        		<tr>
+        			<td>{{ tag.getName() }}</td>
+        			<td>{{ tag.getDescription() }}</td>
+        			<td class="cs-right">
+        				<div>
+                        {{ formTool.ajaxFieldButton(
+                            path("cscfa_cs_manager_project_ajaxSource_tag_remove", {"project": project.getId(), "tag": tag.getId()}),
+                        	"ajaxRemTag"|trans, 
+                        	(grantProjectAttribute("tags", project, false, true) != true),
+                        	"cs-ajax-field-button pull-xs-right",
+                        	"btn btn-danger"
+                        	) 
+                        }}
+                        </div>
+                	</td>
+        		</tr>
+        	{% if loop.last %}
+    		</table>
+        	{% endif %}
+        {% else %}
+            <p>{{ "projectTags.noTags"|trans }}</p>
+        {% endfor %}
+        </div>
+    </div>
+</div>
+{% endif %}

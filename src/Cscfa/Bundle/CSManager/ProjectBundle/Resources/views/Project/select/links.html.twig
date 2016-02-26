@@ -1,0 +1,14 @@
+{% trans_default_domain "CscfaCSManagerProjectBundle_view_Project_selectProject" %}
+
+{% if grantProjectAttribute("links", project) %}
+<div class="col-xs-11 cs-fieldset">
+    <h4 class="cs-fieldset-head">{{ "projectLinks.title"|trans }}</h4>
+    <div class="cs-fieldset-body">
+        {% for link in project.getLinks() %}
+            {{ dump(link) }}
+        {% else %}
+            <p>{{ "projectLinks.noLinks"|trans }}</p>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
