@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is a part of CSCFA csmanager project.
  * 
@@ -15,6 +14,7 @@
  * @filesource
  * @link     http://cscfa.fr
  */
+
 namespace Cscfa\Bundle\CSManager\ProjectBundle\Controller\AjaxApi;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;

@@ -1,0 +1,24 @@
+
+<div class="row" style="overflow: hidden;">
+{{ form_start(formUpdate) }}
+	<div class="col-xs-12">
+		<div class="cs-center col-xs-12">
+			{{ form_label(formUpdate.content) }}
+		</div>
+		<div class="cs-center col-xs-12">
+			{{ form_widget(formUpdate.content) }}
+		</div>
+		{{ form_row(formUpdate.content) }}
+	</div>
+	
+	<div class="cs-center col-xs-12">
+		{{ form_row(formUpdate.submit) }}
+	</div>
+{{ form_end(formUpdate) }}
+</div>
+
+{{ form_start(formDelete) }}
+	<div class="cs-right">
+		{{ form_row(formDelete.submit) }}
+	</div>
+{{ form_end(formDelete) }}

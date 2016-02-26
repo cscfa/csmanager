@@ -58,3 +58,24 @@ cscfa_cs_manager_project_ajaxTarget_link_remove:
     path:     /ajaxTarget/link/remove/{project}/{link}
     defaults: { _controller: "CscfaCSManagerProjectBundle:AjaxApi/Links:removeTarget" }
     methods:  [POST]
+
+cscfa_cs_manager_project_ajaxSource_note_add:
+    path:     /ajaxSource/note/add/{project}
+    defaults: { _controller: "CscfaCSManagerProjectBundle:AjaxApi/Note:addSource" }
+    methods:  [GET]
+cscfa_cs_manager_project_ajaxTarget_note_add:
+    path:     /ajaxTarget/note/add/{project}
+    defaults: { _controller: "CscfaCSManagerProjectBundle:AjaxApi/Note:addTarget" }
+    methods:  [POST]
+cscfa_cs_manager_project_ajaxSource_note_edit:
+    path:     /ajaxSource/note/edit/{project}/{note}
+    defaults: { _controller: "CscfaCSManagerProjectBundle:AjaxApi/Note:editSource" }
+    methods:  [GET]
+cscfa_cs_manager_project_ajaxTarget_note_edit:
+    path:     /ajaxTarget/note/edit/{project}/{note}
+    defaults: { _controller: "CscfaCSManagerProjectBundle:AjaxApi/Note:editTarget" }
+    methods:  [POST]
+cscfa_cs_manager_project_ajaxTarget_note_remove:
+    path:     /ajaxTarget/note/remove/{project}/{note}
+    defaults: { _controller: "CscfaCSManagerProjectBundle:AjaxApi/Note:removeTarget" }
+    methods:  [POST]

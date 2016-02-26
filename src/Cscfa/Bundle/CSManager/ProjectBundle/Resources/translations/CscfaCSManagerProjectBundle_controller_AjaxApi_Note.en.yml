@@ -1,0 +1,13 @@
+addSource:
+    content:
+        label: "text"
+    submit:
+        label: "add"
+editSource:
+    content:
+        label: "text"
+    submit:
+        label: "update"
+removeSource:
+    submit:
+        label: "remove"

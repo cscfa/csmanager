@@ -28,3 +28,8 @@ ajaxAddTag:       "add"
 ajaxRemTag:       "remove"
 ajaxAddLink:      "add"
 ajaxRemLink:      "remove"
+ajaxAddNote:      "add"
+note:
+    user:         "user : "
+    created:      "date : "
+ajaxEditNote:     "edit"

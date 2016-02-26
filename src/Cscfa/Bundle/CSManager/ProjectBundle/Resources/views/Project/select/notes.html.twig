@@ -3,9 +3,41 @@
 {% if grantProjectAttribute("notes", project) %}
 <div class="col-xs-11 cs-fieldset">
     <h4 class="cs-fieldset-head">{{ "projectNotes.title"|trans }}</h4>
+    
+    
     <div class="cs-fieldset-body">
-        {% for notes in project.getNotes() %}
-            {{ dump(notes) }}
+    	<div class="cs-right">
+    		<div>
+                {{ formTool.ajaxFieldButton(
+                    path("cscfa_cs_manager_project_ajaxSource_note_add", {"project": project.getId()}), 
+                	"ajaxAddNote"|trans, 
+                	(grantProjectAttribute("notes", project, false, true) != true),
+                	"cs-ajax-field-button"
+                	) 
+                }}
+            </div>
+        </div>
+        
+        {% for note in project.getNotes() if note.isDeleted() != true %}
+            <div class="col-xs-12 cs-article">
+            	<div class="col-xs-12 cs-article-head">
+            		<span class="col-xs-8">{{ "note.user"|trans }}{{ note.getUser().getUsername() }}</span>
+            		<span class="col-xs-4">{{ "note.created"|trans }}{{ note.getCreated().format("Y-m-d H:i:s") }}</span>
+            	</div>
+            	<div class="col-xs-12 cs-right">
+            		<div>
+                    {{ formTool.ajaxFieldButton(
+                        path("cscfa_cs_manager_project_ajaxSource_note_edit", {"project": project.getId(), "note":note.getId()}), 
+                    	"ajaxEditNote"|trans, 
+                    	(grantProjectAttribute("notes", project, false, true) != true),
+                    	"cs-ajax-field-button",
+                    	"btn btn-warning"
+                    	) 
+                    }}
+            		</div>
+            	</div>
+            	<p class="col-xs-12">{{ note.getContent() }}</p>
+            </div>
         {% else %}
             <p>{{ "projectNotes.noNotes"|trans }}</p>
         {% endfor %}
