@@ -22,7 +22,11 @@
         	<table class="table table-striped">
         	{% endif %}
         		<tr>
-        			<td>{{ link.getLink() }}</td>
+        			<td>
+        				<a href="{{ link.getLink() }}" target="_blank">
+        			        {{ link.getLink() }}
+        			    </a>
+    			    </td>
         			<td class="cs-right">
         				<div>
                         {{ formTool.ajaxFieldButton(
