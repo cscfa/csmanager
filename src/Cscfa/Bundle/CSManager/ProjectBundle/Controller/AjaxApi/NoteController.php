@@ -71,7 +71,10 @@ class NoteController extends Controller
                 "content", 
                 "textarea",
                 array(
-                    "label"=>$this->get("translator")->trans("addSource.content.label", [], $this->transDomain)
+                    "label"=>$this->get("translator")->trans("addSource.content.label", [], $this->transDomain),
+                    "attr"=>array(
+                        "class"=>"form-control cs-width-lock"
+                    )
                 )
             )
             ->add(
@@ -140,7 +143,10 @@ class NoteController extends Controller
                 "content", 
                 "textarea", 
                 array(
-                    "label"=>$this->get("translator")->trans("editSource.content.label", [], $this->transDomain)
+                    "label"=>$this->get("translator")->trans("editSource.content.label", [], $this->transDomain),
+                    "attr"=>array(
+                        "class"=>"form-control cs-width-lock"
+                    )
                 )
             )
             ->add(

@@ -70,6 +70,15 @@ class ProjectController extends Controller
      */
     public function selectProjectAction(Request $request, Project $id)
     {
+        $notes = $id->getNotes();
+        $parser = new \Parsedown();
+        
+        foreach ($notes as $key=>$note) {
+            $notes[$key] = $note->setContent($parser->parse($note->getContent()));
+        }
+        
+        $id->setNotes($notes);
+        
         return array("project"=>$id);
     }
     
