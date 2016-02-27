@@ -2,8 +2,10 @@ core_home_index:
     path:     /
     defaults: { _controller: "CscfaCSManagerCoreBundle:CoreHome:index" }
     methods:  [GET]
-
-
+core_authenticated_check:
+    path:     /is/authenticated
+    defaults: { _controller: "CscfaCSManagerCoreBundle:CoreHome:authenticated" }
+    methods:  [GET]
 
 
 

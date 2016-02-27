@@ -44,7 +44,7 @@
     {% endjavascripts %}
     
     <script type="text/javascript">
-        var pageLoader = cs.loader(".cs-loader-container");
+        var pageLoader = cs.loader(".cs-loader-container", "{{ path("core_authenticated_check") }}");
         pageLoader.run();
     </script>
 {% endblock %}

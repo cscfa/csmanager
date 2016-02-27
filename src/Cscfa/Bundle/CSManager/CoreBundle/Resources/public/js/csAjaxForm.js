@@ -11,6 +11,7 @@ function ajaxForm(constructor){
 		ajaxSourceProperty: "pathFrom",
 		ajaxDataProperty: "value",
 		ajaxSourceMethod: "GET",
+		checkAuthenticated: undefined,
 		select: function(){
 			this.selected = $(this.selector).filter(function(index, element){
 				return !$(element).is("[disabled]");
@@ -31,6 +32,7 @@ function ajaxForm(constructor){
 		callTop: function(){
 		},
 		callback: function(event, selfRef){
+			
 			var target = event.currentTarget;
 
 			var ajaxSource = target.getAttribute(event.data.selfRef.ajaxSourceProperty);
@@ -38,6 +40,19 @@ function ajaxForm(constructor){
 			
 			var htmlTarget = $(selfRef.htmlTarget);
 			$(htmlTarget).dialog({width: (screen.width*0.33)});
+			
+			if (selfRef.checkAuthenticated !== undefined) {
+				$.ajax({
+					url: selfRef.checkAuthenticated,
+					async: false,
+					success: function(data){
+						if (data == false) {
+							window.location.reload();
+							throw new Error("authentication fail - reload");
+						}
+					}
+				});
+			}
 			
 			$.ajax({
 				url: ajaxSource,

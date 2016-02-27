@@ -19,6 +19,7 @@
     		submitingHtml: "<div class='dialog-helper' title='{{ "ajaxFromScript.title"|trans }}'><div class='cs-center'><img src='{{ asset_url }}' alt='loading'/></div></div>",
     		submitErrorHtml: "<p style='text-align: center;'>{{ "ajaxFromScript.errorOccured"|trans }}</p>",
     		ajaxErrorHtml: "<p style='text-align: center;'>{{ "ajaxFromScript.errorOccured"|trans }}</p>",
+    		checkAuthenticated: "{{ path("core_authenticated_check") }}",
     		submit: function(selfRef, form, htmlTarget, firstEvent){
     			$.ajax({
     				type:form.method, 
@@ -46,6 +47,7 @@
     		submitingHtml: "<div class='dialog-helper' title='{{ "ajaxFromScript.title"|trans }}'><div class='cs-center'><img src='{{ asset_url }}' alt='loading'/></div></div>",
     		submitErrorHtml: "<p style='text-align: center;'>{{ "ajaxFromScript.errorOccured"|trans }}</p>",
     		ajaxErrorHtml: "<p style='text-align: center;'>{{ "ajaxFromScript.errorOccured"|trans }}</p>",
+    		checkAuthenticated: "{{ path("core_authenticated_check") }}",
     		submit: function(selfRef, form, htmlTarget, firstEvent){
     			$.ajax({
     				type:form.method, 

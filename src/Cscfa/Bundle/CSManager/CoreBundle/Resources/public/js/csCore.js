@@ -2,9 +2,9 @@
 cs = function() {
 };
 
-cs.loader = function(selector){
+cs.loader = function(selector, check){
 
-	var element = new LoaderElement(selector);
+	var element = new LoaderElement(selector, check);
 	
 	if(this.loader.list === undefined){
 		this.loader.list = [];
@@ -14,11 +14,16 @@ cs.loader = function(selector){
 	return element;
 }
 
-LoaderElement = function(selector){
+LoaderElement = function(selector, check){
 	this.container = $(selector);
 	this.header = $(selector).find(".cs-loader-head")[0];
 	this.body = $(selector).find(".cs-loader")[0];
 	this.receiver = $(this.body).find("div")[0];
+	
+	if (check !== undefined) {
+		this.check = check;
+	}
+	
 	this.current = {
 		href: null,
 		element: null,
@@ -48,18 +53,49 @@ LoaderElement = function(selector){
 			selfRef.current.element = element;
 		}
 		
-		$.get(url).done(function(data){
-			selfRef.setLoaded();
-			$(selfRef.receiver).html(data);
-		}).fail(function(){
-			selfRef.setLoaded();
-			
-			$(selfRef.receiver).html("<p>An error occured</p>");
-		}).always(function(){
-			if (element) {
-				$(element).parent().addClass("active");
-			}
-		});
+		if (selfRef.check !== undefined) {
+			$.ajax({
+				url: selfRef.check,
+				success: function(data){
+					if (data === true) {
+						$.get(url).done(function(data){
+							selfRef.setLoaded();
+							$(selfRef.receiver).html(data);
+						}).fail(function(){
+							selfRef.setLoaded();
+							
+							$(selfRef.receiver).html("<p>An error occured</p>");
+						}).always(function(){
+							if (element) {
+								$(element).parent().addClass("active");
+							}
+						});
+					} else {
+						window.location.reload();
+					}
+				},
+				error: function(){
+					selfRef.setLoaded();
+					$(selfRef.receiver).html("<p>An error occured</p>");
+					if (element) {
+						$(element).parent().addClass("active");
+					}
+				}
+			});
+		} else {
+			$.get(url).done(function(data){
+				selfRef.setLoaded();
+				$(selfRef.receiver).html(data);
+			}).fail(function(){
+				selfRef.setLoaded();
+				
+				$(selfRef.receiver).html("<p>An error occured</p>");
+			}).always(function(){
+				if (element) {
+					$(element).parent().addClass("active");
+				}
+			});
+		}
 	}
 	
 	this.run = function(){

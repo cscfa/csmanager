@@ -20,6 +20,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Cscfa\Bundle\CSManager\SecurityBundle\Objects\singin\SignInObject;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * CoreHomeController class.
@@ -63,4 +64,21 @@ class CoreHomeController extends Controller
             return array();
         }
     }
+    
+    /**
+     * Authenticated action.
+     * 
+     * This action return a json
+     * that grant the authenticated
+     * state of the session.
+     * 
+     * @return Response
+     */
+    public function authenticatedAction()
+    {
+        $response = new Response(json_encode($this->isGranted("IS_AUTHENTICATED_FULLY")), 200);
+        $response->headers->set("Content-Type", "application/json");
+        return $response;
+    }
+    
 }
