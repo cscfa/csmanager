@@ -128,13 +128,14 @@ class ProjectController extends Controller
         $domain = "CscfaCSManagerProjectBundle_controller_ProjectController_viewProjectAction";
         $name = $translator->trans('nameHeader', [], $domain);
         $summary = $translator->trans('summaryHeader', [], $domain);
+        $status = $translator->trans('statusHeader', [], $domain);
 
         $paginator = (new DataGridPaginator($projects, $page, $limit))
             ->setStepper($this->container->get("cscfa.view_project.paginator_stepper"))
             ->setAllowedLimits(array(5, 25, 100));
         $data = (new DataGridContainer($paginator->getPageData()))
-            ->setAccessMethods(array("getName", "getSummary"))
-            ->setHeader(array($name, $summary))
+            ->setAccessMethods(array("getName", "getSummary", "getStatus.getName"))
+            ->setHeader(array($name, $summary, $status))
             ->setType(DataGridContainer::TYPE_OBJECT)
             ->setStepper($this->get("cscfa.view_project.datagrid_stepper"));
         
