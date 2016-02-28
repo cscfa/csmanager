@@ -18,6 +18,23 @@ cscfa_cs_manager_project_select_project:
     path:     /ajax/select/project/{id}
     defaults: { _controller: "CscfaCSManagerProjectBundle:Project:selectProject" }
     methods:  [GET]
+cscfa_cs_manager_project_remove_project:
+    path:     /ajax/remove/project/{project}
+    defaults: { _controller: "CscfaCSManagerProjectBundle:Project:removeProject" }
+    methods:  [GET, POST]
+    
+cscfa_cs_manager_project_index_role:
+    path:     /ajax/role/index/project/{project}
+    defaults: { _controller: "CscfaCSManagerProjectBundle:Role:index" }
+    methods:  [GET]
+cscfa_cs_manager_project_index_role_add_user:
+    path:     /ajax/role/index/project/addUser/{project}
+    defaults: { _controller: "CscfaCSManagerProjectBundle:Role:addUser" }
+    methods:  [POST]
+cscfa_cs_manager_project_index_role_update:
+    path:     /ajax/role/project/update/{project}
+    defaults: { _controller: "CscfaCSManagerProjectBundle:Role:updateUserRole" }
+    methods:  [PUT]
 
 
 

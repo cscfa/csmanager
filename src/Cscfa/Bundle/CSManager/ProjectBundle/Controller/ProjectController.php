@@ -195,4 +195,60 @@ class ProjectController extends Controller
         
         return $this->render("CscfaCSManagerProjectBundle:Project:createProject.html.twig", array("form"=>$createForm->createView()));
     }
+    
+    /**
+     * Remove project action
+     * 
+     * This action return the
+     * project removing
+     * template.
+     * 
+     * @param Project $project The current project
+     * 
+     * @return Response
+     */
+    public function removeProjectAction(Request $request, Project $project)
+    {
+        $translator = $this->get('translator');
+        $domain = "CscfaCSManagerProjectBundle_controller_ProjectController_viewProjectAction";
+        
+        $form = $this->createFormBuilder($project)
+            ->setAction($this->generateUrl("cscfa_cs_manager_project_remove_project", array("project"=>$project->getId())))
+            ->add(
+                "deleted", 
+                "checkbox",
+                array(
+                    "label"=>$translator->trans("removeProject.deleted.label", [], $domain),
+                    "required"=>false
+                )
+            )
+            ->add(
+                "submit", 
+                "submit",
+                array(
+                    "label"=>$translator->trans("removeProject.submit.label", [], $domain),
+                    "attr"=>array(
+                        "class"=>"btn btn-success"
+                    )
+                )
+            )
+            ->getForm();
+        
+        if ($request->getMethod() == "POST") {
+            $form->handleRequest($request);
+            
+            if ($form->isValid()) {
+                $this->getDoctrine()->getManager()->persist($project);
+                $this->getDoctrine()->getManager()->flush();
+                
+                if ($project->isDeleted()) {
+                    return $this->redirect($this->generateUrl("cscfa_cs_manager_project_view_project"));
+                } else {
+                    return $this->redirect($this->generateUrl("cscfa_cs_manager_project_select_project", array("id"=>$project->getId())));
+                }
+            }
+        }
+        
+        return $this->render("CscfaCSManagerProjectBundle:Project:removeProject.html.twig", array("form"=>$form->createView()));
+    }
 }

@@ -1,0 +1,14 @@
+
+{{ form_start(form) }}
+	<div class="cs-center">
+	{{ form_row(form.deleted) }}
+	</div>
+	
+	<div class="cs-center">
+	{{ form_row(form.submit) }}
+	</div>
+{{ form_end(form) }}
+
+{% javascripts '@CscfaCSManagerProjectBundle/Resources/public/js/removeProject.js' %}
+    <script src="{{ asset_url }}"></script>
+{% endjavascripts %}

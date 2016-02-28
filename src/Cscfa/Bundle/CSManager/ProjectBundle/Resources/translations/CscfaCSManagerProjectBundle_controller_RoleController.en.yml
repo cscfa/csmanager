@@ -1,0 +1,6 @@
+getAddable:
+    selected:
+        label:        "user : "
+        placeholder:  "choose a user"
+    submit:
+        label:        "add"

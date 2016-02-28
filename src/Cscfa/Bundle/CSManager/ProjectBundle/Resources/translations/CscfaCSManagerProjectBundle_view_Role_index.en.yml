@@ -1,0 +1,17 @@
+userList:
+    username:       "Username : "
+addUserForm:
+    title:          "Add user"
+existing:
+    title:          "Registered users : "
+multipleAction:
+    title:          "action"
+    read:
+        allow:      "set readable"
+        desallow:   "set not readable"
+    write:
+        allow:      "set writable"
+        desallow:   "set not writable"
+    changeCheckbox: "check/uncheck all"
+    check:          "check all"
+    uncheck:        "uncheck all"

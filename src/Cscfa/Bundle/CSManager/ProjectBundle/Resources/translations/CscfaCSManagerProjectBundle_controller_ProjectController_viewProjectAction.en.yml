@@ -1,3 +1,8 @@
 nameHeader:    "name"
 summaryHeader: "summary"
 statusHeader:  "status"
+removeProject:
+    deleted:
+        label: "I confirm the deletion of the project"
+    submit:
+        label: "submit"

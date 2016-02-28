@@ -149,34 +149,48 @@ class ProjectRoleExtension extends \Twig_Extension
      * 
      * @return boolean
      */
-    public function isGrantedProjectAttribute($attribute, Project $project, $read = true, $write = false)
+    public function isGrantedProjectAttribute($attribute, Project $project, $read = true, $write = false, $owner = null)
     {
-        if ($this->getUser() !== null) {
-            
-            $owner = $this->getOwner($project);
-            
-            if ($owner instanceof ProjectOwner) {
-                $roles = $owner->getRoles();
-                
-                foreach ($roles as $role) {
-                    if ($role->getProperty() == $attribute || $role->getProperty() == "all") {
-                        if ($read && !$role->getRead()) {
-                            return false;
-                        }
-                        if ($write && !$role->getWrite()) {
-                            return false;
-                        }
-                    }
-                }
-                
-                return true;
+        if ($owner === null) {
+            if ($this->getUser() !== null) {
+                $owner = $this->getOwner($project);
             } else {
                 return false;
             }
+        }
+        
+        if ($owner->getUser()->hasRole("ROLE_ADMIN")) {
+            return true;
+        }
+
+        if ($owner instanceof ProjectOwner) {
+            $roles = $owner->getRoles();
             
+            $requireFalse = false;
+            foreach ($roles as $role) {
+                if ($role->getProperty() == $attribute || $role->getProperty() == "all") {
+                    if ($read && !$role->getRead()) {
+                        $requireFalse = true;
+                    } else if ($read && $role->getRead() && $role->getProperty() != "all") {
+                        return true;
+                    }
+                    if ($write && !$role->getWrite()) {
+                        $requireFalse = true;
+                    } else if ($write && $role->getWrite() && $role->getProperty() != "all") {
+                        return true;
+                    }
+                }
+            }
+            
+            if ($requireFalse) {
+                return false;
+            }
+            
+            return true;
         } else {
             return false;
         }
+            
     }
 
     /**

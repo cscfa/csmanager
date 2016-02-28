@@ -1,0 +1,145 @@
+{% trans_default_domain "CscfaCSManagerProjectBundle_view_Role_index" %}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xs-12 col-md-8 col-lg-6 col-md-offset-4 col-lg-offset-6">
+            <h4>{{ "addUserForm.title"|trans }}</h4>
+            <div class="container-fluid">
+                {{ form_start(addableUsers, {attr:{class:"formAddUserContainer"}}) }}
+                		{{ form_row(addableUsers.selected) }}
+                		
+                		{{ form_row(addableUsers.submit) }}
+                {{ form_end(addableUsers) }}
+            </div>
+        </div>
+    </div>
+    
+    <h3 class="row">{{ "existing.title"|trans }}</h3>
+    
+    <div class="row">
+        {% for owner in project.getProjectOwners() %}
+        	{% if loop.first %}
+        	<div class="accordion">
+        	{% endif %}
+            <h3>{{ "userList.username"|trans }}{{ owner.getUser().getUsername() }}</h3>
+            <div>
+            	{% set attributes = 
+            	    {
+            	        "name":"name",
+            	        "summary":"summary",
+            	        "status":"status",
+            	        "created":"created",
+            	        "updated":"updated",
+            	        "active":"active",
+            	        "links":"links",
+            	        "notes":"notes",
+            	        "tags":"tags",
+            	    	"remove":"remove",
+            	    	"roles":"roles",
+                    } 
+        	    %}
+            	{% for key, attribute in attributes %}
+            		{% if loop.first %}
+            		<table class="table table-striped">
+            			<tr>
+            				<td>&nbsp;</td>
+            				<td>&nbsp;</td>
+            				<td>&nbsp;</td>
+            				<td>
+            					<div>
+                                	<div class="btn-group">
+                                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        	{{ "multipleAction.title"|trans }} <span class="glyphicon glyphicon-edit" aria-hidden="true"></span><span class="caret"></span>
+                                        </button>
+                                		<ul class="dropdown-menu">
+                                			<li>
+                                				<a href="" class="multipleActionButton" action="read.allow" owner="{{ owner.getId() }}">
+                                				    {{ "multipleAction.read.allow"|trans }}
+                                			    </a>
+                                			</li>
+                                			<li>
+                                				<a href="" class="multipleActionButton" action="read.desallow" owner="{{ owner.getId() }}">
+                                				    {{ "multipleAction.read.desallow"|trans }}
+                                			    </a>
+                                			</li>
+    										<li role="separator" class="divider"></li>
+                                			<li>
+                                				<a href="" class="multipleActionButton" action="write.allow" owner="{{ owner.getId() }}">
+                                				    {{ "multipleAction.write.allow"|trans }}
+                                			    </a>
+                                			</li>
+                                			<li>
+                                				<a href="" class="multipleActionButton" action="write.desallow" owner="{{ owner.getId() }}">
+                                				    {{ "multipleAction.write.desallow"|trans }}
+                                			    </a>
+                                			</li>
+    										<li role="separator" class="divider"></li>
+                                			<li>
+                                				<a href="" class="changeCheckbox" owner="{{ owner.getId() }}">
+                                				    {{ "multipleAction.changeCheckbox"|trans }}
+                                			    </a>
+                                			</li>
+                                			<li>
+                                				<a href="" class="checkCheckbox" owner="{{ owner.getId() }}">
+                                				    {{ "multipleAction.check"|trans }}
+                                			    </a>
+                                			</li>
+                                			<li>
+                                				<a href="" class="uncheckCheckbox" owner="{{ owner.getId() }}">
+                                				    {{ "multipleAction.uncheck"|trans }}
+                                			    </a>
+                                			</li>
+                                		</ul>
+                                	</div>
+                                </div>
+            				</td>
+            			</tr>
+            		{% endif %}
+            			<tr>
+            				<th>
+            		            {{ key|trans }}
+            		    	</th>
+            		    	<td>
+                    		    {% if grantProjectAttribute(attribute, project, true, false, owner) %}
+                    		    <button class="btn btn-success roleButton" data='{{ attribute }}' action="read.desallow" owner="{{ owner.getId() }}">
+                    		    	Read 
+                		    	</button>
+                    		    {% else %}
+                    		    <button class="btn btn-danger roleButton" data='{{ attribute }}' action="read.allow" owner="{{ owner.getId() }}">
+                    		    	Read
+                		    	</button>
+                    		    {% endif %}
+            		    	</td>
+            		    	<td> 
+                    		    {% if grantProjectAttribute(attribute, project, false, true, owner) %}
+                    		    <button class="btn btn-success roleButton" data='{{ attribute }}' action="write.desallow" owner="{{ owner.getId() }}">
+                    		    	Write
+                		    	</button>
+                    		    {% else %}
+                    		    <button class="btn btn-danger roleButton" data='{{ attribute }}' action="write.allow" owner="{{ owner.getId() }}">
+                    		    	Write
+                		    	</button>
+                    		    {% endif %}
+            		    	</td>
+            		    	<td>
+            		    		<input class="roleCheckbox" type="checkbox" data='{{ attribute }}' owner="{{ owner.getId() }}"/>
+            		    	</td>
+            		    </tr>
+        		    {% if loop.last %}
+        		    </table>
+        		    {% endif %}
+            	{% endfor %}
+            </div>
+        	{% if loop.last %}
+        	</div>
+        	{% endif %}
+        {% endfor %}
+    </div>
+</div>
+
+<script type="text/javascript">
+	var roleModifyUrl = "{{ path("cscfa_cs_manager_project_index_role_update", {project: project.getId()}) }}";
+</script>
+{% javascripts '@CscfaCSManagerProjectBundle/Resources/public/js/roleIndexProject.js' %}
+    <script src="{{ asset_url }}"></script>
+{% endjavascripts %}

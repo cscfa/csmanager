@@ -1,6 +1,33 @@
 {% import "CscfaCSManagerCoreBundle:Macro:form.html.twig" as formTool %}
 {% trans_default_domain "CscfaCSManagerProjectBundle_view_Project_selectProject" %}
 
+{% if (grantProjectAttribute("userRoles", project, false, true) == true) or 
+      (grantProjectAttribute("remove", project, false, true) == true) %}
+<div class="cs-right">
+	<div class="btn-group">
+        <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        	{{ "projectEditMenu.label"|trans }} <span class="glyphicon glyphicon-edit" aria-hidden="true"></span><span class="caret"></span>
+        </button>
+		<ul class="dropdown-menu">
+			{% if (grantProjectAttribute("userRoles", project, false, true) == true) %}
+			<li>
+				<a href="{{ path("cscfa_cs_manager_project_index_role", {"project":project.getId()}) }}" class="projectEditMenu">
+				    {{ "projectEditMenu.roles"|trans }}
+			    </a>
+			</li>
+			{% endif %}
+			{% if (grantProjectAttribute("remove", project, false, true) == true) %}
+			<li>
+				<a href="{{ path("cscfa_cs_manager_project_remove_project", {"project":project.getId()}) }}" class="projectEditMenu">
+				    {{ "projectEditMenu.remove"|trans }}
+			    </a>
+			</li>
+			{% endif %}
+		</ul>
+	</div>
+</div>
+{% endif %}
+
 {% include "CscfaCSManagerProjectBundle:Project/select:general.html.twig" %}
 
 {% include "CscfaCSManagerProjectBundle:Project/select:tags.html.twig" %}
@@ -9,7 +36,8 @@
 
 {% include "CscfaCSManagerProjectBundle:Project/select:notes.html.twig" %}
 
-{% javascripts '@CscfaCSManagerCoreBundle/Resources/public/js/csAjaxForm.js' %}
+{% javascripts '@CscfaCSManagerCoreBundle/Resources/public/js/csAjaxForm.js'
+    '@CscfaCSManagerProjectBundle/Resources/public/js/selectProject.js' %}
     <script src="{{ asset_url }}"></script>
 {% endjavascripts %}
 {% image '@CscfaCSManagerCoreBundle/Resources/public/image/Loader/gears100.svg' %}

@@ -33,3 +33,7 @@ note:
     user:         "user : "
     created:      "date : "
 ajaxEditNote:     "edit"
+projectEditMenu:
+    label:        "Edit"
+    roles:        "Users roles"
+    remove:       "Remove"
