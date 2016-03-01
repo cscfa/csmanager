@@ -32,6 +32,7 @@ class AppKernel extends Kernel
             new Cscfa\Bundle\NavBarBundle\CscfaNavBarBundle(),
             new Cscfa\Bundle\CacheSystemBundle\CscfaCacheSystemBundle(),
             new Cscfa\Bundle\DataGridBundle\CscfaDataGridBundle(),
+            new Cscfa\Bundle\CSManager\TrackBundle\CscfaCSManagerTrackBundle(),
         );
         
         if (in_array($this->getEnvironment(), array(
