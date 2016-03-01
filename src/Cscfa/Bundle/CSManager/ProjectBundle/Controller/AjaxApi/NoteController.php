@@ -23,6 +23,7 @@ use Cscfa\Bundle\CSManager\ProjectBundle\Entity\ProjectNote;
 use Cscfa\Bundle\CSManager\ProjectBundle\Entity\Project;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Cscfa\Bundle\CSManager\ProjectBundle\Event\ProjectNoteEvent;
 
 /**
  * NoteController class.
@@ -114,6 +115,13 @@ class NoteController extends Controller
             $note->setProject($project);
             
             $this->getDoctrine()->getManager()->persist($note);
+            
+            $noteEvent = new ProjectNoteEvent();
+            $noteEvent->setNote($note)
+                ->setProject($project)
+                ->setUser($this->getUser());
+            $this->get("event_dispatcher")->dispatch("project.event.addNote", $noteEvent);
+            
             $this->getDoctrine()->getManager()->flush();
             
             return new Response("done", 200);
@@ -197,6 +205,13 @@ class NoteController extends Controller
         
         if ($form->isValid()) {
             $this->getDoctrine()->getManager()->persist($note);
+            
+            $editEvent = new ProjectNoteEvent();
+            $editEvent->setNote($note)
+                ->setProject($project)
+                ->setUser($this->getUser());
+            $this->get("event_dispatcher")->dispatch("project.event.editNote", $editEvent);
+            
             $this->getDoctrine()->getManager()->flush();
             
             return new Response("done", 200);
@@ -220,6 +235,13 @@ class NoteController extends Controller
     {
         $note->setDeleted(true);
         $this->getDoctrine()->getManager()->persist($note);
+            
+            $removeEvent = new ProjectNoteEvent();
+            $removeEvent->setNote($note)
+                ->setProject($project)
+                ->setUser($this->getUser());
+            $this->get("event_dispatcher")->dispatch("project.event.remNote", $removeEvent);
+            
         $this->getDoctrine()->getManager()->flush();
         
         return new Response("done", 200);

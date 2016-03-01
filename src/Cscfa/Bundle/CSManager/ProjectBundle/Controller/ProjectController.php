@@ -24,13 +24,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Cscfa\Bundle\CSManager\ProjectBundle\Entity\ProjectOwner;
 use Cscfa\Bundle\CSManager\ProjectBundle\Entity\ProjectRole;
 use Cscfa\Bundle\DataGridBundle\Objects\DataGridContainer;
-use Cscfa\Bundle\DataGridBundle\Objects\DataGridStepper;
 use Cscfa\Bundle\DataGridBundle\Objects\DataGridPaginator;
-use Cscfa\Bundle\CSManager\CoreBundle\BootstrapStepper\PaginatorStepper;
 use Cscfa\Bundle\DataGridBundle\Objects\PaginatorLimitForm;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Symfony\Component\Form\FormError;
+use Cscfa\Bundle\CSManager\ProjectBundle\Event\ProjectBaseEvent;
 
 /**
  * ProjectController class.
@@ -185,6 +184,12 @@ class ProjectController extends Controller
             
             try {
                 $manager->flush();
+                
+                $creationEvent = new ProjectBaseEvent();
+                $creationEvent->setProject($project);
+                $creationEvent->setUser($this->getUser());
+                $this->get("event_dispatcher")->dispatch("project.event.created", $creationEvent);
+                
                 return $this->redirect($this->generateUrl("cscfa_cs_manager_project_select_project", array("id"=>$project->getId())), 302);
             } catch (UniqueConstraintViolationException $e) {
                 $createForm->get("name")->addError(new FormError("This name already exist"));
@@ -238,7 +243,14 @@ class ProjectController extends Controller
             $form->handleRequest($request);
             
             if ($form->isValid()) {
+                
                 $this->getDoctrine()->getManager()->persist($project);
+                
+                $removeEvent = new ProjectBaseEvent();
+                $removeEvent->setProject($project)
+                    ->setUser($this->getUser());
+                $this->get("event_dispatcher")->dispatch("project.event.removed", $removeEvent);
+                
                 $this->getDoctrine()->getManager()->flush();
                 
                 if ($project->isDeleted()) {

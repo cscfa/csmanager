@@ -23,6 +23,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Cscfa\Bundle\CSManager\ProjectBundle\Entity\Project;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Cscfa\Bundle\CSManager\ProjectBundle\Event\ProjectLinkEvent;
 
 /**
  * LinksController class.
@@ -107,6 +108,13 @@ class LinksController extends Controller
             
             $this->getDoctrine()->getManager()->persist( $link );
             $this->getDoctrine()->getManager()->persist( $project );
+            
+            $linkEvent = new ProjectLinkEvent();
+            $linkEvent->setProject($project)
+                ->setLink($link)
+                ->setUser($this->getUser());
+            $this->get("event_dispatcher")->dispatch("project.event.addLink", $linkEvent);
+            
             $this->getDoctrine()->getManager()->flush();
             
             return new Response( "done", 200 );
@@ -162,6 +170,12 @@ class LinksController extends Controller
     public function removeTargetAction(Project $project, ProjectLink $link)
     {
         $project->getLinks()->removeElement( $link );
+            
+        $linkEvent = new ProjectLinkEvent();
+        $linkEvent->setProject($project)
+            ->setLink($link)
+            ->setUser($this->getUser());
+        $this->get("event_dispatcher")->dispatch("project.event.remLink", $linkEvent);
         
         $this->getDoctrine()->getManager()->persist( $project );
         $this->getDoctrine()->getManager()->remove( $link );

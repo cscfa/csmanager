@@ -24,6 +24,8 @@ use Cscfa\Bundle\CSManager\ProjectBundle\Entity\ProjectOwner;
 use Cscfa\Bundle\CSManager\ProjectBundle\Entity\ProjectRole;
 use Symfony\Component\HttpFoundation\Request;
 use Cscfa\Bundle\CSManager\ProjectBundle\Twig\Extension\ProjectRoleExtension;
+use Cscfa\Bundle\CSManager\ProjectBundle\Event\ProjectOwnerEvent;
+use Cscfa\Bundle\CSManager\ProjectBundle\Event\ProjectRoleEvent;
 
 /**
  * RoleController class.
@@ -164,6 +166,12 @@ class RoleController extends Controller
                 $this->getDoctrine()->getManager()->persist($roles);
                 $owner->getRoles()->add($roles);
                 
+                $ownerEvent = new ProjectOwnerEvent();
+                $ownerEvent->setOwner($owner)
+                    ->setProject($project)
+                    ->setUser($this->getUser());
+                $this->get("event_dispatcher")->dispatch("project.event.addOwner", $ownerEvent);
+                
                 $this->getDoctrine()->getManager()->flush();
                 
                 return new Response("done", 200);
@@ -264,6 +272,15 @@ class RoleController extends Controller
                 $this->getDoctrine()->getManager()->persist($owner);
                 $this->getDoctrine()->getManager()->flush();
             }
+                
+            $roleEvent = new ProjectRoleEvent();
+            $roleEvent->setType($type)
+                ->setMode($mode)
+                ->setProperty($properties)
+                ->setOwner($owner)
+                ->setProject($owner->getProject())
+                ->setUser($this->getUser());
+            $this->get("event_dispatcher")->dispatch("project.event.roleUpdate", $roleEvent);
             
             $result = ["owner"=>$owner->getId(), "properties"=>$properties, "type"=>$type, "mode"=>($mode=="allow"?true:false)];
             $response = new Response(json_encode($result), 200);

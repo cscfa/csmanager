@@ -22,6 +22,7 @@ use Cscfa\Bundle\CSManager\ProjectBundle\Entity\ProjectTag;
 use Cscfa\Bundle\CSManager\ProjectBundle\Entity\Project;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Cscfa\Bundle\CSManager\ProjectBundle\Event\ProjectTagEvent;
 
 /**
  * TagController class.
@@ -122,6 +123,12 @@ class TagController extends Controller
                 $this->getDoctrine()->getManager()->persist($project);
             }
             
+            $tagEvent = new ProjectTagEvent();
+            $tagEvent->setTag($tag["tag"])
+                ->setProject($project)
+                ->setUser($this->getUser());
+            $this->get("event_dispatcher")->dispatch("project.event.assignTag", $tagEvent);
+            
             $this->getDoctrine()->getManager()->flush();
             return new Response("done", 200);
         } else {
@@ -176,6 +183,12 @@ class TagController extends Controller
 
         $this->getDoctrine()->getManager()->persist($project);
         $this->getDoctrine()->getManager()->persist($tag);
+
+        $tagEvent = new ProjectTagEvent();
+        $tagEvent->setTag($tag)
+            ->setProject($project)
+            ->setUser($this->getUser());
+        $this->get("event_dispatcher")->dispatch("project.event.remTag", $tagEvent);
 
         $this->getDoctrine()->getManager()->flush();
         
