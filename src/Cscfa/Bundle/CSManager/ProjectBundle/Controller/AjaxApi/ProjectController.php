@@ -122,9 +122,7 @@ class ProjectController extends Controller
             try{
                 $this->getDoctrine()->getManager()->flush();
                 
-                $nameEvent = new ProjectBaseEvent();
-                $nameEvent->setProject($project)
-                    ->setUser($this->getUser());
+                $nameEvent = new ProjectBaseEvent($project, $this->getUser(), "project.event.nameUpdate");
                 $this->get("event_dispatcher")->dispatch("project.event.nameUpdate", $nameEvent);
                 
             } catch(UniqueConstraintViolationException $e) {
@@ -170,10 +168,8 @@ class ProjectController extends Controller
         if ($form->isValid()) {
             $this->getDoctrine()->getManager()->persist($project);
                 
-            $summaryEvent = new ProjectBaseEvent();
-            $summaryEvent->setProject($project)
-                ->setUser($this->getUser());
-            $this->get("event_dispatcher")->dispatch("project.event.summuryUpdate", $summaryEvent);
+            $summaryEvent = new ProjectBaseEvent($project, $this->getUser(), "project.event.summuryUpdate");
+            $this->get("event_dispatcher")->dispatch("project.event.summaryUpdate", $summaryEvent);
             
             $this->getDoctrine()->getManager()->flush();
             
@@ -236,9 +232,7 @@ class ProjectController extends Controller
         if ($form->isValid()) {
             $this->getDoctrine()->getManager()->persist($project);
                 
-            $statusEvent = new ProjectBaseEvent();
-            $statusEvent->setProject($project)
-                ->setUser($this->getUser());
+            $statusEvent = new ProjectBaseEvent($project, $this->getUser(), "project.event.statusUpdate");
             $this->get("event_dispatcher")->dispatch("project.event.statusUpdate", $statusEvent);
             
             $this->getDoctrine()->getManager()->flush();

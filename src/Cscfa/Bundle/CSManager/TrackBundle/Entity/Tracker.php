@@ -66,6 +66,24 @@ class Tracker {
      */
     protected $links;
     
+    /** 
+     * EventName
+     * 
+     * The tracker event name
+     * 
+     * @ORM\Column(type="string", length=255, options={"comment":"The Tracker event name"}, nullable=false, unique=false, name="csmanager_Tracker_eventName") 
+     */
+    protected $eventName;
+    
+    /**
+     * Message
+     *
+     * The tracker event message
+     *
+     * @ORM\Column(type="text", options={"comment":"The Tracker event message"}, nullable=false, unique=false, name="csmanager_Tracker_message")
+     */
+    protected $message;
+    
     /**
      * Tracker constructor
      * 
@@ -176,5 +194,59 @@ class Tracker {
         $this->links = $links;
         return $this;
     }
- 
+    
+    /**
+     * Get eventName
+     * 
+     * This method the tracker
+     * event name.
+     * 
+     * @return string
+     */
+    public function getEventName() {
+        return $this->eventName;
+    }
+    
+    /**
+     * Set eventName
+     * 
+     * This method allow to set
+     * the tracker event name.
+     * 
+     * @param string $eventName The event name
+     * 
+     * @return Tracker
+     */
+    public function setEventName($eventName) {
+        $this->eventName = $eventName;
+        return $this;
+    }
+    
+    /**
+     * Get message
+     * 
+     * This method the tracker
+     * event message.
+     * 
+     * @return string
+     */
+    public function getMessage() {
+        return $this->message;
+    }
+    
+    /**
+     * Set message
+     * 
+     * This method allow to set
+     * the tracker event message.
+     * 
+     * @param string $message The event message
+     * 
+     * @return Tracker
+     */
+    public function setMessage($message) {
+        $this->message = $message;
+        return $this;
+    }
+    
 }

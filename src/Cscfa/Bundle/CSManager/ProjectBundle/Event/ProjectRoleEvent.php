@@ -17,6 +17,9 @@
 namespace Cscfa\Bundle\CSManager\ProjectBundle\Event;
 
 use Cscfa\Bundle\CSManager\ProjectBundle\Event\ProjectOwnerEvent;
+use Cscfa\Bundle\CSManager\ProjectBundle\Entity\ProjectOwner;
+use Cscfa\Bundle\CSManager\ProjectBundle\Entity\Project;
+use Cscfa\Bundle\SecurityBundle\Entity\User;
 
 /**
  * ProjectRoleEvent class.
@@ -62,6 +65,28 @@ class ProjectRoleEvent extends ProjectOwnerEvent {
      * @var string
      */
     protected $property;
+	
+	/**
+	 * ProjectOwnerEvent constructor
+	 * 
+	 * The ProjectOwnerEvent default
+	 * constructor
+	 * 
+	 * @param string       $type      The event role type
+	 * @param string       $mode      The event role mode
+	 * @param string       $property  The event project property
+	 * @param ProjectOwner $owner     The event owner
+	 * @param Project      $project   The event project
+	 * @param User         $user      The current user
+	 * @param string       $eventName The event name
+	 */
+	public function __construct($type = null, $mode = null, $property = null, ProjectOwner $owner = null, Project $project = null, User $user = null, $eventName = null){
+	    parent::__construct($owner, $project, $user, $eventName);
+	    
+	    $this->type = $type;
+	    $this->mode = $mode;
+	    $this->property = $property;
+	}
 	
 	/**
 	 * Get type

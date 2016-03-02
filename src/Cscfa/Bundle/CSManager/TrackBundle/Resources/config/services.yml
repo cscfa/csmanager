@@ -1,4 +1,20 @@
 services:
-#    cscfa_cs_manager_track.example:
-#        class: Cscfa\Bundle\CSManager\TrackBundle\Example
-#        arguments: [@service_id, "plain_value", %parameter%]
+    cscfa_cs_manager_track.projectListener:
+        class: Cscfa\Bundle\CSManager\TrackBundle\Listener\ProjectEventListener
+        calls:
+            - [setArguments, [ "@doctrine" ]]
+        tags:
+            - { name: "kernel.event_listener", event: "project.event.created", method: "onCreated" }
+            - { name: "kernel.event_listener", event: "project.event.removed", method: "onRemove" }
+            - { name: "kernel.event_listener", event: "project.event.addOwner", method: "onAddOwner" }
+            - { name: "kernel.event_listener", event: "project.event.roleUpdate", method: "onRoleUpdate" }
+            - { name: "kernel.event_listener", event: "project.event.addLink", method: "onAddLink" }
+            - { name: "kernel.event_listener", event: "project.event.remLink", method: "onRemoveLink" }
+            - { name: "kernel.event_listener", event: "project.event.addNote", method: "onAddNote" }
+            - { name: "kernel.event_listener", event: "project.event.editNote", method: "onEditNote" }
+            - { name: "kernel.event_listener", event: "project.event.remNote", method: "onRemoveNote" }
+            - { name: "kernel.event_listener", event: "project.event.nameUpdate", method: "onUpdateName" }
+            - { name: "kernel.event_listener", event: "project.event.summaryUpdate", method: "onSummaryUpdate" }
+            - { name: "kernel.event_listener", event: "project.event.statusUpdate", method: "onStatusUpdate" }
+            - { name: "kernel.event_listener", event: "project.event.assignTag", method: "onAssignTag" }
+            - { name: "kernel.event_listener", event: "project.event.remTag", method: "onRemoveTag" }

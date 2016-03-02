@@ -109,10 +109,7 @@ class LinksController extends Controller
             $this->getDoctrine()->getManager()->persist( $link );
             $this->getDoctrine()->getManager()->persist( $project );
             
-            $linkEvent = new ProjectLinkEvent();
-            $linkEvent->setProject($project)
-                ->setLink($link)
-                ->setUser($this->getUser());
+            $linkEvent = new ProjectLinkEvent($link, $project, $this->getUser(), "project.event.addLink");
             $this->get("event_dispatcher")->dispatch("project.event.addLink", $linkEvent);
             
             $this->getDoctrine()->getManager()->flush();
@@ -171,10 +168,7 @@ class LinksController extends Controller
     {
         $project->getLinks()->removeElement( $link );
             
-        $linkEvent = new ProjectLinkEvent();
-        $linkEvent->setProject($project)
-            ->setLink($link)
-            ->setUser($this->getUser());
+        $linkEvent = new ProjectLinkEvent($link, $project, $this->getUser(), "project.event.remLink");
         $this->get("event_dispatcher")->dispatch("project.event.remLink", $linkEvent);
         
         $this->getDoctrine()->getManager()->persist( $project );

@@ -116,10 +116,7 @@ class NoteController extends Controller
             
             $this->getDoctrine()->getManager()->persist($note);
             
-            $noteEvent = new ProjectNoteEvent();
-            $noteEvent->setNote($note)
-                ->setProject($project)
-                ->setUser($this->getUser());
+            $noteEvent = new ProjectNoteEvent($note, $project, $this->getUser(), "project.event.addNote");
             $this->get("event_dispatcher")->dispatch("project.event.addNote", $noteEvent);
             
             $this->getDoctrine()->getManager()->flush();
@@ -205,11 +202,8 @@ class NoteController extends Controller
         
         if ($form->isValid()) {
             $this->getDoctrine()->getManager()->persist($note);
-            
-            $editEvent = new ProjectNoteEvent();
-            $editEvent->setNote($note)
-                ->setProject($project)
-                ->setUser($this->getUser());
+
+            $editEvent = new ProjectNoteEvent($note, $project, $this->getUser(), "project.event.editNote");
             $this->get("event_dispatcher")->dispatch("project.event.editNote", $editEvent);
             
             $this->getDoctrine()->getManager()->flush();
@@ -235,11 +229,8 @@ class NoteController extends Controller
     {
         $note->setDeleted(true);
         $this->getDoctrine()->getManager()->persist($note);
-            
-            $removeEvent = new ProjectNoteEvent();
-            $removeEvent->setNote($note)
-                ->setProject($project)
-                ->setUser($this->getUser());
+
+            $removeEvent = new ProjectNoteEvent($note, $project, $this->getUser(), "project.event.remNote");
             $this->get("event_dispatcher")->dispatch("project.event.remNote", $removeEvent);
             
         $this->getDoctrine()->getManager()->flush();

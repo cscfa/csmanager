@@ -18,6 +18,8 @@ namespace Cscfa\Bundle\CSManager\ProjectBundle\Event;
 
 use Cscfa\Bundle\CSManager\ProjectBundle\Event\ProjectBaseEvent;
 use Cscfa\Bundle\CSManager\ProjectBundle\Entity\ProjectNote;
+use Cscfa\Bundle\CSManager\ProjectBundle\Entity\Project;
+use Cscfa\Bundle\SecurityBundle\Entity\User;
 
 /**
  * ProjectNoteEvent class.
@@ -42,6 +44,22 @@ class ProjectNoteEvent extends ProjectBaseEvent {
      * @var ProjectNote
      */
     protected $note;
+	
+	/**
+	 * ProjectNoteEvent constructor
+	 * 
+	 * The ProjectNoteEvent default
+	 * constructor
+	 * 
+	 * @param ProjectNote $note      The event note
+	 * @param Project     $project   The event project
+	 * @param User        $user      The current user
+	 * @param string      $eventName The event name
+	 */
+	public function __construct(ProjectNote $note = null, Project $project = null, User $user = null, $eventName = null){
+	    parent::__construct($project, $user, $eventName);
+	    $this->note = $note;
+	}
     
     /**
      * Get note

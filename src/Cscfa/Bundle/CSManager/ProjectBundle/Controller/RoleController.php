@@ -166,10 +166,7 @@ class RoleController extends Controller
                 $this->getDoctrine()->getManager()->persist($roles);
                 $owner->getRoles()->add($roles);
                 
-                $ownerEvent = new ProjectOwnerEvent();
-                $ownerEvent->setOwner($owner)
-                    ->setProject($project)
-                    ->setUser($this->getUser());
+                $ownerEvent = new ProjectOwnerEvent($owner, $project, $this->getUser(), "project.event.addOwner");
                 $this->get("event_dispatcher")->dispatch("project.event.addOwner", $ownerEvent);
                 
                 $this->getDoctrine()->getManager()->flush();
@@ -273,13 +270,7 @@ class RoleController extends Controller
                 $this->getDoctrine()->getManager()->flush();
             }
                 
-            $roleEvent = new ProjectRoleEvent();
-            $roleEvent->setType($type)
-                ->setMode($mode)
-                ->setProperty($properties)
-                ->setOwner($owner)
-                ->setProject($owner->getProject())
-                ->setUser($this->getUser());
+            $roleEvent = new ProjectRoleEvent($type, $mode, $properties, $owner, $owner->getProject(), $this->getUser(), "project.event.roleUpdate");
             $this->get("event_dispatcher")->dispatch("project.event.roleUpdate", $roleEvent);
             
             $result = ["owner"=>$owner->getId(), "properties"=>$properties, "type"=>$type, "mode"=>($mode=="allow"?true:false)];

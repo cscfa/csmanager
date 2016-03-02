@@ -18,6 +18,9 @@ namespace Cscfa\Bundle\CSManager\ProjectBundle\Event;
 
 use Cscfa\Bundle\CSManager\ProjectBundle\Event\ProjectBaseEvent;
 use Cscfa\Bundle\CSManager\ProjectBundle\Entity\ProjectLink;
+use Cscfa\Bundle\CSManager\TrackBundle\Event\TrackerEvent;
+use Cscfa\Bundle\CSManager\ProjectBundle\Entity\Project;
+use Cscfa\Bundle\SecurityBundle\Entity\User;
 
 /**
  * ProjectLinkEvent class.
@@ -42,6 +45,22 @@ class ProjectLinkEvent extends ProjectBaseEvent {
 	 * @var ProjectLink
 	 */
 	protected $link;
+	
+	/**
+	 * ProjectLinkEvent constructor
+	 * 
+	 * The ProjectLinkEvent default
+	 * constructor
+	 * 
+	 * @param ProjectLink $link      The event link
+	 * @param Project     $project   The event project
+	 * @param User        $user      The current user
+	 * @param string      $eventName The event name
+	 */
+	public function __construct(ProjectLink $link = null, Project $project = null, User $user = null, $eventName = null){
+	    parent::__construct($project, $user, $eventName);
+	    $this->link = $link;
+	}
 	
 	/**
 	 * Get link

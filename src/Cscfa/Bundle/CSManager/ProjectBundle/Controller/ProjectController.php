@@ -185,9 +185,7 @@ class ProjectController extends Controller
             try {
                 $manager->flush();
                 
-                $creationEvent = new ProjectBaseEvent();
-                $creationEvent->setProject($project);
-                $creationEvent->setUser($this->getUser());
+                $creationEvent = new ProjectBaseEvent($project, $this->getUser(), "project.event.created");
                 $this->get("event_dispatcher")->dispatch("project.event.created", $creationEvent);
                 
                 return $this->redirect($this->generateUrl("cscfa_cs_manager_project_select_project", array("id"=>$project->getId())), 302);
@@ -246,9 +244,7 @@ class ProjectController extends Controller
                 
                 $this->getDoctrine()->getManager()->persist($project);
                 
-                $removeEvent = new ProjectBaseEvent();
-                $removeEvent->setProject($project)
-                    ->setUser($this->getUser());
+                $removeEvent = new ProjectBaseEvent($project, $this->getUser(), "project.event.removed");
                 $this->get("event_dispatcher")->dispatch("project.event.removed", $removeEvent);
                 
                 $this->getDoctrine()->getManager()->flush();

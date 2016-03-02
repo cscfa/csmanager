@@ -16,9 +16,9 @@
  */
 namespace Cscfa\Bundle\CSManager\ProjectBundle\Event;
 
-use Symfony\Component\EventDispatcher\Event;
 use Cscfa\Bundle\CSManager\ProjectBundle\Entity\Project;
 use Cscfa\Bundle\SecurityBundle\Entity\User;
+use Cscfa\Bundle\CSManager\TrackBundle\Event\TrackerEvent;
 
 /**
  * ProjectBaseEvent class.
@@ -32,7 +32,7 @@ use Cscfa\Bundle\SecurityBundle\Entity\User;
  * @license  http://opensource.org/licenses/MIT MIT
  * @link     http://cscfa.fr
  */
-class ProjectBaseEvent extends Event {
+class ProjectBaseEvent extends TrackerEvent {
 	
 	/**
 	 * ProjectBaseEvent attribute
@@ -53,6 +53,23 @@ class ProjectBaseEvent extends Event {
 	 * @var User
 	 */
 	protected $user;
+	
+	/**
+	 * ProjectBaseEvent constructor
+	 * 
+	 * The default ProjectBaseEvent
+	 * constructor.
+	 * 
+	 * @param Project $project   The event project
+	 * @param User    $user      The current user
+	 * @param string  $eventName The event name
+	 */
+	public function __construct(Project $project = null, User $user = null, $eventName = null){
+	    parent::__construct($eventName);
+	    
+	    $this->project = $project;
+	    $this->user = $user;
+	}
 	
 	/**
 	 * Get project

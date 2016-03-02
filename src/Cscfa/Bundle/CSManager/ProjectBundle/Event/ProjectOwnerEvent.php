@@ -18,6 +18,8 @@ namespace Cscfa\Bundle\CSManager\ProjectBundle\Event;
 
 use Cscfa\Bundle\CSManager\ProjectBundle\Event\ProjectBaseEvent;
 use Cscfa\Bundle\CSManager\ProjectBundle\Entity\ProjectOwner;
+use Cscfa\Bundle\CSManager\ProjectBundle\Entity\Project;
+use Cscfa\Bundle\SecurityBundle\Entity\User;
 
 /**
  * ProjectOwnerEvent class.
@@ -42,6 +44,22 @@ class ProjectOwnerEvent extends ProjectBaseEvent {
 	 * @var ProjectOwner
 	 */
 	protected $owner;
+	
+	/**
+	 * ProjectOwnerEvent constructor
+	 * 
+	 * The ProjectOwnerEvent default
+	 * constructor
+	 * 
+	 * @param ProjectOwner $owner     The event owner
+	 * @param Project      $project   The event project
+	 * @param User         $user      The current user
+	 * @param string       $eventName The event name
+	 */
+	public function __construct(ProjectOwner $owner = null, Project $project = null, User $user = null, $eventName = null){
+	    parent::__construct($project, $user, $eventName);
+	    $this->owner = $owner;
+	}
 	
 	/**
 	 * Get owner
