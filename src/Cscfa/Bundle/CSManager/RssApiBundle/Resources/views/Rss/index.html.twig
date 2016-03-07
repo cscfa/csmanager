@@ -1,0 +1,111 @@
+{% extends 'CscfaCSManagerCoreBundle:Default:base.html.twig' %}
+
+{% trans_default_domain "CscfaCSManagerRssBundle_view_Rss_index" %}
+
+{% block title %}SCM - {{ "pageTitle"|trans }}{% endblock %}
+
+{% block stylesheets %}
+
+    {{ parent() }}
+
+    <link rel="stylesheet" type="text/css" href="{{ path("core_css_tool") }}"/>
+    
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+    
+    {{ renderNavbar() }}
+
+    <div class="container-fluid">
+    	{% if user is null %}
+    	<div class="row">
+    		<p class="col-xs-12 col-md-10 col-md-offset-1">
+    			{{ "infoRss"|trans }}
+    		</p>
+    	</div>
+    	<div class="row cs-center">
+    		<div>
+    			<a href="{{ path("cscfa_cs_manager_rss_api_create_user") }}">
+            		<button class="btn btn-success">
+            			{{ "createApi"|trans }}
+            		</button>
+				</a>
+    		</div>
+    	</div>
+    	{% else %}
+    	<div class="row">
+    		<div class="col-xs-12 col-md-10 col-md-offset-1">
+    			{% for channel in channels %}
+    			<h4 class="col-xs-12">{{ channel.getName() }}</h4>
+    			<p class="col-xs-12">
+    				{{ channel.getDescription() }}
+    			</p>
+    			<div class="col-xs-12">
+                    <div class="input-group">
+                      <input type="text" class="form-control baseUrlNeeded" id="rssLink{{ loop.index0 }}" value="{{ path("cscfa_cs_manager_rss_api_channel", {userToken: user.getToken(), channelToken: channel.getHashId()}) }}" readonly>
+                      <span class="input-group-btn">
+                        <button class="btn btn-default clipboardCopy" data-clipboard-target="#rssLink{{ loop.index0 }}">
+                        	<span class="glyphicon glyphicon-copy" aria-hidden="true"></span>
+						</button>
+                      </span>
+                    </div>
+    			</div>
+    			<ul class="col-xs-12">
+    				{% for item in channel.getItemTypes() %}
+    				<li class="col-xs-12 col-md-6">{{ item|trans }}</li>
+    				{% endfor %}
+    			</ul>
+    			{% else %}
+    			<p class="bg-danger p-center">{{ "noChannels"|trans }}</p>
+    			{% endfor %}
+    		</div>
+    		
+    		<div class="col-xs-12 col-md-10 col-md-offset-1">
+    			{{ form_start(channelForm, {action: path("cscfa_cs_manager_rss_api_create_channel")}) }}
+    				<fieldset>
+						<legend>{{ "channelForm"|trans }}</legend>
+        				{% set formName %}
+        				<div class="col-xs-12 col-lg-5">{{ form_label(channelForm.name) }}</div>
+        				<div class="col-xs-12 col-lg-7">{{ form_widget(channelForm.name) }}</div>
+        				{% endset %}
+        				<div class="col-xs-12 cs-center">{{ form_errors(channelForm.name) }}</div>
+        				{{ formName }}
+        				
+        				{% set formDescription %}
+        				<div class="col-xs-12 col-lg-5">{{ form_label(channelForm.description) }}</div>
+        				<div class="col-xs-12 col-lg-7">{{ form_widget(channelForm.description) }}</div>
+        				{% endset %}
+        				<div class="col-xs-12 cs-center">{{ form_errors(channelForm.description) }}</div>
+        				{{ formDescription }}
+
+        				{% set formItem %}
+        				<div class="col-xs-12 col-lg-5">{{ form_label(channelForm.item) }}</div>
+        				<div class="col-xs-12 col-lg-7">
+        					{% for child in channelForm.item.children %}
+                                <span class="col-xs-12 col-lg-6">{{ form_widget(child) }} {{ form_label(child) }}</span>
+    					    {% endfor %}
+    				    </div>
+        				{% endset %}
+        				<div class="col-xs-12 cs-center">{{ form_errors(channelForm.item) }}</div>
+        				{{ formItem }}
+        				
+        				<div class="col-xs-12 cs-center">
+        					<div>{{ form_row(channelForm.submit) }}</div>
+        				</div>
+    				</fieldset>
+    			{{ form_end(channelForm) }}
+    		</div>
+    	</div>
+		{% endif %}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.9/clipboard.min.js"></script>
+    
+    {% javascripts '@CscfaCSManagerRssApiBundle/Resources/public/js/rssApi.js' %}
+        <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}

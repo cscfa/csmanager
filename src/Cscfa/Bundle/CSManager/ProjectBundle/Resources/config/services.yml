@@ -40,3 +40,24 @@ services:
         tags:
             - { name: twig.extension }
             
+    project.created.rss.auth:
+        class: Cscfa\Bundle\CSManager\ProjectBundle\Object\ProjectCreatedAuth
+        calls:
+            - [setRegistry, [ "@doctrine" ]]
+            - [setRouter, [ "@router" ]]
+    project.addOwner.rss.auth:
+        class: Cscfa\Bundle\CSManager\ProjectBundle\Object\ProjectAddOwnerAuth
+        calls:
+            - [setRegistry, [ "@doctrine" ]]
+            - [setRouter, [ "@router" ]]
+    project.removed.rss.auth:
+        class: Cscfa\Bundle\CSManager\ProjectBundle\Object\ProjectRemovedAuth
+        calls:
+            - [setRegistry, [ "@doctrine" ]]
+            - [setRouter, [ "@router" ]]
+    project.addNote.rss.auth:
+        class: Cscfa\Bundle\CSManager\ProjectBundle\Object\ProjectAddNoteAuth
+        calls:
+            - [setRegistry, [ "@doctrine" ]]
+            - [setRouter, [ "@router" ]]
+            - [setRoleExtension, [ "@cscfa_project.project_role.extension" ]]

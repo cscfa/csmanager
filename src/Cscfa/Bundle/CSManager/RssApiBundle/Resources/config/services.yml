@@ -1,0 +1,20 @@
+services:
+    rss.userManager:
+        class: Cscfa\Bundle\CSManager\RssApiBundle\Object\RssUserManager
+        calls:
+            - [setArguments, [ "@doctrine" ]]
+    rss.channelManager:
+        class: Cscfa\Bundle\CSManager\RssApiBundle\Object\RssChannelManager
+        calls:
+            - [setArguments, [ "@doctrine", "@translator", "@form.factory" ]]
+    rss.form.channel:
+        class: Cscfa\Bundle\CSManager\RssApiBundle\Form\Type\ChannelType
+        calls: 
+            - [setArguments, [ "@translator" ]]
+        tags: 
+            - { name: form.type, alias: rssChannel }
+    rss.itemManager:
+        class: Cscfa\Bundle\CSManager\RssApiBundle\Object\RssItemManager
+        calls:
+            - [setContainer, [ "@service_container" ]]
+            - [setDoctrine, [ "@doctrine" ]]

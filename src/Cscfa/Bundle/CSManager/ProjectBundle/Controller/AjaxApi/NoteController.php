@@ -119,6 +119,8 @@ class NoteController extends Controller
             $noteEvent = new ProjectNoteEvent($note, $project, $this->getUser(), "project.event.addNote");
             $this->get("event_dispatcher")->dispatch("project.event.addNote", $noteEvent);
             
+            $this->get("project.addNote.rss.auth")->create($project, $note);
+            
             $this->getDoctrine()->getManager()->flush();
             
             return new Response("done", 200);

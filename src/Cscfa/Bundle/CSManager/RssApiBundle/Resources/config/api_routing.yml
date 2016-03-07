@@ -1,0 +1,4 @@
+cscfa_cs_manager_rss_api_channel:
+    path:     /channel/{userToken}/{channelToken}
+    defaults: { _controller: "CscfaCSManagerRssApiBundle:Rss:rssChannel" }
+    methods:  [GET]

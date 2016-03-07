@@ -1,0 +1,12 @@
+cscfa_cs_manager_rss_api_homepage:
+    path:     /home
+    defaults: { _controller: "CscfaCSManagerRssApiBundle:Rss:index" }
+    methods:  [GET]
+cscfa_cs_manager_rss_api_create_user:
+    path:     /create/account
+    defaults: { _controller: "CscfaCSManagerRssApiBundle:Rss:createAccount" }
+    methods:  [GET]
+cscfa_cs_manager_rss_api_create_channel:
+    path:     /create/channel
+    defaults: { _controller: "CscfaCSManagerRssApiBundle:Rss:createChannel" }
+    methods:  [POST]

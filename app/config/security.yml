@@ -16,9 +16,14 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
-
+        rss:
+            anonymous: ~
+            pattern: ^/api/rss
+            security: false
         main:
             anonymous: ~
+            pattern: ^/
+            provider: csprovider
             form_login:
                 login_path: /
                 check_path: /login_check

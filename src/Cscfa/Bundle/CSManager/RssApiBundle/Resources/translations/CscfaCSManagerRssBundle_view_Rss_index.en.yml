@@ -1,0 +1,11 @@
+pageTitle:   "rss api"
+createApi:   "Create my Rss API account"
+infoRss:     "The RSS Api allow you to get the last informations of you'r project by use a RSS Reader. With you'r account you will be able to create channels behaviour."
+noChannels:  "You dont have active channels"
+channelForm: "Create channel : "
+project:
+    event:
+        created:  "project creation"
+        addOwner: "project ownership"
+        removed:  "project removing"
+        addNote:  "project note adding"

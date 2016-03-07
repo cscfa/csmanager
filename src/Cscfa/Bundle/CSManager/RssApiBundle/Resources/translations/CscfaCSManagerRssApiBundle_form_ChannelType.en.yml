@@ -1,0 +1,13 @@
+name:
+    label:  "Channel name : "
+description:
+    label:  "Channel description : "
+item:
+    label:  "Channel topics : "
+submit:
+    label:  "Add channel"
+notEmpty:   "You must choose at least one option"
+item.project.created:  "project creation"
+item.project.addOwner: "project ownership"
+item.project.removed:  "project removing"
+item.project.addNote:  "project note adding"

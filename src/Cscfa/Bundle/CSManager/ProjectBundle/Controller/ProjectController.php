@@ -30,6 +30,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Symfony\Component\Form\FormError;
 use Cscfa\Bundle\CSManager\ProjectBundle\Event\ProjectBaseEvent;
+use Cscfa\Bundle\CSManager\RssApiBundle\Entity\RssItem;
 
 /**
  * ProjectController class.
@@ -188,6 +189,8 @@ class ProjectController extends Controller
                 $creationEvent = new ProjectBaseEvent($project, $this->getUser(), "project.event.created");
                 $this->get("event_dispatcher")->dispatch("project.event.created", $creationEvent);
                 
+                $this->get("project.created.rss.auth")->create($project);
+                
                 return $this->redirect($this->generateUrl("cscfa_cs_manager_project_select_project", array("id"=>$project->getId())), 302);
             } catch (UniqueConstraintViolationException $e) {
                 $createForm->get("name")->addError(new FormError("This name already exist"));
@@ -246,6 +249,8 @@ class ProjectController extends Controller
                 
                 $removeEvent = new ProjectBaseEvent($project, $this->getUser(), "project.event.removed");
                 $this->get("event_dispatcher")->dispatch("project.event.removed", $removeEvent);
+                
+                $this->get("project.removed.rss.auth")->create($project);
                 
                 $this->getDoctrine()->getManager()->flush();
                 

@@ -1,0 +1,29 @@
+{
+    "name" : "cscfa/cscfa-csmanager-task_bundle",
+    "description" : "The TaskBundle is a symfony2 bundle that contain the csmanager task creation and management system",
+    "version" : "1.0.0",
+    "type" : "library",
+    "keywords" : [
+        "cscfa",
+        "csmanager",
+        "task"
+    ],
+    "time" : "2015-12-17",
+    "license" : "MIT",
+    "authors" : [{
+            "name" : "Matthieu Vallance",
+            "email" : "matthieu.vallance@cscfa.fr",
+            "homepage" : "http://www.cscfa.fr",
+            "role" : "Developer"
+        }
+    ],
+    "require" : {
+        "php" : ">=5.3.9",
+        "symfony/framework-bundle" : "~2.1"
+    },
+    "autoload" : {
+        "psr-4" : {
+            "Cscfa\\Bundle\\CSManager\\TaskBundle\\" : "CSManager\\"
+        }
+    }
+}

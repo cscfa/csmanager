@@ -1,0 +1,5 @@
+navbar:
+    rss_index:
+        label: "rss"
+        path: {route: "cscfa_cs_manager_rss_api_homepage"}
+        position: 10

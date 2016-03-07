@@ -169,6 +169,8 @@ class RoleController extends Controller
                 $ownerEvent = new ProjectOwnerEvent($owner, $project, $this->getUser(), "project.event.addOwner");
                 $this->get("event_dispatcher")->dispatch("project.event.addOwner", $ownerEvent);
                 
+                $this->get("project.addOwner.rss.auth")->create($project, $owner);
+                
                 $this->getDoctrine()->getManager()->flush();
                 
                 return new Response("done", 200);

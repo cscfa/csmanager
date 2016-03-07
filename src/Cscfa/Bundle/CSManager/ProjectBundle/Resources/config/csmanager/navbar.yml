@@ -2,3 +2,4 @@ navbar:
     project_index:
         label: "project"
         path: {route: "cscfa_cs_manager_project_home"}
+        position: 2

@@ -93,3 +93,9 @@ cscfa_nav_bar:
 cscfa_cache_system:
     prefix:    'cscfa'
     timestamp: 30
+cscfa_cs_manager_rss_api:
+    basePath:  "http://127.0.0.1:8000"
+    webmaster: "matthieu.vallance@cscfa.fr"
+    author:    "matthieu.vallance@cscfa.fr"
+    image:
+        path:  "/favicon.ico"

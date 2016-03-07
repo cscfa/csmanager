@@ -1,0 +1,33 @@
+{
+	"name" : "cscfa/cscfa-csmanager-track_bundle",
+	"description" : "The TrackBundle is a symfony2 bundle that contain the csmanager user tracking system",
+	"version" : "1.0.0",
+	"type" : "library",
+	"keywords" : [
+		"cscfa",
+		"csmanager",
+		"track"
+	],
+	"time" : "2015-12-17",
+	"license" : "MIT",
+	"authors" : [{
+			"name" : "Matthieu Vallance",
+			"email" : "matthieu.vallance@cscfa.fr",
+			"homepage" : "http://www.cscfa.fr",
+			"role" : "Developer"
+		}
+	],
+	"require" : {
+		"php" : ">=5.3.9",
+		"symfony/framework-bundle" : "~2.1",
+        "sensio/framework-extra-bundle" : "3.*@stable",
+        "doctrine/orm" : "2.5.*@stable",
+        "doctrine/dbal" : "2.5.*@stable",
+        "doctrine/doctrine-bundle" : "1.5.*@stable"
+	},
+	"autoload" : {
+		"psr-4" : {
+			"Cscfa\\Bundle\\CSManager\\TrackBundle\\" : "CSManager\\"
+		}
+	}
+}

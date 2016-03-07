@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+	<channel>
+		<title>{{ channel.getName() }}</title>
+		<description>{{ channel.getDescription() }}</description>
+		<generator>CSManagerRssApiBundle</generator>
+		{% if config.webmaster %}
+		<webMaster>{{ config.webmaster }}</webMaster>
+		{% endif %}
+		
+		{% if config.image %}
+		<image>
+			{% if config.image.path %}
+            <url>{{ config.basePath|default("") }}{{ config.image.path }}</url>
+            {% endif %}
+			{% if config.image.width %}
+			<width>{{ config.image.width }}</width>
+            {% endif %}
+			{% if config.image.height %}
+			<width>{{ config.image.height }}</width>
+            {% endif %}
+        </image>
+		{% endif %}
+		
+		{% for item in items %}
+        <item>
+            <title>{{ item.getTitle() }}</title>
+            <link>{{ config.basePath|default("") }}{{ item.getLink() }}</link>
+            <description>{{ item.getDescription() }}</description>
+            {% if item.getAuthor() %}
+            <author>{{ item.getAuthor() }}</author>
+            {% elseif config.author %}
+            <author>{{ config.author }}</author>
+            {% endif %}
+            {% if item.getCategory() %}
+            <category>{{ item.getCategory() }}</category>
+            {% endif %}
+            <guid>{{ item.getId() }}</guid>
+            <pubDate>{{ item.getCreated().format("D, d M Y H:i:s T") }}</pubDate>
+        </item>
+        {% endfor %}
+     
+	</channel>
+</rss>
