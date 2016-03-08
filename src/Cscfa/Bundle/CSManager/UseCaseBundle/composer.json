@@ -1,0 +1,30 @@
+{
+    "name" : "cscfa/cscfa-csmanager-usecase_bundle",
+    "description" : "The UseCaseBundle is a symfony2 bundle that contain the main csmanager use case manager",
+    "version" : "1.0.0",
+    "type" : "library",
+    "keywords" : [
+        "cscfa",
+        "csmanager",
+        "use case",
+        "usecase"
+    ],
+    "time" : "2016-03-08",
+    "license" : "MIT",
+    "authors" : [{
+            "name" : "Matthieu Vallance",
+            "email" : "matthieu.vallance@cscfa.fr",
+            "homepage" : "http://www.cscfa.fr",
+            "role" : "Developer"
+        }
+    ],
+    "require" : {
+        "php" : ">=5.3.9",
+        "symfony/framework-bundle" : "~2.1"
+    },
+    "autoload" : {
+        "psr-4" : {
+            "Cscfa\\Bundle\\CSManager\\UseCaseBundle\\" : "CSManager\\"
+        }
+    }
+}

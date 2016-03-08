@@ -1,3 +1,7 @@
+cscfa_cs_manager_use_case:
+    resource: "@CscfaCSManagerUseCaseBundle/Resources/config/routing.yml"
+    prefix:   /csm/usecase
+
 cscfa_cs_manager_rss_api:
     resource: "@CscfaCSManagerRssApiBundle/Resources/config/api_routing.yml"
     prefix:   /api/rss
