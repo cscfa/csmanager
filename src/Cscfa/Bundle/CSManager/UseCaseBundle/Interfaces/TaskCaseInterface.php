@@ -17,6 +17,7 @@
 namespace Cscfa\Bundle\CSManager\UseCaseBundle\Interfaces;
 
 use Cscfa\Bundle\CSManager\ProjectBundle\Entity\ProjectOwner;
+use Cscfa\Bundle\CSManager\ProjectBundle\Entity\Project;
 
 /**
  * TaskCaseInterface class.
@@ -141,5 +142,25 @@ interface TaskCaseInterface {
      * @return void
      */
     public function update();
+    
+    /**
+     * Get project
+     * 
+     * This method return the
+     * project.
+     * 
+     * @return Project
+     */
+    public function getProject();
+    
+    /**
+     * Set project
+     * 
+     * This method allow to
+     * set the project.
+     * 
+     * @param Project $project The project
+     */
+    public function setProject(Project $project);
     
 }
