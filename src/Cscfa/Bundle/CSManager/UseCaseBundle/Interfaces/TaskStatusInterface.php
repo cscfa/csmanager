@@ -17,9 +17,9 @@
 namespace Cscfa\Bundle\CSManager\UseCaseBundle\Interfaces;
 
 /**
- * TaskStatusInterface class.
+ * TaskStatusInterface interface.
  *
- * The TaskStatusInterface class define
+ * The TaskStatusInterface interface define
  * the the UseCase / Task status interface.
  *
  * @category Interface

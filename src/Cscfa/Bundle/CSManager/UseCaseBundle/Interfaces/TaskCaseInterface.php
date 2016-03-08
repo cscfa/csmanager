@@ -42,16 +42,6 @@ interface TaskCaseInterface {
      * @return \DateTime
      */
     public function getCreated();
-    /**
-     * Set created
-     * 
-     * This method allow to set
-     * the created date of the
-     * task.
-     * 
-     * @param \DateTime $created The created date
-     */
-    private function setCreated(\DateTime $created);
 
     /**
      * Get updated
@@ -63,16 +53,6 @@ interface TaskCaseInterface {
      * @return \DateTime
      */
     public function getUpdated();
-    /**
-     * Set updated
-     * 
-     * This method allow to set
-     * the updated date of the
-     * task.
-     * 
-     * @param \DateTime $updated The updated date
-     */
-    protected function setUpdated(\DateTime $updated);
 
     /**
      * Get creator
@@ -93,7 +73,7 @@ interface TaskCaseInterface {
      * 
      * @param ProjectOwner $user The creator
      */
-    protected function setCreator(ProjectOwner $user);
+    public function setCreator(ProjectOwner $user);
 
     /**
      * Get status
