@@ -12,9 +12,15 @@
         </div>
     </div>
     
+    {% set markdownInfo %}
+	<p class="text-muted">Note you can use markdown for summary</p>
+    {% endset %}
+    
     {{ formTool.fieldset(
         "sectionTitle1"|trans,
-        [[form.name, 1, 1, 0], [form.summary, 1, 1, 0]])
+        [[form.name, 1, 1, 0], [form.summary, 1, 1, 0]],
+        markdownInfo
+        )
     }}
     
     {{ formTool.fieldset(

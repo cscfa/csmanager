@@ -36,7 +36,7 @@
                     }}
             		</div>
             	</div>
-            	<div class="col-xs-12">{{ note.getContent()|raw }}</div>
+            	<div class="col-xs-12">{{ note.getContent()|parseDown }}</div>
             </div>
         {% else %}
             <p>{{ "projectNotes.noNotes"|trans }}</p>

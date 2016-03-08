@@ -14,12 +14,15 @@
 
         <span class="col-xs-4 col-md-3 col-lg-2">{{ "projectSummary"|trans }}</span>
         <span class="col-xs-8 col-md-9 col-lg-10">
-            {{ formTool.ajaxField(
+            {{ formTool.ajaxField_start(
             	path("cscfa_cs_manager_project_ajaxSource_project_summary", {"project": project.getId()}), 
             	project.getSummary(), 
-            	(grantProjectAttribute("summary", project, false, true) != true)
+            	(grantProjectAttribute("summary", project, false, true) != true),
+            	"cs-ajax-field markdowned"
             	) 
             }}
+            {{ project.getSummary()|parseDown }}
+            {{ formTool.ajaxField_end() }}
         </span>
     </div>
     

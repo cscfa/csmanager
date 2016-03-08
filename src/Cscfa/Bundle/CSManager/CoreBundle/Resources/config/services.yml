@@ -9,3 +9,8 @@ services:
         calls: 
             - [setArguments, [ "@router" ]]
             - [setCallBacks]
+    markdown_parser.extension:
+        class: Cscfa\Bundle\CSManager\CoreBundle\Twig\Extension\MarkdownParserExtension
+        public: false
+        tags:
+            - { name: twig.extension }

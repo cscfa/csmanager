@@ -5,9 +5,10 @@
 		<div class="cs-center col-xs-12">
 			{{ form_label(form.summary) }}
 		</div>
-		<div class="cs-center col-xs-12">
-			{{ form_widget(form.summary) }}
+		<div class="col-xs-12">
+			{{ form_widget(form.summary, {attr: {class: "form-control cs-width-lock"}}) }}
 		</div>
+		<p class="text-muted">Note you can use markdown for summary</p>
 		{{ form_row(form.summary) }}
 	</div>
 	

@@ -125,7 +125,7 @@ class RssItemManager {
                             unset($items[$key]);
                         }
                     }
-                } catch (Exception $e) {
+                } catch (\Exception $e) {
                     unset($items[$key]);
                 }
             }

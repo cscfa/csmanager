@@ -129,6 +129,17 @@
     </fieldset>
 {% endmacro %}
 
+{% macro ajaxField_start(pathFrom, data, disable, class) %}
+	<span class="{{ class|default("cs-ajax-field") }}" pathFrom="{{ pathFrom }}" value="{{ data }}" {% if disable %}disabled{% endif %}>
+        {% if disable != true %}
+        	<span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+        {% endif %}
+{% endmacro %}
+
+{% macro ajaxField_end() %}
+    </span>
+{% endmacro %}
+
 {% macro ajaxField(pathFrom, data, disable, class) %}
 	<span class="{{ class|default("cs-ajax-field") }}" pathFrom="{{ pathFrom }}" value="{{ data }}" {% if disable %}disabled{% endif %}>
 	    {{ data }}

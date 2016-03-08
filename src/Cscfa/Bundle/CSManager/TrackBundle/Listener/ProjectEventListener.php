@@ -22,6 +22,7 @@ use Cscfa\Bundle\CSManager\ProjectBundle\Event\ProjectRoleEvent;
 use Cscfa\Bundle\CSManager\ProjectBundle\Event\ProjectLinkEvent;
 use Cscfa\Bundle\CSManager\ProjectBundle\Event\ProjectNoteEvent;
 use Cscfa\Bundle\CSManager\ProjectBundle\Event\ProjectTagEvent;
+use Cscfa\Bundle\ToolboxBundle\Strings\StringTool;
 
 /**
  * ProjectEventListener class
@@ -209,7 +210,7 @@ class ProjectEventListener extends TrackerListener {
         $message = sprintf(
             "The user '%s' add note '%s' to project named '%s' on %s", 
             $event->getUser()->getUsername(), 
-            strlen($content)>20?substr($content, 0, 20)."...":$content,
+            StringTool::limitLength($content, 20, "..."),
             $event->getProject()->getName(), 
             $date->format("Y-m-d H:i:s")
         );
@@ -236,7 +237,7 @@ class ProjectEventListener extends TrackerListener {
         $message = sprintf(
             "The user '%s' edit note '%s' for project named '%s' on %s", 
             $event->getUser()->getUsername(), 
-            strlen($content)>20?substr($content, 0, 20)."...":$content,
+            StringTool::limitLength($content, 20, "..."),
             $event->getProject()->getName(), 
             $date->format("Y-m-d H:i:s")
         );
@@ -263,7 +264,7 @@ class ProjectEventListener extends TrackerListener {
         $message = sprintf(
             "The user '%s' remove note '%s' from project named '%s' on %s", 
             $event->getUser()->getUsername(), 
-            strlen($content)>50?substr($content, 0, 50)."...":$content,
+            StringTool::limitLength($content, 50, "..."),
             $event->getProject()->getName(), 
             $date->format("Y-m-d H:i:s")
         );
@@ -315,7 +316,7 @@ class ProjectEventListener extends TrackerListener {
         $message = sprintf(
             "The user '%s' update summary to '%s' for project '%s' on %s", 
             $event->getUser()->getUsername(),
-            strlen($content)>20?substr($content, 0, 20)."...":$content,
+            StringTool::limitLength($content, 20, "..."),
             $event->getProject()->getName(),
             $date->format("Y-m-d H:i:s")
         );

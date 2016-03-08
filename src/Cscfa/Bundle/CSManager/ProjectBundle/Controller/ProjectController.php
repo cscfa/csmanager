@@ -31,6 +31,7 @@ use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Symfony\Component\Form\FormError;
 use Cscfa\Bundle\CSManager\ProjectBundle\Event\ProjectBaseEvent;
 use Cscfa\Bundle\CSManager\RssApiBundle\Entity\RssItem;
+use Cscfa\Bundle\ToolboxBundle\Strings\StringTool;
 
 /**
  * ProjectController class.
@@ -70,15 +71,6 @@ class ProjectController extends Controller
      */
     public function selectProjectAction(Request $request, Project $id)
     {
-        $notes = $id->getNotes();
-        $parser = new \Parsedown();
-        
-        foreach ($notes as $key=>$note) {
-            $notes[$key] = $note->setContent($parser->parse($note->getContent()));
-        }
-        
-        $id->setNotes($notes);
-        
         return array("project"=>$id);
     }
     
@@ -131,6 +123,10 @@ class ProjectController extends Controller
             $projects = $repository->findExistant();
         } else {
             $projects = $repository->findReadable($this->getUser()->getId());
+        }
+        
+        foreach ($projects as $project) {
+            $project->setSummary(StringTool::limitLength($project->getSummary(), 75, "..."));
         }
         
         $translator = $this->get('translator');

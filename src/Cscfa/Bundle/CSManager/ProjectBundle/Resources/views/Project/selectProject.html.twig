@@ -57,9 +57,15 @@
     					$(htmlTarget).html(selfRef.submitingHtml);
     				},
     				success: function(data){
-    					$(firstEvent.currentTarget).attr("value", data);
-    					$(firstEvent.currentTarget).html(data+'<span class="glyphicon glyphicon-edit" aria-hidden="true"></span>');
-    					$(htmlTarget).remove();
+
+    					if($(firstEvent.currentTarget).hasClass("markdowned")){
+    						$(htmlTarget).remove();
+        					pageLoader.reload();
+        				}else{
+    						$(firstEvent.currentTarget).attr("value", data);
+    						$(firstEvent.currentTarget).html(data+'<span class="glyphicon glyphicon-edit" aria-hidden="true"></span>');
+    						$(htmlTarget).remove();
+        				}
     				},
     				error: function(jqXHR, textStatus, errorThrown){
     					$(htmlTarget).html(selfRef.submitErrorHtml+jqXHR.responseText);

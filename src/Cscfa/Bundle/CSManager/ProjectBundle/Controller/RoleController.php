@@ -269,8 +269,9 @@ class RoleController extends Controller
 
                 $this->getDoctrine()->getManager()->persist($projectRole);
                 $this->getDoctrine()->getManager()->persist($owner);
-                $this->getDoctrine()->getManager()->flush();
             }
+            
+            $this->getDoctrine()->getManager()->flush();
                 
             $roleEvent = new ProjectRoleEvent($type, $mode, $properties, $owner, $owner->getProject(), $this->getUser(), "project.event.roleUpdate");
             $this->get("event_dispatcher")->dispatch("project.event.roleUpdate", $roleEvent);

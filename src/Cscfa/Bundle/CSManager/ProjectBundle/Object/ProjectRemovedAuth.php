@@ -121,7 +121,7 @@ class ProjectRemovedAuth extends RssItemAuthBase {
                 }else{
                     return false;
                 }
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 return false;
             }
         }

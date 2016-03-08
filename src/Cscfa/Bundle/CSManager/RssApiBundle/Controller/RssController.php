@@ -120,7 +120,6 @@ class RssController extends Controller
         } else {
             throw new \Exception("dismatch rss channel", 404);
         }
-        exit();
     }
     
 }
