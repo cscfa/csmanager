@@ -18,6 +18,7 @@ namespace Cscfa\Bundle\CSManager\UseCaseBundle\ChainOfResponsabilities\Observers
 
 use Cscfa\Bundle\CSManager\UseCaseBundle\ChainOfResponsabilities\Interfaces\ChainObserverInterface;
 use Cscfa\Bundle\CSManager\UseCaseBundle\Observer\Interfaces\ObservableInterface;
+use Cscfa\Bundle\CSManager\UseCaseBundle\ChainOfResponsabilities\Interfaces\ChainOfResponsibilityInterface;
 
 /**
  * ChainObserver.
