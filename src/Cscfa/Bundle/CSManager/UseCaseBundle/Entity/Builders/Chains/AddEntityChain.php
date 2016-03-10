@@ -257,7 +257,7 @@ class AddEntityChain extends AbstractChain{
      * 
      * @return mixed
      */
-    abstract public function getAction(){
+    public function getAction(){
         return $this->property;
     }
 
