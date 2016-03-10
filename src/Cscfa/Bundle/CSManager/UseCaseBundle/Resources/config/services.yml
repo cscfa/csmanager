@@ -1,4 +1,33 @@
 services:
-#    cscfa_cs_manager_use_case.example:
-#        class: Cscfa\Bundle\CSManager\UseCaseBundle\Example
-#        arguments: [@service_id, "plain_value", %parameter%]
+#The UseCase form factory
+#   Register UseCase form base strategy
+#   Register UseCase entity factory
+    cs_use_case.use_case_form_factory:
+        class: Cscfa\Bundle\CSManager\UseCaseBundle\Form\Factories\UseCaseFormFactory
+        calls:
+            - [ useStrategy, [ "base" ] ]
+            - [ setFormFactory, [ "@form.factory" ] ]
+            - [ setUseCaseFactory, [ "@cs_use_case.use_case_entity_factory.use_case" ] ]
+        tags:
+            - { name: cs.strategy_factory, cs.strategy_factory.target: cs.useCaseFactory.strategy }
+# The UseCase form base strategy
+    cs_use_case.use_case_strategy.base:
+        class: Cscfa\Bundle\CSManager\UseCaseBundle\Form\Strategies\UseCase\BaseUseCaseStrategy
+        calls:
+            - [ setTransDomain , [ "CscfaCSManagerUseCaseBundle_Strategy_BaseUseCase" ] ]
+            - [ setTranslator , [ "@translator" ] ]
+        tags:
+            - { name: cs.useCaseFactory.strategy, alias: base }
+
+# The UseCase entity factory
+    cs_use_case.use_case_entity_factory.use_case:
+        class: Cscfa\Bundle\CSManager\UseCaseBundle\Entity\Factories\UseCaseFactory
+        calls:
+            - [ setBuilder , ["@cs_use_case.use_case_entity_builder.use_case"] ]
+
+# The UseCase entity builder
+    cs_use_case.use_case_entity_builder.use_case:
+        class: Cscfa\Bundle\CSManager\UseCaseBundle\Entity\Builders\DefaultEntityBuilder
+        calls:
+            - [ setProcessChain, ["@cs_use_case.chain.add_name_chain"] ]
+

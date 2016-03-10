@@ -36,7 +36,6 @@ services:
         class: Cscfa\Bundle\CSManager\ProjectBundle\Twig\Extension\ProjectRoleExtension
         calls: 
             - [setArguments, [ "@security.context", "@doctrine.orm.entity_manager" ]]
-        public: false
         tags:
             - { name: twig.extension }
             

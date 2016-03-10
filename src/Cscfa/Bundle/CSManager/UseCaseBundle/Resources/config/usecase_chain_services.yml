@@ -1,0 +1,62 @@
+services:
+    cs_use_case.chain.chain_observer_factory:
+        class: Cscfa\Bundle\CSManager\UseCaseBundle\ChainOfResponsabilities\Observers\ChainObserverFactory
+# The UseCase property setting chain
+    cs_use_case.chain.add_name_chain:
+        class: Cscfa\Bundle\CSManager\UseCaseBundle\Entity\Builders\Chains\AddDataChain
+        calls:
+            - [ setProperty , [ "name" ] ]
+            - [ setNext , [ "@cs_use_case.chain.add_description_chain" ] ]
+            - [ addObserver, [ "@=service('cs_use_case.chain.chain_observer_factory').getInstance()" ] ]
+    cs_use_case.chain.add_description_chain:
+        class: Cscfa\Bundle\CSManager\UseCaseBundle\Entity\Builders\Chains\AddDataChain
+        calls:
+            - [ setProperty , [ "description" ] ]
+            - [ setNext , [ "@cs_use_case.chain.add_project_chain" ] ]
+            - [ addObserver, [ "@=service('cs_use_case.chain.chain_observer_factory').getLast()" ] ]
+    cs_use_case.chain.add_project_chain:
+        class: Cscfa\Bundle\CSManager\UseCaseBundle\Entity\Builders\Chains\AddEntityChain
+        calls:
+            - [ setProperty , [ "project" ] ]
+            - [ setPropertyClass , [ "Cscfa\\Bundle\\CSManager\\ProjectBundle\\Entity\\project" ] ]
+            - [ setEntityRepository , [ "@=service('doctrine').getRepository('CscfaCSManagerProjectBundle:Project')" ] ]
+            - [ setRouteEntity , [ "@=service('request').attributes.get('project')" ] ]
+            - [ setNext , [ "@cs_use_case.chain.add_creator_chain" ] ]
+            - [ addObserver, [ "@=service('cs_use_case.chain.chain_observer_factory').getLast()" ] ]
+    cs_use_case.chain.add_creator_chain:
+        class: Cscfa\Bundle\CSManager\UseCaseBundle\Entity\Builders\Chains\AddEntityChain
+        calls:
+            - [ setProperty , [ "creator" ] ]
+            - [ setPropertyClass , [ "Cscfa\\Bundle\\CSManager\\ProjectBundle\\Entity\\ProjectOwner" ] ]
+            - [ setEntityRepository , [ "@=service('doctrine').getRepository('CscfaCSManagerProjectBundle:ProjectOwner')" ] ]
+            - [ setRouteEntity , [ "@=service('request').attributes.get('creator')" ] ]
+            - [ setNext , [ "@cs_use_case.chain.add_status_chain" ] ]
+            - [ addObserver, [ "@=service('cs_use_case.chain.chain_observer_factory').getLast()" ] ]
+    cs_use_case.chain.add_status_chain:
+        class: Cscfa\Bundle\CSManager\UseCaseBundle\Entity\Builders\Chains\AddEntityChain
+        calls:
+            - [ setProperty , [ "status" ] ]
+            - [ setPropertyClass , [ "Cscfa\\Bundle\\CSManager\\UseCaseBundle\\Entity\\UseCaseStatus" ] ]
+            - [ setEntityRepository , [ "@=service('doctrine').getRepository('CscfaCSManagerUseCaseBundle:UseCaseStatus')" ] ]
+            - [ setRouteEntity , [ "@=service('request').attributes.get('status')" ] ]
+            - [ setNext , [ "@cs_use_case.chain.add_tag_chain" ] ]
+            - [ addObserver, [ "@=service('cs_use_case.chain.chain_observer_factory').getLast()" ] ]
+    cs_use_case.chain.add_tag_chain:
+        class: Cscfa\Bundle\CSManager\UseCaseBundle\Entity\Builders\Chains\AddCollectionEntityChain
+        calls:
+            - [ setProperty , [ "tags" ] ]
+            - [ setPropertyClass , [ "Cscfa\\Bundle\\CSManager\\UseCaseBundle\\Entity\\UseCaseTag" ] ]
+            - [ setEntityRepository , [ "@=service('doctrine').getRepository('CscfaCSManagerUseCaseBundle:UseCaseTag')" ] ]
+            - [ setNext , [ "@cs_use_case.chain.add_child_chain" ] ]
+            - [ addObserver, [ "@=service('cs_use_case.chain.chain_observer_factory').getLast()" ] ]
+    cs_use_case.chain.add_child_chain:
+        class: Cscfa\Bundle\CSManager\UseCaseBundle\Entity\Builders\Chains\AddCollectionEntityChain
+        calls:
+            - [ setProperty , [ "childs" ] ]
+            - [ setPropertyClass , [ "Cscfa\\Bundle\\CSManager\\UseCaseBundle\\Entity\\UseCase" ] ]
+            - [ setEntityRepository , [ "@=service('doctrine').getRepository('CscfaCSManagerUseCaseBundle:UseCase')" ] ]
+            - [ addObserver, [ "@=service('cs_use_case.chain.chain_observer_factory').getLast()" ] ]
+    cs_use_case.chain.end_chain:
+        class: Cscfa\Bundle\CSManager\UseCaseBundle\Entity\Builders\Chains\EndChain
+        calls:
+            - [ addObserver, [ "@=service('cs_use_case.chain.chain_observer_factory').getLast()" ] ]

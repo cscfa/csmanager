@@ -17,6 +17,8 @@
 namespace Cscfa\Bundle\CSManager\UseCaseBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Cscfa\Bundle\CSManager\UseCaseBundle\Compiler\StrategistFormCompilerPass;
 
 /**
  * CscfaCSManagerUseCaseBundle class.
@@ -30,6 +32,22 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
  * @license  http://opensource.org/licenses/MIT MIT
  * @link     http://cscfa.fr
  */
-class CscfaCSManagerUseCaseBundle extends Bundle
-{
+class CscfaCSManagerUseCaseBundle extends Bundle{
+
+    /**
+     * Builds the bundle.
+     *
+     * It is only ever called once when the cache is empty.
+     *
+     * This method can be overridden to register compilation passes,
+     * other extensions, ...
+     *
+     * @param ContainerBuilder $container A ContainerBuilder instance
+     */
+    public function build(ContainerBuilder $container){
+        parent::build($container);
+        
+        $container->addCompilerPass(new StrategistFormCompilerPass());
+    }
+    
 }

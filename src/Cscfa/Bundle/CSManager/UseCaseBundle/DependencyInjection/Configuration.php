@@ -39,6 +39,28 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        return new TreeBuilder();
+        $treeBuilder = new TreeBuilder();
+        
+        $rootNode = $treeBuilder->root('cscfa_csmanager_use_case');
+        
+        $rootNode
+            ->children()
+                ->arrayNode("strategy_factory")
+                ->addDefaultsIfNotSet()
+                    ->children()
+                        ->scalarNode('tag_name')
+                            ->defaultValue("cs.strategy_factory")
+                        ->end()
+                        ->scalarNode('target_tag')
+                            ->defaultValue("cs.strategy_factory.target")
+                        ->end()
+                        ->scalarNode('method')
+                            ->defaultValue("addStrategy")
+                        ->end()
+                    ->end()
+                ->end()
+            ->end();
+
+        return $treeBuilder;
     }
 }
