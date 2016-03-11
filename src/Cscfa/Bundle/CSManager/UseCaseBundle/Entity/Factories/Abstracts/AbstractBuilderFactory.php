@@ -57,7 +57,7 @@ abstract class AbstractBuilderFactory implements BuilderFactoryInterface, UseCas
      *
      * @return mixed
      */
-    abstract public function getInstance(array $options);
+    abstract public function getInstance($options);
 
     /**
      * Set builder
