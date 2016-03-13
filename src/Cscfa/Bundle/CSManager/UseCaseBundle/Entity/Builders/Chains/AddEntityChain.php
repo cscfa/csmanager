@@ -183,13 +183,13 @@ class AddEntityChain extends AbstractChain{
      *
      * @return ChainOfResponsibilityInterface
      */
-    public function process($action, $data, array $options = array()){
+    public function process($action, &$data, array $options = array()){
         $state = false;
 
         if ($this->support($action)) {
             $entity = null;
         
-            // Find the project
+            // Find the entity
             if (array_key_exists("data", $options)) {
                 if (is_object($options["data"]) && $options["data"] instanceof $this->propertyClass) {
                     $entity = $options["data"];
@@ -213,9 +213,11 @@ class AddEntityChain extends AbstractChain{
                     if (in_array("set".ucfirst($this->property), get_class_methods($data))) {
                         $state = true;
                         $data->{"set".ucfirst($this->property)}($entity);
-                    } else if (in_array($this->property, get_class_vars($data))) {
-                        $state = true;
-                        $data->{$this->property} = $entity;
+                    } else if (property_exists($data, $this->property)) {
+                        $propertyReflection = new \ReflectionProperty($data, $this->property);
+                        if ($propertyReflection->isPublic()) {
+                            $data->{$this->property} = $entity;
+                        }
                     }
                 }
             }
