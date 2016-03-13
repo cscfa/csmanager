@@ -67,7 +67,7 @@ class ChainObserverFactory implements UseCaseEntityFactoryInterface{
      * @return mixed
      * @see UseCaseEntityFactoryInterface::getInstance()
      */
-    public function getInstance(array $options) {
+    public function getInstance(array $options = null) {
         $this->last = new ChainObserver();
         return $this->last;
     }

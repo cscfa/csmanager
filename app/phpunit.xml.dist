@@ -42,6 +42,9 @@
           <file>../src/Cscfa/Bundle/TwigUIBundle/Test/Base/TagTest.php</file>
           <file>../src/Cscfa/Bundle/TwigUIBundle/Test/Twig/JavaScript/TwigJavascriptTest.php</file>
         </testsuite>
+        <testsuite name="csm_usecase">
+          <directory>../src/Cscfa/Bundle/CSManager/UseCaseBundle/Tests</directory>
+        </testsuite>
     </testsuites>
 
     <!--

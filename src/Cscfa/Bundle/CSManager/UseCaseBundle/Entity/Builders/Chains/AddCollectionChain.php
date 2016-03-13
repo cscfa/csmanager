@@ -71,19 +71,22 @@ class AddCollectionChain extends AbstractChain{
      * @param mixed $data       The data to process
      * @param mixed $injectable The data to inject
      */
-    protected function inject($data, $injectable){
+    protected function inject(&$data, $injectable){
         if (is_array($data)) {
-            if (!is_array($data[$this->property])) {
+            if (!array_key_exists($this->property, $data) || !is_array($data[$this->property])) {
                 $data[$this->property] = array();
             }
-            $data[$this->property] = $injectable;
+            array_push($data[$this->property], $injectable);
         } else if (is_object($data)) {
             if (in_array("get".ucfirst($this->property), get_class_methods($data))) {
-                if (in_array("add", get_class_methods($data->{"set".ucfirst($this->property)}))) {
-                    $data->{"set".ucfirst($this->property)}()->add($injectable);
+                if (in_array("add", get_class_methods($data->{"get".ucfirst($this->property)}()))) {
+                    $data->{"get".ucfirst($this->property)}()->add($injectable);
                 }
-            } else if (in_array($this->property, get_class_vars($data))) {
-                $data->{$this->property}->add($injectable);
+            } else if (property_exists($data, $this->property)) {
+                $propertyReflection = new \ReflectionProperty($data, $this->property);
+                if ($propertyReflection->isPublic()) {
+                    $data->{$this->property}->add($injectable);
+                }
             }
         }
     }
@@ -100,7 +103,7 @@ class AddCollectionChain extends AbstractChain{
      *
      * @return ChainOfResponsibilityInterface
      */
-    public function process($action, $data, array $options = array()){
+    public function process($action, &$data, array $options = array()){
         $state = false;
         
         if ($this->support($action) && array_key_exists("data", $options)) {

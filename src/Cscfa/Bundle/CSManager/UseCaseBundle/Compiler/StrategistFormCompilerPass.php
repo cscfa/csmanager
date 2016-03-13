@@ -88,7 +88,6 @@ class StrategistFormCompilerPass implements CompilerPassInterface {
      */
     protected function mapTargets($factories, $targetTagName){
         $map = array();
-        
         foreach ($factories as $id => $tags) {
             $target = null;
             foreach ($tags as $attributes) {
@@ -120,7 +119,7 @@ class StrategistFormCompilerPass implements CompilerPassInterface {
             foreach ($factoryMap as $factory => $target) {
                 $taggedServices = $container->findTaggedServiceIds($target);
                 $definition = $container->getDefinition($factory);
-    
+
                 foreach ($taggedServices as $id => $tags) {
                     foreach ($tags as $attributes) {
                         $definition->addMethodCall($method, array(new Reference($id), $attributes["alias"]));

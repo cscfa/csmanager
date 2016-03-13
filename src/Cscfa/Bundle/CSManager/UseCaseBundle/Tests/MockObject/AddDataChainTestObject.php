@@ -7,40 +7,35 @@
  * 
  * PHP version 5.5
  * 
- * @category EntityFactory
+ * @category Test
  * @package  CscfaCSManagerUseCaseBundle
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
  * @filesource
  * @link     http://cscfa.fr
  */
-namespace Cscfa\Bundle\CSManager\UseCaseBundle\Entity\Factories\Interfaces;
+namespace Cscfa\Bundle\CSManager\UseCaseBundle\Tests\MockObject;
 
 /**
- * UseCaseEntityFactoryInterface.
+ * AddDataChainTestObject.
  *
- * The UseCaseEntityFactoryInterface
- * define the creation methods of
- * Entity factories.
+ * The AddDataChainTestObject
+ * allow to test specific AddDataChain
+ * code lines.
  *
- * @category EntityFactory
+ * @category Test
  * @package  CscfaCSManagerUseCaseBundle
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
  * @link     http://cscfa.fr
  */
-interface UseCaseEntityFactoryInterface {
+class AddDataChainTestObject {
     
     /**
-     * Get instance
+     * Test property
      * 
-     * This method return an instance
-     * of the factory target.
-     * 
-     * @param array $options The creation options
-     * 
-     * @return mixed
+     * @var string
      */
-    public function getInstance(array $options = null);
+    public $testProperty;
     
 }

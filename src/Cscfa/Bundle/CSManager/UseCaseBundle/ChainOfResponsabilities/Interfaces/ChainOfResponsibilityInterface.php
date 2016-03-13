@@ -67,7 +67,7 @@ interface ChainOfResponsibilityInterface {
      * 
      * @return ChainOfResponsibilityInterface
      */
-    public function process($action, $data, array $options = array());
+    public function process($action, &$data, array $options = array());
     
     /**
      * Support
