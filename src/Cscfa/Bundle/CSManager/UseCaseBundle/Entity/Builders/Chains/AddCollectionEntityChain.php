@@ -152,7 +152,7 @@ class AddCollectionEntityChain extends AddCollectionChain {
      *
      * @return ChainOfResponsibilityInterface
      */
-    public function process($action, $data, array $options = array()){
+    public function process($action, &$data, array $options = array()){
         $state = false;
     
         if ($this->support($action) && array_key_exists("data", $options)) {

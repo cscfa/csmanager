@@ -370,6 +370,13 @@ class AddEntityChainTest extends \PHPUnit_Framework_TestCase {
         );
     }
     
+    /**
+     * Test process with routed object
+     * 
+     * This method process test
+     * for routed injection of
+     * object.
+     */
     public function testProcessWithRoutedObject(){
         //test supported action *find without data (direct routed object) * inject into array
         $data = array();

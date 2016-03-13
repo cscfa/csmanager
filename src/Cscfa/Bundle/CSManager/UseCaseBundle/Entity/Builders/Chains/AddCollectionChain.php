@@ -56,9 +56,12 @@ class AddCollectionChain extends AbstractChain{
      * property to use.
      *
      * @param string $property The property name
+     * 
+     * @return AddCollectionChain
      */
     public function setProperty($property) {
         $this->property = $property;
+        return $this;
     }
     
     /**
