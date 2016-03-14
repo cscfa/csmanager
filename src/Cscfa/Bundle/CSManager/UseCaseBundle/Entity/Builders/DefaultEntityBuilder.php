@@ -68,7 +68,7 @@ class DefaultEntityBuilder implements EntityBuilderInterface {
      */
     public function add($property, $data=null, array $options = array()){
         
-        if ($this->entity !== null || $this->chain !== null) {
+        if ($this->entity !== null && $this->chain !== null) {
             $options["data"] = $data;
             $this->chain->process($property, $this->entity, $options);
         }

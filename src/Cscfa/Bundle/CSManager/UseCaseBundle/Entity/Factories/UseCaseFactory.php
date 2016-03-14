@@ -66,20 +66,24 @@ class UseCaseFactory extends AbstractBuilderFactory {
      *
      * @return UseCase
      */
-    public function getInstance($options){
+    public function getInstance(array $options = null){
         $this->builder->setEntity($this->createNew());
-        foreach ($options as $option) {
-            
-            if (!is_array($option) || !array_key_exists("property", $option)) {
-                continue;
+        
+        if ($options !== null) {
+            foreach ($options as $option) {
+                
+                if (!array_key_exists("property", $option)) {
+                    continue;
+                }
+                
+                $this->builder->add(
+                    $option["property"], 
+                    isset($option["data"])?$option["data"]:null,
+                    isset($option["options"])?$option["options"]:array()
+                );
             }
-            
-            $this->builder->add(
-                $option["property"], 
-                isset($option["data"])?$option["data"]:null,
-                isset($option["options"])?$option["options"]:null
-            );
         }
+        
         return $this->builder->getEntity();
     }
 

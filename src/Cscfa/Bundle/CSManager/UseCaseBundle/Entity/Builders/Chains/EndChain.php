@@ -18,6 +18,7 @@ namespace Cscfa\Bundle\CSManager\UseCaseBundle\Entity\Builders\Chains;
 
 use Cscfa\Bundle\CSManager\UseCaseBundle\ChainOfResponsabilities\Abstracts\AbstractChain;
 use Cscfa\Bundle\CSManager\UseCaseBundle\ChainOfResponsabilities\Interfaces\ChainObserverInterface;
+use Cscfa\Bundle\CSManager\UseCaseBundle\Exception\UnusedChainException;
 
 /**
  * EndChain
@@ -100,7 +101,7 @@ class EndChain extends AbstractChain{
      *
      * @return ChainOfResponsibilityInterface
      */
-    public function process($action, $data,array $options = array()){
+    public function process($action, &$data, array $options = array()){
         
         if ($this->throwable) {
             $observes = $this->getObserver();
@@ -116,7 +117,7 @@ class EndChain extends AbstractChain{
                             }
                         }
                         
-                        throw new \Exception(
+                        throw new UnusedChainException(
                             sprintf("The action %s doesn't exist. Only [%s] exists", $action, implode(",", $actions)),
                             500
                         );
