@@ -74,8 +74,7 @@ abstract class AbstractStrategicForm extends AbstractType implements StrategicFo
      * 
      * @see AbstractType::buildForm()
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
-    {
+    public function buildForm(FormBuilderInterface $builder, array $options = array()){
         $this->strategy->buildForm($builder, $options);
     }
 }

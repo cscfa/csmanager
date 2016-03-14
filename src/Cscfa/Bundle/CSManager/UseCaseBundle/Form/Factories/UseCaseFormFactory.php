@@ -78,7 +78,7 @@ class UseCaseFormFactory extends AbstractStrategistForm {
      * @see UseCaseBuilder
      */
     public function createForm($options = null){
-        
+
         if ($options !== null && array_key_exists("entity", $options)) {
             $useCaseOptions = $options["entity"];
         } else {
