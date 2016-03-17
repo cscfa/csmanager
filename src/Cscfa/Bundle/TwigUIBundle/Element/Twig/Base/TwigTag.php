@@ -1,19 +1,21 @@
 <?php
 /**
  * This file is a part of CSCFA TwigUi project.
- * 
+ *
  * The TwigUi project is a twig builder written in php
  * with Symfony2 framework.
- * 
+ *
  * PHP version 5.5
- * 
+ *
  * @category TwigTag
- * @package  CscfaTwigUiBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
  * @filesource
+ *
  * @link     http://cscfa.fr
  */
+
 namespace Cscfa\Bundle\TwigUIBundle\Element\Twig\Base;
 
 use Cscfa\Bundle\TwigUIBundle\Element\BaseInterface\NestedInterface;
@@ -22,26 +24,26 @@ use Cscfa\Bundle\TwigUIBundle\Element\BaseInterface\SubTagedInterface;
 /**
  * TwigTag class.
  *
- * The TwigTag class is 
+ * The TwigTag class is
  * used to create a twig
  * element.
  *
  * @category TwigTag
- * @package  CscfaTwigUiBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
+ *
  * @link     http://cscfa.fr
  */
 abstract class TwigTag implements NestedInterface, SubTagedInterface
 {
-
     /**
      * Nest level.
-     * 
+     *
      * This property indicate the
      * current nest level.
-     * 
-     * @var integer
+     *
+     * @var int
      */
     protected $nestedLevel;
 
@@ -52,13 +54,14 @@ abstract class TwigTag implements NestedInterface, SubTagedInterface
      * set the current tag
      * nesting level.
      *
-     * @param integer $nestedLevel The nesteing level
+     * @param int $nestedLevel The nesteing level
      *
      * @return mixed
      */
     public function setNestedLevel($nestedLevel)
     {
         $this->nestedLevel = $nestedLevel;
+
         return $this;
     }
 
@@ -69,7 +72,7 @@ abstract class TwigTag implements NestedInterface, SubTagedInterface
      * the current tag nesting
      * level.
      *
-     * @return integer
+     * @return int
      */
     public function getNestedLevel()
     {
@@ -94,7 +97,7 @@ abstract class TwigTag implements NestedInterface, SubTagedInterface
      *
      * Return the sub tags count.
      *
-     * @return integer
+     * @return int
      */
     public function getSubTagsCount()
     {

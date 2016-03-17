@@ -1,19 +1,21 @@
 <?php
 /**
  * This file is a part of CSCFA security project.
- * 
+ *
  * The security project is a security bundle written in php
  * with Symfony2 framework.
- * 
+ *
  * PHP version 5.5
- * 
- * @category Repository
- * @package  CscfaSecurityBundle
- * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
- * @license  http://opensource.org/licenses/MIT MIT
+ *
+ * @category   Repository
+ *
+ * @author     Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
+ * @license    http://opensource.org/licenses/MIT MIT
  * @filesource
- * @link     http://cscfa.fr
+ *
+ * @link       http://cscfa.fr
  */
+
 namespace Cscfa\Bundle\SecurityBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -21,33 +23,39 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * StackUpdate class.
  *
- * The StackUpdate class is the main stack entity for 
- * database persistance. It precise logical storage 
+ * The StackUpdate class is the main stack entity for
+ * database persistance. It precise logical storage
  * informations.
  *
  * This entity is stored into the csmanager_stack_update table
  * of the database and have an index called cs_manager_stack_update_indx
- * that reference the name of the user updator and the update date to 
+ * that reference the name of the user updator and the update date to
  * allow quikly access into finding by name or date case.
  *
  * The repository of this entity is located into
  * the Entity\Repository folder of the core bundle.
  *
  * @category Repository
- * @package  CscfaSecurityBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
+ *
  * @link     http://cscfa.fr
  *
  * @ORM\Entity(repositoryClass="Cscfa\Bundle\SecurityBundle\Entity\Repository\StackUpdateRepository")
  * @ORM\Table(
- *      name="csmanager_stack_update", indexes={@ORM\Index(name="cs_manager_stack_update_indx", columns={"stack_updating_user", "stack_update_date"})}
+ *      name="csmanager_stack_update",
+ *      indexes={
+ *          @ORM\Index(
+ *              name="cs_manager_stack_update_indx",
+ *              columns={"stack_updating_user", "stack_update_date"}
+ *          )
+ *      }
  * )
  * @ORM\HasLifecycleCallbacks
  */
 class StackUpdate
 {
-
     /**
      * The id field.
      *
@@ -56,46 +64,56 @@ class StackUpdate
      * format to improve security and allow
      * obfuscation of the total entry count.
      *
-     * It is stored into stack_update_id field into 
+     * It is stored into stack_update_id field into
      * GUID format, is unique and can't be null.
-     * 
+     *
      * @ORM\Column(
-     *      type="guid", name="stack_update_id", unique=true, nullable=false, options={"comment":"updating stack identity"}
+     *      type="guid",
+     *      name="stack_update_id",
+     *      unique=true,
+     *      nullable=false,
+     *      options={"comment":"updating stack identity"}
      * )
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="UUID")
      */
-    protected $id;
+    protected $stackId;
 
     /**
      * The previousState field.
-     * 
+     *
      * This field represent a state of an
      * entity into it serialized format.
-     * 
+     *
      * It is stored ito stack_update_previous_state
      * field and can be null.
-     * 
-     * @ORM\Column(type="text", name="stack_update_previous_state", unique=false, nullable=true, options={"comment":"Element previous state"})
+     *
+     * @ORM\Column(
+     *      type="text",
+     *      name="stack_update_previous_state",
+     *      unique=false,
+     *      nullable=true,
+     *      options={"comment":"Element previous state"}
+     * )
      */
     protected $previousState;
 
     /**
      * The update date field.
-     * 
+     *
      * This field represent the date of
      * update of the current stack entity
      * state.
-     * 
+     *
      * @ORM\Column(type="datetime", name="stack_update_date", nullable=false, options={"comment":"Stack updating date"})
      */
     protected $date;
 
     /**
      * The updateBy field.
-     * 
+     *
      * This field store the user updator.
-     * 
+     *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(name="stack_updating_user", referencedColumnName="user_id")
      **/
@@ -112,13 +130,13 @@ class StackUpdate
      */
     public function getId()
     {
-        return $this->id;
+        return $this->stackId;
     }
 
     /**
      * Get the previous state.
      *
-     * The method getPreviousState() allow to get the 
+     * The method getPreviousState() allow to get the
      * previous state of the stored entity contained
      * into the current stack.
      *
@@ -131,29 +149,30 @@ class StackUpdate
 
     /**
      * Set the previous state.
-     * 
+     *
      * This method allow to store a serialized state
      * of an entity to database storage. The goal
      * of this procedure is to allow a backup for
      * each state.
-     * 
+     *
      * @param string $previousState The serialized entity to store.
-     * 
+     *
      * @return \Cscfa\Bundle\SecurityBundle\Entity\StackUpdate
      */
     public function setPreviousState($previousState)
     {
         $this->previousState = $previousState;
+
         return $this;
     }
 
     /**
      * Get the date of update.
-     * 
+     *
      * This method allow to get the
      * update date of the current
      * stack entity state.
-     * 
+     *
      * @return \DateTime
      */
     public function getDate()
@@ -163,28 +182,29 @@ class StackUpdate
 
     /**
      * Set the date of update.
-     * 
+     *
      * This method allow to set the
      * update date of the current
      * stack entity state.
-     * 
+     *
      * @param \DateTime $date The current object state update date.
-     * 
+     *
      * @return \Cscfa\Bundle\SecurityBundle\Entity\StackUpdate
      */
     public function setDate($date)
     {
         $this->date = $date;
+
         return $this;
     }
 
     /**
      * Get the updator user.
-     * 
+     *
      * This method allow to get the
      * current stack entity state
      * user updator.
-     * 
+     *
      * @return User
      */
     public function getUpdatedBy()
@@ -194,18 +214,19 @@ class StackUpdate
 
     /**
      * Set the User updator.
-     * 
+     *
      * This method allow to set the
      * current stack entity state
      * user updator.
-     * 
+     *
      * @param User $updatedBy The current object state user updator.
-     * 
+     *
      * @return StackUpdate
      */
     public function setUpdatedBy($updatedBy)
     {
         $this->updatedBy = $updatedBy;
+
         return $this;
     }
 }

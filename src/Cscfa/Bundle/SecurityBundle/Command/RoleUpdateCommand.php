@@ -1,19 +1,21 @@
 <?php
 /**
  * This file is a part of CSCFA security project.
- * 
+ *
  * The security project is a security bundle written in php
  * with Symfony2 framework.
- * 
+ *
  * PHP version 5.5
- * 
- * @category Command
- * @package  CscfaSecurityBundle
- * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
- * @license  http://opensource.org/licenses/MIT MIT
+ *
+ * @category   Command
+ *
+ * @author     Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
+ * @license    http://opensource.org/licenses/MIT MIT
  * @filesource
- * @link     http://cscfa.fr
+ *
+ * @link       http://cscfa.fr
  */
+
 namespace Cscfa\Bundle\SecurityBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
@@ -36,15 +38,16 @@ use Cscfa\Bundle\SecurityBundle\Command\UpdateTool\PostProcessRole;
  * update a Role that is registered into the database.
  *
  * @category Controller
- * @package  CscfaSecurityBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
+ *
  * @version  Release: 1.1
+ *
  * @link     http://cscfa.fr
  */
 class RoleUpdateCommand extends ContainerAwareCommand
 {
-
     /**
      * The RoleProvider.
      *
@@ -80,10 +83,10 @@ class RoleUpdateCommand extends ContainerAwareCommand
     {
         // register role manager
         $this->roleManager = $roleManager;
-        
+
         // register role provider
         $this->roleProvider = $roleProvider;
-        
+
         // call parent constructor
         parent::__construct();
     }
@@ -97,14 +100,17 @@ class RoleUpdateCommand extends ContainerAwareCommand
      * name to update.
      *
      * @see    \Symfony\Component\Console\Command\Command::configure()
-     * @return void
      */
     protected function configure()
     {
         // command configuration
         $this->setName('cs:update:role')
             ->setDescription('Update a role')
-            ->addArgument('name', InputArgument::OPTIONAL, "What's the role name to update?");
+            ->addArgument(
+                'name',
+                InputArgument::OPTIONAL,
+                "What's the role name to update?"
+            );
     }
 
     /**
@@ -124,76 +130,83 @@ class RoleUpdateCommand extends ContainerAwareCommand
      *
      * @param InputInterface  $input  The common command input
      * @param OutputInterface $output The common command output
-     *            
+     *
      * @see     \Symfony\Component\Console\Command\Command::execute()
+     *
      * @version Release: 1.1
-     * @return  void
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $commandFacade = new CommandFacade($input, $output, $this);
-        list ($name) = $commandFacade->getOrAskMulti(
+        list($name) = $commandFacade->getOrAskMulti(
             array(
                 array(
-                    "var" => "name",
-                    "question" => "Role name",
-                    "type" => CommandAskBuilder::TYPE_ASK,
-                    "option" => CommandAskBuilder::OPTION_ASK_AUTOCOMPLETED,
-                    "completion" => $this->roleManager->getRolesName(),
-                    "extra" => array(
-                        "empty" => false,
-                        "default" => false
-                    )
-                )
+                    'var' => 'name',
+                    'question' => 'Role name',
+                    'type' => CommandAskBuilder::TYPE_ASK,
+                    'option' => CommandAskBuilder::OPTION_ASK_AUTOCOMPLETED,
+                    'completion' => $this->roleManager->getRolesName(),
+                    'extra' => array(
+                        'empty' => false,
+                        'default' => false,
+                    ),
+                ),
             )
         );
-        
+
         $role = $this->roleProvider->findOneByName($name);
-        if (! $role) {
-            $cf = new CommandColorFacade($output);
-            $cf->addColor("error", CommandColorInterface::BLACK, CommandColorInterface::RED, null);
-            $cf->clear();
-            $cf->addText("\n");
-            $cf->addText("\nUnexisting role " . $name . ".\n", "error");
-            $cf->addText("\n");
-            $cf->write();
-            
+        if (!$role) {
+            $outputColor = new CommandColorFacade($output);
+            $outputColor->addColor(
+                'error',
+                CommandColorInterface::BLACK,
+                CommandColorInterface::RED,
+                null
+            );
+            $outputColor->clear();
+            $outputColor->addText("\n");
+            $outputColor->addText("\nUnexisting role ".$name.".\n", 'error');
+            $outputColor->addText("\n");
+            $outputColor->write();
+
             return;
         }
-        
+
         $commandFacade->askATWIL(
-            $role, 
-            "finish", 
-            "What to update", 
+            $role,
+            'finish',
+            'What to update',
             array(
-                "name" => array(
-                    "ask" => array(
-                        "question" => "Name : ",
-                        "type" => CommandAskBuilder::TYPE_ASK
+                'name' => array(
+                    'ask' => array(
+                        'question' => 'Name : ',
+                        'type' => CommandAskBuilder::TYPE_ASK,
                     ),
-                    "success" => "done",
-                    "failure" => "failure"
+                    'success' => 'done',
+                    'failure' => 'failure',
                 ),
-                "child" => array(
-                    "preProcess" => new PreProcessRole("findAllNames"),
-                    "ask" => array(
-                        "question" => "Child : ",
-                        "default" => null,
-                        "type" => CommandAskBuilder::TYPE_ASK_SELECT
+                'child' => array(
+                    'preProcess' => new PreProcessRole('findAllNames'),
+                    'ask' => array(
+                        'question' => 'Child : ',
+                        'default' => null,
+                        'type' => CommandAskBuilder::TYPE_ASK_SELECT,
                     ),
-                    "extra" => $this->roleProvider,
-                    "success" => "done",
-                    "failure" => "failure",
-                    "postProcess" => new PostProcessRole("setChild")
-                )
+                    'extra' => $this->roleProvider,
+                    'success' => 'done',
+                    'failure' => 'failure',
+                    'postProcess' => new PostProcessRole('setChild'),
+                ),
             )
         );
-        
+
         $valid = array(
-            "name" => $role->getName(),
-            "child" => ($role->getChild() !== null ? $role->getChild()->getName() : null)
+            'name' => $role->getName(),
+            'child' => (
+                $role->getChild() !== null ? $role->getChild()->getName() : null
+            ),
         );
-        
+
         if ($commandFacade->getConfirmation($valid)) {
             $this->roleManager->persist($role);
         }

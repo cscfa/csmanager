@@ -1,19 +1,21 @@
 <?php
 /**
  * This file is a part of CSCFA security project.
- * 
+ *
  * The security project is a security bundle written in php
  * with Symfony2 framework.
- * 
+ *
  * PHP version 5.5
- * 
+ *
  * @category Entity
- * @package  CscfaSecurityBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
  * @filesource
+ *
  * @link     http://cscfa.fr
  */
+
 namespace Cscfa\Bundle\SecurityBundle\Entity\Base;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -27,14 +29,14 @@ use Cscfa\Bundle\SecurityBundle\Entity\User;
  * about user modifications action.
  *
  * @category Entity
- * @package  CscfaSecurityBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
+ *
  * @link     http://cscfa.fr
  */
 abstract class StackableObject
 {
-
     /**
      * The creation date.
      *
@@ -99,6 +101,7 @@ abstract class StackableObject
      * or null if never set.
      *
      * @see    \DateTime
+     *
      * @return \DateTime
      */
     public function getCreatedAt()
@@ -115,12 +118,13 @@ abstract class StackableObject
      * StackableObject for chained methods.
      *
      * @param \DateTime $createdAt The new datetime to store.
-     *         
+     *
      * @return \Cscfa\Bundle\SecurityBundle\Entity\Base\StackableObject
      */
     public function setCreatedAt($createdAt)
     {
         $this->createdAt = $createdAt;
+
         return $this;
     }
 
@@ -133,12 +137,13 @@ abstract class StackableObject
      * StackableObject for chained methods.
      *
      * @param \DateTime $updatedAt The new DateTime to store.
-     * 
+     *
      * @return \Cscfa\Bundle\SecurityBundle\Entity\Base\StackableObject
      */
     public function setUpdatedAt($updatedAt)
     {
         $this->updatedAt = $updatedAt;
+
         return $this;
     }
 
@@ -180,12 +185,13 @@ abstract class StackableObject
      * chained methods.
      *
      * @param User $createdBy The User instance to store as creator.
-     * 
+     *
      * @return \Cscfa\Bundle\SecurityBundle\Entity\Base\StackableObject
      */
     public function setCreatedBy($createdBy)
     {
         $this->createdBy = $createdBy;
+
         return $this;
     }
 
@@ -214,12 +220,13 @@ abstract class StackableObject
      * for chained methods.
      *
      * @param User $updatedBy The User instance to store as updator.
-     * 
+     *
      * @return StackableObject
      */
     public function setUpdatedBy($updatedBy)
     {
         $this->updatedBy = $updatedBy;
+
         return $this;
     }
 }

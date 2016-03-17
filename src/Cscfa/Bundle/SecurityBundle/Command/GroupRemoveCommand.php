@@ -1,19 +1,21 @@
 <?php
 /**
  * This file is a part of CSCFA security project.
- * 
+ *
  * The security project is a security bundle written in php
  * with Symfony2 framework.
- * 
+ *
  * PHP version 5.5
- * 
- * @category Command
- * @package  CscfaSecurityBundle
- * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
- * @license  http://opensource.org/licenses/MIT MIT
+ *
+ * @category   Command
+ *
+ * @author     Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
+ * @license    http://opensource.org/licenses/MIT MIT
  * @filesource
- * @link     http://cscfa.fr
+ *
+ * @link       http://cscfa.fr
  */
+
 namespace Cscfa\Bundle\SecurityBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
@@ -35,14 +37,14 @@ use Doctrine\ORM\OptimisticLockException;
  * remove a Group that is registered into the database.
  *
  * @category Controller
- * @package  CscfaSecurityBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
+ *
  * @link     http://cscfa.fr
  */
 class GroupRemoveCommand extends ContainerAwareCommand
 {
-
     /**
      * The GroupProvider.
      *
@@ -77,9 +79,9 @@ class GroupRemoveCommand extends ContainerAwareCommand
     public function __construct(GroupManager $groupManager, GroupProvider $groupProvider)
     {
         $this->groupManager = $groupManager;
-        
+
         $this->groupProvider = $groupProvider;
-        
+
         parent::__construct();
     }
 
@@ -92,7 +94,6 @@ class GroupRemoveCommand extends ContainerAwareCommand
      * name to delete.
      *
      * @see    \Symfony\Component\Console\Command\Command::configure()
-     * @return void
      */
     protected function configure()
     {
@@ -117,43 +118,56 @@ class GroupRemoveCommand extends ContainerAwareCommand
      *
      * @param InputInterface  $input  The common command input
      * @param OutputInterface $output The common command output
-     * 
+     *
      * @see    \Symfony\Component\Console\Command\Command::execute()
-     * @return void
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $commandFacade = new CommandFacade($input, $output, $this);
-        $cf = new CommandColorFacade($output);
-        $cf->addColor("error", CommandColorInterface::BLACK, CommandColorInterface::RED, null);
-        $cf->addColor("success", CommandColorInterface::BLACK, CommandColorInterface::GREEN, null);
-        
-        $builder = new CommandAskBuilder(CommandAskBuilder::TYPE_ASK, "The group name : ", null, CommandAskBuilder::OPTION_ASK_AUTOCOMPLETED, $this->groupProvider->findAllNames());
-        $name = $commandFacade->getOrAsk("name", $builder);
-        
+        $outputColor = new CommandColorFacade($output);
+        $outputColor->addColor('error', CommandColorInterface::BLACK, CommandColorInterface::RED, null);
+        $outputColor->addColor('success', CommandColorInterface::BLACK, CommandColorInterface::GREEN, null);
+
+        $builder = new CommandAskBuilder(
+            CommandAskBuilder::TYPE_ASK,
+            'The group name : ',
+            null,
+            CommandAskBuilder::OPTION_ASK_AUTOCOMPLETED,
+            $this->groupProvider->findAllNames()
+        );
+        $name = $commandFacade->getOrAsk('name', $builder);
+
         $group = $this->groupProvider->findOneByName($name);
-        
-        if ($group !== null && $commandFacade->getConfirmation(array("name" => $name))) {
+
+        if ($group !== null && $commandFacade->getConfirmation(array('name' => $name))) {
             try {
                 $this->groupManager->remove($group);
-                $cf->clear();
-                $cf->addText("\n");
-                $cf->addText("\nDone\n", "success");
-                $cf->addText("\n");
-                $cf->write();
+                $outputColor->clear();
+                $outputColor->addText("\n");
+                $outputColor->addText("\nDone\n", 'success');
+                $outputColor->addText("\n");
+                $outputColor->write();
             } catch (OptimisticLockException $e) {
-                $cf->clear();
-                $cf->addText("\n");
-                $cf->addText("\nAn error occures : [" . $e->getCode() . "] " . $e->getMessage() . "\n\t In file : " . $e->getFile() . " line " . $e->getLine() . "\n", "error");
-                $cf->addText("\n");
-                $cf->write();
+                $message = sprintf(
+                    "\nAn error occures : [%s] %s\n\t In file : %s line %s\n",
+                    $e->getCode(),
+                    $e->getMessage(),
+                    $e->getFile(),
+                    $e->getLine()
+                );
+
+                $outputColor->clear();
+                $outputColor->addText("\n");
+                $outputColor->addText($message, 'error');
+                $outputColor->addText("\n");
+                $outputColor->write();
             }
-        } else if ($group === null) {
-            $cf->clear();
-            $cf->addText("\n");
-            $cf->addText("\nUnexisting group " . $name . ".\n", "error");
-            $cf->addText("\n");
-            $cf->write();
+        } elseif ($group === null) {
+            $outputColor->clear();
+            $outputColor->addText("\n");
+            $outputColor->addText("\nUnexisting group ".$name.".\n", 'error');
+            $outputColor->addText("\n");
+            $outputColor->write();
         }
     }
 }

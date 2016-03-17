@@ -1,19 +1,21 @@
 <?php
 /**
  * This file is a part of CSCFA security project.
- * 
+ *
  * The security project is a security bundle written in php
  * with Symfony2 framework.
- * 
+ *
  * PHP version 5.5
- * 
+ *
  * @category Entity
- * @package  CscfaSecurityBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
  * @filesource
+ *
  * @link     http://cscfa.fr
  */
+
 namespace Cscfa\Bundle\SecurityBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -39,9 +41,10 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * the Entity\Repository folder of the core bundle.
  *
  * @category Entity
- * @package  CscfaSecurityBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
+ *
  * @link     http://cscfa.fr
  *
  * @ORM\Entity(repositoryClass="Cscfa\Bundle\SecurityBundle\Entity\Repository\UserRepository")
@@ -52,7 +55,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class User extends StackableObject implements AdvancedUserInterface, \Serializable
 {
     /**
-     * The id field
+     * The id field.
      *
      * The id parameter is the database
      * unique identity field, stored into GUID
@@ -68,16 +71,16 @@ class User extends StackableObject implements AdvancedUserInterface, \Serializab
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="UUID")
      */
-    protected $id;
+    protected $userId;
 
     /**
      * The username field.
-     * 
+     *
      * The username parameter allow an
      * User to be named.
-     * 
+     *
      * @var string
-     * 
+     *
      * @ORM\Column(
      *      type="string", length=50, name="user_username", options={"comment":"user name"}
      * )
@@ -86,26 +89,30 @@ class User extends StackableObject implements AdvancedUserInterface, \Serializab
 
     /**
      * The user cannonical name.
-     * 
+     *
      * The cannonical name allow database
      * to prevent duplicate name by characters
      * case change.
-     * 
+     *
      * @var string
-     * 
+     *
      * @ORM\Column(
-     *      type="string", length=255, name="user_username_canonical", unique=true, options={"comment":"user canonical name"}
+     *      type="string",
+     *      length=255,
+     *      name="user_username_canonical",
+     *      unique=true,
+     *      options={"comment":"user canonical name"}
      * )
      */
     protected $usernameCanonical;
 
     /**
      * The email field.
-     * 
+     *
      * This field store an user email.
-     * 
+     *
      * @var string
-     * 
+     *
      * @ORM\Column(
      *      type="string", length=255, name="user_email", options={"comment":"user email"}
      * )
@@ -114,26 +121,30 @@ class User extends StackableObject implements AdvancedUserInterface, \Serializab
 
     /**
      * The email canonical field.
-     * 
+     *
      * This field allow to prevent duplicate
      * email by characters case change.
-     * 
+     *
      * @var string
-     * 
+     *
      * @ORM\Column(
-     *      type="string", length=255, name="user_email_canonical", unique=true, options={"comment":"user canonical email"}
+     *      type="string",
+     *      length=255,
+     *      name="user_email_canonical",
+     *      unique=true,
+     *      options={"comment":"user canonical email"}
      * )
      */
     protected $emailCanonical;
 
     /**
      * The enabled field.
-     * 
+     *
      * This field allow to enable or
      * desable an user account.
-     * 
-     * @var boolean
-     * 
+     *
+     * @var bool
+     *
      * @ORM\Column(
      *      type="boolean", name="user_enabled", options={"comment":"user enable state"}
      * )
@@ -142,12 +153,12 @@ class User extends StackableObject implements AdvancedUserInterface, \Serializab
 
     /**
      * The salt field.
-     * 
+     *
      * This field is used to create
      * the password of the user.
-     * 
+     *
      * @var string
-     * 
+     *
      * @ORM\Column(
      *      type="string", name="user_salt", options={"comment":"user hashing salt"}
      * )
@@ -156,12 +167,12 @@ class User extends StackableObject implements AdvancedUserInterface, \Serializab
 
     /**
      * The password field.
-     * 
+     *
      * This field allow to store
      * the user password.
-     * 
+     *
      * @var string
-     * 
+     *
      * @ORM\Column(
      *      type="string", name="user_password", options={"comment":"Encrypted password"}
      * )
@@ -170,8 +181,8 @@ class User extends StackableObject implements AdvancedUserInterface, \Serializab
 
     /**
      * The plain password.
-     * 
-     * Plain password. Used for model validation. 
+     *
+     * Plain password. Used for model validation.
      * Must not be persisted.
      *
      * @var string
@@ -180,12 +191,12 @@ class User extends StackableObject implements AdvancedUserInterface, \Serializab
 
     /**
      * The last login.
-     * 
+     *
      * This field store the last login
      * date of the user.
-     * 
+     *
      * @var \DateTime
-     * 
+     *
      * @ORM\Column(
      *      type="datetime", name="user_lastLogin", nullable=true, options={"comment":"Last user login"}
      * )
@@ -194,35 +205,41 @@ class User extends StackableObject implements AdvancedUserInterface, \Serializab
 
     /**
      * The confirmation token.
-     * 
+     *
      * This field store the user
      * confirmation token.
-     * 
+     *
      * @var string
-     * 
+     *
      * @ORM\Column(
-     *      type="string", name="user_confirmation_token", nullable=true, options={"comment":"Random string sent to the user email address in order to verify it"}
+     *      type="string",
+     *      name="user_confirmation_token",
+     *      nullable=true,
+     *      options={"comment":"Random string sent to the user email address in order to verify it"}
      * )
      */
     protected $confirmationToken;
 
     /**
      * The password request date.
-     * 
+     *
      * This field allow to store the user
      * password request date.
-     * 
+     *
      * @var \DateTime
-     * 
+     *
      * @ORM\Column(
-     *      type="datetime", name="user_password_requested_at", nullable=true, options={"comment":"User requesting password date"}
+     *      type="datetime",
+     *      name="user_password_requested_at",
+     *      nullable=true,
+     *      options={"comment":"User requesting password date"}
      * )
      */
     protected $passwordRequestedAt;
 
     /**
      * The groups.
-     * 
+     *
      * This field store the user groups.
      *
      * @ORM\ManyToMany(targetEntity="Group")
@@ -235,12 +252,12 @@ class User extends StackableObject implements AdvancedUserInterface, \Serializab
 
     /**
      * The user locked state.
-     * 
+     *
      * This field allow to store
      * the locked state of the user.
-     * 
-     * @var boolean
-     * 
+     *
+     * @var bool
+     *
      * @ORM\Column(
      *      type="boolean", name="user_locked", options={"comment":"user locked state"}
      * )
@@ -249,12 +266,12 @@ class User extends StackableObject implements AdvancedUserInterface, \Serializab
 
     /**
      * The user expiration state.
-     * 
+     *
      * This field allow to store if the user
      * account has expired.
-     * 
-     * @var boolean
-     * 
+     *
+     * @var bool
+     *
      * @ORM\Column(
      *      type="boolean", name="user_expired", options={"comment":"user expired state"}
      * )
@@ -263,12 +280,12 @@ class User extends StackableObject implements AdvancedUserInterface, \Serializab
 
     /**
      * The user account expiration date.
-     * 
+     *
      * This field allow to store the user
      * expiration date.
-     * 
+     *
      * @var \DateTime
-     * 
+     *
      * @ORM\Column(
      *      type="datetime", name="user_expires_at", nullable=true, options={"comment":"User expiration date"}
      * )
@@ -277,12 +294,12 @@ class User extends StackableObject implements AdvancedUserInterface, \Serializab
 
     /**
      * The user roles.
-     * 
+     *
      * This field allow to store the user
      * roles.
-     * 
+     *
      * @var Collection
-     * 
+     *
      * @ORM\ManyToMany(targetEntity="Role")
      * @ORM\JoinTable(name="tk_csmanager_user_join_role",
      *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="user_id")},
@@ -293,12 +310,12 @@ class User extends StackableObject implements AdvancedUserInterface, \Serializab
 
     /**
      * The user credention expiration state.
-     * 
-     * This field allow to store the user 
+     *
+     * This field allow to store the user
      * credention expiration state.
-     * 
-     * @var Boolean
-     * 
+     *
+     * @var bool
+     *
      * @ORM\Column(
      *      type="boolean", name="user_credentials_expired", options={"comment":"user credential expired state"}
      * )
@@ -307,25 +324,26 @@ class User extends StackableObject implements AdvancedUserInterface, \Serializab
 
     /**
      * The user credention expiration date.
-     * 
-     * This field allow to store the user 
+     *
+     * This field allow to store the user
      * credention expiration date.
-     * 
+     *
      * @var \DateTime
-     * 
+     *
      * @ORM\Column(
-     *      type="datetime", name="user_credentials_expires_at", nullable=true, options={"comment":"User credential expiration date"}
+     *      type="datetime",
+     *      name="user_credentials_expires_at",
+     *      nullable=true,
+     *      options={"comment":"User credential expiration date"}
      * )
      */
     protected $credentialsExpireAt;
 
     /**
      * The User constructor.
-     * 
+     *
      * This constructor set to default
      * values the User variables.
-     * 
-     * @return void
      */
     public function __construct()
     {
@@ -341,25 +359,26 @@ class User extends StackableObject implements AdvancedUserInterface, \Serializab
 
     /**
      * Add a role.
-     * 
+     *
      * This method allow to add a role
      * to the current user.
-     * 
+     *
      * @param Role $role The Role to add.
-     * 
+     *
      * @throws \Exception
+     *
      * @return \Cscfa\Bundle\SecurityBundle\Entity\User
      */
     public function addRole(Role $role)
     {
-        if (! $role instanceof Role) {
-            throw new \Exception("addRole takes a Role object as the parameter");
+        if (!$role instanceof Role) {
+            throw new \Exception('addRole takes a Role object as the parameter');
         }
-        
-        if (! $this->hasRole($role->getName())) {
+
+        if (!$this->hasRole($role->getName())) {
             $this->roles->add($role);
         }
-        
+
         return $this;
     }
 
@@ -382,20 +401,18 @@ class User extends StackableObject implements AdvancedUserInterface, \Serializab
                 $this->locked,
                 $this->credentialsExpired,
                 $this->enabled,
-                $this->id
+                $this->userId,
             )
         );
     }
 
     /**
      * Unserializes the user.
-     * 
+     *
      * This method allow to unserialize
      * an user instance.
      *
      * @param string $serialized The serialized instance
-     * 
-     * @return void
      */
     public function unserialize($serialized)
     {
@@ -403,17 +420,25 @@ class User extends StackableObject implements AdvancedUserInterface, \Serializab
         // add a few extra elements in the array to ensure that we have enough keys when unserializing
         // older data which does not include all properties.
         $data = array_merge($data, array_fill(0, 2, null));
-        
-        list ($this->password, $this->salt, $this->usernameCanonical, $this->username, $this->expired, $this->locked, $this->credentialsExpired, $this->enabled, $this->id) = $data;
+
+        list(
+            $this->password,
+            $this->salt,
+            $this->usernameCanonical,
+            $this->username,
+            $this->expired,
+            $this->locked,
+            $this->credentialsExpired,
+            $this->enabled,
+            $this->userId
+        ) = $data;
     }
 
     /**
      * Remove credential.
-     * 
-     * Removes sensitive credential data 
+     *
+     * Removes sensitive credential data
      * from the user instance.
-     * 
-     * @return void
      */
     public function eraseCredentials()
     {
@@ -422,22 +447,23 @@ class User extends StackableObject implements AdvancedUserInterface, \Serializab
 
     /**
      * Get id.
-     * 
+     *
      * Returns the user unique id.
      *
      * @return mixed
      */
     public function getId()
     {
-        return $this->id;
+        return $this->userId;
     }
 
     /**
      * Get Username.
-     * 
+     *
      * Return the user username.
-     * 
+     *
      * @see    \Symfony\Component\Security\Core\User\UserInterface::getUsername()
+     *
      * @return string
      */
     public function getUsername()
@@ -447,9 +473,9 @@ class User extends StackableObject implements AdvancedUserInterface, \Serializab
 
     /**
      * Get user canonical username.
-     * 
+     *
      * Return the user canonical username.
-     * 
+     *
      * @return string
      */
     public function getUsernameCanonical()
@@ -459,10 +485,11 @@ class User extends StackableObject implements AdvancedUserInterface, \Serializab
 
     /**
      * Get the user salt.
-     * 
+     *
      * Return the user password salt.
-     * 
+     *
      * @see    \Symfony\Component\Security\Core\User\UserInterface::getSalt()
+     *
      * @return string
      */
     public function getSalt()
@@ -472,9 +499,9 @@ class User extends StackableObject implements AdvancedUserInterface, \Serializab
 
     /**
      * Get email.
-     * 
+     *
      * Return the user email.
-     * 
+     *
      * @return string
      */
     public function getEmail()
@@ -484,9 +511,9 @@ class User extends StackableObject implements AdvancedUserInterface, \Serializab
 
     /**
      * Get canonical email.
-     * 
+     *
      * Return the user canonical email.
-     * 
+     *
      * @return string
      */
     public function getEmailCanonical()
@@ -496,7 +523,7 @@ class User extends StackableObject implements AdvancedUserInterface, \Serializab
 
     /**
      * Get password.
-     * 
+     *
      * Gets the encrypted password.
      *
      * @return string
@@ -508,7 +535,7 @@ class User extends StackableObject implements AdvancedUserInterface, \Serializab
 
     /**
      * Get password.
-     * 
+     *
      * Gets the plain password.
      *
      * @return string
@@ -520,7 +547,7 @@ class User extends StackableObject implements AdvancedUserInterface, \Serializab
 
     /**
      * Get last login.
-     * 
+     *
      * Gets the last login time.
      *
      * @return \DateTime
@@ -532,9 +559,9 @@ class User extends StackableObject implements AdvancedUserInterface, \Serializab
 
     /**
      * Get confirmation token.
-     * 
+     *
      * Return the user confirmation token.
-     * 
+     *
      * @return string
      */
     public function getConfirmationToken()
@@ -544,7 +571,7 @@ class User extends StackableObject implements AdvancedUserInterface, \Serializab
 
     /**
      * Get roles.
-     * 
+     *
      * Returns the user roles
      *
      * @return array The roles
@@ -552,17 +579,17 @@ class User extends StackableObject implements AdvancedUserInterface, \Serializab
     public function getRoles()
     {
         $roles = array();
-        
+
         foreach ($this->roles as $role) {
             $roles = array_merge($roles, $role->getRecursiveNames());
         }
-        
+
         return array_unique($roles);
     }
 
     /**
      * Check if user has a role.
-     * 
+     *
      * Never use this to check if this user has access to anything!
      *
      * Use the SecurityContext, or an implementation of AccessDecisionManager
@@ -572,7 +599,7 @@ class User extends StackableObject implements AdvancedUserInterface, \Serializab
      *
      * @param string $role The needed role.
      *
-     * @return boolean
+     * @return bool
      */
     public function hasRole($role)
     {
@@ -581,77 +608,77 @@ class User extends StackableObject implements AdvancedUserInterface, \Serializab
 
     /**
      * Is account expired.
-     * 
+     *
      * Check if the user account has expired.
-     * 
-     * @return boolean
+     *
+     * @return bool
      */
     public function isAccountNonExpired()
     {
         if (true === $this->expired) {
             return false;
         }
-        
+
         if (null !== $this->expiresAt && $this->expiresAt->getTimestamp() < time()) {
             return false;
         }
-        
+
         return true;
     }
 
     /**
      * Is account non locked.
-     * 
+     *
      * Check if the user is locked. Return
      * true if not.
-     * 
-     * @return boolean
+     *
+     * @return bool
      */
     public function isAccountNonLocked()
     {
-        return ! $this->locked;
+        return !$this->locked;
     }
 
     /**
      * Is credential non expired.
-     * 
-     * Check if the user credentials are expired. 
+     *
+     * Check if the user credentials are expired.
      * Return true if not.
-     * 
-     * @return boolean
+     *
+     * @return bool
      */
     public function isCredentialsNonExpired()
     {
         if (true === $this->credentialsExpired) {
             return false;
         }
-        
+
         if (null !== $this->credentialsExpireAt && $this->credentialsExpireAt->getTimestamp() < time()) {
             return false;
         }
-        
+
         return true;
     }
 
     /**
      * Is credential expired.
-     * 
-     * Check if the user credentials are expired. 
+     *
+     * Check if the user credentials are expired.
      * Return true if expired.
-     * 
-     * @return boolean
+     *
+     * @return bool
      */
     public function isCredentialsExpired()
     {
-        return ! $this->isCredentialsNonExpired();
+        return !$this->isCredentialsNonExpired();
     }
 
     /**
-     * Is enabled
-     * 
+     * Is enabled.
+     *
      * Check if the user is enable.
-     * 
-     * @return boolean
+     *
+     * @return bool
      */
     public function isEnabled()
     {
@@ -659,37 +686,37 @@ class User extends StackableObject implements AdvancedUserInterface, \Serializab
     }
 
     /**
-     * Is expired
-     * 
+     * Is expired.
+     *
      * Check if the user is expired.
-     * 
-     * @return boolean
+     *
+     * @return bool
      */
     public function isExpired()
     {
-        return ! $this->isAccountNonExpired();
+        return !$this->isAccountNonExpired();
     }
 
     /**
-     * Is locked
-     * 
+     * Is locked.
+     *
      * Check if the user is locked.
-     * 
-     * @return boolean
+     *
+     * @return bool
      */
     public function isLocked()
     {
-        return ! $this->isAccountNonLocked();
+        return !$this->isAccountNonLocked();
     }
 
     /**
      * Is user.
-     * 
+     *
      * Check if the current user is the given user.
-     * 
+     *
      * @param UserInterface $user the user to check.
-     * 
-     * @return boolean
+     *
+     * @return bool
      */
     public function isUser(UserInterface $user = null)
     {
@@ -698,11 +725,11 @@ class User extends StackableObject implements AdvancedUserInterface, \Serializab
 
     /**
      * Remove Role.
-     * 
+     *
      * Remove a Role from the current user.
-     * 
+     *
      * @param string $role The Role to remove.
-     * 
+     *
      * @return \Cscfa\Bundle\SecurityBundle\Entity\User
      */
     public function removeRole($role)
@@ -712,47 +739,47 @@ class User extends StackableObject implements AdvancedUserInterface, \Serializab
                 unset($this->roles[$key]);
             }
         }
-        
+
         return $this;
     }
 
     /**
      * Set username.
-     * 
+     *
      * Set the current user username.
-     * 
+     *
      * @param string $username The new username.
-     * 
+     *
      * @return \Cscfa\Bundle\SecurityBundle\Entity\User
      */
     public function setUsername($username)
     {
         $this->username = $username;
-        
+
         return $this;
     }
 
     /**
      * Set username canonical.
-     * 
+     *
      * Set the current user username canonical.
-     * 
+     *
      * @param string $usernameCanonical The new username canonical.
-     * 
+     *
      * @return \Cscfa\Bundle\SecurityBundle\Entity\User
      */
     public function setUsernameCanonical($usernameCanonical)
     {
         $this->usernameCanonical = $usernameCanonical;
-        
+
         return $this;
     }
 
     /**
      * Set credential expire at.
-     * 
+     *
      * Set the user credential expiration date.
-     * 
+     *
      * @param \DateTime $date The new expiration date.
      *
      * @return User
@@ -760,39 +787,39 @@ class User extends StackableObject implements AdvancedUserInterface, \Serializab
     public function setCredentialsExpireAt(\DateTime $date = null)
     {
         $this->credentialsExpireAt = $date;
-        
+
         return $this;
     }
 
     /**
      * Set credential expired.
-     * 
+     *
      * Set the user credential expiration state.
-     * 
-     * @param boolean $boolean The new expiration state.
+     *
+     * @param bool $boolean The new expiration state.
      *
      * @return User
      */
     public function setCredentialsExpired($boolean)
     {
         $this->credentialsExpired = $boolean;
-        
+
         return $this;
     }
 
     /**
      * Set email.
-     * 
+     *
      * Set the user email.
-     * 
+     *
      * @param string $email The new email.
-     * 
+     *
      * @return \Cscfa\Bundle\SecurityBundle\Entity\User
      */
     public function setEmail($email)
     {
         $this->email = $email;
-        
+
         return $this;
     }
 
@@ -808,47 +835,47 @@ class User extends StackableObject implements AdvancedUserInterface, \Serializab
     public function setEmailCanonical($emailCanonical)
     {
         $this->emailCanonical = $emailCanonical;
-        
+
         return $this;
     }
 
     /**
      * Set enabled.
-     * 
+     *
      * Set the user enable state.
-     * 
-     * @param boolean $boolean The enale state.
-     * 
+     *
+     * @param bool $boolean The enale state.
+     *
      * @return \Cscfa\Bundle\SecurityBundle\Entity\User
      */
     public function setEnabled($boolean)
     {
         $this->enabled = (boolean) $boolean;
-        
+
         return $this;
     }
 
     /**
      * Set expired.
-     * 
+     *
      * Sets this user to expired.
      *
-     * @param Boolean $boolean The expired state.
+     * @param bool $boolean The expired state.
      *
      * @return User
      */
     public function setExpired($boolean)
     {
         $this->expired = (boolean) $boolean;
-        
+
         return $this;
     }
 
     /**
      * Set expire at.
-     * 
+     *
      * Set the user expiration date.
-     * 
+     *
      * @param \DateTime $date The expiration date.
      *
      * @return User
@@ -856,109 +883,109 @@ class User extends StackableObject implements AdvancedUserInterface, \Serializab
     public function setExpiresAt($date)
     {
         $this->expiresAt = $date;
-        
+
         return $this;
     }
 
     /**
      * Set password.
-     * 
+     *
      * Set the user password.
-     * 
+     *
      * @param string $password the new password.
-     * 
+     *
      * @return \Cscfa\Bundle\SecurityBundle\Entity\User
      */
     public function setPassword($password)
     {
         $this->password = $password;
-        
+
         return $this;
     }
 
     /**
      * Set plain password.
-     * 
+     *
      * Set the user plain password.
-     * 
+     *
      * @param string $password The user password.
-     * 
+     *
      * @return \Cscfa\Bundle\SecurityBundle\Entity\User
      */
     public function setPlainPassword($password)
     {
         $this->plainPassword = $password;
-        
+
         return $this;
     }
 
     /**
      * Set last login.
-     * 
+     *
      * Set the user last login date.
-     * 
+     *
      * @param \DateTime $time The last login date.
-     * 
+     *
      * @return \Cscfa\Bundle\SecurityBundle\Entity\User
      */
     public function setLastLogin($time)
     {
         $this->lastLogin = $time;
-        
+
         return $this;
     }
 
     /**
      * Set locked.
-     * 
+     *
      * Set the user locked state.
-     * 
-     * @param boolean $boolean The locked state.
-     * 
+     *
+     * @param bool $boolean The locked state.
+     *
      * @return \Cscfa\Bundle\SecurityBundle\Entity\User
      */
     public function setLocked($boolean)
     {
         $this->locked = $boolean;
-        
+
         return $this;
     }
 
     /**
      * Set confirmation token.
-     * 
+     *
      * Set the user confirmation token.
-     * 
+     *
      * @param string $confirmationToken The confirmation token.
-     * 
+     *
      * @return \Cscfa\Bundle\SecurityBundle\Entity\User
      */
     public function setConfirmationToken($confirmationToken)
     {
         $this->confirmationToken = $confirmationToken;
-        
+
         return $this;
     }
 
     /**
      * Set password request.
-     * 
+     *
      * Set the user password request date.
-     * 
+     *
      * @param \DateTime $date The request date.
-     * 
+     *
      * @return \Cscfa\Bundle\SecurityBundle\Entity\User
      */
     public function setPasswordRequestedAt(\DateTime $date = null)
     {
         $this->passwordRequestedAt = $date;
-        
+
         return $this;
     }
 
     /**
      * Get passord request date.
-     * 
+     *
      * Gets the timestamp that the user requested a password reset.
      *
      * @return null|\DateTime
@@ -970,44 +997,46 @@ class User extends StackableObject implements AdvancedUserInterface, \Serializab
 
     /**
      * Is password request non expired.
-     * 
+     *
      * Check if the request password  date is
      * expired for a given timestamp.
-     * 
-     * @param integer $ttl The expiration timestamp.
-     * 
-     * @return boolean
+     *
+     * @param int $ttl The expiration timestamp.
+     *
+     * @return bool
      */
     public function isPasswordRequestNonExpired($ttl)
     {
-        return $this->getPasswordRequestedAt() instanceof \DateTime && $this->getPasswordRequestedAt()->getTimestamp() + $ttl > time();
+        $isDate = $this->getPasswordRequestedAt() instanceof \DateTime;
+
+        return $isDate && $this->getPasswordRequestedAt()->getTimestamp() + $ttl > time();
     }
 
     /**
      * Set roles.
-     * 
+     *
      * Set the user roles.
-     * 
+     *
      * @param array $roles The roles as array.
-     * 
+     *
      * @return \Cscfa\Bundle\SecurityBundle\Entity\User
      */
     public function setRoles(array $roles)
     {
         $this->roles = new ArrayCollection();
-        
+
         foreach ($roles as $role) {
             $this->addRole($role);
         }
-        
+
         return $this;
     }
 
     /**
      * To String.
-     * 
+     *
      * Parse the current User to string.
-     * 
+     *
      * @return string
      */
     public function __toString()
@@ -1017,16 +1046,17 @@ class User extends StackableObject implements AdvancedUserInterface, \Serializab
 
     /**
      * Set salt.
-     * 
+     *
      * Set the user password salt.
-     * 
+     *
      * @param string $salt The salt.
-     * 
+     *
      * @return User
      */
     public function setSalt($salt)
     {
         $this->salt = $salt;
+
         return $this;
     }
 }

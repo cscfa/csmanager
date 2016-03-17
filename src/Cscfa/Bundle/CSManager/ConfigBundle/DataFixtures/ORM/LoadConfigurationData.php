@@ -7,13 +7,15 @@
  *
  * PHP version 5.5
  *
- * @category Fixture
- * @package  CscfaCSManagerConfigBundle
- * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
- * @license  http://opensource.org/licenses/MIT MIT
+ * @category   Fixture
+ *
+ * @author     Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
+ * @license    http://opensource.org/licenses/MIT MIT
  * @filesource
- * @link     http://cscfa.fr
+ *
+ * @link       http://cscfa.fr
  */
+
 namespace Cscfa\Bundle\CSManager\ConfigBundle\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\FixtureInterface;
@@ -28,47 +30,48 @@ use Cscfa\Bundle\CSManager\ConfigBundle\Entity\Preference;
  * method to load the configuration data.
  *
  * @category Fixture
- * @package  CscfaCSManagerConfigBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
+ *
  * @link     http://cscfa.fr
  */
 class LoadConfigurationData implements FixtureInterface
 {
-
     /**
-     * Load
-     * 
+     * Load.
+     *
      * Load the configuration data
-     * 
-     * @see \Doctrine\Common\DataFixtures\FixtureInterface::load()
+     *
+     * @param ObjectManager $manager The doctrine object manager
+     *
+     * @see    \Doctrine\Common\DataFixtures\FixtureInterface::load()
      */
     public function load(ObjectManager $manager)
     {
-        
         $configuration = $manager->getRepository("Cscfa\Bundle\CSManager\ConfigBundle\Entity\Configuration")
-            ->findOneByName("default");
-        
-        if(!$configuration){
+            ->findOneByName('default');
+
+        if (!$configuration) {
             $configuration = new Configuration();
         }
-        $configuration->setName("default")
+        $configuration->setName('default')
             ->setForgotPasswordReaction(Configuration::PASSWORD_FORGOT_AUTOMAIL)
             ->setSignInAllowed(true)
             ->setSignInVerifyEmail(true);
-        
+
         $manager->persist($configuration);
 
         $preference = $manager->getRepository("Cscfa\Bundle\CSManager\ConfigBundle\Entity\Preference")
             ->findAll();
-        
-        if(!$preference){
+
+        if (!$preference) {
             $preference = new Preference();
-        }else if(is_array($preference)){
+        } elseif (is_array($preference)) {
             $preference = $preference[0];
         }
         $preference->setConfiguration($configuration);
-        
+
         $manager->persist($preference);
         $manager->flush();
     }

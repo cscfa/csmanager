@@ -1,19 +1,21 @@
 <?php
 /**
  * This file is a part of CSCFA toolbox project.
- * 
+ *
  * The toolbox project is a toolbox written in php
  * with Symfony2 framework.
- * 
+ *
  * PHP version 5.5
- * 
- * @category Builder
- * @package  CscfaToolboxBundle
- * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
- * @license  http://opensource.org/licenses/MIT MIT
+ *
+ * @category   Builder
+ *
+ * @author     Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
+ * @license    http://opensource.org/licenses/MIT MIT
  * @filesource
- * @link     http://cscfa.fr
+ *
+ * @link       http://cscfa.fr
  */
+
 namespace Cscfa\Bundle\ToolboxBundle\Builder\Command;
 
 use Symfony\Component\Console\Output\OutputInterface;
@@ -26,45 +28,45 @@ use Cscfa\Bundle\ToolboxBundle\Factory\Command\ColoredStringFactory;
  * CommandColorBuilder class.
  *
  * The CommandColorBuilder class is used
- * to build formated colored string to 
+ * to build formated colored string to
  * display behind a CommandFacade instance.
  *
  * @category Builder
- * @package  CscfaToolboxBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
+ *
  * @link     http://cscfa.fr
  */
 class CommandColorBuilder implements CommandColorInterface, CommandOptionInterface, SetInterface
 {
-
     /**
-     * The output
-     * 
+     * The output.
+     *
      * This is the OutputInterface
      * coming from the command.
-     * 
+     *
      * @var OutputInterface
      */
     protected $output;
 
     /**
-     * The colored string array
-     * 
+     * The colored string array.
+     *
      * This is a colored string
      * factory array.
-     * 
+     *
      * @var array
      */
     protected $coloredStrings;
 
     /**
      * CommandColorBuilder constructor.
-     * 
+     *
      * This is the default CommandColorBuilder
      * constructor. It register an OutputInterface
      * that allow to display strings.
-     * 
+     *
      * @param OutputInterface $output        The output interface
      * @param array           $coloredString The started colored string array
      */
@@ -75,31 +77,27 @@ class CommandColorBuilder implements CommandColorInterface, CommandOptionInterfa
     }
 
     /**
-     * Add a colored string
-     * 
+     * Add a colored string.
+     *
      * This method allow to add a
      * colored string factory.
-     * 
-     * @param string|null $text The text to display
-     * @param string|null $fg   The foreground color
-     * @param string|null $bg   The background color
-     * @param string|null $op   The font style option
-     * 
-     * @return void
+     *
+     * @param string|null $text       The text to display
+     * @param string|null $foreground The foreground color
+     * @param string|null $background The background color
+     * @param string|null $option     The font style option
      */
-    public function addColoredString($text, $fg = null, $bg = null, $op = null)
+    public function addColoredString($text, $foreground = null, $background = null, $option = null)
     {
-        $this->add(new ColoredStringFactory($fg, $bg, $op, $text));
+        $this->add(new ColoredStringFactory($foreground, $background, $option, $text));
     }
 
     /**
-     * Add
+     * Add.
      *
      * add an element to the set.
      *
      * @param mixed $element The element to add
-     *
-     * @return void
      */
     public function add($element)
     {
@@ -107,31 +105,27 @@ class CommandColorBuilder implements CommandColorInterface, CommandOptionInterfa
     }
 
     /**
-     * Add all
+     * Add all.
      *
      * add an array of elements
      * to the set.
      *
      * @param array $elements The array of elements to add
-     *
-     * @return void
      */
     public function addAll(array $elements)
     {
         foreach ($elements as $element) {
-            if (! $this->contain($element)) {
+            if (!$this->contain($element)) {
                 $this->add($element);
             }
         }
     }
 
     /**
-     * Clear
+     * Clear.
      *
      * Remove all elements from
      * this set.
-     *
-     * @return void
      */
     public function clear()
     {
@@ -139,14 +133,14 @@ class CommandColorBuilder implements CommandColorInterface, CommandOptionInterfa
     }
 
     /**
-     * Contain
+     * Contain.
      *
      * Check if the set contain
      * a specified element.
      *
      * @param mixed $element The element to check
      *
-     * @return boolean
+     * @return bool
      */
     public function contain($element)
     {
@@ -154,33 +148,33 @@ class CommandColorBuilder implements CommandColorInterface, CommandOptionInterfa
     }
 
     /**
-     * Contain all
+     * Contain all.
      *
      * Check if the set contain all
      * of the elements of an other set.
      *
      * @param array $elements The element array to check
      *
-     * @return boolean
+     * @return bool
      */
     public function containsAll(array $elements)
     {
         foreach ($elements as $element) {
-            if (! $this->contain($element)) {
+            if (!$this->contain($element)) {
                 return false;
             }
         }
-        
+
         return true;
     }
 
     /**
-     * Is empty
+     * Is empty.
      *
      * Check if the set is
      * empty.
      *
-     * @return boolean
+     * @return bool
      */
     public function isEmpty()
     {
@@ -188,14 +182,12 @@ class CommandColorBuilder implements CommandColorInterface, CommandOptionInterfa
     }
 
     /**
-     * Remove
+     * Remove.
      *
      * Remove an element from
      * the set and return it.
      *
      * @param mixed $element The element to remove
-     *
-     * @return void
      */
     public function remove($element)
     {
@@ -206,14 +198,12 @@ class CommandColorBuilder implements CommandColorInterface, CommandOptionInterfa
     }
 
     /**
-     * Remove all
+     * Remove all.
      *
      * Remove all contained elements
      * by a set from the current set.
      *
      * @param array $elements The element array to remove
-     * 
-     * @return void
      */
     public function removeAll(array $elements)
     {
@@ -223,7 +213,7 @@ class CommandColorBuilder implements CommandColorInterface, CommandOptionInterfa
     }
 
     /**
-     * Get
+     * Get.
      *
      * Get an element from
      * the set.
@@ -236,14 +226,15 @@ class CommandColorBuilder implements CommandColorInterface, CommandOptionInterfa
     {
         if ($this->contain($element)) {
             $key = array_search($element, $this->coloredStrings);
+
             return $this->coloredStrings[$key];
         } else {
-            return null;
+            return;
         }
     }
 
     /**
-     * Get all
+     * Get all.
      *
      * Get all of the set
      * contained elements.
@@ -267,81 +258,79 @@ class CommandColorBuilder implements CommandColorInterface, CommandOptionInterfa
      */
     public function getString($glue = '')
     {
-        $result = "";
-        
+        $result = '';
+
         foreach ($this->coloredStrings as $key => $coloredString) {
             if ($coloredString instanceof ColoredStringFactory) {
                 if ($key > 0) {
                     $result .= $glue;
                 }
-                
+
                 $result .= $coloredString->getString();
-            } else if (is_string($coloredString)) {
+            } elseif (is_string($coloredString)) {
                 if ($key > 0) {
                     $result .= $glue;
                 }
-                
+
                 $result .= $coloredString;
             }
         }
-        
+
         return $result;
     }
 
     /**
      * to string.
-     * 
+     *
      * This method compute the
      * strings to create the
      * complete colored string.
-     * 
+     *
      * @return string
      */
     public function __toString()
     {
-        $result = "";
-        
+        $result = '';
+
         foreach ($this->coloredStrings as $coloredString) {
             if ($coloredString instanceof ColoredStringFactory) {
                 $result .= $coloredString->getString();
-            } else if (is_string($coloredString)) {
+            } elseif (is_string($coloredString)) {
                 $result .= $coloredString;
             }
         }
-        
+
         return $result;
     }
 
     /**
-     * Write
-     * 
+     * Write.
+     *
      * This method allow to display the
      * current string. It use the
      * output writeln method.
-     * 
+     *
      * When the string is displayed,
      * the current instance is cleared.
      * It's possible to desable the
      * clearing by passing false as
      * second parameter.
-     * 
+     *
      * The first parameter allow
      * to add a text glue inserted
      * between each string piece.
-     * 
+     *
      * @param string $glue  The glue to inject
      * @param string $clear The post clearing status
-     * 
-     * @return void
      */
     public function write($glue = '', $clear = true)
     {
         if ($this->isEmpty()) {
             return;
         }
-        
+
         $this->output->writeln($this->getString($glue));
-        
+
         if ($clear) {
             $this->clear();
         }

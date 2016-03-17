@@ -1,19 +1,21 @@
 <?php
 /**
  * This file is a part of CSCFA security project.
- * 
+ *
  * The security project is a security bundle written in php
  * with Symfony2 framework.
  *
  * PHP version 5.5
  *
  * @category Manager
- * @package  CscfaSecurityBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
  * @filesource
+ *
  * @link     http://cscfa.fr
  */
+
 namespace Cscfa\Bundle\SecurityBundle\Util\Manager;
 
 use Cscfa\Bundle\SecurityBundle\Util\Builder\UserBuilder;
@@ -31,14 +33,14 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * an instance into the database.
  *
  * @category Manager
- * @package  CscfaSecurityBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
+ *
  * @link     http://cscfa.fr
  */
 class UserManager
 {
-
     /**
      * The RoleManager service.
      *
@@ -52,21 +54,21 @@ class UserManager
 
     /**
      * The UserProvider service.
-     * 
+     *
      * This service allow the UserManager
      * and the UserBuilder to manage
      * the database access.
-     * 
+     *
      * @var UserProvider
      */
     protected $userProvider;
 
     /**
      * The EncoderFactory service.
-     * 
+     *
      * This service allow the UserBuilder
      * to hach the user password.
-     * 
+     *
      * @var EncoderFactoryInterface
      */
     protected $encoder;
@@ -91,20 +93,20 @@ class UserManager
      * @var Symfony\Component\Security\Core\SecurityContextInterface
      */
     protected $security;
-    
+
     /**
-     * The current service container
-     * 
+     * The current service container.
+     *
      * This container is used to get
      * other services from the container.
-     * 
+     *
      * @var ContainerInterface
      */
     protected $container;
 
     /**
      * The UserManager constructor.
-     * 
+     *
      * This constructor register the service container
      * to allow retreiving serices.
      *
@@ -126,7 +128,7 @@ class UserManager
      */
     public function getRoleManager()
     {
-        return $this->container->get("core.manager.role_manager");
+        return $this->container->get('core.manager.role_manager');
     }
 
     /**
@@ -137,12 +139,12 @@ class UserManager
      * the regex match the username.
      *
      * @param string $username The username to test
-     * 
-     * @return boolean
+     *
+     * @return bool
      */
     public function isUsernameValid($username)
     {
-        return preg_match("/^[a-zA-Z][a-zA-Z0-9_]+$/", $username) ? true : false;
+        return preg_match('/^[a-zA-Z][a-zA-Z0-9_]+$/', $username) ? true : false;
     }
 
     /**
@@ -153,8 +155,8 @@ class UserManager
      * the regex match the email.
      *
      * @param string $email The email to validate
-     * 
-     * @return boolean
+     *
+     * @return bool
      */
     public function isEmailValid($email)
     {
@@ -166,14 +168,14 @@ class UserManager
      *
      * This method create and return a new
      * instance of UserBuilder.
-     * 
+     *
      * @return \Cscfa\Bundle\SecurityBundle\Util\Builder\UserBuilder
      */
     public function getNewInstance()
     {
-        $userProvider = $this->container->get("core.provider.user_provider");
-        $encoder = $this->container->get("security.encoder_factory");
-        
+        $userProvider = $this->container->get('core.provider.user_provider');
+        $encoder = $this->container->get('security.encoder_factory');
+
         return new UserBuilder($this, $userProvider, $encoder);
     }
 
@@ -194,18 +196,15 @@ class UserManager
      * only the StackUpdate object without remove
      * the User Object allow to create a User image
      * that only exist in StackUpdate table.
-     * 
+     *
      * @param UserBuilder $userBuilder The user builder that contain the instance to persist
-     * @param boolean     $onlyStack   The state of persisting. True to sotre only the StackUpdate object.
-     * 
-     * @return void
+     * @param bool        $onlyStack   The state of persisting. True to sotre only the StackUpdate object.
      */
     public function persist(UserBuilder $userBuilder, $onlyStack = false)
     {
-        $manager = $this->container->get("doctrine.orm.entity_manager");
-        
-        if (! $onlyStack) {
+        $manager = $this->container->get('doctrine.orm.entity_manager');
 
+        if (!$onlyStack) {
             if ($userBuilder->getId()) {
                 $userBuilder->getUser()->setUpdatedBy($this->getSecurityUser());
                 $userBuilder->getUser()->setUpdatedAt(new \DateTime());
@@ -213,10 +212,10 @@ class UserManager
                 $userBuilder->getUser()->setCreatedBy($this->getSecurityUser());
                 $userBuilder->getUser()->setCreatedAt(new \DateTime());
             }
-            
+
             $manager->persist($userBuilder->getUser());
         }
-        
+
         $stack = $userBuilder->getStackUpdate();
         if ($stack !== null) {
             $stack->setDate(new \DateTime());
@@ -227,7 +226,7 @@ class UserManager
             }
             $manager->persist($stack);
         }
-        
+
         $manager->flush();
     }
 
@@ -237,16 +236,15 @@ class UserManager
      * This method allow to remove a User
      * instance from the database. It persist
      * the StackUpdate object before processing.
-     * 
+     *
      * @param UserBuilder $user The user builder that contain instance to remove from the database.
      *
-     * @throws Doctrine\ORM\OptimisticLockException 
-     * @return void 
+     * @throws Doctrine\ORM\OptimisticLockException
      */
     public function remove(UserBuilder $user)
     {
-        $manager = $this->container->get("doctrine.orm.entity_manager");
-        
+        $manager = $this->container->get('doctrine.orm.entity_manager');
+
         $this->persist($user, true);
         $manager->remove($user->getUser());
         $manager->flush();
@@ -267,34 +265,38 @@ class UserManager
      * image.
      *
      * @param User $user The user instance to convert.
-     * 
+     *
      * @return \Cscfa\Bundle\SecurityBundle\Util\Builder\UserBuilder
      */
     public function convertInstance(User $user)
     {
-        $userProvider = $this->container->get("core.provider.user_provider");
-        $encoder = $this->container->get("security.encoder_factory");
-        
+        $userProvider = $this->container->get('core.provider.user_provider');
+        $encoder = $this->container->get('security.encoder_factory');
+
         return new UserBuilder($this, $userProvider, $encoder, $user);
     }
-    
+
     /**
      * Get security user.
-     * 
+     *
      * This method allow to
      * get the current security
      * user.
-     * 
-     * @return User|NULL
+     *
+     * @return User|null
      */
     protected function getSecurityUser()
     {
         $security = $this->container->get('security.context');
-        
-        if (method_exists($security, "getToken") && $security->getToken() !== null && method_exists($security->getToken(), "getUser") && $security->getToken()->getUser() !== null) {
+
+        if (method_exists($security, 'getToken') &&
+            $security->getToken() !== null &&
+            method_exists($security->getToken(), 'getUser') &&
+            $security->getToken()->getUser() !== null
+        ) {
             return $security->getToken()->getUser();
         } else {
-            return null;
+            return;
         }
     }
 }

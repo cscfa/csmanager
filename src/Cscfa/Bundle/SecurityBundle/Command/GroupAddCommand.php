@@ -1,19 +1,21 @@
 <?php
 /**
  * This file is a part of CSCFA security project.
- * 
+ *
  * The security project is a security bundle written in php
  * with Symfony2 framework.
- * 
+ *
  * PHP version 5.5
- * 
- * @category Command
- * @package  CscfaSecurityBundle
- * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
- * @license  http://opensource.org/licenses/MIT MIT
+ *
+ * @category   Command
+ *
+ * @author     Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
+ * @license    http://opensource.org/licenses/MIT MIT
  * @filesource
- * @link     http://cscfa.fr
+ *
+ * @link       http://cscfa.fr
  */
+
 namespace Cscfa\Bundle\SecurityBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
@@ -36,14 +38,14 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * generate a new group into the database.
  *
  * @category Controller
- * @package  CscfaSecurityBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
+ *
  * @link     http://cscfa.fr
  */
 class GroupAddCommand extends ContainerAwareCommand
 {
-
     /**
      * The GroupManager.
      *
@@ -81,20 +83,18 @@ class GroupAddCommand extends ContainerAwareCommand
      * provider and a group manager. Also
      * it call the parent constructor.
      *
-     * @param GroupManager  $groupManager  The group manager service
-     * @param GroupProvider $groupProvider The group provider service
-     * @param RoleProvider  $roleProvider  The role provider service
+     * @param ContainerInterface $container The service container
      */
     public function __construct(ContainerInterface $container)
     {
         // Register group provider
-        $this->groupProvider = $container->get("core.provider.group_provider");
-        
+        $this->groupProvider = $container->get('core.provider.group_provider');
+
         // Register group manager
-        $this->groupManager = $container->get("core.manager.group_manager");
-        
-        $this->roleProvider = $container->get("core.provider.role_provider");
-        
+        $this->groupManager = $container->get('core.manager.group_manager');
+
+        $this->roleProvider = $container->get('core.provider.role_provider');
+
         parent::__construct();
     }
 
@@ -104,12 +104,11 @@ class GroupAddCommand extends ContainerAwareCommand
      * This configuration purpose that calling this command
      * behind "app/console cs:generate:group". It declare
      * four optional arguments that are the name, the locked state,
-     * the expiration date and a role collection. If this 
-     * informations are omitted, they will be answer behind 
+     * the expiration date and a role collection. If this
+     * informations are omitted, they will be answer behind
      * an interactive shell interface into the execute method.
      *
      * @see    \Symfony\Component\Console\Command\Command::configure()
-     * @return void
      */
     protected function configure()
     {
@@ -139,13 +138,12 @@ class GroupAddCommand extends ContainerAwareCommand
      * @param InputInterface  $input  The common command input
      * @param OutputInterface $output The common command output
      *
-     * @see     \Symfony\Component\Console\Command\Command::execute()
-     * @return  void
+     * @see    \Symfony\Component\Console\Command\Command::execute()
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $commandFacade = new CommandFacade($input, $output, $this);
-        
+
         $rolesNames = $this->roleProvider->findAllNames();
         if (empty($rolesNames)) {
             $rolesActive = false;
@@ -154,109 +152,114 @@ class GroupAddCommand extends ContainerAwareCommand
         }
         $multi = array(
             array(
-                "var" => "name",
-                "question" => "Group name",
-                "type" => CommandAskBuilder::TYPE_ASK,
-                "extra" => array(
-                    "empty" => false,
-                    "default" => false
-                )
+                'var' => 'name',
+                'question' => 'Group name',
+                'type' => CommandAskBuilder::TYPE_ASK,
+                'extra' => array(
+                    'empty' => false,
+                    'default' => false,
+                ),
             ),
             array(
-                "var" => "locked",
-                "question" => "Locked group",
-                "default" => false
+                'var' => 'locked',
+                'question' => 'Locked group',
+                'default' => false,
             ),
             array(
-                "var" => "expiration",
-                "question" => "Group expiration as Y-m-d H:i:s",
-                "type" => CommandAskBuilder::TYPE_ASK,
-                "default" => null,
-                "extra" => array(
-                    "transform" => function ($expire) {
-                        $expire = \DateTime::createFromFormat("Y-m-d H:i:s", $expire);
-                        if (! ($expire instanceof \DateTime) || $expire !== null) {
+                'var' => 'expiration',
+                'question' => 'Group expiration as Y-m-d H:i:s',
+                'type' => CommandAskBuilder::TYPE_ASK,
+                'default' => null,
+                'extra' => array(
+                    'transform' => function ($expire) {
+                        $expire = \DateTime::createFromFormat('Y-m-d H:i:s', $expire);
+                        if (!($expire instanceof \DateTime) || $expire !== null) {
                             $expire = null;
                         }
+
                         return $expire;
-                    }
-                )
+                    },
+                ),
             ),
             array(
-                "var" => "roles",
-                "question" => "Group roles",
-                "type" => CommandAskBuilder::TYPE_ASK_SELECT,
-                "limit" => $rolesNames,
-                "option" => CommandAskBuilder::OPTION_ASK_MULTI_SELECT,
-                "default" => null,
-                "extra" => array(
-                    "active" => $rolesActive,
-                    "unactive" => array()
-                )
-            )
+                'var' => 'roles',
+                'question' => 'Group roles',
+                'type' => CommandAskBuilder::TYPE_ASK_SELECT,
+                'limit' => $rolesNames,
+                'option' => CommandAskBuilder::OPTION_ASK_MULTI_SELECT,
+                'default' => null,
+                'extra' => array(
+                    'active' => $rolesActive,
+                    'unactive' => array(),
+                ),
+            ),
         );
-        
-        list ($name, $locked, $expire, $roles) = $commandFacade->getOrAskMulti($multi);
-        
+
+        list($name, $locked, $expire, $roles) = $commandFacade->getOrAskMulti($multi);
+
         $rolesSelected = array();
         foreach ($roles as $value) {
-            $rolesSelected[] = $rolesNames[$value] . " ";
+            $rolesSelected[] = $rolesNames[$value].' ';
         }
-        
+
         if ($commandFacade->getConfirmation(
             array(
                 'name' => $name,
                 'locked' => $locked,
                 'expire' => $expire,
-                'roles' => $rolesSelected
+                'roles' => $rolesSelected,
                 )
         )) {
-            
             $rolesArray = array();
             foreach ($roles as $value) {
                 $tmpR = $this->roleProvider->findOneByName($rolesNames[$value]);
-                
+
                 if ($tmpR instanceof RoleBuilder) {
                     $rolesArray[] = $tmpR->getRole();
                 }
             }
-            
+
             $validating = array(
-                "setName" => array(
+                'setName' => array(
                     $name,
-                    "Naming error",
+                    'Naming error',
                     array(
-                        GroupBuilder::EXISTING_NAME => "name exist",
-                        GroupBuilder::INVALID_NAME => "invalid name"
-                    )
+                        GroupBuilder::EXISTING_NAME => 'name exist',
+                        GroupBuilder::INVALID_NAME => 'invalid name',
+                    ),
                 ),
-                "setLocked" => array(
+                'setLocked' => array(
                     $locked,
-                    "Locking error",
+                    'Locking error',
                     array(
-                        GroupBuilder::NOT_BOOLEAN => "locked not boolean"
-                    )
+                        GroupBuilder::NOT_BOOLEAN => 'locked not boolean',
+                    ),
                 ),
-                "setExpiresAt" => array(
+                'setExpiresAt' => array(
                     $expire,
-                    "Expiration error",
+                    'Expiration error',
                     array(
-                        GroupBuilder::DATE_BEFORE_NOW => "Expiration date before now"
-                    )
+                        GroupBuilder::DATE_BEFORE_NOW => 'Expiration date before now',
+                    ),
                 ),
-                "addRole" => array(
+                'addRole' => array(
                     $rolesArray,
-                    "Role error",
+                    'Role error',
                     array(
-                        GroupBuilder::HAS_ALREADY_ROLE => "Role already exist for this group",
-                        GroupBuilder::UNEXISTING_ROLE => "Role doesn't exist in the database"
-                    )
-                )
+                        GroupBuilder::HAS_ALREADY_ROLE => 'Role already exist for this group',
+                        GroupBuilder::UNEXISTING_ROLE => "Role doesn't exist in the database",
+                    ),
+                ),
             );
-            
+
             $groupBuilder = $this->groupManager->getNewInstance();
-            $isValid = $commandFacade->applyAndValidate($groupBuilder, $validating, "An error occured. Can't generate", "Generating succefull");
-            
+            $isValid = $commandFacade->applyAndValidate(
+                $groupBuilder,
+                $validating,
+                "An error occured. Can't generate",
+                'Generating succefull'
+            );
+
             if ($isValid) {
                 $this->groupManager->persist($groupBuilder);
             }

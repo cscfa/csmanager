@@ -8,12 +8,14 @@
  * PHP version 5.5
  *
  * @category Controller
- * @package  CscfaCSManagerSecurityBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
  * @filesource
+ *
  * @link     http://cscfa.fr
  */
+
 namespace Cscfa\Bundle\CSManager\SecurityBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -38,40 +40,38 @@ use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
  * method to manage the security.
  *
  * @category Controller
- * @package  CscfaCSManagerSecurityBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
+ *
  * @link     http://cscfa.fr
  */
 class SecurityController extends Controller
 {
-
     /**
-     * confirmationByMailAction
-     * 
+     * confirmationByMailAction.
+     *
      * This method enable an user
      * by giving the id and the
      * confirmation token behind
      * an http get request
-     * 
+     *
      * @param User   $user              - the user id
      * @param string $confirmationToken - the confirmation token
-     * 
+     *
      * @template
      */
     public function confirmationByMailAction(Request $request, User $user, $confirmationToken)
     {
-        
         $confirmationToken = urldecode($confirmationToken);
-        
-        if (! $this->getPreference()->getConfiguration()->getSignInAllowed() || 
-            ! $this->getPreference()->getConfiguration()->getSignInVerifyEmail()) {
-                
-            $domain = "CscfaCSManagerSecurityBundle_controller_SecurityController_confirmationByMail";
-            $message = $this->get("translator")->trans("access.forbiden", [], $domain);
+
+        if (!$this->getPreference()->getConfiguration()->isSignInAllowed() ||
+            !$this->getPreference()->getConfiguration()->isSignInVerifyEmail()) {
+            $domain = 'CscfaCSManagerSecurityBundle_controller_SecurityController_confirmationByMail';
+            $message = $this->get('translator')->trans('access.forbiden', [], $domain);
             throw $this->createAccessDeniedException($message);
         }
-        
+
         if ($user->getConfirmationToken() == $confirmationToken) {
             $user->setEnabled(true);
             $this->getDoctrine()
@@ -80,283 +80,318 @@ class SecurityController extends Controller
             $this->getDoctrine()
                 ->getManager()
                 ->flush();
-            
-            $token = new UsernamePasswordToken($user, $user->getPassword(), "main", $user->getRoles());
-            $this->get("security.context")->setToken($token);
-            
+
+            $token = new UsernamePasswordToken($user, $user->getPassword(), 'main', $user->getRoles());
+            $this->get('security.context')->setToken($token);
+
             $event = new InteractiveLoginEvent($request, $token);
-            $this->get("event_dispatcher")->dispatch("security.interactive_login", $event);
-            
+            $this->get('event_dispatcher')->dispatch('security.interactive_login', $event);
+
             return array(
-                "success" => true
+                'success' => true,
             );
         } else {
             return array(
-                "success" => false
+                'success' => false,
             );
         }
     }
 
     /**
-     * RegisterAction
-     * 
+     * RegisterAction.
+     *
      * This method allow to manage
      * the registering logic
-     * 
+     *
      * @param Request $request
-     * 
+     *
      * @template
      */
     public function registerAction(Request $request)
     {
-        $domain = "CscfaCSManagerSecurityBundle_controller_SecurityController_register";
-        
+        $domain = 'CscfaCSManagerSecurityBundle_controller_SecurityController_register';
+
         $preference = $this->getPreference();
-        $signinAllowed = $preference->getConfiguration()->getSignInAllowed();
-        
+        $signinAllowed = $preference->getConfiguration()->isSignInAllowed();
+
         if ($signinAllowed) {
             $signin = new SignInObject();
-            $signinForm = $this->createForm("signin", $signin, array(
-                "action" => $this->generateUrl('register')
+            $signinForm = $this->createForm('signin', $signin, array(
+                'action' => $this->generateUrl('register'),
             ));
-            
+
             $signinForm->handleRequest($request);
-            
+
             if ($signinForm->isValid()) {
                 $errors = false;
                 $data = $signinForm->getData();
                 $manager = $this->getDoctrine()->getManager();
-                $hydrator = new SigninHydrator($this->get("translator"), "CscfaCSManagerSecurityBundle_object_signinHydrator");
-                
+                $hydrator = new SigninHydrator(
+                    $this->get('translator'),
+                    'CscfaCSManagerSecurityBundle_object_signinHydrator'
+                );
+
                 if ($data instanceof SignInObject) {
                     $groups = $data->getGroups();
-                    
+
                     $user = null;
-                    
-                    if (in_array("Default", $groups)) {
-                        $userManager = $this->get("core.manager.user_manager");
+
+                    if (in_array('Default', $groups)) {
+                        $userManager = $this->get('core.manager.user_manager');
                         if ($hydrator->hydrateBase($manager, $userManager, $signinForm, $user, $preference)) {
                             $errors = true;
                         }
-                        
-                        if (! $errors) {
-                            
+
+                        if (!$errors) {
                             $person = new Person();
                             $manager->persist($person);
-                            
+
                             $person->setUser($user->getUser());
-                            
-                            if (in_array("Phone", $groups)) {
+
+                            if (in_array('Phone', $groups)) {
                                 $hydrator->hydratePhone($manager, $signinForm, $person);
                             }
-                            
-                            if (in_array("Yourself", $groups)) {
+
+                            if (in_array('Yourself', $groups)) {
                                 $hydrator->hydrateYourself($signinForm, $person);
                             }
-                            
-                            if (in_array("Company", $groups)) {
+
+                            if (in_array('Company', $groups)) {
                                 $hydrator->hydrateCompany($manager, $signinForm, $person);
                             }
-                            
-                            if (in_array("Address", $groups)) {
+
+                            if (in_array('Address', $groups)) {
                                 $hydrator->hydrateCompany($manager, $signinForm, $person);
                             }
                         }
                     }
                 }
-                
-                if (! $errors) {
+
+                if (!$errors) {
                     $manager->flush();
 
-                    $subject = $this->get("translator")->trans("signin.subject", [], $domain);
-                    
-                    if ($preference->getConfiguration()->getSignInVerifyEmail() && $user instanceof UserBuilder) {
+                    $subject = $this->get('translator')->trans('signin.subject', [], $domain);
+
+                    if ($preference->getConfiguration()->isSignInVerifyEmail() && $user instanceof UserBuilder) {
+                        $body = $this->renderView(
+                            'CscfaCSManagerSecurityBundle:mail:signinConfirmation.html.twig',
+                            array(
+                                'token' => urlencode($user->getConfirmationToken()),
+                                'id' => $user->getId(),
+                                'preference' => $preference,
+                            )
+                        );
+
+                        $part = $this->renderView(
+                            'CscfaCSManagerSecurityBundle:mail:signinConfirmation.txt.twig',
+                            array(
+                                'token' => urlencode($user->getConfirmationToken()),
+                                'id' => $user->getId(),
+                                'preference' => $preference,
+                            )
+                        );
+
                         $message = \Swift_Message::newInstance()->setSubject($subject)
                             ->setFrom($preference->getEmailSender())
                             ->setTo($user->getEmail())
-                            ->setBody($this->renderView('CscfaCSManagerSecurityBundle:mail:signinConfirmation.html.twig', array(
-                            'token' => urlencode($user->getConfirmationToken()),
-                            'id' => $user->getId(),
-                            'preference' => $preference
-                        )), 'text/html')
-                            ->addPart($this->renderView('CscfaCSManagerSecurityBundle:mail:signinConfirmation.txt.twig', array(
-                            'token' => urlencode($user->getConfirmationToken()),
-                            'id' => $user->getId(),
-                            'preference' => $preference
-                        )), 'text/plain');
-                        
+                            ->setBody($body, 'text/html')
+                            ->addPart($part, 'text/plain');
+
                         $this->get('mailer')->send($message);
                     } else {
+                        $body = $this->renderView(
+                            'CscfaCSManagerSecurityBundle:mail:signin.html.twig',
+                            array(
+                                'preference' => $preference,
+                            )
+                        );
+
+                        $part = $this->renderView(
+                            'CscfaCSManagerSecurityBundle:mail:signin.txt.twig',
+                            array(
+                                'preference' => $preference,
+                            )
+                        );
+
                         $message = \Swift_Message::newInstance()->setSubject($subject)
                             ->setFrom($preference->getEmailSender())
                             ->setTo($user->getEmail())
-                            ->setBody($this->renderView('CscfaCSManagerSecurityBundle:mail:signin.html.twig', array(
-                            'preference' => $preference
-                        )), 'text/html')
-                            ->addPart($this->renderView('CscfaCSManagerSecurityBundle:mail:signin.txt.twig', array(
-                            'preference' => $preference
-                        )), 'text/plain');
-                        
+                            ->setBody($body, 'text/html')
+                            ->addPart($part, 'text/plain');
+
                         $this->get('mailer')->send($message);
-                        
-                        $token = new UsernamePasswordToken($user->getUser(), $user->getPassword(), "main", $user->getUser()->getRoles());
-                        $this->get("security.context")->setToken($token);
-                        
+
+                        $token = new UsernamePasswordToken(
+                            $user->getUser(),
+                            $user->getPassword(),
+                            'main',
+                            $user->getUser()->getRoles()
+                        );
+                        $this->get('security.context')->setToken($token);
+
                         $event = new InteractiveLoginEvent($request, $token);
-                        $this->get("event_dispatcher")->dispatch("security.interactive_login", $event);
+                        $this->get('event_dispatcher')->dispatch('security.interactive_login', $event);
                     }
-                    
+
                     return array(
-                        "success" => true,
-                        'preference' => $preference
+                        'success' => true,
+                        'preference' => $preference,
                     );
                 }
             }
-            
+
             return array(
-                "success" => false,
-                "form" => $signinForm->createView(),
-                "signinAllowed" => true
+                'success' => false,
+                'form' => $signinForm->createView(),
+                'signinAllowed' => true,
             );
         } else {
-            $message = $this->get("translator")->trans("access.forbiden", [], $domain);
+            $message = $this->get('translator')->trans('access.forbiden', [], $domain);
             throw $this->createAccessDeniedException($message);
         }
     }
 
     /**
-     * Forgot action
-     * 
+     * Forgot action.
+     *
      * This action provide the
      * default page for the forgotten
      * password page.
-     * 
+     *
      * @template
      */
     public function forgotAction(Request $request)
     {
-        $domain = "CscfaCSManagerSecurityBundle_controller_SecurityController_forgot";
-        
+        $domain = 'CscfaCSManagerSecurityBundle_controller_SecurityController_forgot';
+
         $preference = $this->getPreference();
         $reaction = $preference->getConfiguration()->getForgotPasswordReaction();
-        
+
         if ($reaction == Configuration::PASSWORD_FORGOT_NOREACT) {
-            return array("config" => $preference->getConfiguration());
-        } else if ($reaction == Configuration::PASSWORD_FORGOT_AUTOMAIL) {
-            
+            return array('config' => $preference->getConfiguration());
+        } elseif ($reaction == Configuration::PASSWORD_FORGOT_AUTOMAIL) {
             $formData = array();
             $formArray = $this->createFormBuilder($formData)
-                ->add("email", "text", array(
+                ->add('email', 'text', array(
                 'attr' => array(
                     'class' => 'form-control',
-                    'placeholder' => $this->get("translator")->trans("form.email.placeholder", [], $domain)
-                )
-            ))
-                ->add("send", "submit", array(
-                'label' => $this->get("translator")->trans("form.send.label", [], $domain),
+                    'placeholder' => $this->get('translator')->trans('form.email.placeholder', [], $domain),
+                ),
+                ))
+                ->add('send', 'submit', array(
+                'label' => $this->get('translator')->trans('form.send.label', [], $domain),
                 'attr' => array(
-                    'class' => 'btn btn-primary'
-                )
-            ))
+                    'class' => 'btn btn-primary',
+                ),
+                ))
                 ->getForm();
-            
-            if ($request->getMethod() == "POST") {
+
+            if ($request->getMethod() == 'POST') {
                 $formArray->handleRequest($request);
-                
+
                 $data = $formArray->getData();
-                
-                $userRepository = $this->getDoctrine()->getRepository("CscfaSecurityBundle:User");
-                $user = $userRepository->findOneByEmail($data["email"]);
-                
+
+                $userRepository = $this->getDoctrine()->getRepository('CscfaSecurityBundle:User');
+                $user = $userRepository->findOneByEmail($data['email']);
+
                 if ($user && $user instanceof User) {
                     $factory = $this->get('security.encoder_factory');
                     $encoder = $factory->getEncoder($user);
-                    
-                    $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+                    $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
                     $textPassword = substr(str_shuffle($chars), 0, 10);
-                    
+
                     $password = $encoder->encodePassword($textPassword, $user->getSalt());
                     $user->setPassword($password);
-                    
+
                     $this->getDoctrine()->getManager()->persist($user);
                     $this->getDoctrine()->getManager()->flush();
-                    
-                    $subject = $this->get("translator")->trans("message.subject", [], $domain);
-                    
+
+                    $subject = $this->get('translator')->trans('message.subject', [], $domain);
+
                     $message = \Swift_Message::newInstance()->setSubject($subject)
                         ->setFrom($preference->getEmailSender())
                         ->setTo($user->getEmail())
                         ->setBody($this->renderView('CscfaCSManagerSecurityBundle:mail:forgot.html.twig', array(
                         'plainPassword' => $textPassword,
-                        'preference' => $preference
-                    )), 'text/html')
+                        'preference' => $preference,
+                        )), 'text/html')
                         ->addPart($this->renderView('CscfaCSManagerSecurityBundle:mail:forgot.txt.twig', array(
-                        'plainPassword' => $textPassword
-                    )), 'text/plain');
-                    
+                        'plainPassword' => $textPassword,
+                        )), 'text/plain');
+
                     $this->get('mailer')->send($message);
-                    
-                    $this->addFlash("success", $this->get("translator")->trans("flash.success", [], $domain));
+
+                    $this->addFlash('success', $this->get('translator')->trans('flash.success', [], $domain));
                 } else {
-                    $message = $this->get("translator")->trans("error.userUnfound", [], $domain);
-                    $formArray->get("email")->addError(new FormError($message));
+                    $message = $this->get('translator')->trans('error.userUnfound', [], $domain);
+                    $formArray->get('email')->addError(new FormError($message));
                 }
             }
-            
+
             return array(
-                "config" => $preference->getConfiguration(),
-                "form" => $formArray->createView()
+                'config' => $preference->getConfiguration(),
+                'form' => $formArray->createView(),
             );
         } else {
             $logger = $this->get('logger');
-            $logger->error('An error occurred : SecurityController forgotAction. The reaction provided by the preference cannot be recognized by the system.');
-            
-            throw new \Exception("Reaction error. See logs.", 500, null);
+            $logger->error(
+                'An error occurred : SecurityController forgotAction. The reaction' +
+                ' provided by the preference cannot be recognized by the system.'
+            );
+
+            throw new \Exception('Reaction error. See logs.', 500, null);
         }
     }
 
     /**
      * Login check action.
-     * 
-     * This action provide 
+     *
+     * This action provide
      * the login check logic.
-     * 
+     *
      * Note that the framework
      * handle this action.
      */
     public function loginCheckAction()
-    {}
+    {
+    }
 
     /**
      * Logout action.
-     * 
-     * This action provide 
+     *
+     * This action provide
      * the logout logic.
-     * 
+     *
      * Note that the framework
      * handle this action.
      */
     public function logoutAction()
-    {}
+    {
+    }
 
     /**
-     * Get preference
-     * 
+     * Get preference.
+     *
      * Get the current preference
-     * 
+     *
      * @throws \Exception - if any database error occured
+     *
      * @return Preference - The current preference
      */
     protected function getPreference()
     {
-        $preferenceRepository = $this->getDoctrine()->getRepository("CscfaCSManagerConfigBundle:Preference");
+        $preferenceRepository = $this->getDoctrine()->getRepository('CscfaCSManagerConfigBundle:Preference');
         $preference = $preferenceRepository->getCurrentOrNull();
-        
+
         if ($preference === null) {
             $logger = $this->get('logger');
-            $logger->error('An error occurred : SecurityController getPreference. No preference find into the database or the repository have one problem to retreiving the instance.');
-            
-            throw new \Exception("Database error for csmanager preference storage. See logs.", 500, null);
+            $logger->error(
+                'An error occurred : SecurityController getPreference. No preference' +
+                ' find into the database or the repository have one problem to retreiving the instance.'
+            );
+
+            throw new \Exception('Database error for csmanager preference storage. See logs.', 500, null);
         } else {
             return $preference;
         }

@@ -1,19 +1,21 @@
 <?php
 /**
  * This file is a part of CSCFA security project.
- * 
+ *
  * The security project is a security bundle written in php
  * with Symfony2 framework.
- * 
+ *
  * PHP version 5.5
- * 
+ *
  * @category Provider
- * @package  CscfaSecurityBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
  * @filesource
+ *
  * @link     http://cscfa.fr
  */
+
 namespace Cscfa\Bundle\SecurityBundle\Util\Provider;
 
 use Cscfa\Bundle\SecurityBundle\Util\Builder\RoleBuilder;
@@ -31,17 +33,17 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * and allow a restoration for backup.
  *
  * @category Provider
- * @package  CscfaSecurityBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
+ *
  * @link     http://cscfa.fr
  * @see      Cscfa\Bundle\SecurityBundle\Util\RoleBuilder
  */
 class RoleProvider
 {
-
     /**
-     * The current service container
+     * The current service container.
      *
      * This container is used to get
      * other services from the container.
@@ -52,7 +54,7 @@ class RoleProvider
 
     /**
      * RoleProvider constructor.
-     * 
+     *
      * This constructor register the service container
      * to allow retreiving serices.
      *
@@ -78,20 +80,21 @@ class RoleProvider
      * the base instance.
      *
      * @param string $name The name of the Role to find.
-     *            
+     *
      * @see    Cscfa\Bundle\SecurityBundle\Util\Builder\RoleBuilder::getRole()
-     * @return \Cscfa\Bundle\SecurityBundle\Util\Builder\RoleBuilder|NULL
+     *
+     * @return \Cscfa\Bundle\SecurityBundle\Util\Builder\RoleBuilder|null
      */
     public function findOneByName($name)
     {
-        $repository = $this->container->get("doctrine.orm.entity_manager")->getRepository("CscfaSecurityBundle:Role");
-        
+        $repository = $this->container->get('doctrine.orm.entity_manager')->getRepository('CscfaSecurityBundle:Role');
+
         $role = $repository->findOneByName($name);
-        
+
         if ($role !== null) {
-            return new RoleBuilder($this->container->get("core.manager.role_manager"), $role);
+            return new RoleBuilder($this->container->get('core.manager.role_manager'), $role);
         } else {
-            return null;
+            return;
         }
     }
 
@@ -108,7 +111,8 @@ class RoleProvider
      */
     public function findAll()
     {
-        $repository = $this->container->get("doctrine.orm.entity_manager")->getRepository("CscfaSecurityBundle:Role");
+        $repository = $this->container->get('doctrine.orm.entity_manager')->getRepository('CscfaSecurityBundle:Role');
+
         return $repository->findAll();
     }
 
@@ -122,12 +126,13 @@ class RoleProvider
      * otherwise.
      *
      * @param string $name The name of the Role to check if exist.
-     *            
-     * @return boolean
+     *
+     * @return bool
      */
     public function isExistingByName($name)
     {
-        $repository = $this->container->get("doctrine.orm.entity_manager")->getRepository("CscfaSecurityBundle:Role");
+        $repository = $this->container->get('doctrine.orm.entity_manager')->getRepository('CscfaSecurityBundle:Role');
+
         return $repository->isExistingByName($name) === null ? false : true;
     }
 
@@ -142,7 +147,8 @@ class RoleProvider
      */
     public function findAllNames()
     {
-        $repository = $this->container->get("doctrine.orm.entity_manager")->getRepository("CscfaSecurityBundle:Role");
+        $repository = $this->container->get('doctrine.orm.entity_manager')->getRepository('CscfaSecurityBundle:Role');
+
         return $repository->getAllNames();
     }
 }

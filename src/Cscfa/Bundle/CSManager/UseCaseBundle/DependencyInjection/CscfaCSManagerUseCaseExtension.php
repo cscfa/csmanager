@@ -1,19 +1,21 @@
 <?php
 /**
  * This file is a part of CSCFA UseCase project.
- * 
+ *
  * The UseCase bundle is part of csmanager project. It's a project manager
  * written in php with Symfony2 framework.
- * 
+ *
  * PHP version 5.5
- * 
+ *
  * @category Bundle
- * @package  CscfaCSManagerUseCaseBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
  * @filesource
+ *
  * @link     http://cscfa.fr
  */
+
 namespace Cscfa\Bundle\CSManager\UseCaseBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -22,36 +24,34 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
 
 /**
- * This is the class that loads and manages your bundle configuration
+ * This is the class that loads and manages your bundle configuration.
  *
  * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html}
  *
  * @category Bundle
- * @package  CscfaCSManagerUseCaseBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
+ *
  * @link     http://cscfa.fr
  */
 class CscfaCSManagerUseCaseExtension extends Extension
 {
-
     /**
      * {@inheritdoc}
-     * 
+     *
      * @param array            $configs   The extension configuration
      * @param ContainerBuilder $container The bundle ContainerBuilder
-     * 
-     * @return void
      */
     public function load(array $configs, ContainerBuilder $container)
     {
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
-        
+
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('usecase_chain_services.yml');
         $loader->load('services.yml');
-        
+
         $container->setParameter('cscfa_csmanager_use_case', $config);
     }
 }

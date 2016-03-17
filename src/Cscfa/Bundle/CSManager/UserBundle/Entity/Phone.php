@@ -8,30 +8,31 @@
  * PHP version 5.5
  *
  * @category Entity
- * @package  CscfaCSManagerUserBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
  * @filesource
+ *
  * @link     http://cscfa.fr
  */
+
 namespace Cscfa\Bundle\CSManager\UserBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Phone
+ * Phone.
  *
  * The phone entity for the
  * Cscfaproject manager
- * 
+ *
  * @ORM\Entity(repositoryClass="Cscfa\Bundle\CSManager\UserBundle\Entity\Repository\PhoneRepository")
  * @ORM\Table(name="csmanager_user_phone")
  */
 class Phone
 {
-    
     /**
-     * The id field
+     * The id field.
      *
      * The id parameter is the database
      * unique identity field, stored into GUID
@@ -47,13 +48,13 @@ class Phone
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="UUID")
      */
-    protected $id;
+    protected $phoneId;
 
     /**
-     * The type
-     * 
+     * The type.
+     *
      * The phone type
-     * 
+     *
      * @var Type
      * @ORM\ManyToOne(targetEntity="Type")
      * @ORM\JoinColumn(name="csmanager_phone_type_id", referencedColumnName="type_id")
@@ -61,32 +62,38 @@ class Phone
     protected $type;
 
     /**
-     * The number
-     * 
+     * The number.
+     *
      * The phone number
-     * 
+     *
      * @var string
-     * @ORM\Column(type="string", length=255, options={"comment":"The phone number"}, nullable=false, name="csmanager_phone_number")
+     * @ORM\Column(
+     *      type="string",
+     *      length=255,
+     *      options={"comment":"The phone number"},
+     *      nullable=false,
+     *      name="csmanager_phone_number"
+     * )
      */
     protected $number;
 
     /**
-     * Get id
-     * 
+     * Get id.
+     *
      * Return the entity UUID
-     * 
+     *
      * @return string - the entity UUID
      */
     public function getId()
     {
-        return $this->id;
+        return $this->phoneId;
     }
 
     /**
-     * Get type
-     * 
+     * Get type.
+     *
      * Return the phone type
-     * 
+     *
      * @return Type - the phone type
      */
     public function getType()
@@ -95,24 +102,26 @@ class Phone
     }
 
     /**
-     * Set type
-     * 
+     * Set type.
+     *
      * Set the phone type
-     * 
+     *
      * @param Type $type - the phone type
+     *
      * @return Phone - the current instance
      */
     public function setType(Type $type)
     {
         $this->type = $type;
+
         return $this;
     }
 
     /**
-     * Get number
-     * 
+     * Get number.
+     *
      * Return the phone number
-     * 
+     *
      * @return string - the phone number
      */
     public function getNumber()
@@ -121,17 +130,18 @@ class Phone
     }
 
     /**
-     * Set number
-     * 
+     * Set number.
+     *
      * Set the phone number
-     * 
+     *
      * @param string $number - the phone number
+     *
      * @return Phone - the current instance
      */
     public function setNumber($number)
     {
         $this->number = $number;
+
         return $this;
     }
- 
 }

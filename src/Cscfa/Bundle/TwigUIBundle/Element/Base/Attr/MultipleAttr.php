@@ -1,19 +1,21 @@
 <?php
 /**
  * This file is a part of CSCFA TwigUi project.
- * 
+ *
  * The TwigUi project is a twig builder written in php
  * with Symfony2 framework.
- * 
+ *
  * PHP version 5.5
- * 
+ *
  * @category Set
- * @package  CscfaTwigUiBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
  * @filesource
+ *
  * @link     http://cscfa.fr
  */
+
 namespace Cscfa\Bundle\TwigUIBundle\Element\Base\Attr;
 
 use Cscfa\Bundle\ToolboxBundle\BaseInterface\Collection\SetInterface;
@@ -23,32 +25,32 @@ use Cscfa\Bundle\ToolboxBundle\BaseInterface\Collection\SetInterface;
  *
  * The MultipleAttr class
  * is used to register an
- * attribute with multiple 
+ * attribute with multiple
  * values.
  *
  * @category Set
- * @package  CscfaTwigUiBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
+ *
  * @link     http://cscfa.fr
  */
 class MultipleAttr implements SetInterface
 {
-
     /**
      * The values.
-     * 
+     *
      * This property indicate the
-     * set of values that is 
+     * set of values that is
      * registered for an attribute.
-     * 
+     *
      * @var array
      */
     protected $content;
 
     /**
      * Default constructor.
-     * 
+     *
      * This contructor initialize the
      * properties.
      */
@@ -58,7 +60,7 @@ class MultipleAttr implements SetInterface
     }
 
     /**
-     * Add
+     * Add.
      *
      * add an element to the set.
      *
@@ -69,19 +71,17 @@ class MultipleAttr implements SetInterface
     public function add($element)
     {
         $this->content[] = $element;
-        
+
         return $this;
     }
 
     /**
-     * Remove all
+     * Remove all.
      *
      * Remove all contained elements
      * by a set from the current set.
      *
      * @param array $elements The elements list to remove
-     *
-     * @return void
      */
     public function removeAll(array $elements)
     {
@@ -91,14 +91,14 @@ class MultipleAttr implements SetInterface
     }
 
     /**
-     * Contain
+     * Contain.
      *
      * Check if the set contain
      * a specified element.
      *
      * @param mixed $element The element to check
      *
-     * @return boolean
+     * @return bool
      */
     public function contain($element)
     {
@@ -106,7 +106,7 @@ class MultipleAttr implements SetInterface
     }
 
     /**
-     * Get all
+     * Get all.
      *
      * Get all of the set
      * contained elements.
@@ -119,14 +119,12 @@ class MultipleAttr implements SetInterface
     }
 
     /**
-     * Add all
+     * Add all.
      *
      * add an array of elements
      * to the set.
      *
      * @param array $elements The array of elements to add
-     *
-     * @return void
      */
     public function addAll(array $elements)
     {
@@ -136,28 +134,28 @@ class MultipleAttr implements SetInterface
     }
 
     /**
-     * Contain all
+     * Contain all.
      *
      * Check if the set contain all
      * of the elements of an other set.
      *
      * @param array $elements The element list to check
      *
-     * @return boolean
+     * @return bool
      */
     public function containsAll(array $elements)
     {
         foreach ($elements as $element) {
-            if (! $this->contain($element)) {
+            if (!$this->contain($element)) {
                 return false;
             }
         }
-        
+
         return true;
     }
 
     /**
-     * Get
+     * Get.
      *
      * Get an element from
      * the set.
@@ -171,17 +169,15 @@ class MultipleAttr implements SetInterface
         if (isset($this->content[$element])) {
             return $this->content[$element];
         } else {
-            return null;
+            return;
         }
     }
 
     /**
-     * Clear
+     * Clear.
      *
      * Remove all elements from
      * this set.
-     *
-     * @return void
      */
     public function clear()
     {
@@ -189,12 +185,12 @@ class MultipleAttr implements SetInterface
     }
 
     /**
-     * Is empty
+     * Is empty.
      *
      * Check if the set is
      * empty.
      *
-     * @return boolean
+     * @return bool
      */
     public function isEmpty()
     {
@@ -202,7 +198,7 @@ class MultipleAttr implements SetInterface
     }
 
     /**
-     * Remove
+     * Remove.
      *
      * Remove an element from
      * the set and return it.
@@ -216,22 +212,23 @@ class MultipleAttr implements SetInterface
         if (isset($this->content[$element])) {
             $content = $this->content[$element];
             unset($this->content[$element]);
+
             return $content;
         } else {
-            return null;
+            return;
         }
     }
-    
+
     /**
      * To string.
-     * 
+     *
      * This method return the current
      * instance parsed as string.
-     * 
+     *
      * @return string
      */
     public function __toString()
     {
-        return implode(" ", $this->getAll());
+        return implode(' ', $this->getAll());
     }
 }
