@@ -15,7 +15,7 @@ cscfa_cs_manager_project_change_view_limit:
     defaults: { _controller: "CscfaCSManagerProjectBundle:Project:viewLimit" }
     methods:  [POST]
 cscfa_cs_manager_project_select_project:
-    path:     /ajax/select/project/{id}
+    path:     /ajax/select/project/{project}
     defaults: { _controller: "CscfaCSManagerProjectBundle:Project:selectProject" }
     methods:  [GET]
 cscfa_cs_manager_project_remove_project:

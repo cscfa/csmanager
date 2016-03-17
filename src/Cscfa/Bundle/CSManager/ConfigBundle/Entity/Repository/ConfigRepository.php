@@ -7,13 +7,15 @@
  *
  * PHP version 5.5
  *
- * @category Repository
- * @package  CscfaCSManagerConfigBundle
- * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
- * @license  http://opensource.org/licenses/MIT MIT
+ * @category   Repository
+ *
+ * @author     Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
+ * @license    http://opensource.org/licenses/MIT MIT
  * @filesource
- * @link     http://cscfa.fr
+ *
+ * @link       http://cscfa.fr
  */
+
 namespace Cscfa\Bundle\CSManager\ConfigBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
@@ -26,9 +28,10 @@ use Doctrine\ORM\EntityRepository;
  * from the database.
  *
  * @category Repository
- * @package  CscfaCSManagerConfigBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
+ *
  * @link     http://cscfa.fr
  */
 class ConfigRepository extends EntityRepository

@@ -1,19 +1,21 @@
 <?php
 /**
  * This file is a part of CSCFA TwigUi project.
- * 
+ *
  * The TwigUi project is a twig builder written in php
  * with Symfony2 framework.
- * 
+ *
  * PHP version 5.5
- * 
+ *
  * @category Widget
- * @package  CscfaTwigUiBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
  * @filesource
+ *
  * @link     http://cscfa.fr
  */
+
 namespace Cscfa\Bundle\TwigUIBundle\Element\Advanced\Widget;
 
 use Cscfa\Bundle\TwigUIBundle\Element\Base\TagContainer;
@@ -30,59 +32,59 @@ use Cscfa\Bundle\ToolboxBundle\Tool\Cache\CacheTool;
  * displayed element.
  *
  * @category Widget
- * @package  CscfaTwigUiBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
+ *
  * @link     http://cscfa.fr
  */
 abstract class Widget extends TagContainer implements StylizedInterface, ScriptedInterface
 {
-
     /**
      * Widget cache file.
-     * 
+     *
      * This constant indicate
      * the widget cache file.
-     * 
+     *
      * @var string
      */
-    const WIDGET_CACHE_FILE = "twigBundleWidget";
+    const WIDGET_CACHE_FILE = 'twigBundleWidget';
 
     /**
      * The CacheFile.
-     * 
+     *
      * This property contain
      * the CacheFile of the
      * widget.
-     * 
+     *
      * @var CacheFile
      */
     protected $cacheFile;
 
     /**
      * Default constructor.
-     * 
+     *
      * This constructor initialize
      * the properties.
-     * 
+     *
      * @param CacheTool $cacheTool The cache tool service.
      */
     public function __construct(CacheTool $cacheTool)
     {
         parent::__construct();
-        
+
         $this->cacheFile = $cacheTool->get(self::WIDGET_CACHE_FILE);
     }
 
     /**
      * Get cache parameter.
-     * 
+     *
      * This method return a
      * cached parameter.
-     * 
+     *
      * @param string $parameter The parameter to get
-     * 
-     * @return mixed|NULL
+     *
+     * @return mixed|null
      */
     protected function getCache($parameter)
     {
@@ -91,30 +93,31 @@ abstract class Widget extends TagContainer implements StylizedInterface, Scripte
 
     /**
      * Set cache parameter.
-     * 
+     *
      * This method allow
-     * to set a cached 
+     * to set a cached
      * parameter. and save
      * it.
-     * 
+     *
      * @param string $parameter The parameter to set
      * @param mixed  $value     The value to register
-     * 
+     *
      * @return Widget
      */
     protected function setCache($parameter, $value)
     {
         $this->cacheFile->set($parameter, $value)->save();
+
         return $this;
     }
-    
+
     /**
      * Get cache file.
-     * 
+     *
      * This method allow to
-     * get the current cache 
+     * get the current cache
      * file instance.
-     * 
+     *
      * @return CacheFile
      */
     protected function getCacheFile()
@@ -124,20 +127,20 @@ abstract class Widget extends TagContainer implements StylizedInterface, Scripte
 
     /**
      * Has style.
-     * 
+     *
      * This method check if the
      * current element has style.
-     * 
-     * @return boolean
+     *
+     * @return bool
      */
     abstract public function hasStyle();
 
     /**
      * Get styles.
-     * 
+     *
      * This method return all
      * of the element stylesheets.
-     * 
+     *
      * @return array
      */
     abstract public function getStyles();
@@ -149,7 +152,7 @@ abstract class Widget extends TagContainer implements StylizedInterface, Scripte
      * script link existance
      * of the current instance.
      *
-     * @return boolean
+     * @return bool
      */
     abstract public function hasScriptLink();
 
@@ -172,7 +175,7 @@ abstract class Widget extends TagContainer implements StylizedInterface, Scripte
      * current instance script
      * links counts.
      *
-     * @return integer
+     * @return int
      */
     abstract public function getScriptLinkCount();
 
@@ -183,7 +186,7 @@ abstract class Widget extends TagContainer implements StylizedInterface, Scripte
      * existance of customized
      * script.
      *
-     * @return boolean
+     * @return bool
      */
     abstract public function hasCustomScript();
 
@@ -205,7 +208,7 @@ abstract class Widget extends TagContainer implements StylizedInterface, Scripte
      * current instance custom
      * script length.
      *
-     * @return integer
+     * @return int
      */
     abstract public function getCustomScriptLength();
 }

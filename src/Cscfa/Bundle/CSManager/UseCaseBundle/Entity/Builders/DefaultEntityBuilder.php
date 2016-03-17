@@ -1,19 +1,21 @@
 <?php
 /**
  * This file is a part of CSCFA UseCase project.
- * 
+ *
  * The UseCase bundle is part of csmanager project. It's a project manager
  * written in php with Symfony2 framework.
- * 
+ *
  * PHP version 5.5
- * 
+ *
  * @category EntityBuilder
- * @package  CscfaCSManagerUseCaseBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
  * @filesource
+ *
  * @link     http://cscfa.fr
  */
+
 namespace Cscfa\Bundle\CSManager\UseCaseBundle\Entity\Builders;
 
 use Cscfa\Bundle\CSManager\UseCaseBundle\Entity\Builders\Interfaces\EntityBuilderInterface;
@@ -23,38 +25,39 @@ use Cscfa\Bundle\CSManager\UseCaseBundle\ChainOfResponsabilities\Interfaces\Chai
  * DefaultEntityBuilder.
  *
  * The DefaultEntityBuilder
- * process entity building 
+ * process entity building
  * methods.
  *
  * @category EntityBuilder
- * @package  CscfaCSManagerUseCaseBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
+ *
  * @link     http://cscfa.fr
  */
-class DefaultEntityBuilder implements EntityBuilderInterface {
-
+class DefaultEntityBuilder implements EntityBuilderInterface
+{
     /**
-     * Chain
-     * 
+     * Chain.
+     *
      * The building chain of
      * responsibility
-     * 
+     *
      * @var ChainOfResponsibilityInterface
      */
     protected $chain;
-    
+
     /**
-     * Entity
-     * 
+     * Entity.
+     *
      * The entity to build
-     * 
+     *
      * @var mixed
      */
     protected $entity;
 
     /**
-     * Add
+     * Add.
      *
      * This method add a
      * new property to the
@@ -66,18 +69,18 @@ class DefaultEntityBuilder implements EntityBuilderInterface {
      *
      * @return EntityBuilderInterface
      */
-    public function add($property, $data=null, array $options = array()){
-        
+    public function add($property, $data = null, array $options = array())
+    {
         if ($this->entity !== null && $this->chain !== null) {
-            $options["data"] = $data;
+            $options['data'] = $data;
             $this->chain->process($property, $this->entity, $options);
         }
-        
+
         return $this;
     }
 
     /**
-     * Set process chain
+     * Set process chain.
      *
      * This method allow to set
      * the chain of responsibility
@@ -87,13 +90,15 @@ class DefaultEntityBuilder implements EntityBuilderInterface {
      *
      * @return EntityBuilderInterface
      */
-    public function setProcessChain(ChainOfResponsibilityInterface $chain) {
+    public function setProcessChain(ChainOfResponsibilityInterface $chain)
+    {
         $this->chain = $chain;
+
         return $this;
     }
 
     /**
-     * Get process chain
+     * Get process chain.
      *
      * This method return the
      * current chain of
@@ -101,24 +106,26 @@ class DefaultEntityBuilder implements EntityBuilderInterface {
      *
      * @return ChainOfResponsibilityInterface
      */
-    public function getProcessChain(){ 
+    public function getProcessChain()
+    {
         return $this->chain;
     }
 
     /**
-     * Get entity
+     * Get entity.
      *
      * This method return the builded
      * entity.
      *
      * @return mixed $entity The builded entity
      */
-    public function getEntity(){ 
+    public function getEntity()
+    {
         return $this->entity;
     }
-    
+
     /**
-     * Set entity
+     * Set entity.
      *
      * This method allow to set
      * the entity to build.
@@ -127,9 +134,10 @@ class DefaultEntityBuilder implements EntityBuilderInterface {
      *
      * @return EntityBuilderInterface
      */
-    public function setEntity($entity){ 
+    public function setEntity($entity)
+    {
         $this->entity = $entity;
+
         return $this;
     }
-
 }

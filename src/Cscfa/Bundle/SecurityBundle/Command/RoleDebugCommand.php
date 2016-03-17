@@ -1,21 +1,22 @@
 <?php
 /**
  * This file is a part of CSCFA security project.
- * 
+ *
  * The security project is a security bundle written in php
  * with Symfony2 framework.
- * 
+ *
  * PHP version 5.5
- * 
- * @category Command
- * @package  CscfaSecurityBundle
- * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
- * @license  http://opensource.org/licenses/MIT MIT
+ *
+ * @category   Command
+ *
+ * @author     Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
+ * @license    http://opensource.org/licenses/MIT MIT
  * @filesource
- * @link     http://cscfa.fr
+ *
+ * @link       http://cscfa.fr
  */
-namespace Cscfa\Bundle\SecurityBundle\Command;
 
+namespace Cscfa\Bundle\SecurityBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Cscfa\Bundle\SecurityBundle\Util\Provider\RoleProvider;
@@ -30,6 +31,7 @@ use Cscfa\Bundle\SecurityBundle\Command\DebugTool\UpdatorTest;
 use Cscfa\Bundle\ToolboxBundle\Builder\Command\CommandTableBuilder;
 use Cscfa\Bundle\ToolboxBundle\Facade\Command\CommandColorFacade;
 use Cscfa\Bundle\ToolboxBundle\BaseInterface\Command\CommandColorInterface;
+
 /**
  * RoleDebugCommand class.
  *
@@ -38,15 +40,16 @@ use Cscfa\Bundle\ToolboxBundle\BaseInterface\Command\CommandColorInterface;
  * the database.
  *
  * @category Controller
- * @package  CscfaSecurityBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
+ *
  * @version  Release: 1.1
+ *
  * @link     http://cscfa.fr
  */
 class RoleDebugCommand extends ContainerAwareCommand
 {
-
     /**
      * The RoleProvider.
      *
@@ -74,15 +77,15 @@ class RoleDebugCommand extends ContainerAwareCommand
      * and a role manager. Also it call the parent
      * constructor.
      *
-     * @param RoleProvider $RoleProvider The Role provider service
+     * @param RoleProvider $roleProvider The Role provider service
      * @param RoleManager  $roleManager  The Role manager service
      */
-    public function __construct(RoleProvider $RoleProvider, RoleManager $roleManager)
+    public function __construct(RoleProvider $roleProvider, RoleManager $roleManager)
     {
-        $this->roleProvider = $RoleProvider;
-        
+        $this->roleProvider = $roleProvider;
+
         $this->roleManager = $roleManager;
-        
+
         parent::__construct();
     }
 
@@ -94,7 +97,6 @@ class RoleDebugCommand extends ContainerAwareCommand
      * "app/console cs:debug:role".
      *
      * @see    \Symfony\Component\Console\Command\Command::configure()
-     * @return void
      */
     protected function configure()
     {
@@ -129,59 +131,59 @@ class RoleDebugCommand extends ContainerAwareCommand
      * @param OutputInterface $output The common command output
      *
      * @see     \Symfony\Component\Console\Command\Command::execute()
+     *
      * @version Release: 1.1
-     * @return  void
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $roles = $this->roleProvider->findAll();
         $commandFacade = new CommandFacade($input, $output, $this);
         list($rows, $error) = $commandFacade->debugMulti(
-            $roles, 
+            $roles,
             array(
-                array("target"=>"getUpdatedAt", "test"=>new UpdateAtTest()),
-                array("target"=>"getCreatedAt", "test"=>new DateTimeTest(DateTimeTest::BEFORE_NOW)),
-                array("target"=>"getCreatedBy", "test"=>new UserInstanceTest()),
-                array("target"=>"getUpdatedBy", "test"=>new UpdatorTest())
+                array('target' => 'getUpdatedAt', 'test' => new UpdateAtTest()),
+                array('target' => 'getCreatedAt', 'test' => new DateTimeTest(DateTimeTest::BEFORE_NOW)),
+                array('target' => 'getCreatedBy', 'test' => new UserInstanceTest()),
+                array('target' => 'getUpdatedBy', 'test' => new UpdatorTest()),
             ),
-            array("getId", "getName"),
-            "<fg=green>V</fg=green>",
-            "<fg=red>X</fg=red>"
+            array('getId', 'getName'),
+            '<fg=green>V</fg=green>',
+            '<fg=red>X</fg=red>'
         );
-        
-        foreach ($rows as $key=>$row) {
+
+        foreach ($rows as $key => $row) {
             $result = $this->roleManager->hasCircularReference($roles[$key]);
-            
+
             if ($result) {
-                $row["circular"] = "<fg=red>X</fg=red>";
+                $row['circular'] = '<fg=red>X</fg=red>';
             } else {
-                $row["circular"] = "<fg=green>V</fg=green>";
+                $row['circular'] = '<fg=green>V</fg=green>';
             }
-            
+
             $rows[$key] = $row;
         }
-        
+
         $commandTable = new CommandTableBuilder();
         $commandTable->setType(CommandTableBuilder::TYPE_ARRAY)
             ->setValues($rows)
             ->setKeys(
                 array(
-                    'UUID'=>"getId",
-                    'Name'=>"getName",
-                    "updated at"=>"getUpdatedAt",
-                    "created at"=>"getCreatedAt",
-                    "updated by"=>"getUpdatedBy",
-                    "created by"=>"getCreatedBy",
-                    "Circular reference"=>"circular"
+                    'UUID' => 'getId',
+                    'Name' => 'getName',
+                    'updated at' => 'getUpdatedAt',
+                    'created at' => 'getCreatedAt',
+                    'updated by' => 'getUpdatedBy',
+                    'created by' => 'getCreatedBy',
+                    'Circular reference' => 'circular',
                 )
             )
             ->render($output);
-        
+
         $commandColor = new CommandColorFacade($output);
-        $commandColor->addColor("error", CommandColorInterface::BLACK, CommandColorInterface::RED)
-            ->addColor("success", CommandColorInterface::BLACK, CommandColorInterface::GREEN);
+        $commandColor->addColor('error', CommandColorInterface::BLACK, CommandColorInterface::RED)
+            ->addColor('success', CommandColorInterface::BLACK, CommandColorInterface::GREEN);
         $commandColor->addText("\nTotal errors : ");
-        $commandColor->addText(" ".$error." ", ($error > 0 ? "error" : "success"));
+        $commandColor->addText(' '.$error.' ', ($error > 0 ? 'error' : 'success'));
         $commandColor->addText("\n");
         $commandColor->write();
     }

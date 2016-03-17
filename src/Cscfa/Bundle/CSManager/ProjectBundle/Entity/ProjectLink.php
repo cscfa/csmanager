@@ -8,20 +8,21 @@
  * PHP version 5.5
  *
  * @category Entity
- * @package  CscfaCSManagerProjectBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
  * @filesource
+ *
  * @link     http://cscfa.fr
  */
+
 namespace Cscfa\Bundle\CSManager\ProjectBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-
 /**
- * ProjectLink
+ * ProjectLink.
  *
  * The base ProjectLink entity for the
  * Cscfa project manager
@@ -36,38 +37,44 @@ class ProjectLink
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="UUID")
      */
-    protected $id;
+    protected $linkId;
 
     /**
      * @ORM\ManyToOne(targetEntity="Project", inversedBy="links")
      * @ORM\JoinColumn(name="csmanager_ProjectLink_id", referencedColumnName="csmanager_Project_id")
      */
     protected $project;
-    
-    /** 
-     * @ORM\Column(type="string", length=255, options={"comment":"The link"}, nullable=false, name="csmanager_ProjectLink_link")
-     * @Assert\NotBlank() 
+
+    /**
+     * @ORM\Column(
+     *      type="string",
+     *      length=255,
+     *      options={"comment":"The link"},
+     *      nullable=false,
+     *      name="csmanager_ProjectLink_link"
+     * )
+     * @Assert\NotBlank()
      */
     protected $link;
 
     /**
-     * Get id
-     * 
+     * Get id.
+     *
      * Return the entity id.
-     * 
+     *
      * @return string - return the entity id
      */
     public function getId()
     {
-        return $this->id;
+        return $this->linkId;
     }
- 
+
     /**
-     * Get project
-     * 
+     * Get project.
+     *
      * Return the referenced
      * project.
-     * 
+     *
      * @return Project - the referenced project
      */
     public function getProject()
@@ -76,26 +83,27 @@ class ProjectLink
     }
 
     /**
-     * Set project
-     * 
+     * Set project.
+     *
      * Set the referenced
      * project
-     * 
+     *
      * @param Project $project - the referenced project
-     * 
+     *
      * @return ProjectLink - the current entity
      */
     public function setProject($project)
     {
         $this->project = $project;
+
         return $this;
     }
- 
+
     /**
-     * Get link
-     * 
+     * Get link.
+     *
      * Return the link.
-     * 
+     *
      * @return string - the link
      */
     public function getLink()
@@ -104,18 +112,18 @@ class ProjectLink
     }
 
     /**
-     * Set link
-     * 
+     * Set link.
+     *
      * Set the link
-     * 
+     *
      * @param string $link - the link
-     * 
+     *
      * @return ProjectLink - the current entity
      */
     public function setLink($link)
     {
         $this->link = $link;
+
         return $this;
     }
- 
 }

@@ -1,19 +1,21 @@
 <?php
 /**
  * This file is a part of CSCFA TwigUi project.
- * 
+ *
  * The TwigUi project is a twig builder written in php
  * with Symfony2 framework.
- * 
+ *
  * PHP version 5.5
- * 
+ *
  * @category Interface
- * @package  CscfaTwigUiBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
  * @filesource
+ *
  * @link     http://cscfa.fr
  */
+
 namespace Cscfa\Bundle\TwigUIBundle\Element\BaseInterface;
 
 /**
@@ -23,78 +25,78 @@ namespace Cscfa\Bundle\TwigUIBundle\Element\BaseInterface;
  * define scripting methods.
  *
  * @category Interface
- * @package  CscfaTwigUiBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
+ *
  * @link     http://cscfa.fr
  */
 interface ScriptedInterface
 {
-
     /**
      * Has script link.
-     * 
+     *
      * This method indicate the
      * script link existance
      * of the current instance.
-     * 
-     * @return boolean
+     *
+     * @return bool
      */
     public function hasScriptLink();
 
     /**
      * Get script link.
-     * 
+     *
      * This method return all
      * of the existings script
      * links of the current
      * instance.
-     * 
+     *
      * @return array
      */
     public function getScriptLink();
 
     /**
      * Get script link count.
-     * 
+     *
      * This method return the
      * current instance script
      * links counts.
-     * 
-     * @return integer
+     *
+     * @return int
      */
     public function getScriptLinkCount();
 
     /**
      * Get custom script.
-     * 
+     *
      * This method indicate the
      * existance of customized
      * script.
-     * 
-     * @return boolean
+     *
+     * @return bool
      */
     public function hasCustomScript();
 
     /**
      * Get custom script.
-     * 
+     *
      * This method return the
      * current instance custom
      * script.
-     * 
+     *
      * @return string
      */
     public function getCustomScript();
 
     /**
      * Get custom script length.
-     * 
+     *
      * This method return the
      * current instance custom
      * script length.
-     * 
-     * @return integer
+     *
+     * @return int
      */
     public function getCustomScriptLength();
 }

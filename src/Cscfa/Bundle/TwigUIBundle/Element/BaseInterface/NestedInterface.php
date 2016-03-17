@@ -1,19 +1,21 @@
 <?php
 /**
  * This file is a part of CSCFA TwigUi project.
- * 
+ *
  * The TwigUi project is a twig builder written in php
  * with Symfony2 framework.
- * 
+ *
  * PHP version 5.5
- * 
+ *
  * @category Interface
- * @package  CscfaTwigUiBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
  * @filesource
+ *
  * @link     http://cscfa.fr
  */
+
 namespace Cscfa\Bundle\TwigUIBundle\Element\BaseInterface;
 
 /**
@@ -24,14 +26,14 @@ namespace Cscfa\Bundle\TwigUIBundle\Element\BaseInterface;
  * leveled element.
  *
  * @category Interface
- * @package  CscfaTwigUiBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
+ *
  * @link     http://cscfa.fr
  */
 interface NestedInterface
 {
-
     /**
      * Get nested level.
      *
@@ -39,7 +41,7 @@ interface NestedInterface
      * the current tag nesting
      * level.
      *
-     * @return integer
+     * @return int
      */
     public function getNestedLevel();
 
@@ -50,7 +52,7 @@ interface NestedInterface
      * set the current tag
      * nesting level.
      *
-     * @param integer $nestedLevel The nesteing level
+     * @param int $nestedLevel The nesteing level
      *
      * @return mixed
      */

@@ -1,19 +1,21 @@
 <?php
 /**
  * This file is a part of CSCFA security project.
- * 
+ *
  * The security project is a security bundle written in php
  * with Symfony2 framework.
- * 
+ *
  * PHP version 5.5
- * 
- * @category Command
- * @package  CscfaSecurityBundle
- * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
- * @license  http://opensource.org/licenses/MIT MIT
+ *
+ * @category   Command
+ *
+ * @author     Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
+ * @license    http://opensource.org/licenses/MIT MIT
  * @filesource
- * @link     http://cscfa.fr
+ *
+ * @link       http://cscfa.fr
  */
+
 namespace Cscfa\Bundle\SecurityBundle\Command\UpdateTool;
 
 use Cscfa\Bundle\ToolboxBundle\BaseInterface\Event\PostProcessEventInterface;
@@ -28,36 +30,37 @@ use Cscfa\Bundle\ToolboxBundle\Facade\Command\CommandFacade;
  * post process a date time format.
  *
  * @category Command
- * @package  CscfaSecurityBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
+ *
  * @link     http://cscfa.fr
  */
 class PostProcessDateTime implements PostProcessEventInterface
 {
     /**
      * The format.
-     * 
+     *
      * This represent the
      * format to use with
      * the DateTime instance.
-     * 
+     *
      * @var string
      */
     protected $format;
-    
+
     /**
      * Default constructor.
-     * 
+     *
      * This constructor allow
      * to specify the DateTime
      * format. Note this format
      * is set as 'Y-m-d H:i:s'
      * as default.
-     * 
+     *
      * @param string $format The DateTime format
      */
-    public function __construct($format = "Y-m-d H:i:s")
+    public function __construct($format = 'Y-m-d H:i:s')
     {
         $this->format = $format;
     }
@@ -69,30 +72,38 @@ class PostProcessDateTime implements PostProcessEventInterface
      * into a new DateTime instance.
      *
      * @param mixed                   $result        The result value
-     * @param ErrorRegisteryInterface &$to           A builder that is used to apply the value
-     * @param array                   &$param        The current param array
+     * @param ErrorRegisteryInterface $errorBuilder  A builder that is used to apply the value
+     * @param array                   $param         The current param array
      * @param CommandFacade           $commandFacade The current CommandFacade instance
      * @param CommandColorFacade      $commandColor  A CommandColorFacade given by the command facade
-     * 
+     *
      * @see    \Cscfa\Bundle\ToolboxBundle\BaseInterface\Event\PostProcessEvent::postProcess()
+     *
      * @return \DateTime
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function postProcess($result, ErrorRegisteryInterface &$to, array &$param, CommandFacade $commandFacade, CommandColorFacade $commandColor) 
-    {
+    public function postProcess(
+        $result,
+        ErrorRegisteryInterface &$errorBuilder,
+        array &$param,
+        CommandFacade $commandFacade,
+        CommandColorFacade $commandColor
+    ) {
         if (is_string($result)) {
             $result = \DateTime::createFromFormat($this->format, $result);
-        
-            if (! ($result instanceof \DateTime)) {
+
+            if (!($result instanceof \DateTime)) {
                 $commandColor->clear();
                 $commandColor->addText("\n");
-                $commandColor->addText($param["failure"], "failure");
+                $commandColor->addText($param['failure'], 'failure');
                 $commandColor->addText("\n");
                 $commandColor->write();
-        
-                $param["active"] = false;
+
+                $param['active'] = false;
             }
         }
+
         return $result;
     }
-
 }

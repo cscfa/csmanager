@@ -13,35 +13,15 @@
             <directory>../src/*/Bundle/*Bundle/Tests</directory>
             <directory>../src/*Bundle/Tests</directory>
         </testsuite>
-        <testsuite name="cscfa security bundle role tests">
-          <file>../src/Cscfa/Bundle/SecurityBundle/Tests/Role/RoleBuilderTest.php</file>
-          <file>../src/Cscfa/Bundle/SecurityBundle/Tests/Role/RoleManagerTest.php</file>
-          <file>../src/Cscfa/Bundle/SecurityBundle/Tests/Role/RoleProviderTest.php</file>
-          <file>../src/Cscfa/Bundle/SecurityBundle/Tests/Role/RoleTest.php</file>
+
+        <testsuite name="cs_toolbox">
+          <directory>../src/Cscfa/Bundle/ToolboxBundle/Tests</directory>
         </testsuite>
-        <testsuite name="cscfa security core bundle user tests">
-          <file>../src/Cscfa/Bundle/SecurityBundle/Tests/User/UserBuilderTest.php</file>
-          <file>../src/Cscfa/Bundle/SecurityBundle/Tests/User/UserManagerTest.php</file>
-          <file>../src/Cscfa/Bundle/SecurityBundle/Tests/User/UserProviderTest.php</file>
+        
+        <testsuite name="cs_twig_ui">
+          <directory>../src/Cscfa/Bundle/TwigUIBundle/Test</directory>
         </testsuite>
-        <testsuite name="cscfa security core bundle group tests">
-          <file>../src/Cscfa/Bundle/SecurityBundle/Tests/Group/GroupBuilderTest.php</file>
-          <file>../src/Cscfa/Bundle/SecurityBundle/Tests/Group/GroupManagerTest.php</file>
-          <file>../src/Cscfa/Bundle/SecurityBundle/Tests/Group/GroupProviderTest.php</file>
-        </testsuite>
-        <testsuite name="cscfa toolbox bundle tests">
-          <file>../src/Cscfa/Bundle/ToolboxBundle/Tests/Builder/Command/CommandAskBuilderTest.php</file>
-          <file>../src/Cscfa/Bundle/ToolboxBundle/Tests/Builder/Command/CommandTableBuilderTest.php</file>
-          <file>../src/Cscfa/Bundle/ToolboxBundle/Tests/Converter/Command/CommandTypeConverterTest.php</file>
-          <file>../src/Cscfa/Bundle/ToolboxBundle/Tests/Exception/Type/UnexpectedTypeExceptionTest.php</file>
-          <file>../src/Cscfa/Bundle/ToolboxBundle/Tests/Factory/Command/ColoredStringFactoryTest.php</file>
-          <file>../src/Cscfa/Bundle/ToolboxBundle/Tests/Search/DirectoryTest.php</file>
-          <file>../src/Cscfa/Bundle/ToolboxBundle/Tests/Set/SetTest.php</file>
-        </testsuite>
-        <testsuite name="cscfa TwigUi bundle tests">
-          <file>../src/Cscfa/Bundle/TwigUIBundle/Test/Base/TagTest.php</file>
-          <file>../src/Cscfa/Bundle/TwigUIBundle/Test/Twig/JavaScript/TwigJavascriptTest.php</file>
-        </testsuite>
+        
         <testsuite name="csm_usecase">
           <directory>../src/Cscfa/Bundle/CSManager/UseCaseBundle/Tests</directory>
         </testsuite>

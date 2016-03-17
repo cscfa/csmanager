@@ -7,13 +7,15 @@
  *
  * PHP version 5.5
  *
- * @category Fixture
- * @package  CscfaCSManagerProjectBundle
- * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
- * @license  http://opensource.org/licenses/MIT MIT
+ * @category   Fixture
+ *
+ * @author     Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
+ * @license    http://opensource.org/licenses/MIT MIT
  * @filesource
- * @link     http://cscfa.fr
+ *
+ * @link       http://cscfa.fr
  */
+
 namespace Cscfa\Bundle\CSManager\ProjectBundle\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\FixtureInterface;
@@ -24,42 +26,45 @@ use Cscfa\Bundle\CSManager\ProjectBundle\Entity\ProjectStatus;
  * LoadStatusData class.
  *
  * The LoadStatusData provide
- * method to load the project 
+ * method to load the project
  * status data.
  *
  * @category Fixture
- * @package  CscfaCSManagerProjectBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
+ *
  * @link     http://cscfa.fr
  */
 class LoadStatusData implements FixtureInterface
 {
     /**
-     * Load
-     * 
+     * Load.
+     *
      * This method allow to load
-     * the project status data into 
+     * the project status data into
      * the database.
-     * 
+     *
+     * @param ObjectManager $manager The doctrine object manager
+     *
      * @see \Doctrine\Common\DataFixtures\FixtureInterface::load()
      */
     public function load(ObjectManager $manager)
     {
         $repository = $manager->getRepository("Cscfa\Bundle\CSManager\ProjectBundle\Entity\ProjectStatus");
 
-        $names = array("active", "closed");
+        $names = array('active', 'closed');
         foreach ($names as $name) {
             $status = $repository->findOneByName($name);
-            if($status){
+            if ($status) {
                 $entity = $status;
-            }else{
+            } else {
                 $entity = new ProjectStatus();
                 $entity->setName($name);
                 $manager->persist($entity);
             }
         }
-        
+
         $manager->flush();
     }
 }

@@ -1,19 +1,21 @@
 <?php
 /**
  * This file is a part of CSCFA security project.
- * 
+ *
  * The security project is a security bundle written in php
  * with Symfony2 framework.
- * 
+ *
  * PHP version 5.5
- * 
- * @category Command
- * @package  CscfaSecurityBundle
- * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
- * @license  http://opensource.org/licenses/MIT MIT
+ *
+ * @category   Command
+ *
+ * @author     Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
+ * @license    http://opensource.org/licenses/MIT MIT
  * @filesource
- * @link     http://cscfa.fr
+ *
+ * @link       http://cscfa.fr
  */
+
 namespace Cscfa\Bundle\SecurityBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
@@ -29,14 +31,14 @@ use Cscfa\Bundle\ToolboxBundle\Builder\Command\CommandTableBuilder;
  * view all of the database registered Groups.
  *
  * @category Command
- * @package  CscfaSecurityBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
+ *
  * @link     http://cscfa.fr
  */
 class GroupViewCommand extends ContainerAwareCommand
 {
-
     /**
      * The GroupProvider.
      *
@@ -69,7 +71,6 @@ class GroupViewCommand extends ContainerAwareCommand
      * "app/console cs:view:group".
      *
      * @see    \Symfony\Component\Console\Command\Command::configure()
-     * @return void
      */
     protected function configure()
     {
@@ -84,20 +85,21 @@ class GroupViewCommand extends ContainerAwareCommand
      *
      * @param InputInterface  $input  The common command input
      * @param OutputInterface $output The common command output
-     *            
+     *
      * @see    \Symfony\Component\Console\Command\Command::execute()
-     * @return void
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $keys = array(
-            "UUID"=>"getId",
-            "Name"=>"getName",
-            "created at"=>"getCreatedAt",
-            "Locked"=>"getLocked",
-            "Expired"=>"isExpired"
+            'UUID' => 'getId',
+            'Name' => 'getName',
+            'created at' => 'getCreatedAt',
+            'Locked' => 'getLocked',
+            'Expired' => 'isExpired',
         );
-        
+
         $table = new CommandTableBuilder();
         $table->setType($table::TYPE_OBJECT)
             ->setKeys($keys)

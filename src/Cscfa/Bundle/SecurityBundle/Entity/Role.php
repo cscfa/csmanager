@@ -1,19 +1,21 @@
 <?php
 /**
  * This file is a part of CSCFA security project.
- * 
+ *
  * The security project is a security bundle written in php
  * with Symfony2 framework.
- * 
+ *
  * PHP version 5.5
- * 
- * @category Entity
- * @package  CscfaSecurityBundle
- * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
- * @license  http://opensource.org/licenses/MIT MIT
+ *
+ * @category   Entity
+ *
+ * @author     Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
+ * @license    http://opensource.org/licenses/MIT MIT
  * @filesource
- * @link     http://cscfa.fr
+ *
+ * @link       http://cscfa.fr
  */
+
 namespace Cscfa\Bundle\SecurityBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -38,23 +40,23 @@ use Cscfa\Bundle\SecurityBundle\Entity\Base\StackableObject;
  * the Entity\Repository folder of the core bundle.
  *
  * @category Entity
- * @package  CscfaSecurityBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
+ *
  * @link     http://cscfa.fr
- *       
+ *
  * @ORM\Entity(repositoryClass="Cscfa\Bundle\SecurityBundle\Entity\Repository\RoleRepository")
  * @ORM\Table(
- *      name="cs_manager_role", 
+ *      name="cs_manager_role",
  *      indexes={@ORM\Index(name="cs_manager_role_indx", columns={"role_name"})}
  * )
  * @ORM\Table(name="csmanager_core_role")
  */
 class Role extends StackableObject
 {
-
     /**
-     * The id field
+     * The id field.
      *
      * The id parameter is the database
      * unique identity field, stored into GUID
@@ -70,10 +72,10 @@ class Role extends StackableObject
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="UUID")
      */
-    protected $id;
+    protected $roleId;
 
     /**
-     * The name field
+     * The name field.
      *
      * The name of the role stored into role_name
      * fieldas index to offer string search optimisation.
@@ -81,12 +83,21 @@ class Role extends StackableObject
      * It can't be more long than 255 characters, is unique
      * and can't be null.
      *
-     * @ORM\Column(type="string", length=255, name="role_name", unique=true, nullable=false, options={"comment":"navbar element name"})
+     * @ORM\Column(
+     *      type="string",
+     *      length=255,
+     *      name="role_name",
+     *      unique=true,
+     *      nullable=false,
+     *      options={
+     *          "comment":"navbar element name"
+     *      }
+     * )
      */
     protected $name;
 
     /**
-     * The child field
+     * The child field.
      *
      * The child reference to the child entity. This
      * field can be null and duplicate. It's stored
@@ -110,7 +121,7 @@ class Role extends StackableObject
      */
     public function getId()
     {
-        return $this->id;
+        return $this->roleId;
     }
 
     /**
@@ -126,14 +137,15 @@ class Role extends StackableObject
      * This method return this to allow chained methods.
      *
      * @param string $name The new name to insert.
-     * 
+     *
      * @see    Cscfa\Bundle\SecurityBundle\Util\Manager\RoleManager::roleExists()
+     *
      * @return Role
      */
     public function setName($name)
     {
         $this->name = $name;
-        
+
         return $this;
     }
 
@@ -178,43 +190,46 @@ class Role extends StackableObject
      * method of the RoleManager class to prevent it.
      *
      * @param Role $child The new child to insert.
-     * 
+     *
      * @see    Cscfa\Bundle\SecurityBundle\Util\Manager\RoleManager::hasCircularReference()
+     *
      * @return Role
      */
     public function setChild($child)
     {
         $this->child = $child;
+
         return $this;
     }
-    
+
     /**
      * Get the recursives names.
-     * 
+     *
      * This method return the current
      * role name and merge the childs
      * names into an array.
-     * 
+     *
      * @return array
      */
-    public function getRecursiveNames(){
+    public function getRecursiveNames()
+    {
         $names = array();
-        
+
         $names[] = $this->getName();
         if ($this->getChild() !== null) {
             $names = array_merge($names, $this->getChild()->getRecursiveNames());
         }
-        
+
         return $names;
     }
-    
+
     /**
      * The to string method.
-     * 
+     *
      * This method return the
      * current instance getName
      * result.
-     * 
+     *
      * @return string
      */
     public function __toString()

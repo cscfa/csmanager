@@ -1,19 +1,21 @@
 <?php
 /**
  * This file is a part of CSCFA security project.
- * 
+ *
  * The security project is a security bundle written in php
  * with Symfony2 framework.
- * 
+ *
  * PHP version 5.5
- * 
- * @category Entity
- * @package  CscfaSecurityBundle
- * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
- * @license  http://opensource.org/licenses/MIT MIT
+ *
+ * @category   Entity
+ *
+ * @author     Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
+ * @license    http://opensource.org/licenses/MIT MIT
  * @filesource
- * @link     http://cscfa.fr
+ *
+ * @link       http://cscfa.fr
  */
+
 namespace Cscfa\Bundle\SecurityBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -32,9 +34,10 @@ use Doctrine\Common\Collections\ArrayCollection;
  * the Entity\Repository folder of the core bundle.
  *
  * @category Entity
- * @package  CscfaSecurityBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
+ *
  * @link     http://cscfa.fr
  *
  * @ORM\Entity(repositoryClass="Cscfa\Bundle\SecurityBundle\Entity\Repository\GroupRepository")
@@ -44,9 +47,8 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class Group extends StackableObject
 {
-
     /**
-     * The id field
+     * The id field.
      *
      * The id parameter is the database
      * unique identity field, stored into GUID
@@ -62,15 +64,15 @@ class Group extends StackableObject
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="UUID")
      */
-    protected $id;
+    protected $groupId;
 
     /**
      * The group name.
-     * 
+     *
      * The name of the group
      * stored as string into
      * the database.
-     * 
+     *
      * @ORM\Column(
      *      type="string", length=255, nullable=false, name="group_name", options={"comment":"group name"}
      * )
@@ -79,41 +81,53 @@ class Group extends StackableObject
 
     /**
      * The group canonical name.
-     * 
+     *
      * The canonical name
      * of the group. This name
      * must be the same of the
      * group name but in lower
      * case.
-     * 
+     *
      * @ORM\Column(
-     *      type="string", length=255, unique=true, nullable=false, name="group_name_canonical", options={"comment":"canonical group name logical coherency with the group name in lower case"}
+     *      type="string",
+     *      length=255,
+     *      unique=true,
+     *      nullable=false,
+     *      name="group_name_canonical",
+     *      options={
+     *          "comment":"canonical group name logical coherency with the group name in lower case"
+     *      }
      * )
      */
     protected $nameCanonical;
 
     /**
      * The roles.
-     * 
+     *
      * A group of role that the
      * current group is owners.
-     * 
+     *
      * @var Collection
-     * 
+     *
      * @ORM\ManyToMany(targetEntity="Role")
-     * @ORM\JoinTable(name="tk_csmanager_group_join_role",
-     *      joinColumns={@ORM\JoinColumn(name="group_id", referencedColumnName="group_id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="role_id")}
-     *      )
+     * @ORM\JoinTable(
+     *      name="tk_csmanager_group_join_role",
+     *      joinColumns={
+     *          @ORM\JoinColumn(name="group_id", referencedColumnName="group_id")
+     *      },
+     *      inverseJoinColumns={
+     *          @ORM\JoinColumn(name="role_id", referencedColumnName="role_id")
+     *      }
+     * )
      */
     protected $roles;
 
     /**
      * The expired state.
-     * 
+     *
      * The expired state of the
      * group.
-     * 
+     *
      * @ORM\Column(
      *      type="boolean", name="group_expired", nullable=true, options={"comment":"the expired state of the group"}
      * )
@@ -122,12 +136,17 @@ class Group extends StackableObject
 
     /**
      * The expiration date.
-     * 
+     *
      * The date of the epiration
      * of the current group.
-     * 
+     *
      * @ORM\Column(
-     *      type="datetime", name="group_expire_at", nullable=true, options={"comment":"the expiration date of the group"}
+     *      type="datetime",
+     *      name="group_expire_at",
+     *      nullable=true,
+     *      options={
+     *          "comment":"the expiration date of the group"
+     *      }
      * )
      */
     protected $expiresAt;
@@ -146,7 +165,7 @@ class Group extends StackableObject
 
     /**
      * Default constructor.
-     * 
+     *
      * This method is the
      * default Group constructor.
      */
@@ -159,25 +178,25 @@ class Group extends StackableObject
 
     /**
      * Get the id.
-     * 
+     *
      * This method allow to
-     * get the group id as 
+     * get the group id as
      * string.
-     * 
+     *
      * @return string
      */
     public function getId()
     {
-        return $this->id;
+        return $this->groupId;
     }
 
     /**
      * Get the name.
-     * 
+     *
      * This method allow to
      * get the name of the
      * group as string.
-     * 
+     *
      * @return string
      */
     public function getName()
@@ -187,31 +206,32 @@ class Group extends StackableObject
 
     /**
      * Set the name.
-     * 
+     *
      * This method allow to set the
      * froup name.
-     * 
+     *
      * @param string $name The new group name
-     * 
+     *
      * @return \Cscfa\Bundle\SecurityBundle\Entity\Group
      */
     public function setName($name)
     {
         $this->name = $name;
+
         return $this;
     }
 
     /**
      * Get the canonical name.
-     * 
+     *
      * This method allow to
      * get the canonical group
      * name.
-     * 
+     *
      * By convention, the canonical
      * name is the lower case name
      * of the group.
-     * 
+     *
      * @return string
      */
     public function getNameCanonical()
@@ -221,34 +241,35 @@ class Group extends StackableObject
 
     /**
      * Set the canonical name.
-     * 
+     *
      * This method allow to
      * set the canonical group
      * name.
-     * 
+     *
      * By convention, the canonical
      * name is the lower case name
      * of the group.
-     * 
+     *
      * @param string $nameCanonical The canonical name
-     * 
+     *
      * @return string
      */
     public function setNameCanonical($nameCanonical)
     {
         $this->nameCanonical = $nameCanonical;
+
         return $this;
     }
 
     /**
      * Add a Role.
-     * 
+     *
      * This method allow to
      * add a Role to the current
      * group.
-     * 
+     *
      * @param Role $role The role instance to add
-     * 
+     *
      * @return \Cscfa\Bundle\SecurityBundle\Entity\Group
      */
     public function addRole(Role $role)
@@ -262,18 +283,18 @@ class Group extends StackableObject
 
     /**
      * Check if role owned.
-     * 
+     *
      * This method allow to check
      * if the current group is the
      * owner of a given role.
-     * 
+     *
      * The role parameter can be
      * a Role instance or a Role
      * name as string.
-     * 
+     *
      * @param Role|string $role The role to check for
-     * 
-     * @return boolean
+     *
+     * @return bool
      */
     public function hasRole($role)
     {
@@ -282,27 +303,27 @@ class Group extends StackableObject
         } else {
             return false;
         }
-        
+
         if ($this->roles === null || $this->roles->count() == 0) {
             return false;
         }
-        
+
         foreach ($this->roles as $roles) {
             if ($roles->getName() == $role) {
                 return true;
             }
         }
-        
+
         return false;
     }
 
     /**
      * Get Roles.
-     * 
+     *
      * This method allow to get
      * the complete Role collection
      * of the current group.
-     * 
+     *
      * @return \Cscfa\Bundle\SecurityBundle\Entity\Collection
      */
     public function getRoles()
@@ -312,67 +333,69 @@ class Group extends StackableObject
 
     /**
      * Set the Role.
-     * 
+     *
      * This method allow to set the
      * complete Role collection of
      * the current group.
-     * 
+     *
      * @param Collection $roles The Role collection
-     * 
+     *
      * @return \Cscfa\Bundle\SecurityBundle\Entity\Group
      */
     public function setRoles($roles)
     {
         $this->roles = $roles;
+
         return $this;
     }
 
     /**
      * Check if the group has expired.
-     * 
+     *
      * This method allow to
      * check if the current
      * group is expired.
-     * 
-     * @return boolean
+     *
+     * @return bool
      */
     public function isExpired()
     {
         if ($this->expiresAt === null) {
             return false;
         }
-        
+
         if ((new \DateTime())->getTimestamp() >= $this->expiresAt->getTimestamp()) {
             $this->setExpired(true);
         }
-        
+
         return $this->expired;
     }
 
     /**
      * Set expired.
-     * 
+     *
      * This method allow to
      * set the expiration state
      * of the current group.
-     * 
-     * @param boolean $expired The expiration state
-     * 
+     *
+     * @param bool $expired The expiration state
+     *
      * @return \Cscfa\Bundle\SecurityBundle\Entity\Group
      */
     public function setExpired($expired)
     {
         $this->expired = $expired;
+
         return $this;
     }
 
     /**
      * Get the expiration time.
-     * 
+     *
      * This method allow to get the
-     * expiration time of the current 
+     * expiration time of the current
      * group.
-     * 
+     *
      * @return \DateTime
      */
     public function getExpiresAt()
@@ -382,49 +405,51 @@ class Group extends StackableObject
 
     /**
      * Set the expiration time.
-     * 
+     *
      * This method allow to
      * set the expiration time
      * of the current group.
-     * 
+     *
      * @param \DateTime $expiresAt The expiration time
-     * 
+     *
      * @return \Cscfa\Bundle\SecurityBundle\Entity\Group
      */
     public function setExpiresAt($expiresAt)
     {
         $this->expiresAt = $expiresAt;
+
         return $this;
     }
 
     /**
      * Get locked state.
-     * 
+     *
      * This method allow to
      * get the current locked
      * state of the group.
-     * 
-     * @return boolean
+     *
+     * @return bool
      */
-    public function getLocked()
+    public function isLocked()
     {
         return $this->locked;
     }
 
     /**
      * Set locked state.
-     * 
+     *
      * This method allow to
-     * set the current locked 
+     * set the current locked
      * state of the group.
-     * 
-     * @param boolean $locked The locked state
-     * 
+     *
+     * @param bool $locked The locked state
+     *
      * @return Group
      */
     public function setLocked($locked)
     {
         $this->locked = $locked;
+
         return $this;
     }
 
@@ -441,4 +466,4 @@ class Group extends StackableObject
     {
         return $this->getName();
     }
-} 
+}

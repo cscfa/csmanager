@@ -1,19 +1,21 @@
 <?php
 /**
  * This file is a part of CSCFA UseCase project.
- * 
+ *
  * The UseCase bundle is part of csmanager project. It's a project manager
  * written in php with Symfony2 framework.
- * 
+ *
  * PHP version 5.5
- * 
+ *
  * @category Test
- * @package  CscfaCSManagerUseCaseBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
  * @filesource
+ *
  * @link     http://cscfa.fr
  */
+
 namespace Cscfa\Bundle\CSManager\UseCaseBundle\Tests\Entity\Builders\Chains;
 
 use Cscfa\Bundle\CSManager\UseCaseBundle\Entity\Builders\Chains\AddDataChain;
@@ -28,56 +30,57 @@ use Cscfa\Bundle\CSManager\UseCaseBundle\Tests\MockObject\AddDataChainTestObject
  * tests.
  *
  * @see      Cscfa\Bundle\CSManager\UseCaseBundle\Entity\Builders\Chains\AddDataChain
+ *
  * @category Test
- * @package  CscfaCSManagerUseCaseBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
+ *
  * @link     http://cscfa.fr
  */
-class AddDataChainTest extends \PHPUnit_Framework_TestCase {
-    
+class AddDataChainTest extends \PHPUnit_Framework_TestCase
+{
     /**
-     * AddDataChain
-     * 
+     * AddDataChain.
+     *
      * This method register the
      * tested AddDataChain
-     * 
+     *
      * @var AddDataChain
      */
     protected $addDataChain;
 
-    const SUPPORTED_PROPERTY_NAME = "testProperty";
-    const UNSUPPORTED_PROPERTY_NAME = "unsupportProperty";
-    
+    const SUPPORTED_PROPERTY_NAME = 'testProperty';
+    const UNSUPPORTED_PROPERTY_NAME = 'unsupportProperty';
+
     /**
-     * Set up
-     * 
+     * Set up.
+     *
      * This method set up
      * the test class before
      * tests.
      */
-    public function setUp(){
-        
+    public function setUp()
+    {
         $this->addDataChain = new AddDataChain();
         $this->addDataChain->setProperty(self::SUPPORTED_PROPERTY_NAME);
-        
     }
-    
+
     /**
-     * Test process
-     * 
+     * Test process.
+     *
      * This method test the
      * process method of the
      * AddDataChain.
      */
-    public function testProcess(){
-        
+    public function testProcess()
+    {
         $next = $this->getMockBuilder(ChainOfResponsibilityInterface::class)
-            ->setMethods(array("setNext", "getNext", "process", "support", "getAction"))
+            ->setMethods(array('setNext', 'getNext', 'process', 'support', 'getAction'))
             ->getMock();
-        
+
         $next->expects($this->exactly(3))
-            ->method("process")
+            ->method('process')
             ->will($this->returnSelf());
 
         //unsuported action with array without next
@@ -85,13 +88,13 @@ class AddDataChainTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(
             $this->addDataChain,
             $this->addDataChain->process(
-                self::UNSUPPORTED_PROPERTY_NAME, 
+                self::UNSUPPORTED_PROPERTY_NAME,
                 $data,
-                array("data"=>"test")
+                array('data' => 'test')
             ),
-            "The AddDataChain::process must return itself if no next chain exist"
+            'The AddDataChain::process must return itself if no next chain exist'
         );
-        
+
         $this->assertFalse(
             array_key_exists(self::UNSUPPORTED_PROPERTY_NAME, $data),
             "Th AddDataChain mustn't inject data into array if the action requested is not supported"
@@ -103,87 +106,86 @@ class AddDataChainTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(
             $next,
             $this->addDataChain->process(
-                self::SUPPORTED_PROPERTY_NAME, 
+                self::SUPPORTED_PROPERTY_NAME,
                 $data,
-                array("data"=>"test")
+                array('data' => 'test')
             ),
-            "The AddDataChain::process must return the next chain if exist"
+            'The AddDataChain::process must return the next chain if exist'
         );
-        
+
         $this->assertTrue(
             array_key_exists(self::SUPPORTED_PROPERTY_NAME, $data),
-            "Th AddDataChain must create data array key if the action requested is not supported"
+            'Th AddDataChain must create data array key if the action requested is not supported'
         );
-        
+
         $this->assertEquals(
-            "test", 
-            $data[self::SUPPORTED_PROPERTY_NAME], 
-            "The AddDataChain must inject data into array if the requested action is supported"
+            'test',
+            $data[self::SUPPORTED_PROPERTY_NAME],
+            'The AddDataChain must inject data into array if the requested action is supported'
         );
         //suported action with object method with next
         $data = $this->getMockBuilder(\stdClass::class)
-            ->setMethods(array("set".ucfirst(self::SUPPORTED_PROPERTY_NAME)))
+            ->setMethods(array('set'.ucfirst(self::SUPPORTED_PROPERTY_NAME)))
             ->getMock();
         $data->expects($this->once())
-            ->method("set".ucfirst(self::SUPPORTED_PROPERTY_NAME))
-            ->with($this->equalTo("test"))
+            ->method('set'.ucfirst(self::SUPPORTED_PROPERTY_NAME))
+            ->with($this->equalTo('test'))
             ->will($this->returnSelf());
-        
+
         $this->addDataChain->process(
-            self::SUPPORTED_PROPERTY_NAME, 
+            self::SUPPORTED_PROPERTY_NAME,
             $data,
-            array("data"=>"test")
+            array('data' => 'test')
         );
         //suported action with object property with next
         $data = new AddDataChainTestObject();
-        
+
         $this->addDataChain->process(
-            self::SUPPORTED_PROPERTY_NAME, 
+            self::SUPPORTED_PROPERTY_NAME,
             $data,
-            array("data"=>"test")
+            array('data' => 'test')
         );
-        
+
         $this->assertEquals(
-            "test", 
-            $data->testProperty, 
-            "AddDataChain::process must inject data into property if no one getter method exist"
+            'test',
+            $data->testProperty,
+            'AddDataChain::process must inject data into property if no one getter method exist'
         );
     }
-    
+
     /**
-     * Test action
-     * 
+     * Test action.
+     *
      * This method return
      * the get action method
      * of the AddDataChain.
      */
-    public function testAction(){
+    public function testAction()
+    {
         $this->assertEquals(
-            self::SUPPORTED_PROPERTY_NAME, 
+            self::SUPPORTED_PROPERTY_NAME,
             $this->addDataChain->getAction(),
             "The AddDataChain must return it's own property as action"
         );
     }
-    
+
     /**
-     * Test support
-     * 
-     * This method test the 
+     * Test support.
+     *
+     * This method test the
      * AddDataChain
      * support process.
      */
-    public function testSupport(){
-        
+    public function testSupport()
+    {
         $this->assertTrue(
             $this->addDataChain->support(self::SUPPORTED_PROPERTY_NAME),
             "The add data chain must support it's own property"
         );
-        
+
         $this->assertFalse(
             $this->addDataChain->support(self::UNSUPPORTED_PROPERTY_NAME),
             "The add data chain mustn't support other property than it's own property"
         );
-        
     }
-    
 }

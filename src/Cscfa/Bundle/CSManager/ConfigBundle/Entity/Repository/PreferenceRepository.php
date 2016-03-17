@@ -7,13 +7,15 @@
  *
  * PHP version 5.5
  *
- * @category Repository
- * @package  CscfaCSManagerConfigBundle
- * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
- * @license  http://opensource.org/licenses/MIT MIT
+ * @category   Repository
+ *
+ * @author     Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
+ * @license    http://opensource.org/licenses/MIT MIT
  * @filesource
- * @link     http://cscfa.fr
+ *
+ * @link       http://cscfa.fr
  */
+
 namespace Cscfa\Bundle\CSManager\ConfigBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
@@ -26,22 +28,30 @@ use Doctrine\ORM\EntityRepository;
  * from the database.
  *
  * @category Repository
- * @package  CscfaCSManagerConfigBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
+ *
  * @link     http://cscfa.fr
  */
 class PreferenceRepository extends EntityRepository
 {
-
+    /**
+     * Get current or null.
+     *
+     * This method return the current
+     * preference instance.
+     *
+     * @return mixed|null
+     */
     public function getCurrentOrNull()
     {
-        $preferences = $this->findBy(array("deleted" => false), array("created" => "DESC"), 1);
-        
+        $preferences = $this->findBy(array('deleted' => false), array('created' => 'DESC'), 1);
+
         if (is_array($preferences) && count($preferences) == 1) {
             return $preferences[0];
         } else {
-            return null;
+            return;
         }
     }
 }

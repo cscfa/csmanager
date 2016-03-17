@@ -8,12 +8,14 @@
  * PHP version 5.5
  *
  * @category Repository
- * @package  CscfaCSManagerTrackBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
  * @filesource
+ *
  * @link     http://cscfa.fr
  */
+
 namespace Cscfa\Bundle\CSManager\TrackBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
@@ -26,10 +28,12 @@ use Doctrine\ORM\EntityRepository;
  * from the database.
  *
  * @category Repository
- * @package  CscfaCSManagerTrackBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
+ *
  * @link     http://cscfa.fr
  */
-class TrackerRepository extends EntityRepository {
+class TrackerRepository extends EntityRepository
+{
 }

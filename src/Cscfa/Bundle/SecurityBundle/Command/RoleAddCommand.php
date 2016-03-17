@@ -1,19 +1,21 @@
 <?php
 /**
  * This file is a part of CSCFA security project.
- * 
+ *
  * The security project is a security bundle written in php
  * with Symfony2 framework.
- * 
+ *
  * PHP version 5.5
- * 
- * @category Command
- * @package  CscfaSecurityBundle
- * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
- * @license  http://opensource.org/licenses/MIT MIT
+ *
+ * @category   Command
+ *
+ * @author     Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
+ * @license    http://opensource.org/licenses/MIT MIT
  * @filesource
- * @link     http://cscfa.fr
+ *
+ * @link       http://cscfa.fr
  */
+
 namespace Cscfa\Bundle\SecurityBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
@@ -33,15 +35,16 @@ use Cscfa\Bundle\ToolboxBundle\Facade\Command\CommandFacade;
  * generate a new user Role into the database.
  *
  * @category Controller
- * @package  CscfaSecurityBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
+ *
  * @version  Release: 1.2
+ *
  * @link     http://cscfa.fr
  */
 class RoleAddCommand extends ContainerAwareCommand
 {
-
     /**
      * The RoleProvider.
      *
@@ -77,10 +80,10 @@ class RoleAddCommand extends ContainerAwareCommand
     {
         // Register role provider
         $this->roleProvider = $roleProvider;
-        
+
         // Register role manager
         $this->roleManager = $roleManager;
-        
+
         parent::__construct();
     }
 
@@ -95,7 +98,6 @@ class RoleAddCommand extends ContainerAwareCommand
      * shell interface into the execute method.
      *
      * @see    \Symfony\Component\Console\Command\Command::configure()
-     * @return void
      */
     protected function configure()
     {
@@ -130,38 +132,38 @@ class RoleAddCommand extends ContainerAwareCommand
      * @param OutputInterface $output The common command output
      *
      * @see     \Symfony\Component\Console\Command\Command::execute()
+     *
      * @version Release: 1.2
-     * @return  void
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $limit = $this->roleManager->getRolesName();
         $multi = array(
             array(
-                "var" => "name",
-                "question" => "Role name",
-                "type" => CommandAskBuilder::TYPE_ASK,
-                "extra" => array(
-                    "empty" => false,
-                    "default" => false
-                )
+                'var' => 'name',
+                'question' => 'Role name',
+                'type' => CommandAskBuilder::TYPE_ASK,
+                'extra' => array(
+                    'empty' => false,
+                    'default' => false,
+                ),
             ),
             array(
-                "var" => "child",
-                "question" => "Role childs",
-                "type" => CommandAskBuilder::TYPE_ASK_SELECT,
-                "limit" => $limit,
-                "default" => null,
-                "extra" => array(
-                    "active" => (empty($limit) ? false : true),
-                    "unactive" => array()
-                )
-            )
+                'var' => 'child',
+                'question' => 'Role childs',
+                'type' => CommandAskBuilder::TYPE_ASK_SELECT,
+                'limit' => $limit,
+                'default' => null,
+                'extra' => array(
+                    'active' => (empty($limit) ? false : true),
+                    'unactive' => array(),
+                ),
+            ),
         );
         $commandFacade = new CommandFacade($input, $output, $this);
-        
-        list ($name, $child) = $commandFacade->getOrAskMulti($multi);
-        
+
+        list($name, $child) = $commandFacade->getOrAskMulti($multi);
+
         if (is_int($child)) {
             $childName = $limit[$child];
             $child = $this->roleProvider->findOneByName($childName)->getRole();
@@ -169,31 +171,35 @@ class RoleAddCommand extends ContainerAwareCommand
             $childName = null;
             $child = null;
         }
-        
-        if ($commandFacade->getConfirmation(array("name" => $name, "childs" => $childName))) {
-            
+
+        if ($commandFacade->getConfirmation(array('name' => $name, 'childs' => $childName))) {
             $validating = array(
-                "setName" => array(
+                'setName' => array(
                     $name,
-                    "Naming error",
+                    'Naming error',
                     array(
-                        RoleBuilder::DUPLICATE_ROLE_NAME => "name already exist",
-                        RoleBuilder::INVALID_ROLE_NAME => "invalid name"
-                    )
+                        RoleBuilder::DUPLICATE_ROLE_NAME => 'name already exist',
+                        RoleBuilder::INVALID_ROLE_NAME => 'invalid name',
+                    ),
                 ),
-                "setChild" => array(
+                'setChild' => array(
                     $child,
-                    "Child error",
+                    'Child error',
                     array(
-                        RoleBuilder::CIRCULAR_REFERENCE => "circular reference creating",
-                        RoleBuilder::INVALID_ROLE_INSTANCE_OF => "invalid role instance"
-                    )
-                )
+                        RoleBuilder::CIRCULAR_REFERENCE => 'circular reference creating',
+                        RoleBuilder::INVALID_ROLE_INSTANCE_OF => 'invalid role instance',
+                    ),
+                ),
             );
-            
+
             $roleBuilder = $this->roleManager->getNewInstance();
-            $isValid = $commandFacade->applyAndValidate($roleBuilder, $validating, "An error occured. Can't generate", "Generating succefull");
-            
+            $isValid = $commandFacade->applyAndValidate(
+                $roleBuilder,
+                $validating,
+                "An error occured. Can't generate",
+                'Generating succefull'
+            );
+
             if ($isValid) {
                 $this->roleManager->persist($roleBuilder);
             }

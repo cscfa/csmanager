@@ -8,12 +8,14 @@
  * PHP version 5.5
  *
  * @category Test
- * @package  CscfaToolboxBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
  * @filesource
+ *
  * @link     http://cscfa.fr
  */
+
 namespace Cscfa\Bundle\ToolboxBundle\Tests\Converter\Command;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -27,9 +29,10 @@ use Cscfa\Bundle\ToolboxBundle\Converter\Command\CommandTypeConverter;
  * process.
  *
  * @category Test
- * @package  CscfaToolboxBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
+ *
  * @link     http://cscfa.fr
  * @see      Cscfa\Bundle\CSManager\CoreBundle\Entity\User
  */
@@ -37,12 +40,10 @@ class CommandTypeConverterTest extends WebTestCase
 {
     /**
      * The setUp.
-     * 
+     *
      * This method is used to configure
      * and process the initialisation of
      * the test class.
-     * 
-     * @return void
      */
     public function setUp()
     {
@@ -53,21 +54,19 @@ class CommandTypeConverterTest extends WebTestCase
      *
      * This test is used to confirm
      * the CommandTypeConverter conversion.
-     *
-     * @return void
      */
     public function testConversion()
     {
-        $array = array("1", "2", "3");
-        $arrayConverted = "1, 2, 3";
-        
-        $dateTimeConverted = "2015-04-13 10:10:24";
-        $dateTime = \DateTime::createFromFormat("Y-m-d H:i:s", $dateTimeConverted);
-        
+        $array = array('1', '2', '3');
+        $arrayConverted = '1, 2, 3';
+
+        $dateTimeConverted = '2015-04-13 10:10:24';
+        $dateTime = \DateTime::createFromFormat('Y-m-d H:i:s', $dateTimeConverted);
+
         $this->assertTrue(CommandTypeConverter::convertToString($array) == $arrayConverted);
         $this->assertTrue(CommandTypeConverter::convertToString($dateTime) == $dateTimeConverted);
-        $this->assertTrue(CommandTypeConverter::convertToString(null) == "NULL");
-        $this->assertTrue(CommandTypeConverter::convertToString(true) == "true");
-        $this->assertTrue(CommandTypeConverter::convertToString(false) == "false");
+        $this->assertTrue(CommandTypeConverter::convertToString(null) == 'NULL');
+        $this->assertTrue(CommandTypeConverter::convertToString(true) == 'true');
+        $this->assertTrue(CommandTypeConverter::convertToString(false) == 'false');
     }
 }

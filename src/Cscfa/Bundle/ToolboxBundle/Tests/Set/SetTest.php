@@ -8,12 +8,14 @@
  * PHP version 5.5
  *
  * @category Test
- * @package  CscfaToolboxBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
  * @filesource
+ *
  * @link     http://cscfa.fr
  */
+
 namespace Cscfa\Bundle\ToolboxBundle\Tests\Set;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -28,23 +30,21 @@ use Cscfa\Bundle\ToolboxBundle\Set\HackSet;
  * test to valid Sets classes.
  *
  * @category Test
- * @package  CscfaToolboxBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
+ *
  * @link     http://cscfa.fr
  * @see      Cscfa\Bundle\CSManager\CoreBundle\Entity\User
  */
 class SetTest extends WebTestCase
 {
-
     /**
      * The setUp.
-     * 
+     *
      * This method is used to configure
      * and process the initialisation of
      * the test class.
-     * 
-     * @return void
      */
     public function setUp()
     {
@@ -52,173 +52,167 @@ class SetTest extends WebTestCase
 
     /**
      * test ListSet.
-     * 
+     *
      * This method provide test
      * for the ListSet class.
-     * 
-     * @return void
      */
     public function testListSet()
     {
-        $ls = new ListSet();
-        
-        $element = "work";
+        $listSet = new ListSet();
+
+        $element = 'work';
         $elements = array(
-            "working",
-            "worker",
-            "is work"
+            'working',
+            'worker',
+            'is work',
         );
-        
-        $this->assertTrue($ls->isEmpty());
-        
-        $ls->add($element);
-        $this->assertTrue($ls->contain($element));
-        
-        $ls->addAll($elements);
-        $this->assertTrue($ls->containsAll($elements));
-        $this->assertTrue($ls->get(0) === $element);
-        
-        $all = $ls->getAll();
-        $this->assertTrue(in_array("work", $all));
-        $this->assertTrue(in_array("working", $all));
-        $this->assertTrue(in_array("worker", $all));
-        $this->assertTrue(in_array("is work", $all));
-        
-        $this->assertFalse($ls->isEmpty());
-        
-        $ls->remove("work");
-        $all = $ls->getAll();
-        $this->assertFalse(in_array("work", $all));
-        $this->assertTrue(in_array("working", $all));
-        $this->assertTrue(in_array("worker", $all));
-        $this->assertTrue(in_array("is work", $all));
-        
-        $ls->removeAll(array("working", "worker"));
-        $all = $ls->getAll();
-        $this->assertFalse(in_array("work", $all));
-        $this->assertFalse(in_array("working", $all));
-        $this->assertFalse(in_array("worker", $all));
-        $this->assertTrue(in_array("is work", $all));
-        
-        $ls->clear();
-        $this->assertTrue($ls->isEmpty());
+
+        $this->assertTrue($listSet->isEmpty());
+
+        $listSet->add($element);
+        $this->assertTrue($listSet->contain($element));
+
+        $listSet->addAll($elements);
+        $this->assertTrue($listSet->containsAll($elements));
+        $this->assertTrue($listSet->get(0) === $element);
+
+        $all = $listSet->getAll();
+        $this->assertTrue(in_array('work', $all));
+        $this->assertTrue(in_array('working', $all));
+        $this->assertTrue(in_array('worker', $all));
+        $this->assertTrue(in_array('is work', $all));
+
+        $this->assertFalse($listSet->isEmpty());
+
+        $listSet->remove('work');
+        $all = $listSet->getAll();
+        $this->assertFalse(in_array('work', $all));
+        $this->assertTrue(in_array('working', $all));
+        $this->assertTrue(in_array('worker', $all));
+        $this->assertTrue(in_array('is work', $all));
+
+        $listSet->removeAll(array('working', 'worker'));
+        $all = $listSet->getAll();
+        $this->assertFalse(in_array('work', $all));
+        $this->assertFalse(in_array('working', $all));
+        $this->assertFalse(in_array('worker', $all));
+        $this->assertTrue(in_array('is work', $all));
+
+        $listSet->clear();
+        $this->assertTrue($listSet->isEmpty());
     }
 
     /**
      * Test TypedList.
-     * 
+     *
      * This method provide test
      * for TypedList class.
-     * 
-     * @return void
      */
     public function testTypedList()
     {
-        $tl = new TypedList(new \DateTime());
-        
-        $tl->add("error");
-        $this->assertFalse($tl->contain("error"));
-        
-        $element = new \DateTime("10:00:00");
+        $typedList = new TypedList(new \DateTime());
+
+        $typedList->add('error');
+        $this->assertFalse($typedList->contain('error'));
+
+        $element = new \DateTime('10:00:00');
         $elements = array(
-            new \DateTime("11:00:00"),
-            new \DateTime("12:00:00"),
-            new \DateTime("13:00:00")
+            new \DateTime('11:00:00'),
+            new \DateTime('12:00:00'),
+            new \DateTime('13:00:00'),
         );
-        
-        $this->assertTrue($tl->isEmpty());
-        
-        $tl->add($element);
-        $this->assertTrue($tl->contain($element));
-        
-        $tl->addAll($elements);
-        $this->assertTrue($tl->containsAll($elements));
-        $this->assertTrue($tl->get(0) === $element);
-        
-        $all = $tl->getAll();
+
+        $this->assertTrue($typedList->isEmpty());
+
+        $typedList->add($element);
+        $this->assertTrue($typedList->contain($element));
+
+        $typedList->addAll($elements);
+        $this->assertTrue($typedList->containsAll($elements));
+        $this->assertTrue($typedList->get(0) === $element);
+
+        $all = $typedList->getAll();
         $this->assertTrue(in_array($element, $all));
         $this->assertTrue(in_array($elements[0], $all));
         $this->assertTrue(in_array($elements[1], $all));
         $this->assertTrue(in_array($elements[2], $all));
-        
-        $this->assertFalse($tl->isEmpty());
-        
-        $tl->remove($element);
-        $all = $tl->getAll();
+
+        $this->assertFalse($typedList->isEmpty());
+
+        $typedList->remove($element);
+        $all = $typedList->getAll();
         $this->assertFalse(in_array($element, $all));
         $this->assertTrue(in_array($elements[0], $all));
         $this->assertTrue(in_array($elements[1], $all));
         $this->assertTrue(in_array($elements[2], $all));
-        
-        $tl->removeAll(
+
+        $typedList->removeAll(
             array(
                 $elements[0],
-                $elements[1]
+                $elements[1],
             )
         );
-        $all = $tl->getAll();
+        $all = $typedList->getAll();
         $this->assertFalse(in_array($element, $all));
         $this->assertFalse(in_array($elements[0], $all));
         $this->assertFalse(in_array($elements[1], $all));
         $this->assertTrue(in_array($elements[2], $all));
-        
-        $tl->clear();
-        $this->assertTrue($tl->isEmpty());
+
+        $typedList->clear();
+        $this->assertTrue($typedList->isEmpty());
     }
 
     /**
      * Test HackSet.
-     * 
+     *
      * This method provide test
      * for HackSet class.
-     * 
-     * @return void
      */
     public function testHackSet()
     {
-        $hs = new HackSet();
-        
-        $this->assertTrue($hs->isEmpty());
-        
-        $hs->add("integer", 12);
-        $hs->add("integer", 24);
-        $this->assertTrue($hs->hasKey("integer"));
-        $this->assertTrue($hs->hasValue(12) == "integer");
-        $this->assertTrue($hs->hasValueIn("integer", 12));
-        $this->assertTrue($hs->hasValue(24) == "integer");
-        $this->assertTrue($hs->hasValueIn("integer", 24));
-        $this->assertTrue($hs->hasRecord("integer"));
-        
-        $hs->add("hello", "world");
-        $this->assertTrue(in_array("integer", $hs->getKeys()));
-        $this->assertTrue(in_array("hello", $hs->getKeys()));
-        
-        $this->assertFalse($hs->isEmpty());
-        
-        $integer = $hs->get("integer");
+        $hackSet = new HackSet();
+
+        $this->assertTrue($hackSet->isEmpty());
+
+        $hackSet->add('integer', 12);
+        $hackSet->add('integer', 24);
+        $this->assertTrue($hackSet->hasKey('integer'));
+        $this->assertTrue($hackSet->hasValue(12) == 'integer');
+        $this->assertTrue($hackSet->hasValueIn('integer', 12));
+        $this->assertTrue($hackSet->hasValue(24) == 'integer');
+        $this->assertTrue($hackSet->hasValueIn('integer', 24));
+        $this->assertTrue($hackSet->hasRecord('integer'));
+
+        $hackSet->add('hello', 'world');
+        $this->assertTrue(in_array('integer', $hackSet->getKeys()));
+        $this->assertTrue(in_array('hello', $hackSet->getKeys()));
+
+        $this->assertFalse($hackSet->isEmpty());
+
+        $integer = $hackSet->get('integer');
         $this->assertTrue(in_array(12, $integer));
         $this->assertTrue(in_array(24, $integer));
-        
-        $all = $hs->getAll();
+
+        $all = $hackSet->getAll();
         $tall = array(
-            "integer" => array(
+            'integer' => array(
                 12,
-                24
+                24,
             ),
-            "hello" => array(
-                "world"
-            )
+            'hello' => array(
+                'world',
+            ),
         );
         $this->assertTrue($all == $tall);
-        
-        $hs->removeIn("integer", 12);
-        $this->assertFalse($hs->hasValueIn("integer", 12));
-        $this->assertFalse($hs->hasValue(12) == "integer");
-        
-        $hs->remove("integer");
-        $this->assertFalse($hs->hasKey("integer"));
-        
-        $hs->clear();
-        $this->assertTrue($hs->isEmpty());
+
+        $hackSet->removeIn('integer', 12);
+        $this->assertFalse($hackSet->hasValueIn('integer', 12));
+        $this->assertFalse($hackSet->hasValue(12) == 'integer');
+
+        $hackSet->remove('integer');
+        $this->assertFalse($hackSet->hasKey('integer'));
+
+        $hackSet->clear();
+        $this->assertTrue($hackSet->isEmpty());
     }
 }

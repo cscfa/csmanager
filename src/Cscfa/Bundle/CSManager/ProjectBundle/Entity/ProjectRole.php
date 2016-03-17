@@ -8,18 +8,20 @@
  * PHP version 5.5
  *
  * @category Entity
- * @package  CscfaCSManagerProjectBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
  * @filesource
+ *
  * @link     http://cscfa.fr
  */
+
 namespace Cscfa\Bundle\CSManager\ProjectBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * ProjectRole
+ * ProjectRole.
  *
  * The base ProjectRole entity for the
  * Cscfaproject manager
@@ -34,40 +36,55 @@ class ProjectRole
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="UUID")
      */
-    protected $id;
+    protected $roleId;
 
-    /** 
-     * @ORM\Column(type="string", options={"comment":"The Project property"}, nullable=false, name="csmanager_ProjectRole_property") 
+    /**
+     * @ORM\Column(
+     *      type="string",
+     *      options={"comment":"The Project property"},
+     *      nullable=false,
+     *      name="csmanager_ProjectRole_property"
+     * )
      */
     protected $property;
 
-    /** 
-     * @ORM\Column(type="boolean", options={"default" = true, "comment":"The ProjectRole reading permission"}, nullable=false, name="csmanager_ProjectRole_read") 
+    /**
+     * @ORM\Column(
+     *      type="boolean",
+     *      options={"default" = true, "comment":"The ProjectRole reading permission"},
+     *      nullable=false,
+     *      name="csmanager_ProjectRole_read"
+     * )
      */
     protected $read;
 
-    /** 
-     * @ORM\Column(type="boolean", options={"default" = false, "comment":"The ProjectRole writing permission"}, nullable=false, name="csmanager_ProjectRole_write") 
+    /**
+     * @ORM\Column(
+     *      type="boolean",
+     *      options={"default" = false, "comment":"The ProjectRole writing permission"},
+     *      nullable=false,
+     *      name="csmanager_ProjectRole_write"
+     * )
      */
     protected $write;
 
     /**
-     * Get id
-     * 
+     * Get id.
+     *
      * Return the entity id.
-     * 
+     *
      * @return string - return the entity id
      */
     public function getId()
     {
-        return $this->id;
+        return $this->roleId;
     }
 
     /**
-     * Get property
-     * 
+     * Get property.
+     *
      * Return the property
-     * 
+     *
      * @return string - the property
      */
     public function getProperty()
@@ -76,72 +93,74 @@ class ProjectRole
     }
 
     /**
-     * Set property
-     * 
+     * Set property.
+     *
      * Set the property
-     * 
+     *
      * @param string $property - the property
-     * 
+     *
      * @return ProjectRole - the current instance
      */
     public function setProperty($property)
     {
         $this->property = $property;
+
         return $this;
     }
 
     /**
-     * Get read
-     * 
+     * Get read.
+     *
      * Return the reading permission
-     * 
-     * @return boolean - the reading permission
+     *
+     * @return bool - the reading permission
      */
-    public function getRead()
+    public function isRead()
     {
         return $this->read;
     }
 
     /**
-     * Set read
-     * 
+     * Set read.
+     *
      * Set the reading permission
-     * 
-     * @param boolean $read - the reading permission
-     * 
+     *
+     * @param bool $read - the reading permission
+     *
      * @return ProjectRole - the current instance
      */
     public function setRead($read)
     {
         $this->read = $read;
+
         return $this;
     }
 
     /**
-     * Get write
-     * 
+     * Get write.
+     *
      * Return the writing permission
-     * 
-     * @return boolean - the writing permission
+     *
+     * @return bool - the writing permission
      */
-    public function getWrite()
+    public function isWrite()
     {
         return $this->write;
     }
 
     /**
-     * Set write
-     * 
+     * Set write.
+     *
      * Set the writing permission
-     * 
-     * @param boolean $write - the writing permission
-     * 
+     *
+     * @param bool $write - the writing permission
+     *
      * @return ProjectRole - the current instance
      */
     public function setWrite($write)
     {
         $this->write = $write;
+
         return $this;
     }
- 
 }

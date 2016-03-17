@@ -1,19 +1,21 @@
 <?php
 /**
  * This file is a part of CSCFA security project.
- * 
+ *
  * The security project is a security bundle written in php
  * with Symfony2 framework.
- * 
+ *
  * PHP version 5.5
- * 
+ *
  * @category Builder
- * @package  CscfaSecurityBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
  * @filesource
+ *
  * @link     http://cscfa.fr
  */
+
 namespace Cscfa\Bundle\SecurityBundle\Util\Builder;
 
 use Cscfa\Bundle\SecurityBundle\Util\Manager\RoleManager;
@@ -31,10 +33,12 @@ use Cscfa\Bundle\ToolboxBundle\BaseInterface\Error\ErrorRegisteryInterface;
  * RoleManager usage.
  *
  * @category Builder
- * @package  CscfaSecurityBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
+ *
  * @version  Release: 1.1
+ *
  * @link     http://cscfa.fr
  * @see      Cscfa\Bundle\SecurityBundle\Entity\StackUpdate
  * @see      Cscfa\Bundle\SecurityBundle\Entity\Role
@@ -42,7 +46,6 @@ use Cscfa\Bundle\ToolboxBundle\BaseInterface\Error\ErrorRegisteryInterface;
  */
 class RoleBuilder implements ErrorRegisteryInterface
 {
-
     /**
      * A RoleBuilder error type.
      *
@@ -54,7 +57,7 @@ class RoleBuilder implements ErrorRegisteryInterface
      * The default value of this constant
      * is an integer set to 0.
      *
-     * @var integer
+     * @var int
      */
     const DUPLICATE_ROLE_NAME = 0;
 
@@ -69,7 +72,7 @@ class RoleBuilder implements ErrorRegisteryInterface
      * The default value of this constant
      * is an integer set to 1.
      *
-     * @var integer
+     * @var int
      */
     const INVALID_ROLE_NAME = 1;
 
@@ -84,7 +87,7 @@ class RoleBuilder implements ErrorRegisteryInterface
      * The default value of this constant
      * is an integer set to 2.
      *
-     * @var integer
+     * @var int
      */
     const INVALID_ROLE_INSTANCE_OF = 2;
 
@@ -100,7 +103,7 @@ class RoleBuilder implements ErrorRegisteryInterface
      * The default value of this constant
      * is an integer set to 3.
      *
-     * @var integer
+     * @var int
      */
     const CIRCULAR_REFERENCE = 3;
 
@@ -116,7 +119,7 @@ class RoleBuilder implements ErrorRegisteryInterface
      * The default value of this constant
      * is an integer set to 4.
      *
-     * @var integer
+     * @var int
      */
     const CREATION_AFTER_NOW = 4;
 
@@ -133,7 +136,7 @@ class RoleBuilder implements ErrorRegisteryInterface
      * The default value of this constant
      * is an integer set to 5.
      *
-     * @var integer
+     * @var int
      */
     const UPDATE_BEFORE_CREATION = 5;
 
@@ -149,7 +152,7 @@ class RoleBuilder implements ErrorRegisteryInterface
      * The default value of this constant
      * is an integer set to 6.
      *
-     * @var integer
+     * @var int
      */
     const UPDATE_AFTER_NOW = 6;
 
@@ -162,7 +165,8 @@ class RoleBuilder implements ErrorRegisteryInterface
      * is set to RoleBuilder::NO_ERROR.
      *
      * @see Cscfa\Bundle\SecurityBundle\Util\Builder\RoleBuilder::NO_ERROR
-     * @var integer
+     *
+     * @var int
      */
     protected $lastError;
 
@@ -188,6 +192,7 @@ class RoleBuilder implements ErrorRegisteryInterface
      * it into the database.
      *
      * @see Cscfa\Bundle\SecurityBundle\Util\Manager\RoleManager::persist()
+     *
      * @var StackUpdate
      */
     protected $stackUpdate;
@@ -200,6 +205,7 @@ class RoleBuilder implements ErrorRegisteryInterface
      * it's methods.
      *
      * @see Cscfa\Bundle\SecurityBundle\Util\Manager\RoleManager
+     *
      * @var RoleManager
      */
     protected $manager;
@@ -225,14 +231,14 @@ class RoleBuilder implements ErrorRegisteryInterface
      *
      * @param RoleManager $roleManager The role manage to use for setter validations.
      * @param Role|null   $role        The role to encapsulate.
-     * 
-     * @see Cscfa\Bundle\SecurityBundle\Entity\Role      
+     *
+     * @see Cscfa\Bundle\SecurityBundle\Entity\Role
      */
     public function __construct(RoleManager $roleManager, $role = null)
     {
         $this->manager = $roleManager;
         $this->lastError = self::NO_ERROR;
-        
+
         if ($role === null) {
             $this->role = new Role();
             $this->stackUpdate = null;
@@ -251,6 +257,7 @@ class RoleBuilder implements ErrorRegisteryInterface
      * it getId method.
      *
      * @see    \Cscfa\Bundle\SecurityBundle\Entity\Role::getId()
+     *
      * @return string
      */
     public function getId()
@@ -276,25 +283,29 @@ class RoleBuilder implements ErrorRegisteryInterface
      * is deactivate, method will allways
      * return true.
      *
-     * @param string  $name  The new name to use.
-     * @param boolean $force The force state of the validation.
-     * 
-     * @see    \Cscfa\Bundle\SecurityBundle\Entity\Role::setName()        
-     * @return boolean
+     * @param string $name  The new name to use.
+     * @param bool   $force The force state of the validation.
+     *
+     * @see    \Cscfa\Bundle\SecurityBundle\Entity\Role::setName()
+     *
+     * @return bool
      */
     public function setName($name, $force = false)
     {
-        if ($this->manager->roleExists($name) && $name !== $this->role->getName() && ! $force) {
+        if ($this->manager->roleExists($name) && $name !== $this->role->getName() && !$force) {
             $this->lastError = self::DUPLICATE_ROLE_NAME;
+
             return false;
         }
-        
-        if (! $this->manager->nameIsValid($name) && ! $force) {
+
+        if (!$this->manager->nameIsValid($name) && !$force) {
             $this->lastError = self::IN;
+
             return false;
         }
-        
+
         $this->role->setName($name);
+
         return true;
     }
 
@@ -306,6 +317,7 @@ class RoleBuilder implements ErrorRegisteryInterface
      * value is null.
      *
      * @see    \Cscfa\Bundle\SecurityBundle\Entity\Role::getName()
+     *
      * @return string
      */
     public function getName()
@@ -331,30 +343,33 @@ class RoleBuilder implements ErrorRegisteryInterface
      * deactivate, this method always return true.
      *
      * @param Role|null $child The new child to use.
-     * @param boolean   $force The force state of the setter validation.
-     * 
-     * @see    \Cscfa\Bundle\SecurityBundle\Entity\Role::setChild()        
-     * @return boolean
+     * @param bool      $force The force state of the setter validation.
+     *
+     * @see    \Cscfa\Bundle\SecurityBundle\Entity\Role::setChild()
+     *
+     * @return bool
      */
     public function setChild($child, $force = false)
     {
         $lastChild = $this->getChild();
-        
-        if ($child instanceof Role && $this->manager->roleExists($child) && ! $force) {
+
+        if ($child instanceof Role && $this->manager->roleExists($child) && !$force) {
             $this->role->setChild($child);
-        } else if (! ($child instanceof Role) && $child !== null && ! $force) {
+        } elseif (!($child instanceof Role) && $child !== null && !$force) {
             $this->lastError = self::INVALID_ROLE_INSTANCE_OF;
+
             return false;
         } else {
             $this->role->setChild($child);
         }
-        
-        if (! $force && $this->manager->hasCircularReference($this->role)) {
+
+        if (!$force && $this->manager->hasCircularReference($this->role)) {
             $this->role->setChild($lastChild);
             $this->lastError = self::CIRCULAR_REFERENCE;
+
             return false;
         }
-        
+
         return true;
     }
 
@@ -365,6 +380,7 @@ class RoleBuilder implements ErrorRegisteryInterface
      * child as Role object or null.
      *
      * @see    \Cscfa\Bundle\SecurityBundle\Entity\Role::getChild()
+     *
      * @return Role|null
      */
     public function getChild()
@@ -391,18 +407,21 @@ class RoleBuilder implements ErrorRegisteryInterface
      * always return true.
      *
      * @param \DateTime $createdAt The new DateTime to use.
-     * @param boolean   $force     The force state of the setter validation.
-     * 
+     * @param bool      $force     The force state of the setter validation.
+     *
      * @see    \Cscfa\Bundle\SecurityBundle\Entity\Base\StackableObject::setCreatedAt()
-     * @return boolean
+     *
+     * @return bool
      */
     public function setCreatedAt(\DateTime $createdAt, $force = false)
     {
         if ($force || $createdAt <= new \DateTime()) {
             $this->role->setCreatedAt($createdAt);
+
             return true;
         } else {
             $this->lastError = self::CREATION_AFTER_NOW;
+
             return false;
         }
     }
@@ -414,6 +433,7 @@ class RoleBuilder implements ErrorRegisteryInterface
      * role creation date as DateTime instance.
      *
      * @see    \Cscfa\Bundle\SecurityBundle\Entity\Base\StackableObject::getCreatedAt()
+     *
      * @return \DateTime
      */
     public function getCreatedAt()
@@ -441,26 +461,29 @@ class RoleBuilder implements ErrorRegisteryInterface
      * is deactivate, it will always return true.
      *
      * @param \DateTime $updatedAt The new DateTime to ise as update date.
-     * @param boolean   $force     The force state of the setter validation.
-     * 
-     * @see    \Cscfa\Bundle\SecurityBundle\Entity\Base\StackableObject::setUpdatedAt()        
-     * @return boolean
+     * @param bool      $force     The force state of the setter validation.
+     *
+     * @see    \Cscfa\Bundle\SecurityBundle\Entity\Base\StackableObject::setUpdatedAt()
+     *
+     * @return bool
      */
     public function setUpdatedAt(\DateTime $updatedAt, $force = false)
     {
-        if ($updatedAt > new \DateTime() && ! $force) {
+        if ($updatedAt > new \DateTime() && !$force) {
             $this->lastError = self::UPDATE_AFTER_NOW;
+
             return false;
-        } elseif ($updatedAt < $this->getCreatedAt() && ! $force) {
+        } elseif ($updatedAt < $this->getCreatedAt() && !$force) {
             $this->lastError = self::UPDATE_BEFORE_CREATION;
+
             return false;
-        } else if ($this->getCreatedAt() === null && ! $force) {
+        } elseif ($this->getCreatedAt() === null && !$force) {
             $this->setCreatedAt($updatedAt);
             $this->role->setUpdatedAt($updatedAt);
         } else {
             $this->role->setUpdatedAt($updatedAt);
         }
-        
+
         return true;
     }
 
@@ -471,6 +494,7 @@ class RoleBuilder implements ErrorRegisteryInterface
      * last update date as DateTime instance.
      *
      * @see    \Cscfa\Bundle\SecurityBundle\Entity\Base\StackableObject::getUpdatedAt()
+     *
      * @return \DateTime
      */
     public function getUpdatedAt()
@@ -485,13 +509,15 @@ class RoleBuilder implements ErrorRegisteryInterface
      * the role user creator.
      *
      * @param User $createdBy The User instance to use as creator.
-     * 
-     * @see    \Cscfa\Bundle\SecurityBundle\Entity\Base\StackableObject::setCreatedBy()      
+     *
+     * @see    \Cscfa\Bundle\SecurityBundle\Entity\Base\StackableObject::setCreatedBy()
+     *
      * @return RoleBuilder
      */
     public function setCreatedBy(User $createdBy)
     {
         $this->role->setCreatedBy($createdBy);
+
         return $this;
     }
 
@@ -502,6 +528,7 @@ class RoleBuilder implements ErrorRegisteryInterface
      * current role user creator.
      *
      * @see    \Cscfa\Bundle\SecurityBundle\Entity\Base\StackableObject::getCreatedBy()
+     *
      * @return User
      */
     public function getCreatedBy()
@@ -516,13 +543,15 @@ class RoleBuilder implements ErrorRegisteryInterface
      * the current role user updator.
      *
      * @param User $updatedBy The User instance to use as updator.
-     * 
+     *
      * @see    \Cscfa\Bundle\SecurityBundle\Entity\Base\StackableObject::setUpdatedBy()
+     *
      * @return RoleBuilder
      */
     public function setUpdatedBy(User $updatedBy)
     {
         $this->role->setUpdatedBy($updatedBy);
+
         return $this;
     }
 
@@ -533,6 +562,7 @@ class RoleBuilder implements ErrorRegisteryInterface
      * current role user updator.
      *
      * @see    \Cscfa\Bundle\SecurityBundle\Entity\Base\StackableObject::getUpdatedBy()
+     *
      * @return User
      */
     public function getUpdatedBy()
@@ -603,11 +633,9 @@ class RoleBuilder implements ErrorRegisteryInterface
      *
      * This method allow to remove the
      * last error state.
-     *
-     * @return void
      */
-    public function removeLastError() {
+    public function removeLastError()
+    {
         $this->lastError = self::NO_ERROR;
     }
-
 }
