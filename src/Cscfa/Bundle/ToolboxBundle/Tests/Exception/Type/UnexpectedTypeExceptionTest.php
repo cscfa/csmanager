@@ -8,12 +8,14 @@
  * PHP version 5.5
  *
  * @category Test
- * @package  CscfaToolboxBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
  * @filesource
+ *
  * @link     http://cscfa.fr
  */
+
 namespace Cscfa\Bundle\ToolboxBundle\Tests\Exception\Type;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -27,9 +29,10 @@ use Cscfa\Bundle\ToolboxBundle\Exception\Type\UnexpectedTypeException;
  * process.
  *
  * @category Test
- * @package  CscfaToolboxBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
+ *
  * @link     http://cscfa.fr
  * @see      Cscfa\Bundle\CSManager\CoreBundle\Entity\User
  */
@@ -37,12 +40,10 @@ class UnexpectedTypeExceptionTest extends WebTestCase
 {
     /**
      * The setUp.
-     * 
+     *
      * This method is used to configure
      * and process the initialisation of
      * the test class.
-     * 
-     * @return void
      */
     public function setUp()
     {
@@ -53,18 +54,16 @@ class UnexpectedTypeExceptionTest extends WebTestCase
      *
      * This test is used to confirm
      * the UnexpectedTypeException constructor.
-     *
-     * @return void
      */
     public function testConstructor()
     {
         $allowed = array(
-            "boolean",
-            "string"
+            'boolean',
+            'string',
         );
-        
-        $exception = new UnexpectedTypeException("type exception", 404, null, $allowed);
-        
+
+        $exception = new UnexpectedTypeException('type exception', 404, null, $allowed);
+
         $this->assertTrue($exception->getMessage() == "type exception\n Allowed types : boolean, string");
     }
 }

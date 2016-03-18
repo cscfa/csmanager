@@ -1,19 +1,21 @@
 <?php
 /**
  * This file is a part of CSCFA security project.
- * 
+ *
  * The security project is a security bundle written in php
  * with Symfony2 framework.
- * 
+ *
  * PHP version 5.5
- * 
- * @category Command
- * @package  CscfaSecurityBundle
- * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
- * @license  http://opensource.org/licenses/MIT MIT
+ *
+ * @category   Command
+ *
+ * @author     Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
+ * @license    http://opensource.org/licenses/MIT MIT
  * @filesource
- * @link     http://cscfa.fr
+ *
+ * @link       http://cscfa.fr
  */
+
 namespace Cscfa\Bundle\SecurityBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
@@ -38,14 +40,14 @@ use Cscfa\Bundle\SecurityBundle\Command\UpdateTool\PostProcessRoleArray;
  * update an existing group into the database.
  *
  * @category Command
- * @package  CscfaSecurityBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
+ *
  * @link     http://cscfa.fr
  */
 class GroupUpdateCommand extends ContainerAwareCommand
 {
-
     /**
      * The GroupManager.
      *
@@ -90,11 +92,11 @@ class GroupUpdateCommand extends ContainerAwareCommand
     public function __construct(GroupManager $groupManager, GroupProvider $groupProvider, RoleProvider $roleProvider)
     {
         $this->groupProvider = $groupProvider;
-        
+
         $this->groupManager = $groupManager;
-        
+
         $this->roleProvider = $roleProvider;
-        
+
         parent::__construct();
     }
 
@@ -103,12 +105,11 @@ class GroupUpdateCommand extends ContainerAwareCommand
      *
      * This configuration purpose that calling this command
      * behind "app/console cs:update:group". It declare
-     * one optional arguments that are the name. If this 
-     * informations is omitted, it will be answer behind 
+     * one optional arguments that are the name. If this
+     * informations is omitted, it will be answer behind
      * an interactive shell interface into the execute method.
      *
      * @see    \Symfony\Component\Console\Command\Command::configure()
-     * @return void
      */
     protected function configure()
     {
@@ -120,7 +121,7 @@ class GroupUpdateCommand extends ContainerAwareCommand
     /**
      * Command execution.
      *
-     * The execution of the command will update an existing group 
+     * The execution of the command will update an existing group
      * into the database.All of the needed informations will be ask
      * behind the shell as an interactive element.
      *
@@ -130,104 +131,103 @@ class GroupUpdateCommand extends ContainerAwareCommand
      * @param InputInterface  $input  The common command input
      * @param OutputInterface $output The common command output
      *
-     * @see     \Symfony\Component\Console\Command\Command::execute()
-     * @return  void
+     * @see    \Symfony\Component\Console\Command\Command::execute()
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $commandFacade = new CommandFacade($input, $output, $this);
-        list ($name) = $commandFacade->getOrAskMulti(
+        list($name) = $commandFacade->getOrAskMulti(
             array(
                 array(
-                    "var" => "name",
-                    "question" => "Group name",
-                    "type" => CommandAskBuilder::TYPE_ASK,
-                    "option" => CommandAskBuilder::OPTION_ASK_AUTOCOMPLETED,
-                    "completion" => $this->groupProvider->findAllNames(),
-                    "extra" => array(
-                        "empty" => false,
-                        "default" => false
-                    )
-                )
+                    'var' => 'name',
+                    'question' => 'Group name',
+                    'type' => CommandAskBuilder::TYPE_ASK,
+                    'option' => CommandAskBuilder::OPTION_ASK_AUTOCOMPLETED,
+                    'completion' => $this->groupProvider->findAllNames(),
+                    'extra' => array(
+                        'empty' => false,
+                        'default' => false,
+                    ),
+                ),
             )
         );
-        
+
         $groupBuilder = $this->groupProvider->findOneByName($name);
-        
-        if (! $groupBuilder) {
-            $cf = new CommandColorFacade($output);
-            $cf->addColor("error", CommandColorInterface::BLACK, CommandColorInterface::RED, null);
-            $cf->clear();
-            $cf->addText("\n");
-            $cf->addText("\nUnexisting group " . $name . ".\n", "error");
-            $cf->addText("\n");
-            $cf->write();
-            
+
+        if (!$groupBuilder) {
+            $outputColor = new CommandColorFacade($output);
+            $outputColor->addColor('error', CommandColorInterface::BLACK, CommandColorInterface::RED, null);
+            $outputColor->clear();
+            $outputColor->addText("\n");
+            $outputColor->addText("\nUnexisting group ".$name.".\n", 'error');
+            $outputColor->addText("\n");
+            $outputColor->write();
+
             return;
         }
-        
+
         $commandFacade->askATWIL(
-            $groupBuilder, 
-            "finish", 
-            "What to update", 
+            $groupBuilder,
+            'finish',
+            'What to update',
             array(
-                "name" => array(
-                    "ask" => array(
-                        "question" => "Name : ",
-                        "type" => CommandAskBuilder::TYPE_ASK
+                'name' => array(
+                    'ask' => array(
+                        'question' => 'Name : ',
+                        'type' => CommandAskBuilder::TYPE_ASK,
                     ),
-                    "success" => "done",
-                    "failure" => "failure"
+                    'success' => 'done',
+                    'failure' => 'failure',
                 ),
-                "locked" => array(
-                    "ask" => array(
-                        "question" => "Locked : ",
-                        "type" => CommandAskBuilder::TYPE_ASK_CONFIRMATION
+                'locked' => array(
+                    'ask' => array(
+                        'question' => 'Locked : ',
+                        'type' => CommandAskBuilder::TYPE_ASK_CONFIRMATION,
                     ),
-                    "success" => "done",
-                    "failure" => "failure"
+                    'success' => 'done',
+                    'failure' => 'failure',
                 ),
-                "expiresAt" => array(
-                    "ask" => array(
-                        "question" => "Expiration date as Y-m-d H:i:s : ",
-                        "type" => CommandAskBuilder::TYPE_ASK,
-                        "default" => null
+                'expiresAt' => array(
+                    'ask' => array(
+                        'question' => 'Expiration date as Y-m-d H:i:s : ',
+                        'type' => CommandAskBuilder::TYPE_ASK,
+                        'default' => null,
                     ),
-                    "postProcess" => new PostProcessDateTime(),
-                    "success" => "done",
-                    "failure" => "failure"
+                    'postProcess' => new PostProcessDateTime(),
+                    'success' => 'done',
+                    'failure' => 'failure',
                 ),
-                "role" => array(
-                    "preProcess" => new PreProcessRole("findAllNames"),
-                    "ask" => array(
-                        "question" => "Roles : ",
-                        "default" => null,
-                        "type" => CommandAskBuilder::TYPE_ASK_SELECT,
-                        "option" => CommandAskBuilder::OPTION_ASK_MULTI_SELECT
+                'role' => array(
+                    'preProcess' => new PreProcessRole('findAllNames'),
+                    'ask' => array(
+                        'question' => 'Roles : ',
+                        'default' => null,
+                        'type' => CommandAskBuilder::TYPE_ASK_SELECT,
+                        'option' => CommandAskBuilder::OPTION_ASK_MULTI_SELECT,
                     ),
-                    "extra" => $this->roleProvider,
-                    "success" => "done",
-                    "failure" => "failure",
-                    "postProcess" => new PostProcessRoleArray()
-                )
+                    'extra' => $this->roleProvider,
+                    'success' => 'done',
+                    'failure' => 'failure',
+                    'postProcess' => new PostProcessRoleArray(),
+                ),
             )
         );
-        
+
         $group = $groupBuilder->getGroup();
-        
+
         $groupRoles = $group->getRoles();
         $rolesNames = array();
         foreach ($groupRoles as $role) {
             $rolesNames = $role->getName();
         }
-        
+
         $valid = array(
-            "name" => $group->getName(),
-            "locked" => $group->getLocked(),
-            "expire" => $group->getExpiresAt(),
-            "roles" => $rolesNames
+            'name' => $group->getName(),
+            'locked' => $group->isLocked(),
+            'expire' => $group->getExpiresAt(),
+            'roles' => $rolesNames,
         );
-        
+
         if ($commandFacade->getConfirmation($valid)) {
             $this->groupManager->persist($groupBuilder);
         }

@@ -30,7 +30,7 @@ services:
     cscfa.view_project.datagrid_stepper:
         class: Cscfa\Bundle\CSManager\CoreBundle\BootstrapStepper\DatagridStepper
         calls: 
-            - [setArguments, [ "@router", "cscfa_cs_manager_project_select_project" ]]
+            - [setArguments, [ "@router", "cscfa_cs_manager_project_select_project", "project" ]]
             - [setCallBacks]
     cscfa_project.project_role.extension:
         class: Cscfa\Bundle\CSManager\ProjectBundle\Twig\Extension\ProjectRoleExtension

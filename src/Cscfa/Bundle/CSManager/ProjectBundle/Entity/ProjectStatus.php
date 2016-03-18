@@ -8,18 +8,20 @@
  * PHP version 5.5
  *
  * @category Entity
- * @package  CscfaCSManagerProjectBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
  * @filesource
+ *
  * @link     http://cscfa.fr
  */
+
 namespace Cscfa\Bundle\CSManager\ProjectBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * ProjectStatus
+ * ProjectStatus.
  *
  * The base ProjectStatus entity for the
  * Cscfaproject manager
@@ -30,34 +32,44 @@ use Doctrine\ORM\Mapping as ORM;
 class ProjectStatus
 {
     /**
-     * @ORM\Column(type="guid", nullable=false, name="csmanager_ProjectStatus_id", options={"comment":"ProjectStatus id"})
+     * @ORM\Column(
+     *      type="guid",
+     *      nullable=false,
+     *      name="csmanager_ProjectStatus_id",
+     *      options={"comment":"ProjectStatus id"}
+     * )
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="UUID")
      */
-    protected $id;
+    protected $stautsId;
 
-    /** 
-     * @ORM\Column(type="string", options={"comment":"The status name"}, nullable=false, name="csmanager_ProjectStatus_name") 
+    /**
+     * @ORM\Column(
+     *      type="string",
+     *      options={"comment":"The status name"},
+     *      nullable=false,
+     *      name="csmanager_ProjectStatus_name"
+     * )
      */
     protected $name;
 
     /**
-     * Get id
-     * 
+     * Get id.
+     *
      * Return the entity id.
-     * 
+     *
      * @return string - return the entity id
      */
     public function getId()
     {
-        return $this->id;
+        return $this->stautsId;
     }
 
     /**
-     * Get name
-     * 
+     * Get name.
+     *
      * Return the status name
-     * 
+     *
      * @return string - the status name
      */
     public function getName()
@@ -66,18 +78,18 @@ class ProjectStatus
     }
 
     /**
-     * Set name
-     * 
+     * Set name.
+     *
      * Set the status name
-     * 
+     *
      * @param string $name - the status name
-     * 
+     *
      * @return ProjectStatus - the current instance
      */
     public function setName($name)
     {
         $this->name = $name;
+
         return $this;
     }
- 
 }

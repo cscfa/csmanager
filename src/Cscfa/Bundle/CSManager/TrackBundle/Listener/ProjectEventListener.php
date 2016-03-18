@@ -8,12 +8,14 @@
  * PHP version 5.5
  *
  * @category Listener
- * @package  CscfaCSManagerTrackBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
  * @filesource
+ *
  * @link     http://cscfa.fr
  */
+
 namespace Cscfa\Bundle\CSManager\TrackBundle\Listener;
 
 use Cscfa\Bundle\CSManager\ProjectBundle\Event\ProjectBaseEvent;
@@ -25,384 +27,397 @@ use Cscfa\Bundle\CSManager\ProjectBundle\Event\ProjectTagEvent;
 use Cscfa\Bundle\ToolboxBundle\Strings\StringTool;
 
 /**
- * ProjectEventListener class
- * 
+ * ProjectEventListener class.
+ *
  * Thist class implements
  * event listeners for the
  * project context
  *
  * @category Listener
- * @package  CscfaCSManagerTrackBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  */
-class ProjectEventListener extends TrackerListener {
-    
+class ProjectEventListener extends TrackerListener
+{
     /**
-     * On created
-     * 
+     * On created.
+     *
      * This method persist data
-     * tracking for a project 
+     * tracking for a project
      * creation event
-     * 
+     *
      * @param ProjectBaseEvent $event The event
      */
-    public function onCreated(ProjectBaseEvent $event){
+    public function onCreated(ProjectBaseEvent $event)
+    {
         $date = new \DateTime();
-        
+
         $message = sprintf(
-            "The user '%s' created the project named '%s' on %s", 
-            $event->getUser()->getUsername(), 
-            $event->getProject()->getName(), 
-            $date->format("Y-m-d H:i:s")
+            "The user '%s' created the project named '%s' on %s",
+            $event->getUser()->getUsername(),
+            $event->getProject()->getName(),
+            $date->format('Y-m-d H:i:s')
         );
-        
+
         $links = $this->createArrayCollection([$event->getUser(), $event->getProject()]);
         $this->getNewTracker($event->getEventName(), $message, $event->getUser(), $links);
-        
+
         $this->doctrine->getManager()->flush();
     }
-    
+
     /**
-     * On remove
-     * 
+     * On remove.
+     *
      * This method persist data
-     * tracking for a project 
+     * tracking for a project
      * remove event
-     * 
+     *
      * @param ProjectBaseEvent $event The event
      */
-    public function onRemove(ProjectBaseEvent $event){
+    public function onRemove(ProjectBaseEvent $event)
+    {
         $date = new \DateTime();
-        
+
         $message = sprintf(
-            "The user '%s' removed the project named '%s' on %s", 
-            $event->getUser()->getUsername(), 
-            $event->getProject()->getName(), 
-            $date->format("Y-m-d H:i:s")
+            "The user '%s' removed the project named '%s' on %s",
+            $event->getUser()->getUsername(),
+            $event->getProject()->getName(),
+            $date->format('Y-m-d H:i:s')
         );
-        
+
         $links = $this->createArrayCollection([$event->getUser(), $event->getProject()]);
         $this->getNewTracker($event->getEventName(), $message, $event->getUser(), $links);
-        
+
         $this->doctrine->getManager()->flush();
     }
-    
+
     /**
-     * Add owner
-     * 
+     * Add owner.
+     *
      * This method persist data
-     * tracking for a project 
+     * tracking for a project
      * add owner event
-     * 
+     *
      * @param ProjectOwnerEvent $event The event
      */
-    public function onAddOwner(ProjectOwnerEvent $event){
+    public function onAddOwner(ProjectOwnerEvent $event)
+    {
         $date = new \DateTime();
-        
+
         $message = sprintf(
-            "The user '%s' add user '%s' as owner in project named '%s' on %s", 
-            $event->getUser()->getUsername(), 
+            "The user '%s' add user '%s' as owner in project named '%s' on %s",
+            $event->getUser()->getUsername(),
             $event->getOwner()->getUser()->getUsername(),
-            $event->getProject()->getName(), 
-            $date->format("Y-m-d H:i:s")
+            $event->getProject()->getName(),
+            $date->format('Y-m-d H:i:s')
         );
-        
+
         $links = $this->createArrayCollection([$event->getUser(), $event->getProject(), $event->getOwner()]);
         $this->getNewTracker($event->getEventName(), $message, $event->getUser(), $links);
-        
+
         $this->doctrine->getManager()->flush();
     }
-    
+
     /**
-     * Update role
-     * 
+     * Update role.
+     *
      * This method persist data
-     * tracking for a project 
+     * tracking for a project
      * owner role update event
-     * 
+     *
      * @param ProjectRoleEvent $event The event
      */
-    public function onRoleUpdate(ProjectRoleEvent $event){
+    public function onRoleUpdate(ProjectRoleEvent $event)
+    {
         $date = new \DateTime();
-        
+
         $message = sprintf(
-            "The user '%s' update the user called '%s' roles in project named '%s' on %s. Update [%s] for %s to %s", 
-            $event->getUser()->getUsername(), 
+            "The user '%s' update the user called '%s' roles in project named '%s' on %s. Update [%s] for %s to %s",
+            $event->getUser()->getUsername(),
             $event->getOwner()->getUser()->getUsername(),
-            $event->getProject()->getName(), 
-            $date->format("Y-m-d H:i:s"),
+            $event->getProject()->getName(),
+            $date->format('Y-m-d H:i:s'),
             implode(':', $event->getProperty()),
             $event->getType(),
             $event->getMode()
         );
-        
+
         $links = $this->createArrayCollection([$event->getUser(), $event->getProject(), $event->getOwner()]);
         $this->getNewTracker($event->getEventName(), $message, $event->getUser(), $links);
-        
+
         $this->doctrine->getManager()->flush();
     }
-    
+
     /**
-     * Add link
-     * 
+     * Add link.
+     *
      * This method persist data
-     * tracking for a project 
+     * tracking for a project
      * adding link event
-     * 
+     *
      * @param ProjectLinkEvent $event The event
      */
-    public function onAddLink(ProjectLinkEvent $event){
+    public function onAddLink(ProjectLinkEvent $event)
+    {
         $date = new \DateTime();
-        
+
         $message = sprintf(
-            "The user '%s' add link '%s' to project named '%s' on %s", 
-            $event->getUser()->getUsername(), 
+            "The user '%s' add link '%s' to project named '%s' on %s",
+            $event->getUser()->getUsername(),
             $event->getLink()->getLink(),
-            $event->getProject()->getName(), 
-            $date->format("Y-m-d H:i:s")
+            $event->getProject()->getName(),
+            $date->format('Y-m-d H:i:s')
         );
-        
+
         $links = $this->createArrayCollection([$event->getUser(), $event->getProject(), $event->getLink()]);
         $this->getNewTracker($event->getEventName(), $message, $event->getUser(), $links);
-        
+
         $this->doctrine->getManager()->flush();
     }
-    
+
     /**
-     * Remove link
-     * 
+     * Remove link.
+     *
      * This method persist data
-     * tracking for a project 
+     * tracking for a project
      * removing link event
-     * 
+     *
      * @param ProjectLinkEvent $event The event
      */
-    public function onRemoveLink(ProjectLinkEvent $event){
+    public function onRemoveLink(ProjectLinkEvent $event)
+    {
         $date = new \DateTime();
-        
+
         $message = sprintf(
-            "The user '%s' remove link '%s' from project named '%s' on %s", 
-            $event->getUser()->getUsername(), 
+            "The user '%s' remove link '%s' from project named '%s' on %s",
+            $event->getUser()->getUsername(),
             $event->getLink()->getLink(),
-            $event->getProject()->getName(), 
-            $date->format("Y-m-d H:i:s")
+            $event->getProject()->getName(),
+            $date->format('Y-m-d H:i:s')
         );
-        
+
         $links = $this->createArrayCollection([$event->getUser(), $event->getProject(), $event->getLink()]);
         $this->getNewTracker($event->getEventName(), $message, $event->getUser(), $links);
-        
+
         $this->doctrine->getManager()->flush();
     }
-    
+
     /**
-     * Add note
-     * 
+     * Add note.
+     *
      * This method persist data
-     * tracking for a project 
+     * tracking for a project
      * adding note event
-     * 
+     *
      * @param ProjectNoteEvent $event The event
      */
-    public function onAddNote(ProjectNoteEvent $event){
+    public function onAddNote(ProjectNoteEvent $event)
+    {
         $date = new \DateTime();
         $content = $event->getNote()->getContent();
-        
+
         $message = sprintf(
-            "The user '%s' add note '%s' to project named '%s' on %s", 
-            $event->getUser()->getUsername(), 
-            StringTool::limitLength($content, 20, "..."),
-            $event->getProject()->getName(), 
-            $date->format("Y-m-d H:i:s")
+            "The user '%s' add note '%s' to project named '%s' on %s",
+            $event->getUser()->getUsername(),
+            StringTool::limitLength($content, 20, '...'),
+            $event->getProject()->getName(),
+            $date->format('Y-m-d H:i:s')
         );
-        
+
         $links = $this->createArrayCollection([$event->getUser(), $event->getProject(), $event->getNote()]);
         $this->getNewTracker($event->getEventName(), $message, $event->getUser(), $links);
-        
+
         $this->doctrine->getManager()->flush();
     }
-    
+
     /**
-     * Edit note
-     * 
+     * Edit note.
+     *
      * This method persist data
-     * tracking for a project 
+     * tracking for a project
      * editing note event
-     * 
+     *
      * @param ProjectNoteEvent $event The event
      */
-    public function onEditNote(ProjectNoteEvent $event){
+    public function onEditNote(ProjectNoteEvent $event)
+    {
         $date = new \DateTime();
         $content = $event->getNote()->getContent();
-        
+
         $message = sprintf(
-            "The user '%s' edit note '%s' for project named '%s' on %s", 
-            $event->getUser()->getUsername(), 
-            StringTool::limitLength($content, 20, "..."),
-            $event->getProject()->getName(), 
-            $date->format("Y-m-d H:i:s")
+            "The user '%s' edit note '%s' for project named '%s' on %s",
+            $event->getUser()->getUsername(),
+            StringTool::limitLength($content, 20, '...'),
+            $event->getProject()->getName(),
+            $date->format('Y-m-d H:i:s')
         );
-        
+
         $links = $this->createArrayCollection([$event->getUser(), $event->getProject(), $event->getNote()]);
         $this->getNewTracker($event->getEventName(), $message, $event->getUser(), $links);
-        
+
         $this->doctrine->getManager()->flush();
     }
-    
+
     /**
-     * Remove note
-     * 
+     * Remove note.
+     *
      * This method persist data
-     * tracking for a project 
+     * tracking for a project
      * removing note event
-     * 
+     *
      * @param ProjectNoteEvent $event The event
      */
-    public function onRemoveNote(ProjectNoteEvent $event){
+    public function onRemoveNote(ProjectNoteEvent $event)
+    {
         $date = new \DateTime();
         $content = $event->getNote()->getContent();
-        
+
         $message = sprintf(
-            "The user '%s' remove note '%s' from project named '%s' on %s", 
-            $event->getUser()->getUsername(), 
-            StringTool::limitLength($content, 50, "..."),
-            $event->getProject()->getName(), 
-            $date->format("Y-m-d H:i:s")
+            "The user '%s' remove note '%s' from project named '%s' on %s",
+            $event->getUser()->getUsername(),
+            StringTool::limitLength($content, 50, '...'),
+            $event->getProject()->getName(),
+            $date->format('Y-m-d H:i:s')
         );
-        
+
         $links = $this->createArrayCollection([$event->getUser(), $event->getProject(), $event->getNote()]);
         $this->getNewTracker($event->getEventName(), $message, $event->getUser(), $links);
-        
+
         $this->doctrine->getManager()->flush();
     }
-    
+
     /**
-     * Update name
-     * 
+     * Update name.
+     *
      * This method persist data
-     * tracking for a project 
+     * tracking for a project
      * updating name event
-     * 
+     *
      * @param ProjectBaseEvent $event The event
      */
-    public function onUpdateName(ProjectBaseEvent $event){
+    public function onUpdateName(ProjectBaseEvent $event)
+    {
         $date = new \DateTime();
-        
+
         $message = sprintf(
-            "The user '%s' update a project to '%s' on %s", 
+            "The user '%s' update a project to '%s' on %s",
             $event->getUser()->getUsername(),
             $event->getProject()->getName(),
-            $date->format("Y-m-d H:i:s")
+            $date->format('Y-m-d H:i:s')
         );
-        
+
         $links = $this->createArrayCollection([$event->getUser(), $event->getProject()]);
         $this->getNewTracker($event->getEventName(), $message, $event->getUser(), $links);
-        
+
         $this->doctrine->getManager()->flush();
     }
-    
+
     /**
-     * Update summary
-     * 
+     * Update summary.
+     *
      * This method persist data
-     * tracking for a project 
+     * tracking for a project
      * updating summary event
-     * 
+     *
      * @param ProjectBaseEvent $event The event
      */
-    public function onSummaryUpdate(ProjectBaseEvent $event){
+    public function onSummaryUpdate(ProjectBaseEvent $event)
+    {
         $date = new \DateTime();
         $content = $event->getProject()->getSummary();
-        
+
         $message = sprintf(
-            "The user '%s' update summary to '%s' for project '%s' on %s", 
+            "The user '%s' update summary to '%s' for project '%s' on %s",
             $event->getUser()->getUsername(),
-            StringTool::limitLength($content, 20, "..."),
+            StringTool::limitLength($content, 20, '...'),
             $event->getProject()->getName(),
-            $date->format("Y-m-d H:i:s")
+            $date->format('Y-m-d H:i:s')
         );
-        
+
         $links = $this->createArrayCollection([$event->getUser(), $event->getProject()]);
         $this->getNewTracker($event->getEventName(), $message, $event->getUser(), $links);
-        
+
         $this->doctrine->getManager()->flush();
     }
-    
+
     /**
-     * Update status
-     * 
+     * Update status.
+     *
      * This method persist data
-     * tracking for a project 
+     * tracking for a project
      * updating status event
-     * 
+     *
      * @param ProjectBaseEvent $event The event
      */
-    public function onStatusUpdate(ProjectBaseEvent $event){
+    public function onStatusUpdate(ProjectBaseEvent $event)
+    {
         $date = new \DateTime();
-        
+
         $message = sprintf(
-            "The user '%s' update status to '%s' for project '%s' on %s", 
+            "The user '%s' update status to '%s' for project '%s' on %s",
             $event->getUser()->getUsername(),
             $event->getProject()->getStatus()->getName(),
             $event->getProject()->getName(),
-            $date->format("Y-m-d H:i:s")
+            $date->format('Y-m-d H:i:s')
         );
-        
+
         $links = $this->createArrayCollection([$event->getUser(), $event->getProject()]);
         $this->getNewTracker($event->getEventName(), $message, $event->getUser(), $links);
-        
+
         $this->doctrine->getManager()->flush();
     }
-    
+
     /**
-     * Assign tag
-     * 
+     * Assign tag.
+     *
      * This method persist data
-     * tracking for a project 
+     * tracking for a project
      * assigning tag event
-     * 
+     *
      * @param ProjectTagEvent $event The event
      */
-    public function onAssignTag(ProjectTagEvent $event){
+    public function onAssignTag(ProjectTagEvent $event)
+    {
         $date = new \DateTime();
-        
+
         $message = sprintf(
-            "The user '%s' assign tag '%s' to project '%s' on %s", 
+            "The user '%s' assign tag '%s' to project '%s' on %s",
             $event->getUser()->getUsername(),
             $event->getTag()->getName(),
             $event->getProject()->getName(),
-            $date->format("Y-m-d H:i:s")
+            $date->format('Y-m-d H:i:s')
         );
-        
+
         $links = $this->createArrayCollection([$event->getUser(), $event->getProject(), $event->getTag()]);
         $this->getNewTracker($event->getEventName(), $message, $event->getUser(), $links);
-        
+
         $this->doctrine->getManager()->flush();
     }
-    
+
     /**
-     * Remove tag
-     * 
+     * Remove tag.
+     *
      * This method persist data
-     * tracking for a project 
+     * tracking for a project
      * removing tag event
-     * 
+     *
      * @param ProjectTagEvent $event The event
      */
-    public function onRemoveTag(ProjectTagEvent $event){
+    public function onRemoveTag(ProjectTagEvent $event)
+    {
         $date = new \DateTime();
-        
+
         $message = sprintf(
-            "The user '%s' remove tag '%s' from project '%s' on %s", 
+            "The user '%s' remove tag '%s' from project '%s' on %s",
             $event->getUser()->getUsername(),
             $event->getTag()->getName(),
             $event->getProject()->getName(),
-            $date->format("Y-m-d H:i:s")
+            $date->format('Y-m-d H:i:s')
         );
-        
+
         $links = $this->createArrayCollection([$event->getUser(), $event->getProject(), $event->getTag()]);
         $this->getNewTracker($event->getEventName(), $message, $event->getUser(), $links);
-        
+
         $this->doctrine->getManager()->flush();
     }
-    
 }

@@ -1,19 +1,21 @@
 <?php
 /**
  * This file is a part of CSCFA security project.
- * 
+ *
  * The security project is a security bundle written in php
  * with Symfony2 framework.
  *
  * PHP version 5.5
  *
  * @category Builder
- * @package  CscfaSecurityBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
  * @filesource
+ *
  * @link     http://cscfa.fr
  */
+
 namespace Cscfa\Bundle\SecurityBundle\Util\Builder;
 
 use Cscfa\Bundle\SecurityBundle\Entity\User;
@@ -33,10 +35,12 @@ use Cscfa\Bundle\ToolboxBundle\BaseInterface\Error\ErrorRegisteryInterface;
  * UserManager usage.
  *
  * @category Builder
- * @package  CscfaSecurityBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
+ *
  * @version  Release: 1.1
+ *
  * @link     http://cscfa.fr
  * @see      Cscfa\Bundle\SecurityBundle\Entity\StackUpdate
  * @see      Cscfa\Bundle\SecurityBundle\Entity\User
@@ -44,7 +48,6 @@ use Cscfa\Bundle\ToolboxBundle\BaseInterface\Error\ErrorRegisteryInterface;
  */
 class UserBuilder implements ErrorRegisteryInterface
 {
-
     /**
      * An error type.
      *
@@ -54,7 +57,7 @@ class UserBuilder implements ErrorRegisteryInterface
      * of username is make by regex
      * test on [a-zA-Z0-9_].
      *
-     * @var integer
+     * @var int
      */
     const INVALID_USERNAME = 0;
 
@@ -65,7 +68,7 @@ class UserBuilder implements ErrorRegisteryInterface
      * username is already existing
      * into the database.
      *
-     * @var integer
+     * @var int
      */
     const DUPLICATE_USERNAME = 1;
 
@@ -78,7 +81,7 @@ class UserBuilder implements ErrorRegisteryInterface
      * of email is make by regex test
      * on /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i
      *
-     * @var integer
+     * @var int
      */
     const INVALID_EMAIL = 2;
 
@@ -89,101 +92,101 @@ class UserBuilder implements ErrorRegisteryInterface
      * email is already existing
      * into the database.
      *
-     * @var integer
+     * @var int
      */
     const DUPLICATE_EMAIL = 3;
 
     /**
      * An error type.
-     * 
+     *
      * This error represent that a
      * role is unexisting into the
-     * database. 
-     * 
-     * @var integer
+     * database.
+     *
+     * @var int
      */
     const UNDEFINED_ROLE = 4;
 
     /**
      * An error type.
-     * 
+     *
      * This error represent that
      * a role is not assigned to the
      * current user when a deletion
      * occured.
-     * 
-     * @var integer
+     *
+     * @var int
      */
     const NOT_ASSIGNED_ROLE = 5;
 
     /**
      * An error type.
-     * 
+     *
      * This error represent that
      * a given expiration date is
      * before the current date.
-     * 
-     * @var integer
+     *
+     * @var int
      */
     const EXPIRATION_DATE_BEFORE_NOW = 6;
 
     /**
      * An error type.
-     * 
+     *
      * This error represent that
      * a parameter asserted as
      * boolean is not a boolean.
-     * 
-     * @var integer
+     *
+     * @var int
      */
     const IS_NOT_BOOLEAN = 7;
 
     /**
      * An error type.
-     * 
+     *
      * This error represent that
      * a parameter asserted as
      * string password is an
      * empty string.
-     * 
-     * @var integer
+     *
+     * @var int
      */
     const EMPTY_PASSWORD = 8;
 
     /**
      * An error type.
-     * 
+     *
      * This error represent that
      * a parameter asserted as
      * string password is not a
      * typed string.
-     * 
-     * @var integer
+     *
+     * @var int
      */
     const IS_NOT_STRING = 9;
 
     /**
      * An error type.
-     * 
+     *
      * This error represent that
      * a parameter asserted as
      * a last user login date
      * is more avanced that the
      * current date.
-     * 
-     * @var integer
+     *
+     * @var int
      */
     const LAST_LOGIN_AFTER_NOW = 10;
 
     /**
      * An error type.
-     * 
+     *
      * This error represent that
      * a parameter asserted as
      * a date is time based after
      * the current date and time.
-     * 
-     * @var integer
+     *
+     * @var int
      */
     const DATE_AFTER_NOW = 11;
 
@@ -250,7 +253,7 @@ class UserBuilder implements ErrorRegisteryInterface
      * This represent the last error
      * registered by a method failure.
      *
-     * @var integer
+     * @var int
      */
     protected $lastError;
 
@@ -273,16 +276,18 @@ class UserBuilder implements ErrorRegisteryInterface
      * @param UserProvider            $provider The UserProvider service to get User instances and informations.
      * @param EncoderFactoryInterface $encoder  The encoder factory interface to process password encodage.
      * @param User                    $user     The User instance to encapsulate.
-     *
-     * @return void
      */
-    public function __construct(UserManager $manager, UserProvider $provider, EncoderFactoryInterface $encoder, $user = null)
-    {
+    public function __construct(
+        UserManager $manager,
+        UserProvider $provider,
+        EncoderFactoryInterface $encoder,
+        $user = null
+    ) {
         $this->manager = $manager;
         $this->provider = $provider;
         $this->encoder = $encoder;
         $this->lastError = self::NO_ERROR;
-        
+
         if ($user !== null && $user instanceof User) {
             $this->user = $user;
             $this->stackUpdate = new StackUpdate();
@@ -309,7 +314,7 @@ class UserBuilder implements ErrorRegisteryInterface
      * the user instance without check.
      *
      * @param Role|null $role  The Role instance to insert.
-     * @param boolean   $force The validation force state.
+     * @param bool      $force The validation force state.
      *
      * @return \Cscfa\Bundle\SecurityBundle\Util\Builder\UserBuilder
      */
@@ -318,22 +323,22 @@ class UserBuilder implements ErrorRegisteryInterface
         if ($role === null) {
             return $this;
         }
-        
+
         if ($this->manager->getRoleManager()->roleExists($role->getName()) || $force) {
             $this->user->addRole($role);
         } else {
             $roleBuilder = $this->manager->getRoleManager()->convertInstance($role);
             $this->manager->getRoleManager()->persist($roleBuilder);
-            
+
             $this->user->addRole($role);
         }
-        
+
         return $this;
     }
 
     /**
      * Remove a Role from the user.
-     * 
+     *
      * This method allow to remove a role
      * from the current user. This will first
      * check if the Role exist and if the user
@@ -341,16 +346,16 @@ class UserBuilder implements ErrorRegisteryInterface
      * check fail, the method will return false.
      * Also, if the checks success, this method
      * will return true.
-     * 
+     *
      * It is possible to desable this first
      * check by passing true as second parameter.
      * In this case, the method will always return
      * true.
-     * 
-     * @param Role    $role  The role to remove
-     * @param boolean $force The validation force state
-     * 
-     * @return boolean
+     *
+     * @param Role $role  The role to remove
+     * @param bool $force The validation force state
+     *
+     * @return bool
      */
     public function removeRole(Role $role, $force = false)
     {
@@ -359,13 +364,15 @@ class UserBuilder implements ErrorRegisteryInterface
                 $this->user->removeRole($role->getName());
             } else {
                 $this->lastError = self::NOT_ASSIGNED_ROLE;
+
                 return false;
             }
         } else {
             $this->lastError = self::UNDEFINED_ROLE;
+
             return false;
         }
-        
+
         return true;
     }
 
@@ -390,26 +397,31 @@ class UserBuilder implements ErrorRegisteryInterface
      * true as second argument. This will force
      * the validation process.
      *
-     * @param string  $username The new username.
-     * @param boolean $force    The validation force state.
+     * @param string $username The new username.
+     * @param bool   $force    The validation force state.
      *
-     * @return boolean
+     * @return bool
      */
     public function setUsername($username, $force = false)
     {
         if ($this->manager->isUsernameValid($username) || $force) {
-            
             $canonical = strtolower($username);
-            if (! in_array($canonical, $this->provider->findAllUsernames()) || $force || $this->user->getUsernameCanonical() === $canonical) {
+            if (!in_array($canonical, $this->provider->findAllUsernames()) ||
+                $force ||
+                $this->user->getUsernameCanonical() === $canonical
+            ) {
                 $this->user->setUsername($username);
                 $this->user->setUsernameCanonical($canonical);
+
                 return true;
             } else {
                 $this->lastError = self::DUPLICATE_USERNAME;
+
                 return false;
             }
         } else {
             $this->lastError = self::INVALID_USERNAME;
+
             return false;
         }
     }
@@ -424,30 +436,36 @@ class UserBuilder implements ErrorRegisteryInterface
      *
      * @param string $email The new email
      * @param string $force The validation force state
-     * 
-     * @return boolean
+     *
+     * @return bool
      */
     public function setEmail($email, $force = false)
     {
         if ($this->manager->isEmailValid($email) || $force) {
             $canonical = strtolower($email);
-            if (! in_array($canonical, $this->provider->findAllEmail()) || $force || $this->user->getEmailCanonical() === $canonical) {
+            if (!in_array($canonical, $this->provider->findAllEmail()) ||
+                $force ||
+                $this->user->getEmailCanonical() === $canonical
+            ) {
                 $this->user->setEmail($email);
                 $this->user->setEmailCanonical($canonical);
+
                 return true;
             } else {
                 $this->lastError = self::DUPLICATE_EMAIL;
+
                 return false;
             }
         } else {
             $this->lastError = self::INVALID_EMAIL;
+
             return false;
         }
     }
 
     /**
      * Setting the credentials expiration date.
-     * 
+     *
      * This method allow to specify a
      * credential expiration date. This
      * will check if the given expiration
@@ -455,36 +473,38 @@ class UserBuilder implements ErrorRegisteryInterface
      * this validation fail, the method
      * will return false. Else if the date
      * is valid, the method will return true.
-     * 
+     *
      * It's possible to force the validation
      * state by passing true as second parameter.
      * In this case the method will always
      * return true. The same effect will be
      * find when passing null as date.
-     * 
+     *
      * @param \DateTime $date  The new date or null
      * @param string    $force The validation force state
-     * 
-     * @return boolean
+     *
+     * @return bool
      */
     public function setCredentialsExpireAt(\DateTime $date = null, $force = false)
     {
         $currentDate = new \DateTime();
-        
+
         if ($currentDate <= $date || $date === null || $force) {
             $this->user->setCredentialsExpireAt($date);
+
             return true;
         } else {
             $this->lastError = self::EXPIRATION_DATE_BEFORE_NOW;
+
             return false;
         }
     }
 
     /**
      * Force the credential expiration state.
-     * 
-     * This method allow to force 
-     * the expiration state of the 
+     *
+     * This method allow to force
+     * the expiration state of the
      * credentials. If the needed state
      * is true, the expiration state
      * will be turn to true and the
@@ -492,22 +512,20 @@ class UserBuilder implements ErrorRegisteryInterface
      * to the current date. This method
      * will first valid that the given
      * state is a boolean. If not, it
-     * return false. However, will return 
+     * return false. However, will return
      * true.
-     * 
+     *
      * If the needed state is false,
      * the expiration state will be turn
      * to false, and the expiration date
      * will be set to null.
-     * 
-     * It's possible to override the 
+     *
+     * It's possible to override the
      * validation by passing true as
      * second parameter.
-     * 
-     * @param boolean $boolean The expiration state
-     * @param boolean $force   The validation force state
-     * 
-     * @return void
+     *
+     * @param bool $boolean The expiration state
+     * @param bool $force   The validation force state
      */
     public function setCredentialsExpired($boolean, $force = false)
     {
@@ -515,101 +533,107 @@ class UserBuilder implements ErrorRegisteryInterface
             $currentDate = new \DateTime();
             $this->user->setCredentialsExpireAt($currentDate);
             $this->user->setCredentialsExpired(true);
+
             return true;
-        } else if ($boolean === false || ((boolean) $boolean === false && $force)) {
+        } elseif ($boolean === false || ((boolean) $boolean === false && $force)) {
             $this->user->setCredentialsExpireAt(null);
             $this->user->setCredentialsExpired(false);
+
             return true;
         } else {
             $this->lastError = self::IS_NOT_BOOLEAN;
+
             return false;
         }
     }
 
     /**
      * Set the enable state.
-     * 
+     *
      * This method allow to set the
      * enabled state of an user account.
      * It will assert that the given
      * parameter is a boolean type. If
      * not, the method will return false,
      * however the method will return true.
-     * 
+     *
      * It's possible to force the validation
      * by passing true as second parameter.
      * In this case, the first parameter
      * will be casted and the method will
      * return true.
-     * 
-     * @param boolean $boolean The enabled state
-     * @param string  $force   The validation force state
-     * 
-     * @return boolean
+     *
+     * @param bool   $boolean The enabled state
+     * @param string $force   The validation force state
+     *
+     * @return bool
      */
     public function setEnabled($boolean, $force = false)
     {
-        if (! $force && $boolean !== true && $boolean !== false) {
+        if (!$force && $boolean !== true && $boolean !== false) {
             $this->lastError = self::IS_NOT_BOOLEAN;
+
             return false;
         }
-        
+
         $this->user->setEnabled($boolean);
+
         return true;
     }
 
     /**
      * Set the expiration date.
-     * 
+     *
      * This method allow to set the user
      * expiration date. It will assert
      * that the new date is past of the
      * current date. If not, the method
      * will return false. Else, the method
      * will return true.
-     * 
+     *
      * It's possible to force the validation
      * by passing true as second parameter.
      * If it's the case, the method will
      * return true.
-     * 
+     *
      * This method allow to passing null as
      * date. In this case, the date validation
      * is ignored.
-     * 
+     *
      * @param \DateTime $date  The new expiration date
-     * @param boolean   $force The validation force state
-     * 
-     * @return boolean
+     * @param bool      $force The validation force state
+     *
+     * @return bool
      */
     public function setExpiresAt(\DateTime $date = null, $force = false)
     {
         $currentDate = new \DateTime();
-        
-        if ($date !== null && $currentDate > $date && ! $force) {
+
+        if ($date !== null && $currentDate > $date && !$force) {
             $this->lastError = self::EXPIRATION_DATE_BEFORE_NOW;
+
             return false;
         }
-        
+
         $this->user->setExpiresAt($date);
-        
+
         return true;
     }
 
     /**
      * Set the expired state.
-     * 
+     *
      * This method allow to set the user
      * expired state. It will assert that
      * the given state is typed as boolean.
      * If not, the method will return false.
      * Else, it'll return true.
-     * 
+     *
      * It's possible to override the validation
      * by passing true as second parameter. In
      * this case, the state will be cast as
      * boolean.
-     * 
+     *
      * This method also set the expiration
      * date of the user to conserve the logic
      * state of the entity. If the new state
@@ -617,257 +641,266 @@ class UserBuilder implements ErrorRegisteryInterface
      * be set to null. If the state is true,
      * expiration date will be set to the
      * current date.
-     * 
-     * @param boolean $boolean The expired state
-     * @param string  $force   The validation force state
-     * 
-     * @return boolean
+     *
+     * @param bool   $boolean The expired state
+     * @param string $force   The validation force state
+     *
+     * @return bool
      */
     public function setExpired($boolean, $force = false)
     {
-        if (! $force && $boolean !== true && $boolean !== false) {
+        if (!$force && $boolean !== true && $boolean !== false) {
             $this->lastError = self::IS_NOT_BOOLEAN;
+
             return false;
         }
-        
+
         if ($boolean) {
             $this->user->setExpiresAt(new \DateTime());
         } else {
             $this->user->setExpiresAt(null);
         }
-        
+
         $this->user->setExpired((boolean) $boolean);
-        
+
         return true;
     }
 
     /**
      * Set the password.
-     * 
-     * This method allow to set the user 
-     * password. It will first assert that 
-     * the  given password is not empty 
-     * and is a string. No password format 
-     * validation is applied by this method. 
-     * It'll return false if a validation 
-     * failed. However it'll return true. 
-     * This method allow to passing null 
+     *
+     * This method allow to set the user
+     * password. It will first assert that
+     * the  given password is not empty
+     * and is a string. No password format
+     * validation is applied by this method.
+     * It'll return false if a validation
+     * failed. However it'll return true.
+     * This method allow to passing null
      * as password.
-     * 
-     * It's possible to desable the 
-     * validation by passing true as 
-     * second parameter. In this specific 
+     *
+     * It's possible to desable the
+     * validation by passing true as
+     * second parameter. In this specific
      * case, the method will always
      * return true.
-     * 
-     * This method set up the plain 
+     *
+     * This method set up the plain
      * password field and encode the
      * password before apply to the
      * user as new password.
-     * 
-     * @param string  $password The plain password to set
-     * @param boolean $force    The validation force state
-     * 
-     * @return boolean
+     *
+     * @param string $password The plain password to set
+     * @param bool   $force    The validation force state
+     *
+     * @return bool
      */
     public function setPassword($password = null, $force = false)
     {
-        if (! $force && $password !== null && ($password == "" || empty($password))) {
+        if (!$force && $password !== null && ($password == '' || empty($password))) {
             $this->lastError = self::EMPTY_PASSWORD;
+
             return false;
-        } else if (! $force && $password !== null && ! is_string($password)) {
+        } elseif (!$force && $password !== null && !is_string($password)) {
             $this->lastError = self::IS_NOT_STRING;
+
             return false;
         }
-        
+
         $plainPassword = $password;
-        
+
         if ($password !== null) {
             $password = $this->encoder->getEncoder($this->user)->encodePassword($password, $this->user->getSalt());
         }
-        
+
         $this->user->setPassword($password);
         $this->user->setPlainPassword($plainPassword);
-        
+
         return true;
     }
 
     /**
      * Set the user last login date.
-     * 
-     * This method allow to set the user 
-     * last login date. It will first 
-     * valid that the given date is 
-     * before or equal the current date 
-     * and time. If this validation fail, 
-     * the method will return false. Else 
-     * if the validation success, the 
+     *
+     * This method allow to set the user
+     * last login date. It will first
+     * valid that the given date is
+     * before or equal the current date
+     * and time. If this validation fail,
+     * the method will return false. Else
+     * if the validation success, the
      * method will return true.
-     * 
-     * It's possible to desable the 
-     * validation stateby passing true 
-     * as second parameter. In this 
-     * case, the method will always 
+     *
+     * It's possible to desable the
+     * validation stateby passing true
+     * as second parameter. In this
+     * case, the method will always
      * return true.
-     * 
+     *
      * @param \DateTime $time  The new user last login time
-     * @param boolean   $force The validation force state
-     * 
-     * @return boolean
+     * @param bool      $force The validation force state
+     *
+     * @return bool
      */
     public function setLastLogin(\DateTime $time = null, $force = false)
     {
         $currentTime = new \DateTime();
-        
-        if ($time !== null && ($currentTime < $time && ! $force)) {
+
+        if ($time !== null && ($currentTime < $time && !$force)) {
             $this->lastError = self::LAST_LOGIN_AFTER_NOW;
+
             return false;
         }
-        
+
         $this->user->setLastLogin($time);
-        
+
         return true;
     }
 
     /**
      * Set the user locked state.
-     * 
-     * This method allow to set the user 
-     * locked state. It will assert that 
-     * the first parameter is typed as 
-     * boolean and valid this. If the 
-     * validation failed, the method will 
-     * return false. However, the method 
+     *
+     * This method allow to set the user
+     * locked state. It will assert that
+     * the first parameter is typed as
+     * boolean and valid this. If the
+     * validation failed, the method will
+     * return false. However, the method
      * will return true.
-     * 
-     * It's possible to desable the 
-     * validation by passing true as 
-     * second parameter. In this case, 
+     *
+     * It's possible to desable the
+     * validation by passing true as
+     * second parameter. In this case,
      * the method will always return true.
-     * 
-     * @param boolean $boolean The locked state
-     * @param string  $force   The validation force state
-     * 
-     * @return boolean
+     *
+     * @param bool   $boolean The locked state
+     * @param string $force   The validation force state
+     *
+     * @return bool
      */
     public function setLocked($boolean, $force = false)
     {
-        if ($boolean !== false && $boolean !== true && ! $force) {
+        if ($boolean !== false && $boolean !== true && !$force) {
             $this->lastError = self::IS_NOT_BOOLEAN;
+
             return false;
         }
-        
+
         $this->user->setLocked((boolean) $force);
-        
+
         return true;
     }
 
     /**
      * Set the user confirmation token.
-     * 
+     *
      * This method allow to set the user
      * confirmation token. It will first
      * validate that the given token is
      * typed as string. If not, the method
      * will return false, else return
      * true.
-     * 
-     * It's possible to desable the 
-     * validation by passing true as 
-     * second parameter. In this case, 
+     *
+     * It's possible to desable the
+     * validation by passing true as
+     * second parameter. In this case,
      * the method will always return true.
-     * 
-     * @param string  $confirmationToken The confirmation token string
-     * @param boolean $force             The validation force state
-     * 
-     * @return boolean
+     *
+     * @param string $confirmationToken The confirmation token string
+     * @param bool   $force             The validation force state
+     *
+     * @return bool
      */
     public function setConfirmationToken($confirmationToken = null, $force = false)
     {
-        if ($confirmationToken !== null && ! $force && ! is_string($confirmationToken)) {
+        if ($confirmationToken !== null && !$force && !is_string($confirmationToken)) {
             $this->lastError = self::IS_NOT_STRING;
+
             return false;
         }
-        
+
         $this->user->setConfirmationToken($confirmationToken);
-        
+
         return true;
     }
 
     /**
      * Set the password request date.
-     * 
+     *
      * This method allow to set the user
      * password request date. It will first
      * validate that the new date is past
      * or equal the current date and time.
-     * 
-     * It's possible to desable the 
-     * validation by passing true as 
-     * second parameter. In this case, 
+     *
+     * It's possible to desable the
+     * validation by passing true as
+     * second parameter. In this case,
      * the method will always return true.
-     * 
+     *
      * @param \DateTime $date  The request date
-     * @param boolean   $force The validation force state
-     * 
-     * @return boolean
+     * @param bool      $force The validation force state
+     *
+     * @return bool
      */
     public function setPasswordRequestedAt(\DateTime $date = null, $force = false)
     {
         $currentTime = new \DateTime();
-        
-        if ($date !== null && $currentTime < $date && ! $force) {
+
+        if ($date !== null && $currentTime < $date && !$force) {
             $this->lastError = self::DATE_AFTER_NOW;
+
             return false;
         }
-        
+
         $this->user->setPasswordRequestedAt($date);
-        
+
         return true;
     }
 
     /**
      * Set the user password salt.
-     * 
+     *
      * This method allow to set the user
      * password salt. It will first validate
      * that the given salt is typed as string.
      * If not, the method will return false,
      * however, the method will return true.
-     * 
-     * It's possible to desable the 
-     * validation by passing true as 
-     * second parameter. In this case, 
+     *
+     * It's possible to desable the
+     * validation by passing true as
+     * second parameter. In this case,
      * the method will always return true.
-     * 
+     *
      * Consider that the password need to be
      * set up after this method usage or
      * any login action will fail due to
      * encoding logical error du to unreferenced
      * salt hacking.
-     * 
-     * @param string  $salt  The new user salt
-     * @param boolean $force The validation force state
-     * 
-     * @return boolean
+     *
+     * @param string $salt  The new user salt
+     * @param bool   $force The validation force state
+     *
+     * @return bool
      */
     public function setSalt($salt, $force = false)
     {
-        if (! is_string($salt) && ! $force) {
+        if (!is_string($salt) && !$force) {
             $this->lastError = self::IS_NOT_STRING;
+
             return false;
         }
-        
+
         $this->user->setSalt($salt);
+
         return true;
     }
 
     /**
      * Get the username.
-     * 
+     *
      * This method return the
      * user username as string.
-     * 
+     *
      * @return string
      */
     public function getUsername()
@@ -877,11 +910,11 @@ class UserBuilder implements ErrorRegisteryInterface
 
     /**
      * Get the username canonical.
-     * 
+     *
      * This method return the
      * user username canonical
      * as string.
-     * 
+     *
      * @return string
      */
     public function getUsernameCanonical()
@@ -891,10 +924,10 @@ class UserBuilder implements ErrorRegisteryInterface
 
     /**
      * Get the email.
-     * 
+     *
      * This method return the
      * user email as string.
-     * 
+     *
      * @return string
      */
     public function getEmail()
@@ -904,11 +937,11 @@ class UserBuilder implements ErrorRegisteryInterface
 
     /**
      * Get the email canonical.
-     * 
+     *
      * This method return the
      * user email canonical
      * as string.
-     * 
+     *
      * @return string
      */
     public function getEmailCanonical()
@@ -918,12 +951,12 @@ class UserBuilder implements ErrorRegisteryInterface
 
     /**
      * Get the enable state.
-     * 
+     *
      * This method return the
      * user enabled state as
      * boolean.
-     * 
-     * @return boolean
+     *
+     * @return bool
      */
     public function isEnabled()
     {
@@ -932,10 +965,10 @@ class UserBuilder implements ErrorRegisteryInterface
 
     /**
      * Get the password salt.
-     * 
+     *
      * This method return the user
      * password salt as string.
-     * 
+     *
      * @return string
      */
     public function getSalt()
@@ -945,10 +978,10 @@ class UserBuilder implements ErrorRegisteryInterface
 
     /**
      * Get the password.
-     * 
+     *
      * This method return the
      * user password as string.
-     * 
+     *
      * @return string
      */
     public function getPassword()
@@ -958,11 +991,11 @@ class UserBuilder implements ErrorRegisteryInterface
 
     /**
      * Get the plain password.
-     * 
+     *
      * This method return the
      * user plain text password
      * as string.
-     * 
+     *
      * @return string
      */
     public function getPlainPassword()
@@ -972,11 +1005,11 @@ class UserBuilder implements ErrorRegisteryInterface
 
     /**
      * Get the last login.
-     * 
+     *
      * This method return the
      * user last login date as
      * DateTime.
-     * 
+     *
      * @return DateTime
      */
     public function getLastLogin()
@@ -986,11 +1019,11 @@ class UserBuilder implements ErrorRegisteryInterface
 
     /**
      * Get the confirmation token.
-     * 
+     *
      * This method return the
      * user confirmation token
      * as string.
-     * 
+     *
      * @return string
      */
     public function getConfirmationToken()
@@ -1000,11 +1033,11 @@ class UserBuilder implements ErrorRegisteryInterface
 
     /**
      * Get the password request date.
-     * 
+     *
      * This method return the
      * user password request as
      * DateTime.
-     * 
+     *
      * @return DateTime
      */
     public function getPasswordRequestedAt()
@@ -1014,12 +1047,12 @@ class UserBuilder implements ErrorRegisteryInterface
 
     /**
      * Get the locked state.
-     * 
+     *
      * This method return the
-     * user locked state as 
+     * user locked state as
      * boolean.
-     * 
-     * @return boolean
+     *
+     * @return bool
      */
     public function isLocked()
     {
@@ -1028,12 +1061,12 @@ class UserBuilder implements ErrorRegisteryInterface
 
     /**
      * Get the expiration state.
-     * 
+     *
      * This method return the
-     * user expiration state as 
+     * user expiration state as
      * boolean.
-     * 
-     * @return boolean
+     *
+     * @return bool
      */
     public function isExpired()
     {
@@ -1042,11 +1075,11 @@ class UserBuilder implements ErrorRegisteryInterface
 
     /**
      * Get the roles.
-     * 
+     *
      * This method return the
      * user Roles as array of
      * Role.
-     * 
+     *
      * @return multitype:Role
      */
     public function getRoles()
@@ -1056,12 +1089,12 @@ class UserBuilder implements ErrorRegisteryInterface
 
     /**
      * Get the credential expired state.
-     * 
+     *
      * This method return the
      * user credential expiration
      * state as boolean.
-     * 
-     * @return boolean
+     *
+     * @return bool
      */
     public function isCredentialsExpired()
     {
@@ -1103,7 +1136,7 @@ class UserBuilder implements ErrorRegisteryInterface
      *
      * This method allow to get the
      * encapsulate User instance.
-     * 
+     *
      * @return \Cscfa\Bundle\SecurityBundle\Entity\User
      */
     public function getUser()
@@ -1128,11 +1161,11 @@ class UserBuilder implements ErrorRegisteryInterface
 
     /**
      * Get id.
-     * 
+     *
      * This method allow
      * to get the current
      * user instance id.
-     * 
+     *
      * @return string
      */
     public function getId()
@@ -1145,11 +1178,9 @@ class UserBuilder implements ErrorRegisteryInterface
      *
      * This method allow to remove the
      * last error state.
-     *
-     * @return void
      */
-    public function removeLastError() {
+    public function removeLastError()
+    {
         $this->lastError = self::NO_ERROR;
     }
-
 }

@@ -1,22 +1,23 @@
 <?php
 /**
  * This file is a part of CSCFA csmanager project.
- * 
+ *
  * The csmanager project is a project manager written in php
  * with Symfony2 framework.
- * 
+ *
  * PHP version 5.5
- * 
+ *
  * @category Event
- * @package  CscfaCSManagerProjectBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
  * @filesource
+ *
  * @link     http://cscfa.fr
  */
+
 namespace Cscfa\Bundle\CSManager\ProjectBundle\Event;
 
-use Cscfa\Bundle\CSManager\ProjectBundle\Event\ProjectBaseEvent;
 use Cscfa\Bundle\CSManager\ProjectBundle\Entity\ProjectTag;
 
 /**
@@ -26,15 +27,16 @@ use Cscfa\Bundle\CSManager\ProjectBundle\Entity\ProjectTag;
  * the project tag event.
  *
  * @category Event
- * @package  CscfaCSManagerProjectBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
+ *
  * @link     http://cscfa.fr
  */
-class ProjectTagEvent extends ProjectBaseEvent {
-
+class ProjectTagEvent extends ProjectBaseEvent
+{
     /**
-     * ProjectTagEvent attribute
+     * ProjectTagEvent attribute.
      *
      * This attribute store
      * the event tag
@@ -42,21 +44,22 @@ class ProjectTagEvent extends ProjectBaseEvent {
      * @var ProjectTag
      */
     protected $tag;
-    
+
     /**
-     * Get tag
+     * Get tag.
      *
      * This method return
      * the event tag.
      *
      * @return ProjectTag
      */
-    public function getTag() {
+    public function getTag()
+    {
         return $this->tag;
     }
-    
+
     /**
-     * Set tag
+     * Set tag.
      *
      * This method allow to
      * set the event tag.
@@ -65,9 +68,10 @@ class ProjectTagEvent extends ProjectBaseEvent {
      *
      * @return ProjectTagEvent
      */
-    public function setTag(ProjectTag $tag) {
+    public function setTag(ProjectTag $tag)
+    {
         $this->tag = $tag;
+
         return $this;
     }
-    
 }

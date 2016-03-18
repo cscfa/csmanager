@@ -1,19 +1,21 @@
 <?php
 /**
  * This file is a part of CSCFA security project.
- * 
+ *
  * The security project is a security bundle written in php
  * with Symfony2 framework.
- * 
+ *
  * PHP version 5.5
- * 
- * @category Command
- * @package  CscfaSecurityBundle
- * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
- * @license  http://opensource.org/licenses/MIT MIT
+ *
+ * @category   Command
+ *
+ * @author     Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
+ * @license    http://opensource.org/licenses/MIT MIT
  * @filesource
- * @link     http://cscfa.fr
+ *
+ * @link       http://cscfa.fr
  */
+
 namespace Cscfa\Bundle\SecurityBundle\Command\DebugTool;
 
 use Cscfa\Bundle\ToolboxBundle\BaseInterface\Test\TestValueInterface;
@@ -26,33 +28,33 @@ use Cscfa\Bundle\SecurityBundle\Entity\User;
  * validate a User parameter.
  *
  * @category Command
- * @package  CscfaSecurityBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
+ *
  * @link     http://cscfa.fr
  */
 class UserInstanceTest implements TestValueInterface
 {
-
     /**
      * Allow null.
-     * 
+     *
      * This parameter inform
      * that the given value
      * can be null.
-     * 
-     * @var boolean
+     *
+     * @var bool
      */
     protected $allowNull;
-    
+
     /**
      * Default constructor.
-     * 
+     *
      * This constructor allow
      * to give a null as value
      * instead of a User instance.
-     * 
-     * @param boolean $allowNull The null allowed state
+     *
+     * @param bool $allowNull The null allowed state
      */
     public function __construct($allowNull = false)
     {
@@ -70,7 +72,9 @@ class UserInstanceTest implements TestValueInterface
      * @param mixed $value The value to test
      * @param mixed $extra An extra element that can be used to test the value
      *
-     * @return boolean
+     * @return bool
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function test($value, $extra = null)
     {

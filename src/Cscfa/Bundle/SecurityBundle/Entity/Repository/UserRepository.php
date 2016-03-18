@@ -1,19 +1,21 @@
 <?php
 /**
  * This file is a part of CSCFA security project.
- * 
+ *
  * The security project is a security bundle written in php
  * with Symfony2 framework.
  *
  * PHP version 5.5
  *
  * @category Repository
- * @package  CscfaSecurityBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
  * @filesource
+ *
  * @link     http://cscfa.fr
  */
+
 namespace Cscfa\Bundle\SecurityBundle\Entity\Repository;
 
 use Doctrine\ORM\ORMInvalidArgumentException;
@@ -27,14 +29,14 @@ use Doctrine\ORM\EntityRepository;
  * the database.
  *
  * @category Repository
- * @package  CscfaSecurityBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
+ *
  * @link     http://cscfa.fr
  */
 class UserRepository extends EntityRepository
 {
-
     /**
      * Get all username.
      *
@@ -43,28 +45,27 @@ class UserRepository extends EntityRepository
      * state or null if none
      * exists.
      *
-     * @return string[]|NULL
+     * @return string[]|null
      */
     public function getAllUsername()
     {
         try {
             $usernames = $this->getEntityManager()
                 ->createQueryBuilder()
-                ->select("t0.usernameCanonical")
-                ->from("Cscfa\Bundle\SecurityBundle\Entity\User", "t0")
+                ->select('t0.usernameCanonical')
+                ->from("Cscfa\Bundle\SecurityBundle\Entity\User", 't0')
                 ->distinct()
                 ->getQuery()
                 ->getResult();
-            
+
             $result = array();
             foreach ($usernames as $value) {
                 $result[] = $value['usernameCanonical'];
             }
-            
+
             return $result;
-            
         } catch (ORMInvalidArgumentException $e) {
-            return null;
+            return;
         }
     }
 
@@ -76,28 +77,27 @@ class UserRepository extends EntityRepository
      * state or null if none
      * exists.
      *
-     * @return string[]|NULL
+     * @return string[]|null
      */
     public function getAllEmail()
     {
         try {
             $emails = $this->getEntityManager()
                 ->createQueryBuilder()
-                ->select("t0.emailCanonical")
-                ->from("Cscfa\Bundle\SecurityBundle\Entity\User", "t0")
+                ->select('t0.emailCanonical')
+                ->from("Cscfa\Bundle\SecurityBundle\Entity\User", 't0')
                 ->distinct()
                 ->getQuery()
                 ->getResult();
-            
+
             $result = array();
             foreach ($emails as $value) {
                 $result[] = $value['emailCanonical'];
             }
-            
+
             return $result;
-            
         } catch (ORMInvalidArgumentException $e) {
-            return null;
+            return;
         }
     }
 }

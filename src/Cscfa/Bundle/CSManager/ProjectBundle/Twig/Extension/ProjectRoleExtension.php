@@ -1,19 +1,21 @@
 <?php
 /**
  * This file is a part of CSCFA datagrid project.
- * 
+ *
  * The datagrid project is a symfony bundle written in php
  * with Symfony2 framework.
- * 
+ *
  * PHP version 5.5
- * 
+ *
  * @category Twig extension
- * @package  CscfaCSManagerProjectBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
  * @filesource
+ *
  * @link     http://cscfa.fr
  */
+
 namespace Cscfa\Bundle\CSManager\ProjectBundle\Twig\Extension;
 
 use Cscfa\Bundle\CSManager\ProjectBundle\Entity\Project;
@@ -30,27 +32,27 @@ use Cscfa\Bundle\CSManager\ProjectBundle\Entity\ProjectOwner;
  * on project attribute.
  *
  * @category Twig extension
- * @package  CscfaCSManagerProjectBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
+ *
  * @link     http://cscfa.fr
  */
 class ProjectRoleExtension extends \Twig_Extension
 {
-    
     /**
-     * ProjectRoleExtension Attribute
-     * 
+     * ProjectRoleExtension Attribute.
+     *
      * This attribute store
      * the current security
      * context service.
-     * 
+     *
      * @var SecurityContext
      */
     protected $context;
 
     /**
-     * ProjectRoleExtension Attribute
+     * ProjectRoleExtension Attribute.
      *
      * This attribute store
      * the current entity
@@ -59,38 +61,40 @@ class ProjectRoleExtension extends \Twig_Extension
      * @var EntityRepository
      */
     protected $entityRepository;
-    
+
     /**
-     * ProjectRoleExtension Attribute
+     * ProjectRoleExtension Attribute.
      *
      * This attribute store
      * a project owner.
-     * 
+     *
      * @var array
      */
     protected $registeredOwner = array(null, null, null);
-    
+
     /**
-     * Set arguments
-     * 
+     * Set arguments.
+     *
      * Service argument definition
-     * 
+     *
      * @param SecurityContext $context       The security context service
      * @param EntityManager   $entityManager The entity manager service
      */
     public function setArguments(SecurityContext $context, EntityManager $entityManager)
     {
+        $projectOwnerRepo = "Cscfa\Bundle\CSManager\ProjectBundle\Entity\ProjectOwner";
+
         $this->context = $context;
-        $this->entityRepository = $entityManager->getRepository("Cscfa\Bundle\CSManager\ProjectBundle\Entity\ProjectOwner");
+        $this->entityRepository = $entityManager->getRepository($projectOwnerRepo);
     }
-    
+
     /**
-     * Get user
-     * 
+     * Get user.
+     *
      * This method return the
      * current user from the
      * security context or null.
-     * 
+     *
      * @return User
      */
     public function getUser()
@@ -98,32 +102,35 @@ class ProjectRoleExtension extends \Twig_Extension
         if ($this->context->getToken() !== null) {
             return $this->context->getToken()->getUser();
         } else {
-            return null;
+            return;
         }
     }
-    
+
     public function getOwner($project)
     {
-        if($this->registeredOwner[0] === $project->getId() && $this->registeredOwner[1] === $this->getUser()->getId()){
+        if ($this->registeredOwner[0] === $project->getId() &&
+            $this->registeredOwner[1] === $this->getUser()->getId()
+        ) {
             return $this->registeredOwner[2];
         } else {
             $this->registeredOwner[0] = $project->getId();
             $this->registeredOwner[1] = $this->getUser()->getId();
+
             return $this->registeredOwner[2] = $this->entityRepository->findOneBy(
                 array(
-                    "project"=>$this->registeredOwner[0],
-                    "user"=>$this->registeredOwner[1]
+                    'project' => $this->registeredOwner[0],
+                    'user' => $this->registeredOwner[1],
                 )
             );
         }
     }
 
     /**
-     * Get functions
-     * 
+     * Get functions.
+     *
      * Return the function definitions
      * of the current twig extension.
-     * 
+     *
      * @see Twig_Extension::getFunctions()
      */
     public function getFunctions()
@@ -131,23 +138,23 @@ class ProjectRoleExtension extends \Twig_Extension
         return array(
             new \Twig_SimpleFunction('grantProjectAttribute', array(
                 $this,
-                'isGrantedProjectAttribute'
-            ), array())
+                'isGrantedProjectAttribute',
+            ), array()),
         );
     }
-    
+
     /**
-     * Is granted project attribute
-     * 
+     * Is granted project attribute.
+     *
      * This method check if a user
      * already have specific access
      * to project attribute.
-     * 
-     * @param string  $attribute The project attribute
-     * @param boolean $read      Allow reading check
-     * @param boolean $write     Allow writing check
-     * 
-     * @return boolean
+     *
+     * @param string $attribute The project attribute
+     * @param bool   $read      Allow reading check
+     * @param bool   $write     Allow writing check
+     *
+     * @return bool
      */
     public function isGrantedProjectAttribute($attribute, Project $project, $read = true, $write = false, $owner = null)
     {
@@ -158,50 +165,49 @@ class ProjectRoleExtension extends \Twig_Extension
                 return false;
             }
         }
-        
-        if ($owner->getUser()->hasRole("ROLE_ADMIN")) {
+
+        if ($owner->getUser()->hasRole('ROLE_ADMIN')) {
             return true;
         }
 
         if ($owner instanceof ProjectOwner) {
             $roles = $owner->getRoles();
-            
+
             $requireFalse = false;
             foreach ($roles as $role) {
-                if ($role->getProperty() == $attribute || $role->getProperty() == "all") {
-                    if ($read && !$role->getRead()) {
+                if ($role->getProperty() == $attribute || $role->getProperty() == 'all') {
+                    if ($read && !$role->isRead()) {
                         $requireFalse = true;
-                    } else if ($read && $role->getRead() && $role->getProperty() != "all") {
+                    } elseif ($read && $role->isRead() && $role->getProperty() != 'all') {
                         return true;
                     }
-                    if ($write && !$role->getWrite()) {
+                    if ($write && !$role->isWrite()) {
                         $requireFalse = true;
-                    } else if ($write && $role->getWrite() && $role->getProperty() != "all") {
+                    } elseif ($write && $role->isWrite() && $role->getProperty() != 'all') {
                         return true;
                     }
                 }
             }
-            
+
             if ($requireFalse) {
                 return false;
             }
-            
+
             return true;
         } else {
             return false;
         }
-            
     }
 
     /**
-     * Get name
-     * 
+     * Get name.
+     *
      * Return the current extension name.
-     * 
+     *
      * @see Twig_ExtensionInterface::getName()
      */
     public function getName()
     {
-        return "cscfa_project.project_role.extension";
+        return 'cscfa_project.project_role.extension';
     }
 }

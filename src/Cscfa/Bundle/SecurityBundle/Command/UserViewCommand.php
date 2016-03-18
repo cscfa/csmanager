@@ -1,19 +1,21 @@
 <?php
 /**
  * This file is a part of CSCFA security project.
- * 
+ *
  * The security project is a security bundle written in php
  * with Symfony2 framework.
- * 
+ *
  * PHP version 5.5
- * 
- * @category Command
- * @package  CscfaSecurityBundle
- * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
- * @license  http://opensource.org/licenses/MIT MIT
+ *
+ * @category   Command
+ *
+ * @author     Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
+ * @license    http://opensource.org/licenses/MIT MIT
  * @filesource
- * @link     http://cscfa.fr
+ *
+ * @link       http://cscfa.fr
  */
+
 namespace Cscfa\Bundle\SecurityBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
@@ -29,15 +31,16 @@ use Cscfa\Bundle\ToolboxBundle\Builder\Command\CommandTableBuilder;
  * view all of the database registered Users.
  *
  * @category Command
- * @package  CscfaSecurityBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
+ *
  * @version  Release: 1.1
+ *
  * @link     http://cscfa.fr
  */
 class UserViewCommand extends ContainerAwareCommand
 {
-
     /**
      * The user provider service.
      *
@@ -61,7 +64,7 @@ class UserViewCommand extends ContainerAwareCommand
     public function __construct(UserProvider $userProvider)
     {
         $this->userProvider = $userProvider;
-        
+
         parent::__construct();
     }
 
@@ -72,7 +75,6 @@ class UserViewCommand extends ContainerAwareCommand
      * behind "app/console cs:view:user".
      *
      * @see    \Symfony\Component\Console\Command\Command::configure()
-     * @return void
      */
     protected function configure()
     {
@@ -94,22 +96,24 @@ class UserViewCommand extends ContainerAwareCommand
      * @param OutputInterface $output The common command output
      *
      * @see     \Symfony\Component\Console\Command\Command::execute()
+     *
      * @version Release: 1.1
-     * @return  void
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $keys = array(
-            'UUID'=>"getId",
-            'Name'=>"getUsername",
-            "Email"=>"getEmail",
-            "is enable"=>"isEnabled",
-            "is locked"=>"isLocked",
-            "is expired"=>"isExpired",
-            "last login"=>"getLastLogin",
-            "Roles"=>"getRoles"
+            'UUID' => 'getId',
+            'Name' => 'getUsername',
+            'Email' => 'getEmail',
+            'is enable' => 'isEnabled',
+            'is locked' => 'isLocked',
+            'is expired' => 'isExpired',
+            'last login' => 'getLastLogin',
+            'Roles' => 'getRoles',
         );
-        
+
         $table = new CommandTableBuilder();
         $table->setType($table::TYPE_OBJECT)
             ->setKeys($keys)

@@ -8,122 +8,153 @@
  * PHP version 5.5
  *
  * @category Entity
- * @package  CscfaCSManagerTrackBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
  * @filesource
+ *
  * @link     http://cscfa.fr
  */
+
 namespace Cscfa\Bundle\CSManager\TrackBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * TrackerLink
+ * TrackerLink.
  *
- * The base Tracker Links entity 
+ * The base Tracker Links entity
  * for the Cscfa track manager
  *
  * @ORM\Entity(repositoryClass="Cscfa\Bundle\CSManager\TrackBundle\Entity\Repository\TrackerLinkRepository")
- * @ORM\Table(name="csmanager_tracking_TrackerLink",
- *      indexes={@ORM\Index(name="csmanager_tracking_trackerLink_indx", columns={"csmanager_TrackerLink_className", "csmanager_TrackerLink_linkedId"})}
- *      )
+ * @ORM\Table(
+ *      name="csmanager_tracking_TrackerLink",
+ *      indexes={
+ *          @ORM\Index(
+ *              name="csmanager_tracking_trackerLink_indx",
+ *              columns={
+ *                  "csmanager_TrackerLink_className",
+ *                  "csmanager_TrackerLink_linkedId"
+ *              }
+ *          )
+ *      }
+ * )
  */
-class TrackerLink {
-    
+class TrackerLink
+{
     /**
-     * Id
-     * 
+     * Id.
+     *
      * The tracker id
-     * 
+     *
      * @ORM\Column(type="guid", nullable=false, name="csmanager_TrackerLink_id", options={"comment":"TrackerLink id"})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="UUID")
      */
-    protected $id;
-    
-    /** 
-     * ClassName
-     * 
+    protected $linkId;
+
+    /**
+     * ClassName.
+     *
      * The tracker linked entity classname
-     * 
-     * @ORM\Column(type="string", length=255, options={"comment":"The TrackerLink class name"}, nullable=false, unique=false, name="csmanager_TrackerLink_className") 
+     *
+     * @ORM\Column(
+     *      type="string",
+     *      length=255,
+     *      options={"comment":"The TrackerLink class name"},
+     *      nullable=false,
+     *      unique=false,
+     *      name="csmanager_TrackerLink_className"
+     * )
      */
     protected $className;
-    
-    /** 
-     * Linked id
-     * 
+
+    /**
+     * Linked id.
+     *
      * The tracker linked entity id
-     * 
-     * @ORM\Column(type="string", length=255, options={"comment":"The TrackerLink linked entity id"}, nullable=false, unique=false, name="csmanager_TrackerLink_linkedId") 
+     *
+     * @ORM\Column(
+     *      type="string",
+     *      length=255,
+     *      options={"comment":"The TrackerLink linked entity id"},
+     *      nullable=false,
+     *      unique=false,
+     *      name="csmanager_TrackerLink_linkedId"
+     * )
      */
     protected $linkedId;
 
     /**
-     * Get id
+     * Get id.
      *
      * This method return the
      * entity id
      *
      * @return string
      */
-    public function getId() {
-        return $this->id;
+    public function getId()
+    {
+        return $this->linkId;
     }
-    
+
     /**
-     * Get className
-     * 
+     * Get className.
+     *
      * This method return the
      * linked entity className
-     * 
+     *
      * @return string
      */
-    public function getClassName() {
+    public function getClassName()
+    {
         return $this->className;
     }
-    
+
     /**
-     * Set className
-     * 
+     * Set className.
+     *
      * This method allow to set
      * the linked entity className.
-     * 
+     *
      * @param string $className The linked entity className
-     * 
+     *
      * @return TrackerLink
      */
-    public function setClassName($className) {
+    public function setClassName($className)
+    {
         $this->className = $className;
+
         return $this;
     }
-    
+
     /**
-     * Get linked id
-     * 
+     * Get linked id.
+     *
      * This method return the
      * linked entity id
-     * 
+     *
      * @return string
      */
-    public function getLinkedId() {
+    public function getLinkedId()
+    {
         return $this->linkedId;
     }
-    
+
     /**
-     * Set linked id
-     * 
+     * Set linked id.
+     *
      * This method allow to set
      * the linked entity id.
-     * 
+     *
      * @param string $linkedId The linked entity id
-     * 
+     *
      * @return TrackerLink
      */
-    public function setLinkedId($linkedId) {
+    public function setLinkedId($linkedId)
+    {
         $this->linkedId = $linkedId;
+
         return $this;
     }
- 
 }

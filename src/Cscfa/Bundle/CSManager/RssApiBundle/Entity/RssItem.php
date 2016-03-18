@@ -8,12 +8,14 @@
  * PHP version 5.5
  *
  * @category Entity
- * @package  CscfaCSManagerRssApiBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
  * @filesource
+ *
  * @link     http://cscfa.fr
  */
+
 namespace Cscfa\Bundle\CSManager\RssApiBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -21,7 +23,7 @@ use Cscfa\Bundle\CSManager\RssApiBundle\Interfaces\RssItemAuthInterface;
 use Cscfa\Bundle\CSManager\RssApiBundle\Object\RssAuthInfo;
 
 /**
- * RssItem
+ * RssItem.
  *
  * The base rss item entity for the
  * Cscfa project manager
@@ -29,99 +31,145 @@ use Cscfa\Bundle\CSManager\RssApiBundle\Object\RssAuthInfo;
  * @ORM\Entity(repositoryClass="Cscfa\Bundle\CSManager\RssApiBundle\Entity\Repository\RssItemRepository")
  * @ORM\Table(name="csmanager_rss_item")
  */
-class RssItem {
-
+class RssItem
+{
     /**
-     * Id
-     * 
+     * Id.
+     *
      * The channel id
-     * 
+     *
      * @ORM\Column(type="guid", nullable=false, name="csmanager_rss_item_id", options={"comment":"Rss item id"})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="UUID")
      */
-    protected $id;
+    protected $itemId;
 
-    /** 
-     * Created
-     * 
+    /**
+     * Created.
+     *
      * The entity creation date
-     * 
-     * @ORM\Column(type="datetime", nullable=false, name="csmanager_rss_item_created", options={"comment":"Rss item date of creation"}) 
+     *
+     * @ORM\Column(
+     *      type="datetime",
+     *      nullable=false,
+     *      name="csmanager_rss_item_created",
+     *      options={"comment":"Rss item date of creation"}
+     * )
      */
     protected $created;
 
     /**
-     * Type
+     * Type.
      *
      * The item type
      *
-     * @ORM\Column(type="string", length=255, options={"comment":"The rss item type"}, nullable=false, name="csmanager_rss_item_type")
+     * @ORM\Column(
+     *      type="string",
+     *      length=255,
+     *      options={"comment":"The rss item type"},
+     *      nullable=false,
+     *      name="csmanager_rss_item_type"
+     * )
      */
     protected $type;
 
     /**
-     * Title
+     * Title.
      *
      * The item title
      *
-     * @ORM\Column(type="string", length=255, options={"comment":"The rss item name"}, nullable=false, name="csmanager_rss_item_title")
+     * @ORM\Column(
+     *      type="string",
+     *      length=255,
+     *      options={"comment":"The rss item name"},
+     *      nullable=false,
+     *      name="csmanager_rss_item_title"
+     * )
      */
     protected $title;
 
     /**
-     * Link
+     * Link.
      *
      * The item link
      *
-     * @ORM\Column(type="string", length=255, options={"comment":"The rss item link"}, nullable=false, name="csmanager_rss_item_link")
+     * @ORM\Column(
+     *      type="string",
+     *      length=255,
+     *      options={"comment":"The rss item link"},
+     *      nullable=false,
+     *      name="csmanager_rss_item_link"
+     * )
      */
     protected $link;
 
     /**
-     * Description
+     * Description.
      *
      * The item description
      *
-     * @ORM\Column(type="string", length=255, options={"comment":"The rss item description"}, nullable=false, name="csmanager_rss_item_description")
+     * @ORM\Column(
+     *      type="string",
+     *      length=255,
+     *      options={"comment":"The rss item description"},
+     *      nullable=false,
+     *      name="csmanager_rss_item_description"
+     * )
      */
     protected $description;
 
     /**
-     * Author
+     * Author.
      *
      * The item author
      *
-     * @ORM\Column(type="string", length=255, options={"comment":"The rss item author"}, nullable=true, name="csmanager_rss_item_author")
+     * @ORM\Column(
+     *      type="string",
+     *      length=255,
+     *      options={"comment":"The rss item author"},
+     *      nullable=true,
+     *      name="csmanager_rss_item_author"
+     * )
      */
     protected $author;
 
     /**
-     * category
+     * category.
      *
      * The item category
      *
-     * @ORM\Column(type="string", length=255, options={"comment":"The rss item category"}, nullable=true, name="csmanager_rss_item_category")
+     * @ORM\Column(
+     *      type="string",
+     *      length=255,
+     *      options={"comment":"The rss item category"},
+     *      nullable=true,
+     *      name="csmanager_rss_item_category"
+     * )
      */
     protected $category;
 
     /**
-     * Authorization service
-     * 
+     * Authorization service.
+     *
      * The authorization service
      * that must be called to
      * grant user athorization
      * and extra informations.
      *
-     * @ORM\Column(type="text", options={"comment":"The authorized service and extra informations"}, nullable=false, name="csmanager_rss_item_authService")
+     * @ORM\Column(
+     *      type="text",
+     *      options={"comment":"The authorized service and extra informations"},
+     *      nullable=false,
+     *      name="csmanager_rss_item_authService"
+     * )
      */
     protected $authService;
-    
+
     /**
-     * Channel constructor
-     * 
+     * Channel constructor.
+     *
      * Setup the entity
-     * 
+     *
      * @param string               $type        The item type
      * @param string               $title       The item title
      * @param string               $link        The item link
@@ -131,8 +179,16 @@ class RssItem {
      * @param RssItemAuthInterface $authService The authorization service
      * @param array                $extraAuth   The extra authorization service informations
      */
-    public function __construct($type = null, $title = null, $link = null, $description = null, $author = null, $category = null, RssItemAuthInterface $authService = null, array $extraAuth = array())
-    {
+    public function __construct(
+        $type = null,
+        $title = null,
+        $link = null,
+        $description = null,
+        $author = null,
+        $category = null,
+        RssItemAuthInterface $authService = null,
+        array $extraAuth = array()
+    ) {
         $this->created = new \DateTime();
         $this->type = $type;
         $this->title = $title;
@@ -142,224 +198,245 @@ class RssItem {
         $this->category = $category;
         $this->setAuthService($authService, $extraAuth);
     }
-    
+
     /**
-     * Get id
-     * 
-     * This method return 
+     * Get id.
+     *
+     * This method return
      * the item id
-     * 
+     *
      * @return string
      */
-    public function getId() {
-        return $this->id;
+    public function getId()
+    {
+        return $this->itemId;
     }
-    
+
     /**
-     * Get creation date
-     * 
-     * This method return 
+     * Get creation date.
+     *
+     * This method return
      * the item creation date
-     * 
+     *
      * @return \DateTime
      */
-    public function getCreated() {
+    public function getCreated()
+    {
         return $this->created;
     }
-    
+
     /**
-     * Get type
-     * 
-     * This method return 
+     * Get type.
+     *
+     * This method return
      * the item type
-     * 
+     *
      * @return string
      */
-    public function getType() {
+    public function getType()
+    {
         return $this->type;
     }
-    
+
     /**
-     * Set type
-     * 
-     * This method allow to set 
+     * Set type.
+     *
+     * This method allow to set
      * the item type
-     * 
+     *
      * @param string $type The item type
-     * 
+     *
      * @return RssItem
      */
-    public function setType($type) {
+    public function setType($type)
+    {
         $this->type = $type;
+
         return $this;
     }
-    
+
     /**
-     * Get title
-     * 
-     * This method return 
+     * Get title.
+     *
+     * This method return
      * the item title
-     * 
+     *
      * @return string
      */
-    public function getTitle() {
+    public function getTitle()
+    {
         return $this->title;
     }
-    
+
     /**
-     * Set title
-     * 
-     * This method allow to set 
+     * Set title.
+     *
+     * This method allow to set
      * the item title
-     * 
+     *
      * @param string $title The item title
-     * 
+     *
      * @return RssItem
      */
-    public function setTitle($title) {
+    public function setTitle($title)
+    {
         $this->title = $title;
+
         return $this;
     }
-    
+
     /**
-     * Get link
-     * 
-     * This method return 
+     * Get link.
+     *
+     * This method return
      * the item link
-     * 
+     *
      * @return string
      */
-    public function getLink() {
+    public function getLink()
+    {
         return $this->link;
     }
-    
+
     /**
-     * Set link
-     * 
-     * This method allow to set 
+     * Set link.
+     *
+     * This method allow to set
      * the item link
-     * 
+     *
      * @param string $link The item link
-     * 
+     *
      * @return RssItem
      */
-    public function setLink($link) {
+    public function setLink($link)
+    {
         $this->link = $link;
+
         return $this;
     }
-    
+
     /**
-     * Get description
-     * 
-     * This method return 
+     * Get description.
+     *
+     * This method return
      * the item description
-     * 
+     *
      * @return string
      */
-    public function getDescription() {
+    public function getDescription()
+    {
         return $this->description;
     }
-    
+
     /**
-     * Set description
-     * 
-     * This method allow to set 
+     * Set description.
+     *
+     * This method allow to set
      * the item description
-     * 
+     *
      * @param string $description The item description
-     * 
+     *
      * @return RssItem
      */
-    public function setDescription($description) {
+    public function setDescription($description)
+    {
         $this->description = $description;
+
         return $this;
     }
-    
+
     /**
-     * Get author
-     * 
-     * This method return 
+     * Get author.
+     *
+     * This method return
      * the item author
-     * 
+     *
      * @return string
      */
-    public function getAuthor() {
+    public function getAuthor()
+    {
         return $this->author;
     }
-    
+
     /**
-     * Set author
-     * 
-     * This method allow to set 
+     * Set author.
+     *
+     * This method allow to set
      * the item author
-     * 
+     *
      * @param string $author The item author
-     * 
+     *
      * @return RssItem
      */
-    public function setAuthor($author) {
+    public function setAuthor($author)
+    {
         $this->author = $author;
+
         return $this;
     }
-    
+
     /**
-     * Get category
-     * 
-     * This method return 
+     * Get category.
+     *
+     * This method return
      * the item category
-     * 
+     *
      * @return string
      */
-    public function getCategory() {
+    public function getCategory()
+    {
         return $this->category;
     }
-    
+
     /**
-     * Set category
-     * 
-     * This method allow to set 
+     * Set category.
+     *
+     * This method allow to set
      * the item category
-     * 
+     *
      * @param string $category The item category
-     * 
+     *
      * @return RssItem
      */
-    public function setCategory($category) {
+    public function setCategory($category)
+    {
         $this->category = $category;
+
         return $this;
     }
-    
+
     /**
-     * Get authorization service
-     * 
+     * Get authorization service.
+     *
      * @return RssAuthInfo
      */
-    public function getAuthService() {
+    public function getAuthService()
+    {
         return new RssAuthInfo($this->authService);
     }
-    
+
     /**
-     * Set authorization service
-     * 
+     * Set authorization service.
+     *
      * This method allow to
-     * store the authorize 
+     * store the authorize
      * service informations.
-     * 
+     *
      * @param RssItemAuthInterface $authService The autorized service
      * @param array                $extraAuth   The extra informations
-     * 
+     *
      * @return RssItem
      */
-    public function setAuthService(RssItemAuthInterface $authService = null, array $extraAuth = array()) {
-        
+    public function setAuthService(RssItemAuthInterface $authService = null, array $extraAuth = array())
+    {
         if ($authService !== null) {
-            foreach ($extraAuth as $key=>$value) {
+            foreach ($extraAuth as $key => $value) {
                 $authService->add($key, $value);
             }
-            
+
             $this->authService = $authService->dumpDataInfo();
         }
+
         return $this;
     }
-    
 }

@@ -1,19 +1,21 @@
 <?php
 /**
  * This file is a part of CSCFA security project.
- * 
+ *
  * The security project is a security bundle written in php
  * with Symfony2 framework.
- * 
+ *
  * PHP version 5.5
- * 
- * @category Form
- * @package  CscfaSecurityBundle
- * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
- * @license  http://opensource.org/licenses/MIT MIT
+ *
+ * @category   Form
+ *
+ * @author     Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
+ * @license    http://opensource.org/licenses/MIT MIT
  * @filesource
- * @link     http://cscfa.fr
+ *
+ * @link       http://cscfa.fr
  */
+
 namespace Cscfa\Bundle\SecurityBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
@@ -28,9 +30,10 @@ use Cscfa\Bundle\SecurityBundle\Util\Manager\RoleManager;
  * instance by serving a default User form.
  *
  * @category Form
- * @package  CscfaSecurityBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
+ *
  * @link     http://cscfa.fr
  * @see      Cscfa\Bundle\SecurityBundle\Entity\Role
  */
@@ -78,60 +81,79 @@ class UserFormType extends AbstractType
      * @param array                $options The form options.
      *
      * @see    \Symfony\Component\Form\AbstractType::buildForm()
-     * @return void
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('id', 'hidden')
             ->add(
-                'username', 'text', array(
+                'username',
+                'text',
+                array(
                     'max_length' => '255',
                     'label' => 'security.form.user.label.username',
-                    'translation_domain' => 'form'
+                    'translation_domain' => 'form',
                     )
             )->add(
-                'email', 'email', array(
+                'email',
+                'email',
+                array(
                     'max_length' => '255',
                     'label' => 'security.form.user.label.email',
-                    'translation_domain' => 'form'
+                    'translation_domain' => 'form',
                     )
             )->add(
-                'enabled', 'checkbox', array(
+                'enabled',
+                'checkbox',
+                array(
                     'value' => true,
                     'label' => 'security.form.user.label.enabled',
-                    'translation_domain' => 'form'
+                    'translation_domain' => 'form',
                     )
             )->add(
-                'salt', 'text', array(
+                'salt',
+                'text',
+                array(
                     'label' => 'security.form.user.label.salt',
-                    'translation_domain' => 'form'
+                    'translation_domain' => 'form',
                     )
             )->add(
-                'password', 'password', array(
+                'password',
+                'password',
+                array(
                     'label' => 'security.form.user.label.password',
-                    'translation_domain' => 'form'
+                    'translation_domain' => 'form',
                     )
             )->add(
-                'locked', 'checkbox', array(
+                'locked',
+                'checkbox',
+                array(
                     'value' => false,
                     'label' => 'security.form.user.label.locked',
-                    'translation_domain' => 'form'
+                    'translation_domain' => 'form',
                     )
             )->add(
-                'expiresAt', 'datetime', array(
+                'expiresAt',
+                'datetime',
+                array(
                     'label' => 'security.form.user.label.expiresAt',
-                    'translation_domain' => 'form'
+                    'translation_domain' => 'form',
                     )
             )->add(
-                'roles', 'choice', array(
+                'roles',
+                'choice',
+                array(
                     'choices' => $this->roleManager->getRolesName(),
                     'label' => 'security.form.user.label.roles',
-                    'translation_domain' => 'form'
+                    'translation_domain' => 'form',
                     )
             )->add(
-                'credentialsExpireAt', 'datetime', array(
+                'credentialsExpireAt',
+                'datetime',
+                array(
                     'label' => 'security.form.user.label.credentialsExpireAt',
-                    'translation_domain' => 'form'
+                    'translation_domain' => 'form',
                     )
             )->add('save', 'submit');
     }
@@ -143,10 +165,11 @@ class UserFormType extends AbstractType
      * form type name as string.
      *
      * @see    \Symfony\Component\Form\FormTypeInterface::getName()
+     *
      * @return string
      */
     public function getName()
     {
-        return "UserFormType";
+        return 'UserFormType';
     }
 }

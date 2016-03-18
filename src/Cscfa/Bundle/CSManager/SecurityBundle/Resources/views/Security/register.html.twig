@@ -27,7 +27,7 @@
                 {{ "success.created"|trans }}
             </p>
             
-            {% if preference.getConfiguration().getSignInVerifyEmail() %}
+            {% if preference.getConfiguration().isSignInVerifyEmail() %}
                 <p class="text-info">
                     {{ "success.email"|trans }}
                 </p>

@@ -1,19 +1,21 @@
 <?php
 /**
  * This file is a part of CSCFA security project.
- * 
+ *
  * The security project is a security bundle written in php
  * with Symfony2 framework.
- * 
+ *
  * PHP version 5.5
- * 
+ *
  * @category Provider
- * @package  CscfaSecurityBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
  * @filesource
+ *
  * @link     http://cscfa.fr
  */
+
 namespace Cscfa\Bundle\SecurityBundle\Provider;
 
 use Symfony\Component\Security\Core\User\UserProviderInterface;
@@ -26,32 +28,32 @@ use Cscfa\Bundle\SecurityBundle\Util\Builder\UserBuilder;
 
 /**
  * SecurityUserProvider class.
- * 
+ *
  * This class is the main
  * security bundle provider
  * for the User instance
  * into a security context.
- * 
+ *
  * @category Provider
- * @package  CscfaSecurityBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
+ *
  * @link     http://cscfa.fr
  */
 class SecurityUserProvider implements UserProviderInterface
 {
-
     protected $userProvider;
 
     /**
      * Default constructor.
-     * 
+     *
      * This constructor register
      * the user provider instance
      * service to retreive the
      * user instance from the
      * database.
-     * 
+     *
      * @param UserProvider $providerService The user provider service
      */
     public function __construct(UserProvider $providerService)
@@ -65,14 +67,15 @@ class SecurityUserProvider implements UserProviderInterface
      * @param string $class The class name to test
      *
      * @see    \Symfony\Component\Security\Core\User\UserProviderInterface::supportsClass()
-     * @return boolean
+     *
+     * @return bool
      */
     public function supportsClass($class)
     {
         $userClass = "Cscfa\Bundle\SecurityBundle\Entity\User";
         $userBuilderClass = "Cscfa\Bundle\SecurityBundle\Util\Builder\UserBuilder";
-        
-        return ($class === $userClass || $class === $userBuilderClass);
+
+        return $class === $userClass || $class === $userBuilderClass;
     }
 
     /**
@@ -86,15 +89,16 @@ class SecurityUserProvider implements UserProviderInterface
      * @param UserInterface $user The user instance to reload
      *
      * @throws UnsupportedUserException if the account is not supported
+     *
      * @return User
      */
     public function refreshUser(UserInterface $user)
     {
         $userClass = get_class($user);
-        if (! $this->supportsClass($userClass)) {
+        if (!$this->supportsClass($userClass)) {
             throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', $userClass), 500);
         }
-        
+
         return $this->loadUserByUsername($user->getUsername());
     }
 
@@ -107,20 +111,22 @@ class SecurityUserProvider implements UserProviderInterface
      * @param string $username The username
      *
      * @see    UsernameNotFoundException
+     *
      * @throws UsernameNotFoundException if the user is not found
+     *
      * @return UserInterface
      */
     public function loadUserByUsername($username)
     {
         $user = $this->userProvider->findOneByUsername($username);
-        
+
         if ($user === null) {
             throw new UsernameNotFoundException(sprintf('Username "%s" does not exist.', $username), 404);
         }
-        
+
         if ($user instanceof User) {
             return $user;
-        } else if ($user instanceof UserBuilder) {
+        } elseif ($user instanceof UserBuilder) {
             return $user->getUser();
         }
     }

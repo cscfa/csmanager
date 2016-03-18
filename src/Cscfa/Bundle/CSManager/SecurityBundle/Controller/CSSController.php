@@ -8,12 +8,14 @@
  * PHP version 5.5
  *
  * @category Controller
- * @package  CscfaCSManagerCoreBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
  * @filesource
+ *
  * @link     http://cscfa.fr
  */
+
 namespace Cscfa\Bundle\CSManager\SecurityBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -27,71 +29,76 @@ use Symfony\Component\HttpFoundation\Response;
  * the security bundle.
  *
  * @category Controller
- * @package  CscfaCSManagerSecurityBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
+ *
  * @link     http://cscfa.fr
  */
 class CSSController extends Controller
 {
-
     /**
      * Base action.
      *
-     * This method return the css 
+     * This method return the css
      * header Connecting celement
      * file of the csmanager
      * security bundle.
      *
      * @return Response
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function headerConnectingAction($media)
     {
-        return $this->getResponse($this->renderView("CscfaCSManagerSecurityBundle:CSS:headerConnecting.css.twig"));
+        return $this->getResponse($this->renderView('CscfaCSManagerSecurityBundle:CSS:headerConnecting.css.twig'));
     }
 
     /**
      * forgot action.
-     * 
+     *
      * This method return the forgot
      * css file of the csmanager
      * security bundle.
-     * 
+     *
      * @return Response
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function forgotAction($media)
     {
-        return $this->getResponse($this->renderView("CscfaCSManagerSecurityBundle:CSS:forgot.css.twig"));
+        return $this->getResponse($this->renderView('CscfaCSManagerSecurityBundle:CSS:forgot.css.twig'));
     }
 
     /**
      * register action.
-     * 
+     *
      * This method return the register
      * css file of the csmanager
      * security bundle.
-     * 
+     *
      * @return Response
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function registerAction($media)
     {
-        return $this->getResponse($this->renderView("CscfaCSManagerSecurityBundle:CSS:register.css.twig"));
+        return $this->getResponse($this->renderView('CscfaCSManagerSecurityBundle:CSS:register.css.twig'));
     }
 
     /**
      * Get response.
-     * 
+     *
      * This method return a
      * preformated response for
      * matching css type.
-     * 
+     *
      * @param string $content
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     protected function getResponse($content)
     {
         $response = new Response($content);
-        $response->setCharset("UTF-8")->setStatusCode(Response::HTTP_OK)->headers->set("Content-Type", "text/css");
+        $response->setCharset('UTF-8')->setStatusCode(Response::HTTP_OK)->headers->set('Content-Type', 'text/css');
+
         return $response;
     }
 }
