@@ -130,38 +130,4 @@ class EnvironmentContainer
         return $this;
     }
 
-    /**
-     * Get controller info.
-     *
-     * This method return the current ControllerInfo instance
-     * or null if no one is registered.
-     *
-     * @return ControllerInfo
-     */
-    public function getControllerInfo()
-    {
-        return $this->controllerInfo;
-    }
-
-    /**
-     * Set controller info.
-     *
-     * This method allow to set the ControllerInfo
-     * instance. It not update the instance if the
-     * registered is currently immutable.
-     *
-     * @param ControllerInfo $controllerInfo The ControllerInfo to store
-     *
-     * @return EnvironmentContainer
-     */
-    public function setControllerInfo(ControllerInfo $controllerInfo)
-    {
-        if ($this->controllerInfo !== null && $this->controllerInfo->isImmutable()) {
-            return $this;
-        }
-
-        $this->controllerInfo = $controllerInfo;
-
-        return $this;
-    }
 }
