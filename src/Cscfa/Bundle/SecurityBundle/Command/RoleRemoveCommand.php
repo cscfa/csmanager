@@ -1,19 +1,21 @@
 <?php
 /**
  * This file is a part of CSCFA security project.
- * 
+ *
  * The security project is a security bundle written in php
  * with Symfony2 framework.
- * 
+ *
  * PHP version 5.5
- * 
- * @category Command
- * @package  CscfaSecurityBundle
- * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
- * @license  http://opensource.org/licenses/MIT MIT
+ *
+ * @category   Command
+ *
+ * @author     Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
+ * @license    http://opensource.org/licenses/MIT MIT
  * @filesource
- * @link     http://cscfa.fr
+ *
+ * @link       http://cscfa.fr
  */
+
 namespace Cscfa\Bundle\SecurityBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
@@ -35,15 +37,16 @@ use Doctrine\ORM\OptimisticLockException;
  * remove a Role that is registered into the database.
  *
  * @category Controller
- * @package  CscfaSecurityBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
+ *
  * @version  Release: 1.1
+ *
  * @link     http://cscfa.fr
  */
 class RoleRemoveCommand extends ContainerAwareCommand
 {
-
     /**
      * The RoleProvider.
      *
@@ -79,10 +82,10 @@ class RoleRemoveCommand extends ContainerAwareCommand
     {
         // register role manager
         $this->roleManager = $roleManager;
-        
+
         // register role provider
         $this->roleProvider = $roleProvider;
-        
+
         // call parent constructor
         parent::__construct();
     }
@@ -96,7 +99,6 @@ class RoleRemoveCommand extends ContainerAwareCommand
      * name to delete.
      *
      * @see    \Symfony\Component\Console\Command\Command::configure()
-     * @return void
      */
     protected function configure()
     {
@@ -122,44 +124,58 @@ class RoleRemoveCommand extends ContainerAwareCommand
      *
      * @param InputInterface  $input  The common command input
      * @param OutputInterface $output The common command output
-     * 
+     *
      * @see     \Symfony\Component\Console\Command\Command::execute()
+     *
      * @version Release: 1.1
-     * @return  void
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $commandFacade = new CommandFacade($input, $output, $this);
-        $cf = new CommandColorFacade($output);
-        $cf->addColor("error", CommandColorInterface::BLACK, CommandColorInterface::RED, null);
-        $cf->addColor("success", CommandColorInterface::BLACK, CommandColorInterface::GREEN, null);
-        
-        $builder = new CommandAskBuilder(CommandAskBuilder::TYPE_ASK, "The role name : ", null, CommandAskBuilder::OPTION_ASK_AUTOCOMPLETED, $this->roleManager->getRolesName());
-        $name = $commandFacade->getOrAsk("name", $builder);
-        
+        $ouputColor = new CommandColorFacade($output);
+        $ouputColor->addColor('error', CommandColorInterface::BLACK, CommandColorInterface::RED, null);
+        $ouputColor->addColor('success', CommandColorInterface::BLACK, CommandColorInterface::GREEN, null);
+
+        $builder = new CommandAskBuilder(
+            CommandAskBuilder::TYPE_ASK,
+            'The role name : ',
+            null,
+            CommandAskBuilder::OPTION_ASK_AUTOCOMPLETED,
+            $this->roleManager->getRolesName()
+        );
+        $name = $commandFacade->getOrAsk('name', $builder);
+
         $role = $this->roleProvider->findOneByName($name);
-        
-        if ($role !== null && $commandFacade->getConfirmation(array("name" => $name))) {
+
+        if ($role !== null && $commandFacade->getConfirmation(array('name' => $name))) {
             try {
                 $this->roleManager->remove($role);
-                $cf->clear();
-                $cf->addText("\n");
-                $cf->addText("\nDone\n", "success");
-                $cf->addText("\n");
-                $cf->write();
+                $ouputColor->clear();
+                $ouputColor->addText("\n");
+                $ouputColor->addText("\nDone\n", 'success');
+                $ouputColor->addText("\n");
+                $ouputColor->write();
             } catch (OptimisticLockException $e) {
-                $cf->clear();
-                $cf->addText("\n");
-                $cf->addText("\nAn error occures : [" . $e->getCode() . "] " . $e->getMessage() . "\n\t In file : " . $e->getFile() . " line " . $e->getLine() . "\n", "error");
-                $cf->addText("\n");
-                $cf->write();
+                $message = sprintf(
+                    "\nAn error occures : [%s] %s\n\t In file : %s line %s\n",
+                    $e->getCode(),
+                    $e->getMessage(),
+                    $e->getFile(),
+                    $e->getLine()
+                );
+
+                $ouputColor->clear();
+                $ouputColor->addText("\n");
+                $ouputColor->addText($message, 'error');
+                $ouputColor->addText("\n");
+                $ouputColor->write();
             }
-        } else if ($role === null) {
-            $cf->clear();
-            $cf->addText("\n");
-            $cf->addText("\nUnexisting role " . $name . ".\n", "error");
-            $cf->addText("\n");
-            $cf->write();
+        } elseif ($role === null) {
+            $ouputColor->clear();
+            $ouputColor->addText("\n");
+            $ouputColor->addText("\nUnexisting role ".$name.".\n", 'error');
+            $ouputColor->addText("\n");
+            $ouputColor->write();
         }
     }
 }

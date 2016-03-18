@@ -8,30 +8,31 @@
  * PHP version 5.5
  *
  * @category Entity
- * @package  CscfaCSManagerUserBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
  * @filesource
+ *
  * @link     http://cscfa.fr
  */
+
 namespace Cscfa\Bundle\CSManager\UserBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Email
+ * Email.
  *
  * The email entity for the
  * Cscfaproject manager
- * 
+ *
  * @ORM\Entity(repositoryClass="Cscfa\Bundle\CSManager\UserBundle\Entity\Repository\EmailRepository")
  * @ORM\Table(name="csmanager_user_email")
  */
 class Email
 {
-    
     /**
-     * The id field
+     * The id field.
      *
      * The id parameter is the database
      * unique identity field, stored into GUID
@@ -47,13 +48,13 @@ class Email
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="UUID")
      */
-    protected $id;
+    protected $emailId;
 
     /**
-     * The type
-     * 
+     * The type.
+     *
      * The email type
-     * 
+     *
      * @var Type
      * @ORM\ManyToOne(targetEntity="Type")
      * @ORM\JoinColumn(name="csmanager_email_type_id", referencedColumnName="type_id")
@@ -61,32 +62,38 @@ class Email
     protected $type;
 
     /**
-     * The address
-     * 
+     * The address.
+     *
      * The email address
-     * 
+     *
      * @var string
-     * @ORM\Column(type="string", length=255, options={"comment":"The email adress"}, nullable=false, name="csmanager_email_adress")
+     * @ORM\Column(
+     *      type="string",
+     *      length=255,
+     *      options={"comment":"The email adress"},
+     *      nullable=false,
+     *      name="csmanager_email_adress"
+     * )
      */
     protected $adress;
 
     /**
-     * Get id
-     * 
+     * Get id.
+     *
      * Return the email UUID
-     * 
+     *
      * @return string
      */
     public function getId()
     {
-        return $this->id;
+        return $this->emailId;
     }
 
     /**
-     * Get type
-     * 
+     * Get type.
+     *
      * Return the email type
-     * 
+     *
      * @return Type
      */
     public function getType()
@@ -95,25 +102,26 @@ class Email
     }
 
     /**
-     * Set type
-     * 
+     * Set type.
+     *
      * Set the email type
-     * 
+     *
      * @param Type $type - the email type
-     * 
+     *
      * @return Email - the current instance
      */
     public function setType(Type $type)
     {
         $this->type = $type;
+
         return $this;
     }
 
     /**
-     * Get adress
-     * 
+     * Get adress.
+     *
      * Return the email address
-     * 
+     *
      * @return string - the email address
      */
     public function getAdress()
@@ -122,17 +130,18 @@ class Email
     }
 
     /**
-     * Set address
-     * 
+     * Set address.
+     *
      * Set the email address
-     * 
+     *
      * @param string $adress - the email address
+     *
      * @return Email - the current instance
      */
     public function setAdress($adress)
     {
         $this->adress = $adress;
+
         return $this;
     }
- 
 }

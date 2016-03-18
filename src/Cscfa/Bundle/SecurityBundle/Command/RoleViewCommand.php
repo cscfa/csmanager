@@ -1,19 +1,21 @@
 <?php
 /**
  * This file is a part of CSCFA security project.
- * 
+ *
  * The security project is a security bundle written in php
  * with Symfony2 framework.
- * 
+ *
  * PHP version 5.5
- * 
- * @category Command
- * @package  CscfaSecurityBundle
- * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
- * @license  http://opensource.org/licenses/MIT MIT
+ *
+ * @category   Command
+ *
+ * @author     Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
+ * @license    http://opensource.org/licenses/MIT MIT
  * @filesource
- * @link     http://cscfa.fr
+ *
+ * @link       http://cscfa.fr
  */
+
 namespace Cscfa\Bundle\SecurityBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
@@ -29,15 +31,16 @@ use Cscfa\Bundle\ToolboxBundle\Builder\Command\CommandTableBuilder;
  * view all of the database registered Roles.
  *
  * @category Command
- * @package  CscfaSecurityBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
+ *
  * @version  Release: 1.1
+ *
  * @link     http://cscfa.fr
  */
 class RoleViewCommand extends ContainerAwareCommand
 {
-
     /**
      * The RoleProvider.
      *
@@ -60,7 +63,7 @@ class RoleViewCommand extends ContainerAwareCommand
     {
         // register role provider
         $this->roleProvider = $roleProvider;
-        
+
         // call parent constructor
         parent::__construct();
     }
@@ -73,7 +76,6 @@ class RoleViewCommand extends ContainerAwareCommand
      * "app/console cs:view:role".
      *
      * @see    \Symfony\Component\Console\Command\Command::configure()
-     * @return void
      */
     protected function configure()
     {
@@ -96,23 +98,25 @@ class RoleViewCommand extends ContainerAwareCommand
      *
      * @param InputInterface  $input  The common command input
      * @param OutputInterface $output The common command output
-     *            
-     * @see    \Symfony\Component\Console\Command\Command::execute()
+     *
+     * @see     \Symfony\Component\Console\Command\Command::execute()
+     *
      * @version Release: 1.1
-     * @return void
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $keys = array(
-            'UUID'=>"getId",
-            'Name'=>"getName",
-            "created at"=>"getCreatedAt",
-            "created by"=>"getCreatedBy",
-            "last update"=>"getUpdatedAt",
-            "updated by"=>"getUpdatedBy",
-            "Child role"=>"getChild"
+            'UUID' => 'getId',
+            'Name' => 'getName',
+            'created at' => 'getCreatedAt',
+            'created by' => 'getCreatedBy',
+            'last update' => 'getUpdatedAt',
+            'updated by' => 'getUpdatedBy',
+            'Child role' => 'getChild',
         );
-        
+
         $table = new CommandTableBuilder();
         $table->setType($table::TYPE_OBJECT)
             ->setKeys($keys)

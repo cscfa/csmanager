@@ -1,19 +1,21 @@
 <?php
 /**
  * This file is a part of CSCFA csmanager project.
- * 
+ *
  * The csmanager project is a project manager written in php
  * with Symfony2 framework.
- * 
+ *
  * PHP version 5.5
- * 
+ *
  * @category Object
- * @package  CscfaCSManagerProjectBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
  * @filesource
+ *
  * @link     http://cscfa.fr
  */
+
 namespace Cscfa\Bundle\CSManager\ProjectBundle\Object;
 
 use Cscfa\Bundle\CSManager\RssApiBundle\Object\RssItemAuthBase;
@@ -31,15 +33,16 @@ use Cscfa\Bundle\CSManager\ProjectBundle\Entity\Project;
  * rss system.
  *
  * @category Object
- * @package  CscfaCSManagerProjectBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
+ *
  * @link     http://cscfa.fr
  */
-class ProjectRemovedAuth extends RssItemAuthBase {
-
+class ProjectRemovedAuth extends RssItemAuthBase
+{
     /**
-     * Doctrine
+     * Doctrine.
      *
      * This property store
      * the doctrine service
@@ -47,9 +50,9 @@ class ProjectRemovedAuth extends RssItemAuthBase {
      * @var Registry
      */
     protected $doctrine;
-    
+
     /**
-     * Router
+     * Router.
      *
      * This property store
      * the router service
@@ -57,9 +60,9 @@ class ProjectRemovedAuth extends RssItemAuthBase {
      * @var Router
      */
     protected $router;
-    
+
     /**
-     * Set registry
+     * Set registry.
      *
      * This method allow
      * to set the doctrine
@@ -67,24 +70,26 @@ class ProjectRemovedAuth extends RssItemAuthBase {
      *
      * @param Registry $doctrine
      */
-    public function setRegistry(Registry $doctrine){
+    public function setRegistry(Registry $doctrine)
+    {
         $this->doctrine = $doctrine;
     }
-    
+
     /**
-     * Set router
+     * Set router.
      *
      * This method allow to
      * set the router service.
      *
      * @param Router $router The router service
      */
-    public function setRouter(Router $router){
+    public function setRouter(Router $router)
+    {
         $this->router = $router;
     }
-    
+
     /**
-     * Is authorized
+     * Is authorized.
      *
      * Check if an item is
      * currently allowed to
@@ -94,73 +99,77 @@ class ProjectRemovedAuth extends RssItemAuthBase {
      * @param RssItem $item The rss item
      * @param User    $user The current user
      *
-     * @return boolean
+     * @return bool
      */
-    public function isAuthorized(RssItem $item, User $user) {
-        if ($user->hasRole("ROLE_ADMIN")) {
+    public function isAuthorized(RssItem $item, User $user)
+    {
+        if ($user->hasRole('ROLE_ADMIN')) {
             return true;
-        }else{
+        } else {
             $extra = $item->getAuthService()->getExtra();
-            $projectId = $extra["project"];
-    
+            $projectId = $extra['project'];
+
             $query = $this->doctrine->getManager()->createQuery(
-                    "SELECT o
+                "SELECT o
                 FROM Cscfa\Bundle\CSManager\ProjectBundle\Entity\Project p
                 JOIN Cscfa\Bundle\CSManager\ProjectBundle\Entity\ProjectOwner o
                 WHERE p.id = :project
                 AND o.user = :user
                 "
-                )->setParameter("project", $projectId)
-                ->setParameter("user", $user->getId());
+            )->setParameter('project', $projectId)
+                ->setParameter('user', $user->getId());
 
             try {
                 $result = $query->getSingleResult();
 
                 if ($result) {
                     return true;
-                }else{
+                } else {
                     return false;
                 }
             } catch (\Exception $e) {
                 return false;
             }
         }
+
         return false;
     }
 
     /**
-     * Get name
+     * Get name.
      *
      * Return the service
      * name
      *
      * @return string
      */
-    public function getName() {
-        return "project.removed.rss.auth";
+    public function getName()
+    {
+        return 'project.removed.rss.auth';
     }
-    
+
     /**
-     * Create
-     * 
-     * This method create 
-     * a new RssItem into 
+     * Create.
+     *
+     * This method create
+     * a new RssItem into
      * the database.
-     * 
+     *
      * @param Project $project The current project
      */
-    public function create(Project $project){
+    public function create(Project $project)
+    {
         $rss = new RssItem(
-            "project.event.removed",
-            sprintf("a project was removed", $project->getName()),
-            $this->router->generate("cscfa_cs_manager_project_home"),
-            sprintf("The project %s is removed.", $project->getName()),
+            'project.event.removed',
+            sprintf('a project was removed', $project->getName()),
+            $this->router->generate('cscfa_cs_manager_project_home'),
+            sprintf('The project %s is removed.', $project->getName()),
             null,
-            "Project",
+            'Project',
             $this,
-            array("project"=>$project->getId())
+            array('project' => $project->getId())
         );
-        
+
         $this->doctrine->getManager()->persist($rss);
         $this->doctrine->getManager()->flush();
     }

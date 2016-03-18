@@ -8,12 +8,14 @@
  * PHP version 5.5
  *
  * @category Repository
- * @package  CscfaCSManagerProjectBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
  * @filesource
+ *
  * @link     http://cscfa.fr
  */
+
 namespace Cscfa\Bundle\CSManager\ProjectBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
@@ -26,50 +28,51 @@ use Doctrine\ORM\EntityRepository;
  * from the database.
  *
  * @category Repository
- * @package  CscfaCSManagerProjectBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
+ *
  * @link     http://cscfa.fr
  */
 class ProjectRepository extends EntityRepository
 {
     /**
-     * Find existant
-     * 
+     * Find existant.
+     *
      * Return all of the not
      * deleted projects.
-     * 
+     *
      * @return array
      */
     public function findExistant()
     {
         return $this->createQueryBuilder('e')
-            ->where("e.deleted = false")
+            ->where('e.deleted = false')
             ->getQuery()
             ->getResult();
     }
-    
+
     /**
-     * Find readable
-     * 
+     * Find readable.
+     *
      * Return all of the projects
      * that a specified user have
      * a readable property on it.
-     * 
+     *
      * @param string $userId The user id
-     * 
+     *
      * @return array
      */
     public function findReadable($userId)
     {
         return $this->createQueryBuilder('e')
-            ->join("e.projectOwners", 'o')
-            ->join("o.user", 'u')
-            ->join("o.roles", 'r')
-            ->where("u.id = :id")
+            ->join('e.projectOwners', 'o')
+            ->join('o.user', 'u')
+            ->join('o.roles', 'r')
+            ->where('u.id = :id')
             ->setParameter('id', $userId)
-            ->andWhere("r.read = true")
-            ->andWhere("e.deleted = false")
+            ->andWhere('r.read = true')
+            ->andWhere('e.deleted = false')
             ->getQuery()
             ->getResult();
     }

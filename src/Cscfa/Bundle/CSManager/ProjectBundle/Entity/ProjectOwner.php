@@ -8,12 +8,14 @@
  * PHP version 5.5
  *
  * @category Entity
- * @package  CscfaCSManagerProjectBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
  * @filesource
+ *
  * @link     http://cscfa.fr
  */
+
 namespace Cscfa\Bundle\CSManager\ProjectBundle\Entity;
 
 use Cscfa\Bundle\SecurityBundle\Entity\User;
@@ -21,7 +23,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * ProjectOwner
+ * ProjectOwner.
  *
  * The base ProjectOwner entity for the
  * Cscfaproject manager
@@ -31,41 +33,55 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class ProjectOwner
 {
-
     /**
      * @ORM\Column(type="guid", nullable=false, name="csmanager_ProjectOwner_id", options={"comment":"ProjectOwner id"})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="UUID")
      */
-    protected $id;
+    protected $ownerId;
 
-    /** 
-     * @ORM\Column(type="datetime", nullable=false, name="csmanager_ProjectOwner_created", options={"comment":"ProjectOwner date of creation"}) 
+    /**
+     * @ORM\Column(
+     *      type="datetime",
+     *      nullable=false,
+     *      name="csmanager_ProjectOwner_created",
+     *      options={"comment":"ProjectOwner date of creation"}
+     * )
      */
     protected $created;
 
-    /** 
-     * @ORM\Column(type="datetime", nullable=true, name="csmanager_ProjectOwner_updated", options={"comment":"ProjectOwner date of last update"}) 
+    /**
+     * @ORM\Column(
+     *      type="datetime",
+     *      nullable=true,
+     *      name="csmanager_ProjectOwner_updated",
+     *      options={"comment":"ProjectOwner date of last update"}
+     * )
      */
     protected $updated;
 
-    /** 
-     * @ORM\Column(type="boolean", options={"default" = false, "comment":"The ProjectOwner deletion state"}, nullable=false, name="csmanager_ProjectOwner_deleted") 
+    /**
+     * @ORM\Column(
+     *      type="boolean",
+     *      options={"default" = false, "comment":"The ProjectOwner deletion state"},
+     *      nullable=false,
+     *      name="csmanager_ProjectOwner_deleted"
+     * )
      */
     protected $deleted;
-    
+
     /**
      * @ORM\ManyToOne(targetEntity="Cscfa\Bundle\SecurityBundle\Entity\User")
      * @ORM\JoinColumn(name="csmanager_ProjectOwner_user_id", referencedColumnName="user_id")
      */
     protected $user;
-    
+
     /**
      * @ORM\ManyToOne(targetEntity="Project", inversedBy="projectOwners")
      * @ORM\JoinColumn(name="csmanager_ProjectOwner_project_id", referencedColumnName="csmanager_Project_id")
      */
     protected $project;
-    
+
     /**
      * @ORM\ManyToMany(targetEntity="ProjectRole")
      * @ORM\JoinTable(name="tk_csmanager_ProjectOwner_projectRole",
@@ -74,10 +90,10 @@ class ProjectOwner
      *      )
      */
     protected $roles;
-    
+
     /**
-     * Project constructor
-     * 
+     * Project constructor.
+     *
      * Setup the entity
      */
     public function __construct()
@@ -89,23 +105,23 @@ class ProjectOwner
     }
 
     /**
-     * Get id
-     * 
+     * Get id.
+     *
      * Return the entity id.
-     * 
+     *
      * @return string - return the entity id
      */
     public function getId()
     {
-        return $this->id;
+        return $this->ownerId;
     }
 
     /**
-     * Get created
-     * 
+     * Get created.
+     *
      * Return the creation date
      * of the entity.
-     * 
+     *
      * @return \DateTime - The creation date
      */
     public function getCreated()
@@ -114,11 +130,11 @@ class ProjectOwner
     }
 
     /**
-     * Get updated
-     * 
+     * Get updated.
+     *
      * Return the update date
      * of the entity.
-     * 
+     *
      * @return \DateTime | null - The entity update date or null if never updated
      */
     public function getUpdated()
@@ -127,12 +143,12 @@ class ProjectOwner
     }
 
     /**
-     * Get deleted
-     * 
+     * Get deleted.
+     *
      * Return the deletion state
      * of the entity.
-     * 
-     * @return boolean - the entity deletion state
+     *
+     * @return bool - the entity deletion state
      */
     public function isDeleted()
     {
@@ -140,11 +156,11 @@ class ProjectOwner
     }
 
     /**
-     * Get user
-     * 
+     * Get user.
+     *
      * Return the referenced
      * user.
-     * 
+     *
      * @return User - the referenced user
      */
     public function getUser()
@@ -153,11 +169,11 @@ class ProjectOwner
     }
 
     /**
-     * Get project
-     * 
+     * Get project.
+     *
      * Return the referenced
      * project.
-     * 
+     *
      * @return Project - the referenced project
      */
     public function getProject()
@@ -166,114 +182,118 @@ class ProjectOwner
     }
 
     /**
-     * Get roles
-     * 
+     * Get roles.
+     *
      * Return the referenced
      * roles.
-     * 
+     *
      * @return ArrayCollection - the referenced roles collection
      */
     public function getRoles()
     {
         return $this->roles;
     }
-         
+
     /**
-     * Set updated
-     * 
+     * Set updated.
+     *
      * Setup the updated date
      * to the current date.
-     * 
+     *
      * @return ProjectOwner - the current entity
      */
     public function setUpdated()
     {
         $this->updated = new \DateTime();
+
         return $this;
     }
 
     /**
-     * Set deleted
-     * 
+     * Set deleted.
+     *
      * Set the deleted state of
      * the entity. If the given
      * state is not a boolean,
-     * the variable is cast to 
+     * the variable is cast to
      * boolean.
-     * 
+     *
      * @param mixed $deleted - the state of the deletion
-     * 
+     *
      * @return ProjectOwner - the current entity
      */
     public function setDeleted($deleted)
     {
-        if (! is_bool($deleted)) {
+        if (!is_bool($deleted)) {
             $deleted = boolval($deleted);
         }
-        
+
         $this->deleted = $deleted;
+
         return $this;
     }
 
     /**
-     * Set user
-     * 
+     * Set user.
+     *
      * Set the referenced
      * user
-     * 
+     *
      * @param User $user - the referenced user
-     * 
+     *
      * @return ProjectOwner - the current entity
      */
     public function setUser(User $user)
     {
         $this->user = $user;
+
         return $this;
     }
 
     /**
-     * Set project
-     * 
+     * Set project.
+     *
      * Set the referenced
      * project
-     * 
+     *
      * @param Project $project - the referenced project
-     * 
+     *
      * @return ProjectOwner - the current entity
      */
     public function setProject(Project $project)
     {
         $this->project = $project;
+
         return $this;
     }
 
     /**
-     * Set roles
-     * 
+     * Set roles.
+     *
      * Set the referenced
      * roles
-     * 
+     *
      * @param ArrayCollection $roles - the referenced roles
-     * 
+     *
      * @return ProjectOwner - the current entity
      */
     public function setRoles($roles)
     {
         $this->roles = $roles;
+
         return $this;
     }
-     
+
     /**
-     * Update
-     * 
+     * Update.
+     *
      * PreUpdate the entity to
      * store the update date
-     * 
+     *
      * @ORM\PreUpdate
-     * 
-     * @return null
      */
-    protected function update(){
+    protected function update()
+    {
         $this->setUpdated();
     }
 }

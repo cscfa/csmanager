@@ -1,19 +1,21 @@
 <?php
 /**
  * This file is a part of CSCFA toolbox project.
- * 
+ *
  * The toolbox project is a toolbox written in php
  * with Symfony2 framework.
- * 
+ *
  * PHP version 5.5
- * 
+ *
  * @category Set
- * @package  CscfaToolboxBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
  * @filesource
+ *
  * @link     http://cscfa.fr
  */
+
 namespace Cscfa\Bundle\ToolboxBundle\Set;
 
 use Cscfa\Bundle\ToolboxBundle\BaseInterface\Collection\SetInterface;
@@ -21,31 +23,32 @@ use Cscfa\Bundle\ToolboxBundle\BaseInterface\Collection\SetInterface;
 /**
  * ListSet class.
  *
- * The ListSet class is used to create 
+ * The ListSet class is used to create
  * a set collection.
  *
  * @category Set
- * @package  CscfaToolboxBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
+ *
  * @link     http://cscfa.fr
  */
 class ListSet implements SetInterface
 {
     /**
      * The set container.
-     * 
+     *
      * This property is an
      * array that contain
      * the values.
-     * 
+     *
      * @var array
      */
     protected $container;
 
     /**
      * Default constructor.
-     * 
+     *
      * This constructor initialize the
      * properties.
      */
@@ -55,14 +58,13 @@ class ListSet implements SetInterface
     }
 
     /**
-     * Add
-     * 
+     * Add.
+     *
      * add an element to the set.
-     * 
+     *
      * @param mixed $element The element to add
-     * 
+     *
      * @see    \Cscfa\Bundle\ToolboxBundle\BaseInterface\Collection\SetInterface::add()
-     * @return void
      */
     public function add($element)
     {
@@ -70,15 +72,14 @@ class ListSet implements SetInterface
     }
 
     /**
-     * Remove all
-     * 
+     * Remove all.
+     *
      * Remove all contained elements
      * by a set from the current set.
-     * 
+     *
      * @param array $elements The elements list to remove
-     * 
+     *
      * @see    \Cscfa\Bundle\ToolboxBundle\BaseInterface\Collection\SetInterface::removeAll()
-     * @return void
      */
     public function removeAll(array $elements)
     {
@@ -88,15 +89,16 @@ class ListSet implements SetInterface
     }
 
     /**
-     * Contain
-     * 
+     * Contain.
+     *
      * Check if the set contain
      * a specified element.
-     * 
+     *
      * @param mixed $element The element to check
-     * 
+     *
      * @see    \Cscfa\Bundle\ToolboxBundle\BaseInterface\Collection\SetInterface::contain()
-     * @return boolean
+     *
+     * @return bool
      */
     public function contain($element)
     {
@@ -104,12 +106,13 @@ class ListSet implements SetInterface
     }
 
     /**
-     * Get all
-     * 
+     * Get all.
+     *
      * Get all of the set
      * contained elements.
-     * 
+     *
      * @see    \Cscfa\Bundle\ToolboxBundle\BaseInterface\Collection\SetInterface::getAll()
+     *
      * @return array
      */
     public function getAll()
@@ -118,15 +121,14 @@ class ListSet implements SetInterface
     }
 
     /**
-     * Add all
-     * 
-     * add an array of elements 
+     * Add all.
+     *
+     * add an array of elements
      * to the set.
-     * 
+     *
      * @param array $elements The array of elements to add
-     * 
+     *
      * @see    \Cscfa\Bundle\ToolboxBundle\BaseInterface\Collection\SetInterface::addAll()
-     * @return void
      */
     public function addAll(array $elements)
     {
@@ -136,58 +138,60 @@ class ListSet implements SetInterface
     }
 
     /**
-     * Contain all
-     * 
+     * Contain all.
+     *
      * Check if the set contain all
      * of the elements of an other set.
-     * 
+     *
      * @param array $elements The element list to check
-     * 
+     *
      * @see    \Cscfa\Bundle\ToolboxBundle\BaseInterface\Collection\SetInterface::containsAll()
-     * @return boolean
+     *
+     * @return bool
      */
     public function containsAll(array $elements)
     {
         foreach ($elements as $element) {
-            if (! $this->contain($element)) {
+            if (!$this->contain($element)) {
                 return false;
             }
         }
-        
+
         return true;
     }
 
     /**
-     * Get
-     * 
+     * Get.
+     *
      * Get an element from
      * the set.
-     * 
+     *
      * @param mixed $element The element to get
-     * 
+     *
      * @see    \Cscfa\Bundle\ToolboxBundle\BaseInterface\Collection\SetInterface::get()
+     *
      * @return mixed
      */
     public function get($element)
     {
         if (isset($this->container[$element])) {
             return $this->container[$element];
-        } else if (in_array($element, $this->container)) {
+        } elseif (in_array($element, $this->container)) {
             $key = array_search($element, $this->container);
+
             return $this->container[$key];
         } else {
-            return null;
+            return;
         }
     }
 
     /**
-     * Clear
-     * 
+     * Clear.
+     *
      * Remove all elements from
      * this set.
-     * 
+     *
      * @see    \Cscfa\Bundle\ToolboxBundle\BaseInterface\Collection\SetInterface::clear()
-     * @return void
      */
     public function clear()
     {
@@ -195,13 +199,14 @@ class ListSet implements SetInterface
     }
 
     /**
-     * Is empty
-     * 
+     * Is empty.
+     *
      * Check if the set is
      * empty.
-     * 
+     *
      * @see    \Cscfa\Bundle\ToolboxBundle\BaseInterface\Collection\SetInterface::isEmpty()
-     * @return boolean
+     *
+     * @return bool
      */
     public function isEmpty()
     {
@@ -209,29 +214,30 @@ class ListSet implements SetInterface
     }
 
     /**
-     * Remove
-     * 
+     * Remove.
+     *
      * Remove an element from
      * the set and return it.
-     * 
+     *
      * @param mixed $element The element to remove
-     * 
+     *
      * @see    \Cscfa\Bundle\ToolboxBundle\BaseInterface\Collection\SetInterface::remove()
-     * @return void
      */
     public function remove($element)
     {
         if (isset($this->container[$element])) {
             $element = $this->container[$element];
             unset($this->container[$element]);
+
             return $element;
-        } else if (in_array($element, $this->container)) {
+        } elseif (in_array($element, $this->container)) {
             $key = array_search($element, $this->container);
             $element = $this->container[$key];
             unset($this->container[$key]);
+
             return $element;
         } else {
-            return null;
+            return;
         }
     }
 }

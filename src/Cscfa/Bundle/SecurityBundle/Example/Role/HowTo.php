@@ -1,17 +1,18 @@
 <?php
 /**
  * This file is a part of CSCFA security project.
- * 
+ *
  * The security project is a security bundle written in php
  * with Symfony2 framework.
  *
  * PHP version 5.5
  *
  * @category Example
- * @package  CscfaSecurityBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
  * @filesource
+ *
  * @link     http://cscfa.fr
  * @see      Cscfa\Bundle\SecurityBundle\Entity\Role
  * @see      Cscfa\Bundle\SecurityBundle\Entity\StackUpdate
@@ -22,6 +23,7 @@
  * @see      Cscfa\Bundle\SecurityBundle\Entity\Repository\RoleRepository
  * @see      Cscfa\Bundle\SecurityBundle\Exception\CircularReferenceException
  */
+
 namespace Cscfa\Bundle\SecurityBundle\Example\Role;
 
 use Cscfa\Bundle\SecurityBundle\Example\ExampleInterface;
@@ -39,14 +41,14 @@ use Cscfa\Bundle\SecurityBundle\Entity\Role;
  * creation.
  *
  * @category Example
- * @package  CscfaSecurityBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
+ *
  * @link     http://cscfa.fr
  */
 class HowTo extends Controller implements ExampleInterface
 {
-
     /**
      * The howItWork method.
      *
@@ -54,11 +56,10 @@ class HowTo extends Controller implements ExampleInterface
      * of a Role instance.
      *
      * @see    \Cscfa\Bundle\SecurityBundle\Example\ExampleInterface::howItWork()
-     * @return void
      */
     public function howItWork()
     {
-        
+
         /*
          * In this example, we will consider that
          * the RoleManager instance is retreived by
@@ -67,7 +68,7 @@ class HowTo extends Controller implements ExampleInterface
          * 'core.manager.role_manager'.
          */
         $roleManager = $this->get('core.manager.role_manager');
-        
+
         /*
          * In this example, we will consider that
          * the RoleProvider instance is retreived by
@@ -76,7 +77,7 @@ class HowTo extends Controller implements ExampleInterface
          * 'core.provider.role_provider'.
          */
         $roleProvider = $this->get('core.provider.role_provider');
-        
+
         /*
          * Two things exist to create a Role
          * instance. We can create a Role
@@ -93,13 +94,13 @@ class HowTo extends Controller implements ExampleInterface
          * nothing, view the
          * createRoleInstanceFromNothing() method.
          */
-        
+
         // Create a new Role instance from nothing.
         $this->createRoleInstanceFromNothing($roleManager);
-        
+
         // Create a new Role instance from existing role.
         $this->createRoleInstanceFromExisting($roleManager, $roleProvider);
-        
+
         /*
          * The RoleManager grant the logic
          * of Role instance, it's important
@@ -108,10 +109,10 @@ class HowTo extends Controller implements ExampleInterface
          * RoleManager usage is implicitly
          * use into the RoleBuilder instance.
          */
-        
+
         // RoleManager usage example
         $this->useRoleManager($roleManager);
-        
+
         /*
          * The RoleProvider allow an
          * abstraction state between
@@ -130,12 +131,10 @@ class HowTo extends Controller implements ExampleInterface
      * instance creation.
      *
      * @param RoleManager $roleManager A RoleManager to manage Role instance.
-     *
-     * @return void
      */
     public function createRoleInstanceFromNothing(RoleManager $roleManager)
     {
-        
+
         /*
          * Here we create a RoleBuilder instance and
          * not a Role instance from it own constructor.
@@ -148,10 +147,10 @@ class HowTo extends Controller implements ExampleInterface
          * we will create a MySQL Doctrine exception.
          */
         $newRoleInstance = $roleManager->getNewInstance();
-        
+
         // The current date and time.
         $creationDate = new \DateTime();
-        
+
         /*
          * Now we have an instance of RoleBuilder and
          * we can start to inject values.
@@ -165,18 +164,18 @@ class HowTo extends Controller implements ExampleInterface
          * the error code into a variable that can be
          * retreive behing getLastError() method.
          */
-        if (! $newRoleInstance->getCreatedAt($creationDate)) {
+        if (!$newRoleInstance->getCreatedAt($creationDate)) {
             switch ($newRoleInstance->getLastError()) {
-            case RoleBuilder::CREATION_AFTER_NOW:
-                throw new \Exception("The date of the creation is can't be past of present date.");
-            case RoleBuilder::NO_ERROR:
-                continue;
+                case RoleBuilder::CREATION_AFTER_NOW:
+                    throw new \Exception("The date of the creation is can't be past of present date.");
+                case RoleBuilder::NO_ERROR:
+                    continue;
             }
         }
-        
+
         // The new Role name.
-        $name = "ROLE_TEST";
-        
+        $name = 'ROLE_TEST';
+
         /*
          * Now, we will assign a name for
          * this new Role.
@@ -200,10 +199,10 @@ class HowTo extends Controller implements ExampleInterface
          * Some methods of RoleBuilder allow to force
          * the validation.
          */
-        if ($roleManager->nameIsValid($name) && ! $roleManager->roleExists($name)) {
+        if ($roleManager->nameIsValid($name) && !$roleManager->roleExists($name)) {
             $newRoleInstance->setName($name, true);
         }
-        
+
         /*
          * Now we can persist the role into the database.
          *
@@ -215,9 +214,13 @@ class HowTo extends Controller implements ExampleInterface
         try {
             $roleManager->persist($newRoleInstance);
         } catch (OptimisticLockException $exception) {
-            Throw new \Exception("An error occured during the example. The doctrine persistance failed", 500, $exception);
+            throw new \Exception(
+                'An error occured during the example. The doctrine persistance failed',
+                500,
+                $exception
+            );
         }
-        
+
         return;
     }
 
@@ -230,8 +233,6 @@ class HowTo extends Controller implements ExampleInterface
      *
      * @param RoleManager  $roleManager  A RoleManager to manage Role instance.
      * @param RoleProvider $roleProvider A RoleProvider to get Role from the databaase.
-     *
-     * @return void
      */
     public function createRoleInstanceFromExisting(RoleManager $roleManager, RoleProvider $roleProvider)
     {
@@ -240,21 +241,21 @@ class HowTo extends Controller implements ExampleInterface
          * RoleBuilder instance from nothing.
          */
         $newRole = $roleManager->getNewInstance();
-        
+
         /*
          * We set it's properties to refer
          * a name and a creation date.
          */
         $newRole->setCreatedAt(new \DateTime());
-        $newRole->setName("ROLE_TEST");
-        
+        $newRole->setName('ROLE_TEST');
+
         /*
          * Here, we consider a role with
          * ROLE_USER name already exist
          * into the database.
          */
-        $existingName = "ROLE_USER";
-        
+        $existingName = 'ROLE_USER';
+
         /*
          * We check if this role realy exist
          */
@@ -266,7 +267,7 @@ class HowTo extends Controller implements ExampleInterface
              * it into a RoleBuilder instance.
              */
             $existingRole = $roleProvider->findOneByName($existingName);
-            
+
             /*
              * It's possible to get only the Role
              * instance behind the getRole() method
@@ -282,17 +283,17 @@ class HowTo extends Controller implements ExampleInterface
              * A circular reference occure when the
              * wire of child create an infinite loop.
              */
-            if (! $newRole->setChild($existingRole->getRole())) {
+            if (!$newRole->setChild($existingRole->getRole())) {
                 switch ($newRole->getLastError()) {
-                case RoleBuilder::INVALID_ROLE_INSTANCE_OF:
-                    throw new \Exception("The given child is invalid");
-                case RoleBuilder::CIRCULAR_REFERENCE:
-                    throw new \Exception("The given child create a circular reference");
-                case RoleBuilder::NO_ERROR:
-                    continue;
+                    case RoleBuilder::INVALID_ROLE_INSTANCE_OF:
+                        throw new \Exception('The given child is invalid');
+                    case RoleBuilder::CIRCULAR_REFERENCE:
+                        throw new \Exception('The given child create a circular reference');
+                    case RoleBuilder::NO_ERROR:
+                        continue;
                 }
             }
-            
+
             /*
              * Here we set the update date
              * of the new role instance.
@@ -309,26 +310,26 @@ class HowTo extends Controller implements ExampleInterface
              * update date is after the present
              * day.
              */
-            if (! $newRole->setUpdatedAt(new \DateTime())) {
+            if (!$newRole->setUpdatedAt(new \DateTime())) {
                 switch ($newRole->getLastError()) {
-                case RoleBuilder::UPDATE_BEFORE_CREATION:
-                    throw new \Exception("The update date is before the creation date", 500);
-                case RoleBuilder::UPDATE_AFTER_NOW:
-                    throw new \Exception("The update date is after the present date", 500);
-                case RoleBuilder::NO_ERROR:
-                    continue;
+                    case RoleBuilder::UPDATE_BEFORE_CREATION:
+                        throw new \Exception('The update date is before the creation date', 500);
+                    case RoleBuilder::UPDATE_AFTER_NOW:
+                        throw new \Exception('The update date is after the present date', 500);
+                    case RoleBuilder::NO_ERROR:
+                        continue;
                 }
             }
-            
+
             /*
              * Now we persist the new role
              * instance.
              */
             $roleManager->persist($newRole);
         } else {
-            throw new \Exception("The role ROLE_USER is not defined.", 500);
+            throw new \Exception('The role ROLE_USER is not defined.', 500);
         }
-        
+
         return;
     }
 
@@ -339,19 +340,17 @@ class HowTo extends Controller implements ExampleInterface
      * instance usage.
      *
      * @param RoleManager $roleManager A RoleManager to manage Role instance.
-     *
-     * @return void
      */
     public function useRoleManager(RoleManager $roleManager)
     {
-        
+
         /*
          * Here we can create a new instance.
          * This thing is developed into
          * createRoleInstanceFromNothing().
          */
         $roleBuilder = $roleManager->getNewInstance();
-        
+
         /*
          * Now, imagine that we need to
          * create a ne Role dirctly from
@@ -369,7 +368,7 @@ class HowTo extends Controller implements ExampleInterface
         $newRole = new Role();
         $roleBuilderOfNewRole = $roleManager->convertInstance($newRole);
         unset($roleBuilderOfNewRole);
-        
+
         /*
          * Here we get all of the role
          * names that exist into the database.
@@ -379,7 +378,7 @@ class HowTo extends Controller implements ExampleInterface
          */
         $allRolesNames = $roleManager->getRolesName();
         unset($allRolesNames);
-        
+
         /*
          * Here we can check that a role
          * already exist into the database
@@ -388,10 +387,10 @@ class HowTo extends Controller implements ExampleInterface
          * This set of name is serv into
          * an array of string.
          */
-        if ($roleManager->roleExists("ROLE_ADMIN")) {
-            $roleManager->getRoleWire("ROLE_ADMIN");
+        if ($roleManager->roleExists('ROLE_ADMIN')) {
+            $roleManager->getRoleWire('ROLE_ADMIN');
         }
-        
+
         /*
          * Now we créate two role with
          * circular reference and check
@@ -401,13 +400,13 @@ class HowTo extends Controller implements ExampleInterface
          * This method will return true.
          */
         $roleOne = new Role();
-        $roleOne->setName("roleOne");
+        $roleOne->setName('roleOne');
         $roleTwo = new Role();
-        $roleTwo->setName("roleTwo")->setChild($roleOne);
+        $roleTwo->setName('roleTwo')->setChild($roleOne);
         $roleOne->setChild($roleTwo);
         // the hasCircularReference method
         $roleManager->hasCircularReference($roleOne);
-        
+
         /*
          * Here we can see that the RoleManager
          * instance is in capacity to grant the
@@ -424,9 +423,9 @@ class HowTo extends Controller implements ExampleInterface
          * false because the name contain
          * special characters.
          */
-        $roleManager->nameIsValid("ROLE_name_VALID");
-        $roleManager->nameIsValid("ROLE@name°INVALID");
-        
+        $roleManager->nameIsValid('ROLE_name_VALID');
+        $roleManager->nameIsValid('ROLE@name°INVALID');
+
         /*
          * Now we can see the RoleManager
          * methods that allow to persist
@@ -436,14 +435,14 @@ class HowTo extends Controller implements ExampleInterface
          * can throw an OptimisticLockException
          * if something goes wrong with doctrine.
          */
-        $roleBuilder->setName("ROLE_TEST");
+        $roleBuilder->setName('ROLE_TEST');
         try {
             $roleManager->persist($roleBuilder);
             $roleManager->remove($roleBuilder);
         } catch (OptimisticLockException $exception) {
-            throw new \Exception("An error occured during the example. The doctrine calling fail", 500, $exception);
+            throw new \Exception('An error occured during the example. The doctrine calling fail', 500, $exception);
         }
-        
+
         return;
     }
 
@@ -454,12 +453,10 @@ class HowTo extends Controller implements ExampleInterface
      * instance usage.
      *
      * @param RoleProvider $roleProvider A RoleProvider to get Role from the databaase.
-     *
-     * @return void
      */
     public function useRoleProvider(RoleProvider $roleProvider)
     {
-        
+
         /*
          * Here we get all of the roles
          * existing into the database.
@@ -469,11 +466,11 @@ class HowTo extends Controller implements ExampleInterface
          */
         $allRoles = $roleProvider->findAll();
         foreach ($allRoles as $role) {
-            if (! $role instanceof Role) {
-                Throw new \Exception('$role must be instance of Role.');
+            if (!$role instanceof Role) {
+                throw new \Exception('$role must be instance of Role.');
             }
         }
-        
+
         /*
          * We can see here that the RoleProvider
          * is able to check if a Role exist as
@@ -486,36 +483,14 @@ class HowTo extends Controller implements ExampleInterface
          * If the role doesn't exist, it will
          * return null.
          */
-        if ($roleProvider->isExistingByName("ROLE_USER")) {
-            if (! $roleProvider->findOneByName("ROLE_USER") instanceof Role) {
+        if ($roleProvider->isExistingByName('ROLE_USER')) {
+            if (!$roleProvider->findOneByName('ROLE_USER') instanceof Role) {
                 throw new \Exception('$roleProvider->findOneByName("ROLE_USER") must be instance of Role');
             }
         } else {
-            if (! $roleProvider->findOneByName("ROLE_USER") === null) {
+            if (!$roleProvider->findOneByName('ROLE_USER') === null) {
                 throw new \Exception('$roleProvider->findOneByName("ROLE_USER") must be null');
             }
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

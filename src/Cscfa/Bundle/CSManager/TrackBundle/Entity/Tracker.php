@@ -8,12 +8,14 @@
  * PHP version 5.5
  *
  * @category Entity
- * @package  CscfaCSManagerTrackBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
  * @filesource
+ *
  * @link     http://cscfa.fr
  */
+
 namespace Cscfa\Bundle\CSManager\TrackBundle\Entity;
 
 use Cscfa\Bundle\SecurityBundle\Entity\User;
@@ -21,7 +23,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Tracker
+ * Tracker.
  *
  * The base Tracker entity for the
  * Cscfa track manager
@@ -29,34 +31,39 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="Cscfa\Bundle\CSManager\TrackBundle\Entity\Repository\TrackerRepository")
  * @ORM\Table(name="csmanager_tracking_Tracker")
  */
-class Tracker {
-    
+class Tracker
+{
     /**
-     * Id
-     * 
+     * Id.
+     *
      * The tracker id
-     * 
+     *
      * @ORM\Column(type="guid", nullable=false, name="csmanager_Tracker_id", options={"comment":"Tracker id"})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="UUID")
      */
-    protected $id;
+    protected $trackerId;
 
-    /** 
-     * Date
-     * 
+    /**
+     * Date.
+     *
      * The entity creation date
-     * 
-     * @ORM\Column(type="datetime", nullable=false, name="csmanager_Tracker_created", options={"comment":"Tracker date of creation"}) 
+     *
+     * @ORM\Column(
+     *      type="datetime",
+     *      nullable=false,
+     *      name="csmanager_Tracker_created",
+     *      options={"comment":"Tracker date of creation"}
+     * )
      */
     private $date;
-    
+
     /**
      * @ORM\ManyToOne(targetEntity="Cscfa\Bundle\SecurityBundle\Entity\User")
      * @ORM\JoinColumn(name="csmanager_Tracker_user_id", referencedColumnName="user_id")
      */
     protected $user;
-    
+
     /**
      * @ORM\ManyToMany(targetEntity="TrackerLink")
      * @ORM\JoinTable(name="tk_csmanager_Tracker_TrackerLink",
@@ -65,188 +72,199 @@ class Tracker {
      *      )
      */
     protected $links;
-    
-    /** 
-     * EventName
-     * 
+
+    /**
+     * EventName.
+     *
      * The tracker event name
-     * 
-     * @ORM\Column(type="string", length=255, options={"comment":"The Tracker event name"}, nullable=false, unique=false, name="csmanager_Tracker_eventName") 
+     *
+     * @ORM\Column(
+     *      type="string",
+     *      length=255,
+     *      options={"comment":"The Tracker event name"},
+     *      nullable=false,
+     *      unique=false,
+     *      name="csmanager_Tracker_eventName"
+     * )
      */
     protected $eventName;
-    
+
     /**
-     * Message
+     * Message.
      *
      * The tracker event message
      *
-     * @ORM\Column(type="text", options={"comment":"The Tracker event message"}, nullable=false, unique=false, name="csmanager_Tracker_message")
+     * @ORM\Column(
+     *      type="text",
+     *      options={"comment":"The Tracker event message"},
+     *      nullable=false,
+     *      unique=false,
+     *      name="csmanager_Tracker_message"
+     * )
      */
     protected $message;
-    
+
     /**
-     * Tracker constructor
-     * 
+     * Tracker constructor.
+     *
      * Default constructor
      * that init the creation
      * date.
      */
-    public function __construct(){
+    public function __construct()
+    {
         $this->date = new \DateTime();
     }
-    
+
     /**
-     * Get id
-     * 
+     * Get id.
+     *
      * This method return the
      * entity id
-     * 
+     *
      * @return string
      */
-    public function getId() {
-        return $this->id;
+    public function getId()
+    {
+        return $this->trackerId;
     }
-    
+
     /**
-     * Get date
-     * 
+     * Get date.
+     *
      * This method return
      * the entity date of
      * creation.
-     * 
+     *
      * @return \DateTime
      */
-    public function getDate() {
+    public function getDate()
+    {
         return $this->date;
     }
-    
+
     /**
-     * Set date
-     * 
-     * This method allow to set 
-     * the date of creation of
-     * the current entity
-     * 
-     * @param \DateTime $date The date of creation
-     * 
-     * @return Tracker
-     */
-    private function setDate(\DateTime $date) {
-        $this->date = $date;
-        return $this;
-    }
-    
-    /**
-     * Get user
-     * 
+     * Get user.
+     *
      * This method return
      * the user that it is
      * tracked
-     * 
+     *
      * @return User
      */
-    public function getUser() {
+    public function getUser()
+    {
         return $this->user;
     }
-    
+
     /**
-     * Set user
-     * 
+     * Set user.
+     *
      * This method allow to set
      * the tracked user.
-     * 
+     *
      * @param User $user The tracked user
-     * 
+     *
      * @return Tracker
      */
-    public function setUser(User $user) {
+    public function setUser(User $user)
+    {
         $this->user = $user;
+
         return $this;
     }
-    
+
     /**
-     * Get links
-     * 
+     * Get links.
+     *
      * This method return an
      * array of links that are
      * based on the tracked
      * event.
-     * 
+     *
      * @return ArrayCollection
      */
-    public function getLinks() {
+    public function getLinks()
+    {
         return $this->links;
     }
-    
+
     /**
-     * Set links
-     * 
+     * Set links.
+     *
      * This method allow to set
      * the links that are
      * based on the tracked
      * event.
-     * 
+     *
      * @param array $links The links
-     * 
+     *
      * @return Tracker
      */
-    public function setLinks($links) {
+    public function setLinks($links)
+    {
         $this->links = $links;
+
         return $this;
     }
-    
+
     /**
-     * Get eventName
-     * 
+     * Get eventName.
+     *
      * This method the tracker
      * event name.
-     * 
+     *
      * @return string
      */
-    public function getEventName() {
+    public function getEventName()
+    {
         return $this->eventName;
     }
-    
+
     /**
-     * Set eventName
-     * 
+     * Set eventName.
+     *
      * This method allow to set
      * the tracker event name.
-     * 
+     *
      * @param string $eventName The event name
-     * 
+     *
      * @return Tracker
      */
-    public function setEventName($eventName) {
+    public function setEventName($eventName)
+    {
         $this->eventName = $eventName;
+
         return $this;
     }
-    
+
     /**
-     * Get message
-     * 
+     * Get message.
+     *
      * This method the tracker
      * event message.
-     * 
+     *
      * @return string
      */
-    public function getMessage() {
+    public function getMessage()
+    {
         return $this->message;
     }
-    
+
     /**
-     * Set message
-     * 
+     * Set message.
+     *
      * This method allow to set
      * the tracker event message.
-     * 
+     *
      * @param string $message The event message
-     * 
+     *
      * @return Tracker
      */
-    public function setMessage($message) {
+    public function setMessage($message)
+    {
         $this->message = $message;
+
         return $this;
     }
-    
 }

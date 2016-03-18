@@ -1,19 +1,21 @@
 <?php
 /**
  * This file is a part of CSCFA security project.
- * 
+ *
  * The security project is a security bundle written in php
  * with Symfony2 framework.
- * 
+ *
  * PHP version 5.5
- * 
- * @category Form
- * @package  CscfaSecurityBundle
- * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
- * @license  http://opensource.org/licenses/MIT MIT
+ *
+ * @category   Form
+ *
+ * @author     Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
+ * @license    http://opensource.org/licenses/MIT MIT
  * @filesource
- * @link     http://cscfa.fr
+ *
+ * @link       http://cscfa.fr
  */
+
 namespace Cscfa\Bundle\SecurityBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
@@ -28,15 +30,15 @@ use Symfony\Component\Form\FormBuilderInterface;
  * instance by serving a default Role form.
  *
  * @category Form
- * @package  CscfaSecurityBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
+ *
  * @link     http://cscfa.fr
  * @see      Cscfa\Bundle\SecurityBundle\Entity\Role
  */
 class RoleFormType extends AbstractType
 {
-
     /**
      * The RoleManager.
      *
@@ -82,27 +84,32 @@ class RoleFormType extends AbstractType
      * The labels are translates from the 'form'
      * domain of SecurityBundle with core.form.role.label
      * prefix.
-     * 
+     *
      * @param FormBuilderInterface $builder The form builder.
      * @param array                $options The form options.
      *
      * @see    \Symfony\Component\Form\AbstractType::buildForm()
-     * @return void
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('id', 'hidden')
             ->add(
-                'name', 'text', array(
+                'name',
+                'text',
+                array(
                 'max_length' => '255',
                 'label' => 'security.form.role.label.name',
-                'translation_domain' => 'form'
+                'translation_domain' => 'form',
                 )
             )->add(
-                'child', 'choice', array(
+                'child',
+                'choice',
+                array(
                 'choices' => $this->roleManager->getRolesName(),
                 'label' => 'security.form.role.label.child',
-                'translation_domain' => 'form'
+                'translation_domain' => 'form',
                 )
             )->add('save', 'submit');
     }
@@ -114,6 +121,7 @@ class RoleFormType extends AbstractType
      * form type name as string.
      *
      * @see    \Symfony\Component\Form\FormTypeInterface::getName()
+     *
      * @return string
      */
     public function getName()

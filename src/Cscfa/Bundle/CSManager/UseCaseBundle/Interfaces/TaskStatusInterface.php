@@ -1,19 +1,21 @@
 <?php
 /**
  * This file is a part of CSCFA UseCase project.
- * 
+ *
  * The UseCase bundle is part of csmanager project. It's a project manager
  * written in php with Symfony2 framework.
- * 
+ *
  * PHP version 5.5
- * 
+ *
  * @category Interface
- * @package  CscfaCSManagerUseCaseBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
  * @filesource
+ *
  * @link     http://cscfa.fr
  */
+
 namespace Cscfa\Bundle\CSManager\UseCaseBundle\Interfaces;
 
 /**
@@ -23,34 +25,35 @@ namespace Cscfa\Bundle\CSManager\UseCaseBundle\Interfaces;
  * the the UseCase / Task status interface.
  *
  * @category Interface
- * @package  CscfaCSManagerUseCaseBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
+ *
  * @link     http://cscfa.fr
  */
-interface TaskStatusInterface {
-    
+interface TaskStatusInterface
+{
     /**
-     * Get name
-     * 
+     * Get name.
+     *
      * This method return the
      * status name.
-     * 
+     *
      * @return string
      */
     public function getName();
     /**
-     * Set name
-     * 
-     * This method allow to set 
+     * Set name.
+     *
+     * This method allow to set
      * the status name.
-     * 
+     *
      * @param string $name
      */
     public function setName($name);
 
     /**
-     * Get description
+     * Get description.
      *
      * This method return the
      * status description.
@@ -59,13 +62,12 @@ interface TaskStatusInterface {
      */
     public function getDescription();
     /**
-     * Set description
-     * 
-     * This method allow to set 
+     * Set description.
+     *
+     * This method allow to set
      * the status description.
-     * 
+     *
      * @param string $description
      */
     public function setDescription($description);
-    
 }

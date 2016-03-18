@@ -1,19 +1,21 @@
 <?php
 /**
  * This file is a part of CSCFA toolbox project.
- * 
+ *
  * The toolbox project is a toolbox written in php
  * with Symfony2 framework.
- * 
+ *
  * PHP version 5.5
- * 
+ *
  * @category Set
- * @package  CscfaToolboxBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
  * @filesource
+ *
  * @link     http://cscfa.fr
  */
+
 namespace Cscfa\Bundle\ToolboxBundle\Set;
 
 use Cscfa\Bundle\ToolboxBundle\BaseInterface\Collection\HackInterface;
@@ -25,27 +27,27 @@ use Cscfa\Bundle\ToolboxBundle\BaseInterface\Collection\HackInterface;
  * a set collection.
  *
  * @category Set
- * @package  CscfaToolboxBundle
+ *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
+ *
  * @link     http://cscfa.fr
  */
 class HackSet implements HackInterface
 {
-
     /**
      * The container.
-     * 
+     *
      * This property register
      * the set elements.
-     * 
+     *
      * @var array
      */
     protected $container;
 
     /**
      * Default constructor.
-     * 
+     *
      * This property initialize the
      * properties.
      */
@@ -74,7 +76,7 @@ class HackSet implements HackInterface
             $this->container[$key] = new ListSet();
             $this->container[$key]->add($value);
         }
-        
+
         return $this;
     }
 
@@ -108,6 +110,7 @@ class HackSet implements HackInterface
         foreach ($this->getKeys() as $key) {
             $result[$key] = $this->get($key);
         }
+
         return $result;
     }
 
@@ -143,8 +146,6 @@ class HackSet implements HackInterface
      *
      * @param string $key   The key whence remove the value
      * @param mixed  $value The value to remove
-     *
-     * @return void
      */
     public function removeIn($key, $value)
     {
@@ -163,8 +164,6 @@ class HackSet implements HackInterface
      *
      * This method clear all contained
      * data.
-     *
-     * @return void.
      */
     public function clear()
     {
@@ -178,7 +177,7 @@ class HackSet implements HackInterface
      * is completely empty. Return true
      * if no one key exist.
      *
-     * @return boolean
+     * @return bool
      */
     public function isEmpty()
     {
@@ -203,8 +202,8 @@ class HackSet implements HackInterface
                 return $key;
             }
         }
-        
-        return null;
+
+        return;
     }
 
     /**
@@ -212,7 +211,7 @@ class HackSet implements HackInterface
      *
      * This method return an array
      * that contain each keys.
-     * 
+     *
      * @return array
      */
     public function getKeys()
@@ -229,12 +228,12 @@ class HackSet implements HackInterface
      *
      * @param string $key The key to test.
      *
-     * @return boolean
+     * @return bool
      */
     public function hasRecord($key)
     {
         if ($this->hasKey($key)) {
-            return ! empty($this->get($key));
+            return !empty($this->get($key));
         } else {
             return true;
         }
@@ -250,7 +249,7 @@ class HackSet implements HackInterface
      * @param string $key   The key where search
      * @param mixed  $value The value to search
      *
-     * @return boolean
+     * @return bool
      */
     public function hasValueIn($key, $value)
     {
@@ -279,6 +278,7 @@ class HackSet implements HackInterface
         if ($this->hasKey($key)) {
             $result = $this->get($key);
             unset($this->container[$key]);
+
             return $result;
         } else {
             return array();
