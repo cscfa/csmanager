@@ -21,6 +21,7 @@ namespace Cscfa\Bundle\TwigUIBundle\Test\Objects;
 use Cscfa\Bundle\TwigUIBundle\Object\EnvironmentContainer;
 use Cscfa\Bundle\TwigUIBundle\Object\ObjectsContainer;
 use Cscfa\Bundle\TwigUIBundle\Object\TwigRequest\TwigRequestIterator;
+use Cscfa\Bundle\TwigUIBundle\Object\ControllerInformation\ControllerInfo;
 
 /**
  * EnvironmentContainerTest.
@@ -63,9 +64,20 @@ class EnvironmentContainerTest extends \PHPUnit_Framework_TestCase
      * to test EnvironmentContainer support
      * process.
      *
-     * @var TwigRequestIterator
+     * @var TwigRequestIterator|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $twigRequests;
+
+    /**
+     * Controller info.
+     *
+     * This property store a ControllerInfo
+     * to test EnvironmentContainer support
+     * process.
+     *
+     * @var ControllerInfo|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $controllerInfo;
 
     /**
      * Set up.
@@ -84,8 +96,12 @@ class EnvironmentContainerTest extends \PHPUnit_Framework_TestCase
         $this->twigRequests = $this->getMockBuilder(TwigRequestIterator::class)
             ->getMock();
 
+        $this->controllerInfo = $this->getMockBuilder(ControllerInfo::class)
+            ->getMock();
+
         $this->container->setObjectsContainer($this->objectContainer);
         $this->container->setTwigRequests($this->twigRequests);
+        $this->container->setControllerInfo($this->controllerInfo);
     }
 
     /**
@@ -115,6 +131,41 @@ class EnvironmentContainerTest extends \PHPUnit_Framework_TestCase
             $this->twigRequests,
             $this->container->getTwigRequests(),
             'The EnvironmentContainer::getTwigRequests must return the registered TwigRequestIterator'
+        );
+    }
+
+    /**
+     * Test controller info.
+     *
+     * This method allow to test the ObjectContainer
+     * support of the ControllerInfo class.
+     */
+    public function testControllerInfo()
+    {
+        $this->assertSame(
+            $this->controllerInfo,
+            $this->container->getControllerInfo(),
+            'The EnvironmentContainer::getControllerInfo must return the registered ControllerInfo'
+        );
+
+        $this->controllerInfo->expects($this->exactly(2))
+            ->method('isImmutable')
+            ->will($this->onConsecutiveCalls(true, false));
+
+        $newCtrl = $this->getMock(ControllerInfo::class);
+        $this->container->setControllerInfo($newCtrl);
+        $this->assertSame(
+            $this->controllerInfo,
+            $this->container->getControllerInfo(),
+            'The EnvironmentContainer::setControllerInfo must desallow to update the registered' +
+            'ControllerInfo if it\'s immutable'
+        );
+        $this->container->setControllerInfo($newCtrl);
+        $this->assertNotSame(
+            $this->controllerInfo,
+            $this->container->getControllerInfo(),
+            'The EnvironmentContainer::setControllerInfo must allow to update the registered' +
+            'ControllerInfo if it\'s not immutable'
         );
     }
 }

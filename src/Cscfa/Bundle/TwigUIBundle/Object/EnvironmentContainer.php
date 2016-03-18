@@ -19,6 +19,7 @@
 namespace Cscfa\Bundle\TwigUIBundle\Object;
 
 use Cscfa\Bundle\TwigUIBundle\Object\TwigRequest\TwigRequestIterator;
+use Cscfa\Bundle\TwigUIBundle\Object\ControllerInformation\ControllerInfo;
 
 /**
  * EnvironmentContainer.
@@ -57,6 +58,17 @@ class EnvironmentContainer
      * @var TwigRequestIterator
      */
     protected $twigRequests;
+
+    /**
+     * Controller info.
+     *
+     * This property store a ControllerInfo instance
+     * to provide access on controller and method name
+     * for the modules.
+     *
+     * @var ControllerInfo
+     */
+    protected $controllerInfo;
 
     /**
      * Set object container.
@@ -114,6 +126,41 @@ class EnvironmentContainer
     public function setTwigRequests(TwigRequestIterator $twigRequests)
     {
         $this->twigRequests = $twigRequests;
+
+        return $this;
+    }
+
+    /**
+     * Get controller info.
+     *
+     * This method return the current ControllerInfo instance
+     * or null if no one is registered.
+     *
+     * @return ControllerInfo
+     */
+    public function getControllerInfo()
+    {
+        return $this->controllerInfo;
+    }
+
+    /**
+     * Set controller info.
+     *
+     * This method allow to set the ControllerInfo
+     * instance. It not update the instance if the
+     * registered is currently immutable.
+     *
+     * @param ControllerInfo $controllerInfo The ControllerInfo to store
+     *
+     * @return EnvironmentContainer
+     */
+    public function setControllerInfo(ControllerInfo $controllerInfo)
+    {
+        if ($this->controllerInfo !== null && $this->controllerInfo->isImmutable()) {
+            return $this;
+        }
+
+        $this->controllerInfo = $controllerInfo;
 
         return $this;
     }
