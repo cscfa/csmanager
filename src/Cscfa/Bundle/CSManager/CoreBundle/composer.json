@@ -20,10 +20,10 @@
 	"require" : {
 		"php" : ">=5.3.9",
 		"symfony/framework-bundle" : "~2.1",
-        "cscfa/datagrid-bundle" : "dev-master",
-        "sensio/framework-extra-bundle" : "3.*@stable",
-        "cscfa/cscfa-csmanager-security_bundle" : "dev-master",
-        "cscfa/navbar-bundle" : "dev-master"
+		"cscfa/datagrid-bundle" : "dev-master",
+		"sensio/framework-extra-bundle" : "3.*@stable",
+		"cscfa/cscfa-csmanager-security_bundle" : "dev-master",
+		"cscfa/navbar-bundle" : "dev-master"
 	},
 	"autoload" : {
 		"psr-4" : {

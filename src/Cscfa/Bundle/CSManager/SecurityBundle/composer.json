@@ -20,11 +20,11 @@
 	"require" : {
 		"php" : ">=5.3.9",
 		"symfony/framework-bundle" : "~2.1",
-        "sensio/framework-extra-bundle" : "3.*@stable",
-        "doctrine/orm" : "2.5.*@stable",
-        "doctrine/dbal" : "2.5.*@stable",
-        "doctrine/doctrine-bundle" : "1.5.*@stable",
-        "doctrine/doctrine-fixtures-bundle" : "2.*@stable"
+		"sensio/framework-extra-bundle" : "3.*@stable",
+		"doctrine/orm" : "2.5.*@stable",
+		"doctrine/dbal" : "2.5.*@stable",
+		"doctrine/doctrine-bundle" : "1.5.*@stable",
+		"doctrine/doctrine-fixtures-bundle" : "2.*@stable"
 	},
 	"autoload" : {
 		"psr-4" : {

@@ -20,9 +20,9 @@
 	"require" : {
 		"php" : ">=5.3.9",
 		"symfony/framework-bundle" : "~2.1",
-        "doctrine/orm" : "2.5.*@stable",
-        "doctrine/dbal" : "2.5.*@stable",
-        "doctrine/doctrine-bundle" : "1.5.*@stable"
+		"doctrine/orm" : "2.5.*@stable",
+		"doctrine/dbal" : "2.5.*@stable",
+		"doctrine/doctrine-bundle" : "1.5.*@stable"
 	},
 	"autoload" : {
 		"psr-4" : {

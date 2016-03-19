@@ -100,7 +100,7 @@ class StrategistFormCompilerPass implements CompilerPassInterface
                 }
             }
 
-            if ($target != null) {
+            if ($target !== null) {
                 $map[] = array($id => $target);
             }
         }
