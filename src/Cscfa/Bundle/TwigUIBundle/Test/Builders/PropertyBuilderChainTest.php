@@ -71,6 +71,15 @@ class PropertyBuilderChainTest extends \PHPUnit_Framework_TestCase
             'The PropertyBuilderChain::build must inject data into property if no ' +
             'one setter exist and the property is public'
         );
+
+        $chain2 = new PropertyBuilderChain();
+        $chain2->setProperty('propertyMulti');
+        $object = $this->getMock(SetPropertyObject::class);
+        $object->expects($this->once())
+            ->method('setPropertyMulti')
+            ->will($this->returnSelf())
+            ->with($this->equalTo('data0'), $this->equalTo('data1'), $this->equalTo('data2'));
+        $chain2->build('propertyMulti', array('data0', 'data1', 'data2'), $object);
     }
 
     /**

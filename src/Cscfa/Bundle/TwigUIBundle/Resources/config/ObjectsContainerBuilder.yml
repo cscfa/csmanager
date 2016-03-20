@@ -1,0 +1,13 @@
+parameters:
+    ObjectContainerBuilder_class: Cscfa\Bundle\TwigUIBundle\Builders\ChainedBuilder
+    ObjectContainerBuilder_chain_class: Cscfa\Bundle\TwigUIBundle\Builders\PropertyBuilderChain
+
+services:
+    ObjectContainerBuilder:
+        class: "%ObjectContainerBuilder_class%"
+        calls:
+            - [ "addChain", ["@ObjectContainerBuilder_addObject"] ]
+    ObjectContainerBuilder_addObject:
+        class: "%ObjectContainerBuilder_chain_class%"
+        calls:
+            - [ "setProperty", ["object"] ]

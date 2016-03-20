@@ -106,7 +106,14 @@ class PropertyBuilderChain extends AbstractChain implements BuilderChainInterfac
         foreach ($setters as $setter) {
             if (in_array($setter[0], $setter[1])) {
                 if ($setter[2]) {
-                    $object->{$setter[0]}($data);
+                    $reflexFunc = new \ReflectionMethod($object, $setter[0]);
+
+                    if ($reflexFunc->getNumberOfParameters() <= 1) {
+                        $object->{$setter[0]}($data);
+                    } elseif (is_array($data)) {
+                        $reflex->getMethod($setter[0])
+                            ->invokeArgs($object, $data);
+                    }
                 } else {
                     $object->{$setter[0]} = $data;
                 }

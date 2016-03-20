@@ -1,0 +1,10 @@
+parameters:
+    EnvironmentContainerFactory_class: Cscfa\Bundle\TwigUIBundle\Factories\EnvironmentFactory
+
+services:
+    EnvironmentContainerFactory:
+        class: "%EnvironmentContainerFactory_class%"
+        calls:
+            - [ "setOCBuilder", ["@ObjectContainerBuilder"] ]
+            - [ "setCIBuilder", ["@ControllerInfoBuilder"] ]
+            - [ "setTRIBuilder", ["@TwigRequestIteratorBuilder"] ]

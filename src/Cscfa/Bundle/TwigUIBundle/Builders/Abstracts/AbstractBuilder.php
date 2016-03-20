@@ -82,7 +82,7 @@ abstract class AbstractBuilder implements BuilderInterface
      *
      * @return BuilderInterface
      */
-    public function setElement($element)
+    public function setElement(&$element)
     {
         $this->element = $element;
 

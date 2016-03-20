@@ -58,10 +58,12 @@ class ChainedBuilder extends AbstractBuilder implements ChainedBuilderInterface
      * @param array  $options  The options of the build
      *
      * @return BuilderInterface
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function add($property, $data, array $options = array())
     {
-        $this->buildingChain->build($property, $data, $options);
+        $this->buildingChain->build($property, $data, $this->element);
 
         return $this;
     }

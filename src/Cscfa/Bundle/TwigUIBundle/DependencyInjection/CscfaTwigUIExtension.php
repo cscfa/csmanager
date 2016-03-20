@@ -47,5 +47,9 @@ class CscfaTwigUIExtension extends Extension
     {
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
+        $loader->load('ObjectsContainerBuilder.yml');
+        $loader->load('ControllerInfoBuilder.yml');
+        $loader->load('TwigRequestIteratorBuilder.yml');
+        $loader->load('EnvironmentContainerFactory.yml');
     }
 }

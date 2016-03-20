@@ -20,7 +20,6 @@ namespace Cscfa\Bundle\TwigUIBundle\Test\Builders;
 
 use Cscfa\Bundle\TwigUIBundle\Builders\Abstracts\AbstractBuilder;
 use Cscfa\Bundle\TwigUIBundle\Builders\Interfaces\BuilderInterface;
-use Symfony\Component\HttpKernel\HttpCache\Store;
 
 /**
  * AbstractBuilderTest.

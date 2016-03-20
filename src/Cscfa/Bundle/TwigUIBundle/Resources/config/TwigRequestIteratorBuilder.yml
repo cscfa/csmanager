@@ -1,0 +1,13 @@
+parameters:
+    TwigRequestIteratorBuilder_class: Cscfa\Bundle\TwigUIBundle\Builders\ChainedBuilder
+    TwigRequestIteratorBuilder_chain_class: Cscfa\Bundle\TwigUIBundle\Builders\PropertyBuilderChain
+
+services:
+    TwigRequestIteratorBuilder:
+        class: "%TwigRequestIteratorBuilder_class%"
+        calls:
+            - [ "addChain", ["@TwigRequestIteratorBuilder_addTwigRequest"] ]
+    TwigRequestIteratorBuilder_addTwigRequest:
+        class: "%TwigRequestIteratorBuilder_chain_class%"
+        calls:
+            - [ "setProperty", ["twigRequest"] ]

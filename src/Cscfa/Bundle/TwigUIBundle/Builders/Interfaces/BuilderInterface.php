@@ -43,7 +43,7 @@ interface BuilderInterface
      *
      * @return BuilderInterface
      */
-    public function setElement($element);
+    public function setElement(&$element);
 
     /**
      * Add.

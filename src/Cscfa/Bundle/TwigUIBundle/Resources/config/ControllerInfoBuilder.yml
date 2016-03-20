@@ -1,0 +1,18 @@
+parameters:
+    ControllerInfoBuilder_class: Cscfa\Bundle\TwigUIBundle\Builders\ChainedBuilder
+    ControllerInfoBuilder_chain_class: Cscfa\Bundle\TwigUIBundle\Builders\PropertyBuilderChain
+
+services:
+    ControllerInfoBuilder:
+        class: "%ControllerInfoBuilder_class%"
+        calls:
+            - [ "addChain", ["@ControllerInfoBuilder_setControllerName"] ]
+            - [ "addChain", ["@ControllerInfoBuilder_setMethodName"] ]
+    ControllerInfoBuilder_setControllerName:
+        class: "%ControllerInfoBuilder_chain_class%"
+        calls:
+            - [ "setProperty", ["controllerName"] ]
+    ControllerInfoBuilder_setMethodName:
+        class: "%ControllerInfoBuilder_chain_class%"
+        calls:
+            - [ "setProperty", ["methodName"] ]

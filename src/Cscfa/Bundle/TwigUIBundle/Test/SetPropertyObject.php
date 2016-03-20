@@ -39,4 +39,9 @@ class SetPropertyObject
     {
         return;
     }
+
+    public function setPropertyMulti($param1, $param2, $param3)
+    {
+        return;
+    }
 }

@@ -20,6 +20,7 @@
         
         <testsuite name="cs_twig_ui">
           <directory>../src/Cscfa/Bundle/TwigUIBundle/Test</directory>
+          <directory>../src/Cscfa/Bundle/TwigUIBundle/FunctionalTest</directory>
         </testsuite>
         
         <testsuite name="csm_usecase">
