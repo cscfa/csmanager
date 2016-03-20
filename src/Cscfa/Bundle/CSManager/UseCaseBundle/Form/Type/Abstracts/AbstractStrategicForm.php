@@ -18,10 +18,10 @@
 
 namespace Cscfa\Bundle\CSManager\UseCaseBundle\Form\Type\Abstracts;
 
-use Cscfa\Bundle\CSManager\UseCaseBundle\Form\Type\Interfaces\StrategicForm;
 use Cscfa\Bundle\CSManager\UseCaseBundle\Form\Strategies\Interfaces\UseCaseStrategyInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Cscfa\Bundle\CSManager\UseCaseBundle\Form\Type\Interfaces\StrategicFormInterface;
 
 /**
  * AbstractStrategicForm.
@@ -37,7 +37,7 @@ use Symfony\Component\Form\FormBuilderInterface;
  *
  * @link     http://cscfa.fr
  */
-abstract class AbstractStrategicForm extends AbstractType implements StrategicForm
+abstract class AbstractStrategicForm extends AbstractType implements StrategicFormInterface
 {
     /**
      * The strategy.

@@ -33,7 +33,7 @@ use Cscfa\Bundle\CSManager\UseCaseBundle\Form\Strategies\Interfaces\UseCaseStrat
  *
  * @link     http://cscfa.fr
  */
-interface StrategicForm
+interface StrategicFormInterface
 {
     /**
      * Set strategy.

@@ -44,11 +44,11 @@ interface BuilderChainInterface extends ChainInterface
      *
      * @param string $property The property to build
      * @param mixed  $data     The data to inject
-     * @param array  $options  The options of the build
+     * @param array  $object   The object to build
      *
      * @return BuilderChainInterface
      */
-    public function build($property, $data, $options);
+    public function build($property, $data, &$object);
 
     /**
      * Support.
@@ -57,6 +57,8 @@ interface BuilderChainInterface extends ChainInterface
      * element support the given property.
      *
      * @param string $property The property to check of
+     *
+     * @return bool
      */
     public function support($property);
 }

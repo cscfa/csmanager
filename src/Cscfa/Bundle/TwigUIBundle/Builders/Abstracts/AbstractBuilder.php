@@ -7,7 +7,7 @@
  *
  * PHP version 5.5
  *
- * @category Interface
+ * @category Abstract
  *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
@@ -16,34 +16,34 @@
  * @link     http://cscfa.fr
  */
 
-namespace Cscfa\Bundle\TwigUIBundle\Builders\Interfaces;
+namespace Cscfa\Bundle\TwigUIBundle\Builders\Abstracts;
+
+use Cscfa\Bundle\TwigUIBundle\Builders\Interfaces\BuilderInterface;
 
 /**
- * BuilderInterface.
+ * AbstractBuilder.
  *
- * The BuilderInterface is used to define the
- * builder methods.
+ * The AbstractBuilder create default process for
+ * builder instance.
  *
- * @category Interface
+ * @category Abstract
  *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
  *
  * @link     http://cscfa.fr
  */
-interface BuilderInterface
+abstract class AbstractBuilder implements BuilderInterface
 {
     /**
-     * Set element.
+     * Element.
      *
-     * This method allow the builder
-     * to register an element to build.
+     * This property store the element
+     * to build.
      *
-     * @param mixed $element The element to register
-     *
-     * @return BuilderInterface
+     * @var mixed
      */
-    public function setElement($element);
+    protected $element;
 
     /**
      * Add.
@@ -57,7 +57,7 @@ interface BuilderInterface
      *
      * @return BuilderInterface
      */
-    public function add($property, $data, array $options = array());
+    abstract public function add($property, $data, array $options = array());
 
     /**
      * Get result.
@@ -67,5 +67,25 @@ interface BuilderInterface
      *
      * @return mixed
      */
-    public function getResult();
+    public function getResult()
+    {
+        return $this->element;
+    }
+
+    /**
+     * Set element.
+     *
+     * This method allow the builder
+     * to register an element to build.
+     *
+     * @param mixed $element The element to register
+     *
+     * @return BuilderInterface
+     */
+    public function setElement($element)
+    {
+        $this->element = $element;
+
+        return $this;
+    }
 }

@@ -23,7 +23,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Cscfa\Bundle\ToolboxBundle\Builder\Command\CommandAskBuilder;
 use Cscfa\Bundle\ToolboxBundle\Exception\Type\UnexpectedTypeException;
-use Symfony\Component\Validator\Constraints\Null;
 use Cscfa\Bundle\ToolboxBundle\Builder\Command\CommandColorBuilder;
 use Cscfa\Bundle\ToolboxBundle\Converter\Command\CommandTypeConverter;
 use Cscfa\Bundle\ToolboxBundle\BaseInterface\Error\ErrorRegisteryInterface;
