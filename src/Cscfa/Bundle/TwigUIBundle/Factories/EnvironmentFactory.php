@@ -22,7 +22,6 @@ use Cscfa\Bundle\TwigUIBundle\Object\EnvironmentContainer;
 use Cscfa\Bundle\TwigUIBundle\Object\ObjectsContainer;
 use Cscfa\Bundle\TwigUIBundle\Object\ControllerInformation\ControllerInfo;
 use Cscfa\Bundle\TwigUIBundle\Object\TwigRequest\TwigRequestIterator;
-use Cscfa\Bundle\TwigUIBundle\Builders\ChainedBuilder;
 use Cscfa\Bundle\TwigUIBundle\Builders\Interfaces\ChainedBuilderInterface;
 
 /**
