@@ -52,7 +52,7 @@ abstract class EnvironmentalController extends Controller
      *
      * @return EnvironmentContainer
      */
-    public function getEnvironment($methodName, array $options = array())
+    protected function getEnvironment($methodName, array $options = array())
     {
         $factory = $this->get('EnvironmentContainerFactory');
 

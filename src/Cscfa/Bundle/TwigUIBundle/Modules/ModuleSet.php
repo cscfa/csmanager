@@ -45,7 +45,7 @@ class ModuleSet implements ModuleSetInterface
      *
      * @var array
      */
-    protected $modules;
+    protected $modules = array();
 
     /**
      * Position.

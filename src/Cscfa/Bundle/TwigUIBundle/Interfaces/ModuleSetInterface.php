@@ -55,7 +55,7 @@ interface ModuleSetInterface extends \Iterator
      * This method allow to process
      * all of the registered modules.
      *
-     * @param EnvironmentContainer $environment
+     * @param EnvironmentContainer $environment The current environment
      *
      * @return ModuleSetInterface
      */

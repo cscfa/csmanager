@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is a part of CSCFA TwigUi project.
  *
@@ -45,7 +44,7 @@ interface ModuleInterface
      *
      * @param ModuleInterface $module The module to register
      *
-     * @return ModuleSetInterface
+     * @return ModuleInterface
      */
     public function addModule(ModuleInterface $module);
 
@@ -62,13 +61,27 @@ interface ModuleInterface
     /**
      * Process.
      *
-     * This method process the module.
+     * This method process the module by
+     * calling the render method.
      *
      * @param EnvironmentContainer $environment The current environment
      *
      * @return ModuleInterface
      */
     public function process(EnvironmentContainer $environment);
+
+    /**
+     * Render.
+     *
+     * This method run the module
+     * process. It return a TwigRequest
+     * if needed or null.
+     *
+     * @param EnvironmentContainer $environment The current environment
+     *
+     * @return TwigRequest|null
+     */
+    public function render(EnvironmentContainer $environment);
 
     /**
      * Set priority.
@@ -91,4 +104,14 @@ interface ModuleInterface
      * @return float
      */
     public function getPriority();
+
+    /**
+     * Get name.
+     *
+     * This method return the name
+     * of the module.
+     *
+     * @return string
+     */
+    public function getName();
 }
