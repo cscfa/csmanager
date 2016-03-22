@@ -45,11 +45,21 @@ class CscfaTwigUIExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container)
     {
+        $env = $container->getParameter('kernel.environment');
+
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
         $loader->load('ObjectsContainerBuilder.yml');
         $loader->load('ControllerInfoBuilder.yml');
         $loader->load('TwigRequestIteratorBuilder.yml');
         $loader->load('EnvironmentContainerFactory.yml');
+        if ('test' == $env) {
+            $testLoader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../FunctionalTest/config'));
+            $testLoader->load('services.yml');
+        }
+
+        $configuration = new Configuration();
+        $config = $this->processConfiguration($configuration, $configs);
+        $container->setParameter('cscfa_twig_ui', $config);
     }
 }

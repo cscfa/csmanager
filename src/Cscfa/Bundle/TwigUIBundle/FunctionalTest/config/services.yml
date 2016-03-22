@@ -1,0 +1,26 @@
+services:
+
+    cscfa_twig_ui.test.main:
+        class: Cscfa\Bundle\TwigUIBundle\Modules\ModuleSet
+
+    cscfa_twig_ui.test.firstTop:
+        class: Cscfa\Bundle\TwigUIBundle\FunctionalTest\Object\FirstTopLevel
+        calls:
+            - [ setPriority, [ 10 ]]
+        tags: 
+          - { name: cs.module, cs.module.parent: cscfa_twig_ui.test.main, cs.module.hydrate: addModule }
+
+    cscfa_twig_ui.test.firstMedior:
+        class: Cscfa\Bundle\TwigUIBundle\FunctionalTest\Object\FirstMediorModule
+        tags: 
+          - { name: cs.module, cs.module.parent: cscfa_twig_ui.test.firstTop, cs.module.hydrate: addModule }
+
+    cscfa_twig_ui.test.secondTop:
+        class: Cscfa\Bundle\TwigUIBundle\FunctionalTest\Object\SecondTopLevel
+        calls:
+            - [ setPriority, [ 20 ]]
+        tags: 
+          - { name: cs.module, cs.module.parent: cscfa_twig_ui.test.main, cs.module.hydrate: addModule }
+#    cscfa_twig_ui.example:
+#        class: Cscfa\Bundle\TwigUIBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]

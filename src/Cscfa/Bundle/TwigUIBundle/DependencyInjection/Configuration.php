@@ -45,6 +45,26 @@ class Configuration implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder();
 
+        $rootNode = $treeBuilder->root('cscfa_twig_ui');
+
+        $rootNode
+            ->children()
+                ->arrayNode('modules')
+                ->addDefaultsIfNotSet()
+                    ->children()
+                        ->scalarNode('tag_name')
+                            ->defaultValue('cs.module')
+                        ->end()
+                        ->scalarNode('parent_tag')
+                            ->defaultValue('cs.module.parent')
+                        ->end()
+                        ->scalarNode('method_tag')
+                            ->defaultValue('cs.module.hydrate')
+                        ->end()
+                    ->end()
+                ->end()
+            ->end();
+
         return $treeBuilder;
     }
 }
