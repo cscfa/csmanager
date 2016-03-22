@@ -96,7 +96,7 @@ class TwigRequestIterator implements \Iterator
      * into the Iterator.
      *
      * @param TwigRequest $twigRequest The TwigRequest to store
-     * @param unknown     $aliasName   The alias name of the TwigRequest
+     * @param string      $aliasName   The alias name of the TwigRequest
      *
      * @return TwigRequestIterator
      */

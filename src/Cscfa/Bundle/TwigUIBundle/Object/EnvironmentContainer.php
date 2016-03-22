@@ -20,6 +20,7 @@ namespace Cscfa\Bundle\TwigUIBundle\Object;
 
 use Cscfa\Bundle\TwigUIBundle\Object\TwigRequest\TwigRequestIterator;
 use Cscfa\Bundle\TwigUIBundle\Object\ControllerInformation\ControllerInfo;
+use Cscfa\Bundle\TwigUIBundle\Object\TwigHierarchy\TwigHierarchy;
 
 /**
  * EnvironmentContainer.
@@ -69,6 +70,17 @@ class EnvironmentContainer
      * @var ControllerInfo
      */
     protected $controllerInfo;
+
+    /**
+     * Twig hierachy.
+     *
+     * This property store a TwigHierarchy
+     * to manage the TwigRequest registration
+     * against the modules executions.
+     *
+     * @var TwigHierarchy
+     */
+    protected $twigHierarchy;
 
     /**
      * Set object container.
@@ -163,5 +175,36 @@ class EnvironmentContainer
         $this->controllerInfo = $controllerInfo;
 
         return $this;
+    }
+
+    /**
+     * Set twig hierarchy.
+     *
+     * This method allow to register
+     * a TwigHierarchy to manage the
+     * TwigRequest registration.
+     *
+     * @param TwigHierarchy $hierarchy The TwigHierarchy instance
+     *
+     * @return EnvironmentContainer
+     */
+    public function setTwigHierarchy(TwigHierarchy $hierarchy)
+    {
+        $this->twigHierarchy = $hierarchy;
+
+        return $this;
+    }
+
+    /**
+     * Get twig hierarchy.
+     *
+     * This method return the current
+     * instance of TwigHierarchy.
+     *
+     * @return TwigHierarchy
+     */
+    public function getTwigHierarchy()
+    {
+        return $this->twigHierarchy;
     }
 }

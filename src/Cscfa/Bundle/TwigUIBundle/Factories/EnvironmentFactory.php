@@ -23,6 +23,7 @@ use Cscfa\Bundle\TwigUIBundle\Object\ObjectsContainer;
 use Cscfa\Bundle\TwigUIBundle\Object\ControllerInformation\ControllerInfo;
 use Cscfa\Bundle\TwigUIBundle\Object\TwigRequest\TwigRequestIterator;
 use Cscfa\Bundle\TwigUIBundle\Builders\Interfaces\ChainedBuilderInterface;
+use Cscfa\Bundle\TwigUIBundle\Object\TwigHierarchy\TwigHierarchy;
 
 /**
  * EnvironmentFactory.
@@ -136,6 +137,35 @@ class EnvironmentFactory
     {
         $container->setTwigRequests(new TwigRequestIterator());
 
+        if ($container->getTwigHierarchy() !== null) {
+            $container->getTwigHierarchy()
+                ->setMainRegistry($container->getTwigRequests());
+        }
+
+        return $this;
+    }
+
+    /**
+     * Add twig hierarchy.
+     *
+     * This method inject a new instance
+     * of TwigHierarchy into an instance
+     * of EnvironmentContainer.
+     *
+     * @param EnvironmentContainer $container The Environment container instance
+     *                                        where inject the instance of TwigRequestIterator
+     *
+     * @return EnvironmentFactory
+     */
+    protected function addTwigHierarchy(EnvironmentContainer $container)
+    {
+        $container->setTwigHierarchy(new TwigHierarchy());
+
+        if ($container->getTwigRequests() !== null) {
+            $container->getTwigHierarchy()
+                ->setMainRegistry($container->getTwigRequests());
+        }
+
         return $this;
     }
 
@@ -186,7 +216,8 @@ class EnvironmentFactory
         $instance = $this->getEmpty();
         $this->addObjectsContainer($instance)
             ->addTwigRequests($instance)
-            ->addControllerInfo($instance);
+            ->addControllerInfo($instance)
+            ->addTwigHierarchy($instance);
 
         if (array_key_exists('ObjectContainer', $options)) {
             $this->ocBuilder->setElement($instance->getObjectsContainer());

@@ -24,7 +24,7 @@ namespace Cscfa\Bundle\TwigUIBundle\Interfaces;
  * The ImmutableInterface is used offer desallow
  * modification support.
  *
- * @category Object
+ * @category Interface
  *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT

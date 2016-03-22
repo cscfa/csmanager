@@ -125,5 +125,11 @@ class EnvironmentContainerFactoryTest extends WebTestCase
             $current,
             'The TwigRequestIterator must contain the data given with the options option'
         );
+
+        $this->assertSame(
+            $container->getTwigRequests(),
+            $container->getTwigHierarchy()->getMainRegistry(),
+            'The TwigHierarchy must register the TwigRequest as main registry'
+        );
     }
 }

@@ -224,4 +224,38 @@ class TwigRequestTest extends \PHPUnit_Framework_TestCase
             }
         }
     }
+
+    /**
+     * Test childs.
+     *
+     * This method test the TwigRequest
+     * child support.
+     */
+    public function testChilds()
+    {
+        $childAlias = array('child1', 'child2');
+        $childElement = array(new TwigRequest(), new TwigRequest());
+
+        for ($index = 0; $index < 2; ++$index) {
+            $this->twigRequest->addChildRequest(
+                $childElement[$index],
+                $childAlias[$index]
+            );
+        }
+
+        $index = 0;
+        foreach ($this->twigRequest->getChilds() as $alias => $child) {
+            $this->assertEquals(
+                $childAlias[$index],
+                $alias,
+                'TwigRequest::getChild must return the registered elements'
+            );
+            $this->assertEquals(
+                $childElement[$index],
+                $child,
+                'TwigRequest::getChild must return the registered elements'
+            );
+            ++$index;
+        }
+    }
 }

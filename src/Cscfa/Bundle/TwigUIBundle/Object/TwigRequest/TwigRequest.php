@@ -55,14 +55,60 @@ class TwigRequest
     protected $twigArguments;
 
     /**
+     * Childs requests.
+     *
+     * This property register
+     * the twig requests childs
+     * of the current element.
+     *
+     * @var TwigRequestIterator
+     */
+    protected $childsRequests;
+
+    /**
      * Constructor.
      *
      * The default TwigRequest constructor.
      */
-    public function __construct($twigPath = null, array $twigArguments = array())
+    public function __construct($twigPath = null, array $twigArguments = array(), array $childs = array())
     {
         $this->setTwigPath($twigPath);
         $this->setArguments($twigArguments);
+
+        $this->childsRequests = new TwigRequestIterator();
+        foreach ($childs as $alias => $request) {
+            $this->addChildRequest($request, $alias);
+        }
+    }
+
+    /**
+     * Add ChildRequest.
+     *
+     * This method allow to store a new alias, TwigRequest couple
+     * into the child Iterator.
+     *
+     * @param TwigRequest $twigRequest The TwigRequest to store
+     * @param string      $aliasName   The alias name of the TwigRequest
+     *
+     * @return TwigRequest
+     */
+    public function addChildRequest(TwigRequest $twigRequest, $aliasName)
+    {
+        $this->childsRequests->addTwigRequest($twigRequest, $aliasName);
+
+        return $this;
+    }
+
+    /**
+     * Get childs.
+     *
+     * This method return the TwigRequest childs.
+     *
+     * @return TwigRequestIterator
+     */
+    public function getChilds()
+    {
+        return $this->childsRequests;
     }
 
     /**
