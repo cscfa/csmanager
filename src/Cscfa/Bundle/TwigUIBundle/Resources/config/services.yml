@@ -1,5 +1,0 @@
-services:
-    cscfa_twig_ui.twig_module.extension:
-        class: Cscfa\Bundle\TwigUIBundle\Twig\Extension\TwigModuleExtension
-        tags:
-            - { name: twig.extension }
