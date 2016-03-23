@@ -75,7 +75,7 @@ class ObjectsContainerTest extends \PHPUnit_Framework_TestCase
             array(false, 12, 'alias'),
             array(false, 22.56, 'alias'),
             array(false, array(), 'alias'),
-            array(false, null, 'alias'),
+            array(true, null, 'alias'),
         );
     }
 

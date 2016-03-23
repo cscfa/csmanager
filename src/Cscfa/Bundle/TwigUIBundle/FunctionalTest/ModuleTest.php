@@ -26,6 +26,7 @@ use Cscfa\Bundle\TwigUIBundle\Object\TwigRequest\TwigRequestIterator;
 use Cscfa\Bundle\TwigUIBundle\Object\EnvironmentContainer;
 use Cscfa\Bundle\TwigUIBundle\Twig\Extension\TwigModuleExtension;
 use Symfony\Component\DomCrawler\Crawler;
+use Cscfa\Bundle\TwigUIBundle\FunctionalTest\Controller\EnvController;
 
 /**
  * ModuleTest.
@@ -136,6 +137,45 @@ class ModuleTest extends WebTestCase
         $rendering = $extension->processEnvironment($twigService, $environment);
 
         $crawler = new Crawler($rendering);
+
+        $this->assertEquals(
+            3,
+            $crawler->filter('div')->count(),
+            'Expected div count is 3'
+        );
+
+        $this->assertEquals(
+            3,
+            $crawler->filter('p')->count(),
+            'Expected p count is 3'
+        );
+
+        $this->assertEquals(
+            'argument',
+            $crawler->filter('p')->eq(0)->text(),
+            "Expected first p container 'argument'"
+        );
+
+        $this->assertEquals(
+            'medior',
+            $crawler->filter('p')->eq(1)->text(),
+            "Expected second p container 'medior'"
+        );
+
+        $this->assertEquals(
+            'arguments',
+            $crawler->filter('p')->eq(2)->text(),
+            "Expected third p container 'arguments'"
+        );
+    }
+
+    public function testController()
+    {
+        $controller = new EnvController();
+
+        $controller->setContainer(self::$kernel->getContainer());
+
+        $crawler = new Crawler($controller->processAction()->getContent());
 
         $this->assertEquals(
             3,

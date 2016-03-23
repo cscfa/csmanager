@@ -80,7 +80,7 @@ class ObjectsContainer
      */
     public function addObject($object, $alias)
     {
-        if (!is_object($object)) {
+        if (!is_object($object) && $object !== null) {
             $message = sprintf(
                 'An instance of %s was passed to ObjectContainer to be stored. Only object can be stored.',
                 gettype($object)

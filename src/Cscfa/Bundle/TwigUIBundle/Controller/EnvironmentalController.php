@@ -28,7 +28,7 @@ use Cscfa\Bundle\TwigUIBundle\Factories\EnvironmentFactory;
  * base process to create environment
  * container.
  *
- * @category Factory
+ * @category Controller
  *
  * @author   Matthieu VALLANCE <matthieu.vallance@cscfa.fr>
  * @license  http://opensource.org/licenses/MIT MIT
@@ -62,7 +62,6 @@ abstract class EnvironmentalController extends Controller
             $factoryOption = array(
                 'ObjectContainer' => array(
                     ['object' => array($this->getUser(), 'user')],
-                    ['object' => array($this->getRequest(), 'request')],
                 ),
                 'ControllerInfo' => array(
                     ['controllerName' => $currentClassName],
@@ -70,7 +69,7 @@ abstract class EnvironmentalController extends Controller
                 ),
             );
 
-            return $factory->getInstance(array_merge($factoryOption, $options));
+            return $factory->getInstance(array_merge_recursive($factoryOption, $options));
         }
     }
 }
