@@ -23,6 +23,9 @@ use Cscfa\Bundle\TwigUIBundle\Interfaces\ModuleSetInterface;
 use Cscfa\Bundle\TwigUIBundle\Factories\EnvironmentFactory;
 use Cscfa\Bundle\TwigUIBundle\Object\TwigRequest\TwigRequest;
 use Cscfa\Bundle\TwigUIBundle\Object\TwigRequest\TwigRequestIterator;
+use Cscfa\Bundle\TwigUIBundle\Object\EnvironmentContainer;
+use Cscfa\Bundle\TwigUIBundle\Twig\Extension\TwigModuleExtension;
+use Symfony\Component\DomCrawler\Crawler;
 
 /**
  * ModuleTest.
@@ -110,6 +113,58 @@ class ModuleTest extends WebTestCase
             $excpectedIterator,
             $environment->getTwigRequests(),
             'The modules must be called as the service definition and register twig request as defined'
+        );
+
+        return $environment;
+    }
+
+    /**
+     * Test rendering.
+     *
+     * This method test the rendering
+     * service.
+     *
+     * @param EnvironmentContainer $environment The environment
+     * @depends testProcess
+     */
+    public function testRendering(EnvironmentContainer $environment)
+    {
+        $twigService = self::$kernel->getContainer()->get('twig');
+
+        $extension = new TwigModuleExtension();
+
+        $rendering = $extension->processEnvironment($twigService, $environment);
+
+        $crawler = new Crawler($rendering);
+
+        $this->assertEquals(
+            3,
+            $crawler->filter('div')->count(),
+            'Expected div count is 3'
+        );
+
+        $this->assertEquals(
+            3,
+            $crawler->filter('p')->count(),
+            'Expected p count is 3'
+        );
+
+        $this->assertEquals(
+            'argument',
+            $crawler->filter('p')->eq(0)->text(),
+            "Expected first p container 'argument'"
+        );
+
+        $this->assertEquals(
+            'medior',
+            $crawler->filter('p')->eq(1)->text(),
+            "Expected second p container 'medior'"
+        );
+
+        $this->assertEquals(
+            'arguments',
+            $crawler->filter('p')->eq(2)->text(),
+            "Expected third p container 'arguments'"
         );
     }
 }

@@ -55,7 +55,7 @@ class TwigRequestIterator implements \Iterator
      *
      * @var array
      */
-    protected $aliases;
+    protected $aliases = array();
 
     /**
      * Position.
