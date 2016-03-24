@@ -7,7 +7,7 @@ services:
         calls:
             - [ setProperty , [ "name" ] ]
             - [ setNext , [ "@cs_use_case.chain.add_description_chain" ] ]
-            - [ addObserver, [ "@=service('cs_use_case.chain.chain_observer_factory').getInstance()" ] ]
+            - [ addObserver, [ "@=service('cs_use_case.chain.chain_observer_factory').getLast()" ] ]
     cs_use_case.chain.add_description_chain:
         class: Cscfa\Bundle\CSManager\UseCaseBundle\Entity\Builders\Chains\AddDataChain
         calls:
@@ -55,8 +55,9 @@ services:
             - [ setProperty , [ "childs" ] ]
             - [ setPropertyClass , [ "Cscfa\\Bundle\\CSManager\\UseCaseBundle\\Entity\\UseCase" ] ]
             - [ setEntityRepository , [ "@=service('doctrine').getRepository('CscfaCSManagerUseCaseBundle:UseCase')" ] ]
+            - [ setNext , [ "@cs_use_case.chain.end_chain" ] ]
             - [ addObserver, [ "@=service('cs_use_case.chain.chain_observer_factory').getLast()" ] ]
     cs_use_case.chain.end_chain:
         class: Cscfa\Bundle\CSManager\UseCaseBundle\Entity\Builders\Chains\EndChain
         calls:
-            - [ addObserver, [ "@=service('cs_use_case.chain.chain_observer_factory').getLast()" ] ]
+            - [ addObserver, [ "@=service('cs_use_case.chain.chain_observer_factory').getInstance()" ] ]

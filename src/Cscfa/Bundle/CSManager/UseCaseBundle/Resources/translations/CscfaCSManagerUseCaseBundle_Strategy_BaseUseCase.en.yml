@@ -1,0 +1,11 @@
+status:
+    placeholder: 'Choose a status'
+    label:       'Status'
+name:
+    placeholder: 'The use case name'
+    label:       'Name'
+description:
+    placeholder: 'Write a description for this use case'
+    label:       'Description'
+submit:
+    label:       'Save'

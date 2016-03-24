@@ -1,0 +1,17 @@
+services:
+    addUseCaseModule:
+        class: Cscfa\Bundle\TwigUIBundle\Modules\ModuleSet
+    addUseCaseFormModule:
+        class: Cscfa\Bundle\CSManager\UseCaseBundle\modules\AddUseCase\AddUseCaseFormModule
+        calls:
+            - [ setPriority, [ 50 ]]
+            - [ setFormFactory, [ "@cs_use_case.use_case_form_factory" ]]
+            - [ setEntityManager, [ "@doctrine.orm.entity_manager" ]]
+        tags: 
+            - { name: cs.module, cs.module.parent: addUseCaseModule, cs.module.hydrate: addModule }
+    addUseCaseInfoModule:
+        class: Cscfa\Bundle\CSManager\UseCaseBundle\modules\AddUseCase\AddUseCaseInfoModule
+        calls:
+            - [ setPriority, [ 45 ]]
+        tags: 
+            - { name: cs.module, cs.module.parent: addUseCaseModule, cs.module.hydrate: addModule }

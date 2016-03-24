@@ -1,0 +1,4 @@
+cscfa_cs_manager_useCase_home:
+    path:     /add/{project}
+    defaults: { _controller: "CscfaCSManagerUseCaseBundle:UseCase:add", project: 0 }
+    methods:  [GET|POST]

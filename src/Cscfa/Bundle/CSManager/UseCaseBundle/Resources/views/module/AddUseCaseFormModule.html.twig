@@ -1,0 +1,13 @@
+
+<div module="{{ moduleName }}" class="col-xs-12 col-md-10 col-md-offset-1">
+	{{ form_start(form, {action: path('cscfa_cs_manager_useCase_home', {project: projectId})}) }}
+		{{ form_row(form.status) }}
+		{{ form_row(form.name) }}
+		{{ form_row(form.description) }}
+		<div class="cs-center cs-top-1">
+			{{ form_row(form.submit) }}
+		</div>
+	{{ form_end(form) }}
+
+    {{ twigUIModule(moduleChilds) }}
+</div>

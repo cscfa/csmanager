@@ -29,7 +29,7 @@
 		"cscfa/cache-system-bundle" : "dev-master",
 		"cscfa/datagrid-bundle" : "dev-master",
 		"erusev/parsedown" : "1.6.0",
-		"cscfa/twig_ui_bundle" : "1.0.0"
+		"cscfa/twig_ui_bundle" : "1.0.1"
 	},
 	"require-dev" : {
 		"sensio/generator-bundle" : "2.*@stable"

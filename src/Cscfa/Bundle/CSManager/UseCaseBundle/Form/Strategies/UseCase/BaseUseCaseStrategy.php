@@ -77,7 +77,16 @@ class BaseUseCaseStrategy extends AbstractUseCaseStrategy
                 'label' => $this->translator->trans('description.label', [], $this->transDomain),
                 'attr' => array(
                     'placeholder' => $this->translator->trans('description.placeholder', [], $this->transDomain),
-                    'class' => 'form-control',
+                    'class' => 'form-control cs-width-lock',
+                ),
+            )
+        )->add(
+            'submit',
+            'submit',
+            array(
+                'label' => $this->translator->trans('submit.label', [], $this->transDomain),
+                'attr' => array(
+                    'class' => 'btn btn-success',
                 ),
             )
         );
